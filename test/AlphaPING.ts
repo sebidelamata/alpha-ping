@@ -257,6 +257,42 @@ describe("AlphaPING", function () {
     })
   })
 
+  describe("Set Premium Subscription Prices", function() {
+    let initialSubscriptionPriceWeek = 2000000
+    let initialSubscriptionPriceMonth = 5000000
+    let initialSubscriptionPriceYear = 50000000
+
+    it("Premium subscription prices starts at deployment", async () => {
+      let subscriptionPriceWeek = await alphaPING.subscriptionPriceWeek()
+      let subscriptionPriceMonth = await alphaPING.subscriptionPriceMonth()
+      let subscriptionPriceYear = await alphaPING.subscriptionPriceYear()
+      expect(subscriptionPriceWeek).to.equal(initialSubscriptionPriceWeek)
+      expect(subscriptionPriceMonth).to.equal(initialSubscriptionPriceMonth)
+      expect(subscriptionPriceYear).to.equal(initialSubscriptionPriceYear)
+    })
+    it("Can set new weekly subscription price", async () => {
+      let newPrice = 3000
+      let tx = await alphaPING.setSubscriptionPriceWeek(newPrice)
+      await tx.wait()
+      let newWeeklyPrice = await alphaPING.subscriptionPriceWeek()
+      expect(newWeeklyPrice).to.equal(newPrice)
+    })
+    it("Can set new monthly subscription price", async () => {
+      let newPrice = 3000
+      let tx = await alphaPING.setSubscriptionPriceMonth(newPrice)
+      await tx.wait()
+      let newMonthlyPrice = await alphaPING.subscriptionPriceMonth()
+      expect(newMonthlyPrice).to.equal(newPrice)
+    })
+    it("Can set new yearly subscription price", async () => {
+      let newPrice = 3000
+      let tx = await alphaPING.setSubscriptionPriceYear(newPrice)
+      await tx.wait()
+      let newYearlyPrice = await alphaPING.subscriptionPriceYear()
+      expect(newYearlyPrice).to.equal(newPrice)
+    })
+  })
+
   // describe("Withdrawing", function() {
   //   const ID = 1;
   //   const AMOUNT = ethers.utils.parseUnits("10", "ether")

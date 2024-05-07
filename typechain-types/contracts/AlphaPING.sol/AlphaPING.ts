@@ -62,15 +62,23 @@ export interface AlphaPINGInterface extends Interface {
       | "leaveChannel"
       | "mint"
       | "mods"
+      | "monthDuration"
       | "name"
       | "owner"
       | "ownerOf"
+      | "premiumMembershipExpiry"
       | "promoPeriod"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
+      | "setSubscriptionPriceMonth"
+      | "setSubscriptionPriceWeek"
+      | "setSubscriptionPriceYear"
       | "startPromoPeriod"
       | "stopPromoPeriod"
+      | "subscriptionPriceMonth"
+      | "subscriptionPriceWeek"
+      | "subscriptionPriceYear"
       | "supportsInterface"
       | "symbol"
       | "tokenURI"
@@ -80,11 +88,17 @@ export interface AlphaPINGInterface extends Interface {
       | "transferMod"
       | "transferOwner"
       | "unBlacklistUser"
+      | "weekDuration"
       | "withdraw"
+      | "yearDuration"
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic: "Approval" | "ApprovalForAll" | "Transfer"
+    nameOrSignatureOrTopic:
+      | "Approval"
+      | "ApprovalForAll"
+      | "SubscriptionPurchased"
+      | "Transfer"
   ): EventFragment;
 
   encodeFunctionData(
@@ -161,11 +175,19 @@ export interface AlphaPINGInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "mods", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "monthDuration",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "premiumMembershipExpiry",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "promoPeriod",
@@ -184,11 +206,35 @@ export interface AlphaPINGInterface extends Interface {
     values: [AddressLike, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "setSubscriptionPriceMonth",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSubscriptionPriceWeek",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSubscriptionPriceYear",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "startPromoPeriod",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "stopPromoPeriod",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "subscriptionPriceMonth",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "subscriptionPriceWeek",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "subscriptionPriceYear",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -224,7 +270,15 @@ export interface AlphaPINGInterface extends Interface {
     functionFragment: "unBlacklistUser",
     values: [AddressLike]
   ): string;
+  encodeFunctionData(
+    functionFragment: "weekDuration",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "yearDuration",
+    values?: undefined
+  ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -279,9 +333,17 @@ export interface AlphaPINGInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mods", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "monthDuration",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "premiumMembershipExpiry",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "promoPeriod",
     data: BytesLike
@@ -299,11 +361,35 @@ export interface AlphaPINGInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setSubscriptionPriceMonth",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSubscriptionPriceWeek",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSubscriptionPriceYear",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "startPromoPeriod",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "stopPromoPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "subscriptionPriceMonth",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "subscriptionPriceWeek",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "subscriptionPriceYear",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -336,7 +422,15 @@ export interface AlphaPINGInterface extends Interface {
     functionFragment: "unBlacklistUser",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "weekDuration",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "yearDuration",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace ApprovalEvent {
@@ -372,6 +466,19 @@ export namespace ApprovalForAllEvent {
     owner: string;
     operator: string;
     approved: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace SubscriptionPurchasedEvent {
+  export type InputTuple = [subscriber: AddressLike, expiry: BigNumberish];
+  export type OutputTuple = [subscriber: string, expiry: bigint];
+  export interface OutputObject {
+    subscriber: string;
+    expiry: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -543,11 +650,19 @@ export interface AlphaPING extends BaseContract {
 
   mods: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
 
+  monthDuration: TypedContractMethod<[], [bigint], "view">;
+
   name: TypedContractMethod<[], [string], "view">;
 
   owner: TypedContractMethod<[], [string], "view">;
 
   ownerOf: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+
+  premiumMembershipExpiry: TypedContractMethod<
+    [arg0: AddressLike],
+    [bigint],
+    "view"
+  >;
 
   promoPeriod: TypedContractMethod<[], [boolean], "view">;
 
@@ -574,9 +689,33 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
 
+  setSubscriptionPriceMonth: TypedContractMethod<
+    [_newSubscriptionPrice: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  setSubscriptionPriceWeek: TypedContractMethod<
+    [_newSubscriptionPrice: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  setSubscriptionPriceYear: TypedContractMethod<
+    [_newSubscriptionPrice: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
   startPromoPeriod: TypedContractMethod<[], [void], "nonpayable">;
 
   stopPromoPeriod: TypedContractMethod<[], [void], "nonpayable">;
+
+  subscriptionPriceMonth: TypedContractMethod<[], [bigint], "view">;
+
+  subscriptionPriceWeek: TypedContractMethod<[], [bigint], "view">;
+
+  subscriptionPriceYear: TypedContractMethod<[], [bigint], "view">;
 
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
@@ -616,7 +755,11 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
 
+  weekDuration: TypedContractMethod<[], [bigint], "view">;
+
   withdraw: TypedContractMethod<[], [void], "nonpayable">;
+
+  yearDuration: TypedContractMethod<[], [bigint], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -730,6 +873,9 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "mods"
   ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
   getFunction(
+    nameOrSignature: "monthDuration"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "name"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -738,6 +884,9 @@ export interface AlphaPING extends BaseContract {
   getFunction(
     nameOrSignature: "ownerOf"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+  getFunction(
+    nameOrSignature: "premiumMembershipExpiry"
+  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
   getFunction(
     nameOrSignature: "promoPeriod"
   ): TypedContractMethod<[], [boolean], "view">;
@@ -768,11 +917,41 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "setSubscriptionPriceMonth"
+  ): TypedContractMethod<
+    [_newSubscriptionPrice: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setSubscriptionPriceWeek"
+  ): TypedContractMethod<
+    [_newSubscriptionPrice: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setSubscriptionPriceYear"
+  ): TypedContractMethod<
+    [_newSubscriptionPrice: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "startPromoPeriod"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "stopPromoPeriod"
   ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "subscriptionPriceMonth"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "subscriptionPriceWeek"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "subscriptionPriceYear"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
@@ -809,8 +988,14 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "unBlacklistUser"
   ): TypedContractMethod<[_blacklistedUser: AddressLike], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "weekDuration"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "withdraw"
   ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "yearDuration"
+  ): TypedContractMethod<[], [bigint], "view">;
 
   getEvent(
     key: "Approval"
@@ -825,6 +1010,13 @@ export interface AlphaPING extends BaseContract {
     ApprovalForAllEvent.InputTuple,
     ApprovalForAllEvent.OutputTuple,
     ApprovalForAllEvent.OutputObject
+  >;
+  getEvent(
+    key: "SubscriptionPurchased"
+  ): TypedContractEvent<
+    SubscriptionPurchasedEvent.InputTuple,
+    SubscriptionPurchasedEvent.OutputTuple,
+    SubscriptionPurchasedEvent.OutputObject
   >;
   getEvent(
     key: "Transfer"
@@ -855,6 +1047,17 @@ export interface AlphaPING extends BaseContract {
       ApprovalForAllEvent.InputTuple,
       ApprovalForAllEvent.OutputTuple,
       ApprovalForAllEvent.OutputObject
+    >;
+
+    "SubscriptionPurchased(address,uint256)": TypedContractEvent<
+      SubscriptionPurchasedEvent.InputTuple,
+      SubscriptionPurchasedEvent.OutputTuple,
+      SubscriptionPurchasedEvent.OutputObject
+    >;
+    SubscriptionPurchased: TypedContractEvent<
+      SubscriptionPurchasedEvent.InputTuple,
+      SubscriptionPurchasedEvent.OutputTuple,
+      SubscriptionPurchasedEvent.OutputObject
     >;
 
     "Transfer(address,address,uint256)": TypedContractEvent<
