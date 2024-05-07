@@ -38,6 +38,12 @@ contract AlphaPING is ERC721 {
     // keep track of channel bans
     mapping(uint256 => mapping(address => bool)) public channelBans;
 
+    // promo period
+    bool public promoPeriod;
+
+    // premium membership subscription
+    // personal account blocking
+
     struct Channel {
         uint256 id;
         address tokenAdress;
@@ -95,10 +101,11 @@ contract AlphaPING is ERC721 {
 
     // need to pass in these args when we deploy
     constructor(string memory _name, string memory _symbol) 
-        ERC721(_name, _symbol)
+    ERC721(_name, _symbol)
     {
-            owner = msg.sender;
-            mint();
+        owner = msg.sender;
+        mint();
+        startPromoPeriod();
     }
 
     // this is how to join the app in general
@@ -317,6 +324,14 @@ contract AlphaPING is ERC721 {
         );
         mods[_channelId] = owner;
         isBlackListed[_bannedMod] = true;
+    }
+
+    function startPromoPeriod() public onlyOwner{
+        promoPeriod = true;
+    }
+
+    function stopPromoPeriod() public onlyOwner{
+        promoPeriod = false;
     }
 
     function withdraw() public onlyOwner onlyGoodOnes{

@@ -235,6 +235,29 @@ describe("AlphaPING", function () {
     })
   })
 
+  describe("Promotion Periods", function() {
+    const ID = 1
+    let isPromoPeriodBefore: boolean
+    beforeEach(async () => {
+      isPromoPeriodBefore = await alphaPING.promoPeriod()
+      let tx = await alphaPING.connect(deployer).stopPromoPeriod()
+      await tx.wait()
+    })
+
+    it("Promo period starts at deployment", async () => {
+      expect(isPromoPeriodBefore).to.equal(true)
+    })
+    it("Can turn off promo period", async () => {
+      let isPromoPeriod: boolean = await alphaPING.promoPeriod()
+      expect(isPromoPeriod).to.equal(false)
+    })
+    it("Can turn promo period back on", async () => {
+      let tx = await alphaPING.connect(deployer).startPromoPeriod()
+      let isPromoPeriod: boolean = await alphaPING.promoPeriod()
+      expect(isPromoPeriod).to.equal(true)
+    })
+  })
+
   // describe("Withdrawing", function() {
   //   const ID = 1;
   //   const AMOUNT = ethers.utils.parseUnits("10", "ether")

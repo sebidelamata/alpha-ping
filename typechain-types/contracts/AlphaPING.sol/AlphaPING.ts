@@ -65,9 +65,12 @@ export interface AlphaPINGInterface extends Interface {
       | "name"
       | "owner"
       | "ownerOf"
+      | "promoPeriod"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
+      | "startPromoPeriod"
+      | "stopPromoPeriod"
       | "supportsInterface"
       | "symbol"
       | "tokenURI"
@@ -165,6 +168,10 @@ export interface AlphaPINGInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "promoPeriod",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
@@ -175,6 +182,14 @@ export interface AlphaPINGInterface extends Interface {
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [AddressLike, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "startPromoPeriod",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "stopPromoPeriod",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -268,6 +283,10 @@ export interface AlphaPINGInterface extends Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "promoPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
   ): Result;
@@ -277,6 +296,14 @@ export interface AlphaPINGInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "startPromoPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "stopPromoPeriod",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -522,6 +549,8 @@ export interface AlphaPING extends BaseContract {
 
   ownerOf: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
 
+  promoPeriod: TypedContractMethod<[], [boolean], "view">;
+
   "safeTransferFrom(address,address,uint256)": TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
     [void],
@@ -544,6 +573,10 @@ export interface AlphaPING extends BaseContract {
     [void],
     "nonpayable"
   >;
+
+  startPromoPeriod: TypedContractMethod<[], [void], "nonpayable">;
+
+  stopPromoPeriod: TypedContractMethod<[], [void], "nonpayable">;
 
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
@@ -706,6 +739,9 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "ownerOf"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
   getFunction(
+    nameOrSignature: "promoPeriod"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
     nameOrSignature: "safeTransferFrom(address,address,uint256)"
   ): TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
@@ -731,6 +767,12 @@ export interface AlphaPING extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "startPromoPeriod"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "stopPromoPeriod"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
