@@ -2,7 +2,8 @@ const { expect } = require("chai")
 const { ethers } = require("hardhat")
 import {
   Signer,
-  ContractFactory
+  ContractFactory,
+  AddressLike
 } from 'ethers'
 import { AlphaPING } from "../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 
@@ -208,6 +209,29 @@ describe("AlphaPING", function () {
       await tx.wait()
       let isBlackListed = await alphaPING.isBlackListed(user)
       expect(isBlackListed).to.equal(false)
+    })
+  })
+
+  describe("Mod Bans", function() {
+    const ID = 1
+    let isModBefore: AddressLike
+    beforeEach(async () => {
+      let tx = await alphaPING.transferMod(user, ID)
+      isModBefore = await alphaPING.mods(ID)
+      tx = await alphaPING.connect(deployer).banMod(user, ID)
+      await tx.wait()
+    })
+
+    it("User is mod at first", async () => {
+      expect(isModBefore).to.equal(user)
+    })
+    it("Mod role has been transferred to owner", async () => {
+      let isMod: AddressLike = await alphaPING.mods(ID)
+      expect(isMod).to.equal(deployer)
+    })
+    it("Former mod is blacklisted", async () => {
+      let isBanned = await alphaPING.isBlackListed(user)
+      expect(isBanned).to.equal(true)
     })
   })
 
