@@ -102,43 +102,72 @@ contract AlphaPING is ERC721 {
     
     // anyone can create a channel if it doesnt exist yet
     function createChannel(
-        address _tokenAdress
+        address _tokenAddress,
+        string memory _tokenType
     ) 
     public 
     onlyMember 
     onlyGoodOnes{
+        // channel must be new
         require(
-            channelExistsForToken[_tokenAdress] != true,
+            channelExistsForToken[_tokenAddress] != true,
             "This Channel Already Exists!"
             );
-        // try to classify token type automatically
+        // token can only be ERC20 or ERC721
+        // need to hash strings to compare them
+        bytes32 erc20Hash = keccak256(abi.encodePacked("ERC20"));
+        bytes32 erc721Hash = keccak256(abi.encodePacked("ERC721"));
+        bytes32 _tokenTypeHash = keccak256(abi.encodePacked(_tokenType));
+        require(
+            (_tokenTypeHash == erc20Hash) || (_tokenTypeHash == erc721Hash),
+            "Token Type Must Either Be ERC20 or ERC721!"
+            );
+        // if the token is a 721 make sure it actually is one
+        if(_tokenTypeHash == erc721Hash){
+            require(
+                IERC721(_tokenAddress).supportsInterface(0x80ac58cd),
+                "This Is Not A Valid ERC721 Token!"
+                );
+        } 
+        // try to classify token name automatically
         string memory _name;
-        string memory _tokenType;
-        try IERC20(_tokenAdress).name() returns (string memory tokenName) {
-            _name = tokenName;
-            _tokenType = "ERC20";
-        } catch {
-            // If it's not an ERC20 token, try ERC721
-            try ERC721(_tokenAdress).name() returns (string memory tokenName) {
+
+        if(_tokenTypeHash == erc20Hash){
+            try IERC20(_tokenAddress).name() returns (string memory tokenName) {
                 _name = tokenName;
-                _tokenType = "ERC721";
             } catch {
-                // Return an empty string or handle the case where the token doesn't adhere to ERC20 or ERC721 standards
+                _name = "";
+            }
+        }
+
+        if(_tokenTypeHash == erc721Hash){
+            try ERC721(_tokenAddress).name() returns (string memory tokenName) {
+                _name = tokenName;
+            } catch {
                 _name = "";
             }
         }
         // if we dont get a result we error out
-        require(
-            bytes(_name).length > 0,
-            "No Name Found For This Token!"
-        );
+        if(_tokenTypeHash == erc20Hash){
+            require(
+                bytes(_name).length > 0,
+                "No Name Found For This ERC20 Token!"
+            );
+        }
+        if(_tokenTypeHash == erc721Hash){
+            require(
+                bytes(_name).length > 0,
+                "No Name Found For This ERC721 Token!"
+            );
+        }
+
         totalChannels++;
-        channels[totalChannels] = Channel(totalChannels, _tokenAdress, _name, _tokenType);
+        channels[totalChannels] = Channel(totalChannels, _tokenAddress, _name, _tokenType);
         // auto-assign owner as mod, 
         // can create process to transfer power to mod later
         mods[totalChannels] = owner;
         // add to channel exists for token
-        channelExistsForToken[_tokenAdress] == true;
+        channelExistsForToken[_tokenAddress] == true;
     }
 
     // must be a member to join a channel

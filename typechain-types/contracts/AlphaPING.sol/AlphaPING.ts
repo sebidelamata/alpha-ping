@@ -122,7 +122,7 @@ export interface AlphaPINGInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createChannel",
-    values: [AddressLike]
+    values: [AddressLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
@@ -471,7 +471,7 @@ export interface AlphaPING extends BaseContract {
   >;
 
   createChannel: TypedContractMethod<
-    [_tokenAdress: AddressLike],
+    [_tokenAddress: AddressLike, _tokenType: string],
     [void],
     "nonpayable"
   >;
@@ -649,7 +649,11 @@ export interface AlphaPING extends BaseContract {
   >;
   getFunction(
     nameOrSignature: "createChannel"
-  ): TypedContractMethod<[_tokenAdress: AddressLike], [void], "nonpayable">;
+  ): TypedContractMethod<
+    [_tokenAddress: AddressLike, _tokenType: string],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "getApproved"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
