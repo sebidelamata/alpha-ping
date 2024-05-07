@@ -163,6 +163,30 @@ describe("AlphaPING", function () {
     })
   })
 
+  describe("Channel Bans", function() {
+    const ID = 1
+    let isBannedBefore: boolean
+    this.beforeEach(async () => {
+      isBannedBefore = await alphaPING.channelBans(ID, user)
+      let tx = await alphaPING.connect(deployer).channelBan(user, ID)
+      await tx.wait()
+    })
+
+    it("User not banned at first", async () => {
+      expect(isBannedBefore).to.equal(false)
+    })
+    it("Allows mod to ban user", async () => {
+      let isBanned = await alphaPING.channelBans(ID, user)
+      expect(isBanned).to.equal(true)
+    })
+    it("Allows mod to unban user", async () => {
+      let tx = await alphaPING.connect(deployer).channelUnban(user, ID)
+      await tx.wait()
+      let isBanned = await alphaPING.channelBans(ID, user)
+      expect(isBanned).to.equal(false)
+    })
+  })
+
   // describe("Withdrawing", function() {
   //   const ID = 1;
   //   const AMOUNT = ethers.utils.parseUnits("10", "ether")
