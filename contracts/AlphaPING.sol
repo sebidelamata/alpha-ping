@@ -97,6 +97,7 @@ contract AlphaPING is ERC721 {
         ERC721(_name, _symbol)
     {
             owner = msg.sender;
+            isMember[owner] = true;
     }
     
     // anyone can create a channel if it doesnt exist yet
