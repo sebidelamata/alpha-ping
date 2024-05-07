@@ -122,6 +122,26 @@ describe("AlphaPING", function () {
     })
   })
 
+  describe("Leaving Channels", function() {
+    const ID = 1;
+    let resultBefore: boolean
+    beforeEach(async() => {
+      let tx = await alphaPING.connect(user).joinChannel(ID)
+      await tx.wait()
+      resultBefore = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
+      tx = await alphaPING.connect(user).leaveChannel(ID)
+      await tx.wait()
+    })
+
+    it("User has joined before", async () => {
+      expect(resultBefore).to.equal(true)
+    })
+    it("Allows the user to leave the channel", async () => {
+      let result = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
+      expect(result).to.equal(false)
+    })
+  })
+
   // describe("Withdrawing", function() {
   //   const ID = 1;
   //   const AMOUNT = ethers.utils.parseUnits("10", "ether")

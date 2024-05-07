@@ -100,6 +100,14 @@ contract AlphaPING is ERC721 {
             owner = msg.sender;
             mint();
     }
+
+    // this is how to join the app in general
+    function mint() public{
+        // mint nft
+        totalSupply++;
+        _safeMint(msg.sender, totalSupply);
+        isMember[msg.sender] = true;
+    }
     
     // anyone can create a channel if it doesnt exist yet
     function createChannel(
@@ -207,14 +215,6 @@ contract AlphaPING is ERC721 {
             );
         // join channel 
         hasJoinedChannel[_channelId][msg.sender] = false;
-    }
-
-    // this is how to join the app in general
-    function mint() public{
-        // mint nft
-        totalSupply++;
-        _safeMint(msg.sender, totalSupply);
-        isMember[msg.sender] = true;
     }
 
     // returns channel properties
