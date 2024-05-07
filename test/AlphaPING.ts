@@ -90,12 +90,14 @@ describe("AlphaPING", function () {
       let totalChannels = await alphaPING.totalChannels()
       expect(totalChannels).to.equal(2)
     })
-    it("Returns channel attributes", async () => {
+    it("Returns channel attributes for ERC20 type tokens", async () => {
       let arbitrumToken = await alphaPING.getChannel(1)
       expect(arbitrumToken.id).to.equal(1)
       expect(arbitrumToken.name).to.equal(ARBITRUM_TOKEN_NAME)
       expect(arbitrumToken.tokenAdress).to.equal(ARBITRUM_TOKEN_CONTRACT_ADDRESS)
       expect(arbitrumToken.tokenType).to.equal(ARBITRUM_TOKEN_TYPE)
+    })
+    it("Returns channel attributes for ERC721 type tokens", async () => {
       let gbcToken = await alphaPING.getChannel(2)
       expect(gbcToken.id).to.equal(2)
       expect(gbcToken.name).to.equal(GBC_TOKEN_NAME)
