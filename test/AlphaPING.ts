@@ -21,7 +21,7 @@ describe("AlphaPING", function () {
   const GBC_TOKEN_NAME = "Blueberry Club"
   const GBC_TOKEN_TYPE = "ERC721"
 
-  let AlphaPING
+  let AlphaPING: ContractFactory
   let alphaPING: AlphaPING
   let deployer: Signer, user: Signer, nonMember: Signer
   let userIsMemberBefore: boolean;
