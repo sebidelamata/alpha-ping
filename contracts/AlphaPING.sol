@@ -5,6 +5,11 @@ import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 
 interface IERC20 {
     function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
+    function decimals() external view returns (uint8);
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function allowance(address owner, address spender) external view returns (uint256);
 }
 
 contract AlphaPING is ERC721 {
@@ -127,6 +132,17 @@ contract AlphaPING is ERC721 {
             require(
                 IERC721(_tokenAddress).supportsInterface(0x80ac58cd),
                 "This Is Not A Valid ERC721 Token!"
+                );
+        } 
+        // we can't outright text if an address is an erc20 bc it was
+        // implemented before erc165 (supportsInterface)
+        // however erc20s have a function that erc721s don't: decimals
+        // so we test if we get a reasonable result from calling decimals
+        // not perfect but its something
+        if(_tokenTypeHash == erc20Hash){
+            require(
+                IERC20(_tokenAddress).decimals() >= 0,
+                "This Is Not A Valid ERC20 Token!"
                 );
         } 
         // try to classify token name automatically
