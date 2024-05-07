@@ -187,6 +187,30 @@ describe("AlphaPING", function () {
     })
   })
 
+  describe("Blacklist User", function() {
+    const ID = 1
+    let isBlackListedBefore: boolean
+    this.beforeEach(async () => {
+      isBlackListedBefore = await alphaPING.isBlackListed(user)
+      let tx = await alphaPING.connect(deployer).blacklistUser(user)
+      await tx.wait()
+    })
+
+    it("User not blacklisted at first", async () => {
+      expect(isBlackListedBefore).to.equal(false)
+    })
+    it("Allows owner to blacklist user", async () => {
+      let isBlacklisted = await alphaPING.isBlackListed(user)
+      expect(isBlacklisted).to.equal(true)
+    })
+    it("Allows owner to unblacklist user", async () => {
+      let tx = await alphaPING.connect(deployer).unBlacklistUser(user)
+      await tx.wait()
+      let isBlackListed = await alphaPING.isBlackListed(user)
+      expect(isBlackListed).to.equal(false)
+    })
+  })
+
   // describe("Withdrawing", function() {
   //   const ID = 1;
   //   const AMOUNT = ethers.utils.parseUnits("10", "ether")
