@@ -84,7 +84,7 @@ describe("AlphaPING", function () {
     })
   })
 
-  describe("Creating Channels", function() {
+  describe("Creating and Getting Channels", function() {
 
     it("Returns total channels", async () => {
       let totalChannels = await alphaPING.totalChannels()
@@ -141,6 +141,15 @@ describe("AlphaPING", function () {
     it("Allows the user to leave the channel", async () => {
       let result = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
       expect(result).to.equal(false)
+    })
+  })
+
+  describe("Transfer Owners", function() {
+    it("Allows owner to transfer ownership", async () => {
+      let tx = await alphaPING.connect(deployer).transferOwner(user)
+      await tx.wait()
+      let newOwner = await alphaPING.owner()
+      expect(newOwner).to.equal(user)
     })
   })
 
