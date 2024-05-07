@@ -236,7 +236,6 @@ describe("AlphaPING", function () {
   })
 
   describe("Promotion Periods", function() {
-    const ID = 1
     let isPromoPeriodBefore: boolean
     beforeEach(async () => {
       isPromoPeriodBefore = await alphaPING.promoPeriod()
