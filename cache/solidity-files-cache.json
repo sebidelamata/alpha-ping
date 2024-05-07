@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/migueldelamata/alphaPing/contracts/AlphaPING.sol": {
-      "lastModificationDate": 1715096234582,
-      "contentHash": "395cf8da3d709d802c0d734b5d4acbb6",
+      "lastModificationDate": 1715103039315,
+      "contentHash": "777fdb14855ee8926ba69d020c7dd0fa",
       "sourceName": "contracts/AlphaPING.sol",
       "solcConfig": {
         "version": "0.8.24",

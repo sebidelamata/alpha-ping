@@ -24,6 +24,20 @@ contract AlphaPING is ERC721 {
     // mapping to track whether a channel has been created for a token address
     mapping(address => bool) public channelExistsForToken;
 
+     // maps each channel id to a channel object
+    mapping(uint256 => Channel) public channels;
+    // maps each channel id to a mapping of each address if it has joined
+    mapping(uint256 => mapping(address => bool)) public hasJoinedChannel;
+
+    // we also want to hold memberships
+    mapping(address => bool) public isMember;
+
+    // need to be able to ban bad behaviour and bots
+    mapping(address => bool) public isBlackListed;
+
+    // keep track of channel bans
+    mapping(uint256 => mapping(address => bool)) public channelBans;
+
     struct Channel {
         uint256 id;
         address tokenAdress;
@@ -79,26 +93,12 @@ contract AlphaPING is ERC721 {
         _;
     }
 
-    // maps each channel id to a channel object
-    mapping(uint256 => Channel) public channels;
-    // maps each channel id to a mapping of each address if it has joined
-    mapping(uint256 => mapping(address => bool)) public hasJoinedChannel;
-
-    // we also want to hold memberships
-    mapping(address => bool) public isMember;
-
-    // need to be able to ban bad behaviour and bots
-    mapping(address => bool) public isBlackListed;
-
-    // keep track of channel bans
-    mapping(uint256 => mapping(address => bool)) public channelBans;
-
     // need to pass in these args when we deploy
     constructor(string memory _name, string memory _symbol) 
         ERC721(_name, _symbol)
     {
             owner = msg.sender;
-            isMember[owner] = true;
+            mint();
     }
     
     // anyone can create a channel if it doesnt exist yet
@@ -130,7 +130,7 @@ contract AlphaPING is ERC721 {
                 "This Is Not A Valid ERC721 Token!"
                 );
         } 
-        // we can't outright text if an address is an erc20 bc it was
+        // we can't outright test if an address is an erc20 bc it was
         // implemented before erc165 (supportsInterface)
         // however erc20s have a function that erc721s don't: decimals
         // so we test if we get a reasonable result from calling decimals

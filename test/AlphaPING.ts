@@ -78,6 +78,10 @@ describe("AlphaPING", function () {
       let userIsMember = await alphaPING.isMember(await user.getAddress())
       expect(userIsMember).to.equal(true)
     })
+    it("Increases member nft total supply", async () => {
+      let result = await alphaPING.totalSupply()
+      expect(result).to.be.equal(2)
+    })
   })
 
   describe("Creating Channels", function() {
@@ -100,32 +104,23 @@ describe("AlphaPING", function () {
     })
   })
 
-  // describe("Joining Channels", function() {
-  //   const ID = 1;
-  //   const AMOUNT = ethers.utils.parseUnits("1", "ether")
-  //   let resultBefore
-  //   beforeEach(async() => {
-  //     resultBefore = await dappcord.hasJoined(ID, user.address)
-  //     const tx = await dappcord.connect(user).mint(ID, { value: AMOUNT})
-  //     await tx.wait()
-  //   })
+  describe("Joining Channels", function() {
+    const ID = 1;
+    let resultBefore: boolean
+    beforeEach(async() => {
+      resultBefore = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
+      const tx = await alphaPING.connect(user).joinChannel(ID)
+      await tx.wait()
+    })
 
-  //   it("User not joined before", async () => {
-  //     expect(resultBefore).to.equal(false)
-  //   })
-  //   it("Joins the user", async () => {
-  //     let result = await dappcord.hasJoined(ID, user.address)
-  //     expect(result).to.equal(true)
-  //   })
-  //   it("Increases total supply", async () => {
-  //     let result = await dappcord.totalSupply()
-  //     expect(result).to.be.equal(ID)
-  //   })
-  //   it("Updates contract balance", async () => {
-  //     let result = await ethers.provider.getBalance(dappcord.address)
-  //     expect(result).to.be.equal(AMOUNT)
-  //   })
-  // })
+    it("User not joined before", async () => {
+      expect(resultBefore).to.equal(false)
+    })
+    it("Joins the user", async () => {
+      let result = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
+      expect(result).to.equal(true)
+    })
+  })
 
   // describe("Withdrawing", function() {
   //   const ID = 1;
