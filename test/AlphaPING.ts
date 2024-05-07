@@ -153,6 +153,16 @@ describe("AlphaPING", function () {
     })
   })
 
+  describe("Transfer Mods", function() {
+    const ID = 1
+    it("Allows owner to transfer moderator role", async () => {
+      let tx = await alphaPING.connect(deployer).transferMod(user, ID)
+      await tx.wait()
+      let newMod = await alphaPING.mods(ID)
+      expect(newMod).to.equal(user)
+    })
+  })
+
   // describe("Withdrawing", function() {
   //   const ID = 1;
   //   const AMOUNT = ethers.utils.parseUnits("10", "ether")
