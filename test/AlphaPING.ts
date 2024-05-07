@@ -1,127 +1,112 @@
+const { expect } = require("chai")
+const { ethers } = require("hardhat")
 import {
-  time,
-  loadFixture,
-} from "@nomicfoundation/hardhat-toolbox/network-helpers";
-import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
-import { expect } from "chai";
-import hre from "hardhat";
+  Signer,
+  ContractFactory
+} from 'ethers'
 
-describe("Lock", function () {
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshot in every test.
-  async function deployOneYearLockFixture() {
-    const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-    const ONE_GWEI = 1_000_000_000;
+const tokens = (n: number) => {
+  return ethers.utils.parseUnits(n.toString(), 'ether')
+}
 
-    const lockedAmount = ONE_GWEI;
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
+describe("AlphaPING", function () {
+  
+  const NAME = "AlphaPING"
+  const SYMBOL = "APING"
 
-    // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await hre.ethers.getSigners();
+  let AlphaPING
+  let alphaPING: ContractFactory
+  let deployer: Signer, user: Signer
+  beforeEach( async () => {
+    [deployer, user] = await ethers.getSigners()
+    AlphaPING = await ethers.getContractFactory("AlphaPING")
+    alphaPING = await AlphaPING.deploy(NAME, SYMBOL)
 
-    const Lock = await hre.ethers.getContractFactory("Lock");
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+    // create channel
+    const tx = await alphaPING.connect(deployer).createChannel(
+      "0x912CE59144191C1204E64559FE8253a0e49E6548", 
+      "Arbitrum"
+    )
+    await tx.wait()
+  })
 
-    return { lock, unlockTime, lockedAmount, owner, otherAccount };
-  }
+  describe("Deployment", function() {
 
-  describe("Deployment", function () {
-    it("Should set the right unlockTime", async function () {
-      const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
+    it("Sets the name", async () => {
+      let name = await alphaPING.name()
+      expect(name).to.equal(NAME)
+    })
+    it("Sets the symbol", async () => {
+      let symbol = await alphaPING.symbol()
+      expect(symbol).to.equal(SYMBOL)
+    })
+    it("Sets the owner", async () => {
+      let owner = await alphaPING.owner()
+      expect(owner).to.equal(deployer.address)
+    })
+  })
 
-      expect(await lock.unlockTime()).to.equal(unlockTime);
-    });
+  describe("Creating Channels", function() {
 
-    it("Should set the right owner", async function () {
-      const { lock, owner } = await loadFixture(deployOneYearLockFixture);
+    it("Returns total channels", async () => {
+      let totalChannels = await dappcord.totalChannels()
+      expect(totalChannels).to.equal(1)
+    })
+    it("Returns channel attributes", async () => {
+      let channel = await dappcord.getChannel(1)
+      expect(channel.id).to.equal(1)
+      expect(channel.name).to.equal("General")
+      expect(channel.cost).to.equal(tokens(1))
+    })
+  })
 
-      expect(await lock.owner()).to.equal(owner.address);
-    });
+  describe("Joining Channels", function() {
+    const ID = 1;
+    const AMOUNT = ethers.utils.parseUnits("1", "ether")
+    let resultBefore
+    beforeEach(async() => {
+      resultBefore = await dappcord.hasJoined(ID, user.address)
+      const tx = await dappcord.connect(user).mint(ID, { value: AMOUNT})
+      await tx.wait()
+    })
 
-    it("Should receive and store the funds to lock", async function () {
-      const { lock, lockedAmount } = await loadFixture(
-        deployOneYearLockFixture
-      );
+    it("User not joined before", async () => {
+      expect(resultBefore).to.equal(false)
+    })
+    it("Joins the user", async () => {
+      let result = await dappcord.hasJoined(ID, user.address)
+      expect(result).to.equal(true)
+    })
+    it("Increases total supply", async () => {
+      let result = await dappcord.totalSupply()
+      expect(result).to.be.equal(ID)
+    })
+    it("Updates contract balance", async () => {
+      let result = await ethers.provider.getBalance(dappcord.address)
+      expect(result).to.be.equal(AMOUNT)
+    })
+  })
 
-      expect(await hre.ethers.provider.getBalance(lock.target)).to.equal(
-        lockedAmount
-      );
-    });
+  describe("Withdrawing", function() {
+    const ID = 1;
+    const AMOUNT = ethers.utils.parseUnits("10", "ether")
+    let balanceBefore
 
-    it("Should fail if the unlockTime is not in the future", async function () {
-      // We don't use the fixture here because we want a different deployment
-      const latestTime = await time.latest();
-      const Lock = await hre.ethers.getContractFactory("Lock");
-      await expect(Lock.deploy(latestTime, { value: 1 })).to.be.revertedWith(
-        "Unlock time should be in the future"
-      );
-    });
-  });
+    beforeEach(async() => {
+      balanceBefore = await ethers.provider.getBalance(deployer.address)
+      let tx = await dappcord.connect(user).mint(ID, { value: AMOUNT})
+      await tx.wait()
+      tx = await dappcord.connect(deployer).withdraw()
+      await tx.wait()
+    })
 
-  describe("Withdrawals", function () {
-    describe("Validations", function () {
-      it("Should revert with the right error if called too soon", async function () {
-        const { lock } = await loadFixture(deployOneYearLockFixture);
-
-        await expect(lock.withdraw()).to.be.revertedWith(
-          "You can't withdraw yet"
-        );
-      });
-
-      it("Should revert with the right error if called from another account", async function () {
-        const { lock, unlockTime, otherAccount } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        // We can increase the time in Hardhat Network
-        await time.increaseTo(unlockTime);
-
-        // We use lock.connect() to send a transaction from another account
-        await expect(lock.connect(otherAccount).withdraw()).to.be.revertedWith(
-          "You aren't the owner"
-        );
-      });
-
-      it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
-        const { lock, unlockTime } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        // Transactions are sent using the first signer by default
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).not.to.be.reverted;
-      });
-    });
-
-    describe("Events", function () {
-      it("Should emit an event on withdrawals", async function () {
-        const { lock, unlockTime, lockedAmount } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw())
-          .to.emit(lock, "Withdrawal")
-          .withArgs(lockedAmount, anyValue); // We accept any value as `when` arg
-      });
-    });
-
-    describe("Transfers", function () {
-      it("Should transfer the funds to the owner", async function () {
-        const { lock, unlockTime, lockedAmount, owner } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).to.changeEtherBalances(
-          [owner, lock],
-          [lockedAmount, -lockedAmount]
-        );
-      });
-    });
-  });
-});
+    it("Updates owner balance", async () => {
+      let balanceAfter = await ethers.provider.getBalance(deployer.address)
+      expect(balanceAfter).to.be.greaterThan(balanceBefore)
+    })
+    it("Updates contract balance", async () => {
+      let result = await ethers.provider.getBalance(dappcord.address)
+      expect(result).to.be.equal(0)
+    })
+  })
+})

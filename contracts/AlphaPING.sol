@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.20;
 
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+
+interface IERC20 {
+    function name() external view returns (string memory);
+}
 
 contract AlphaPING is ERC721 {
 
@@ -23,6 +27,7 @@ contract AlphaPING is ERC721 {
         uint256 id;
         address tokenAdress;
         string name;
+        string tokenType;
     }
 
     modifier onlyOwner() {
@@ -34,7 +39,7 @@ contract AlphaPING is ERC721 {
     }
 
     // we also have mod role per channel, but owner can also do anything a mod can do
-    modifier onlyMod(_channelId) {
+    modifier onlyMod(uint256 _channelId) {
         require(
             (msg.sender == mods[_channelId]) || msg.sender == owner,
             "Only Channel Mod or Owner Role May Execute This Function!"
@@ -70,6 +75,7 @@ contract AlphaPING is ERC721 {
             _channelId <= totalChannels,
             "Channel ID Too Large!"
             );
+        _;
     }
 
     // maps each channel id to a channel object
@@ -81,7 +87,7 @@ contract AlphaPING is ERC721 {
     mapping(address => bool) public isMember;
 
     // need to be able to ban bad behaviour and bots
-    mapping(address => bool) public isBlackListed
+    mapping(address => bool) public isBlackListed;
 
     // keep track of channel bans
     mapping(uint256 => mapping(address => bool)) public channelBans;
@@ -95,8 +101,7 @@ contract AlphaPING is ERC721 {
     
     // anyone can create a channel if it doesnt exist yet
     function createChannel(
-        address memory _tokenAdress, 
-        string memory _name
+        address _tokenAdress
     ) 
     public 
     onlyMember 
@@ -105,8 +110,29 @@ contract AlphaPING is ERC721 {
             channelExistsForToken[_tokenAdress] != true,
             "This Channel Already Exists!"
             );
+        // try to classify token type automatically
+        string memory _name;
+        string memory _tokenType;
+        try IERC20(_tokenAdress).name() returns (string memory tokenName) {
+            _name = tokenName;
+            _tokenType = "ERC20";
+        } catch {
+            // If it's not an ERC20 token, try ERC721
+            try ERC721(_tokenAdress).name() returns (string memory tokenName) {
+                _name = tokenName;
+                _tokenType = "ERC721";
+            } catch {
+                // Return an empty string or handle the case where the token doesn't adhere to ERC20 or ERC721 standards
+                _name = "";
+            }
+        }
+        // if we dont get a result we error out
+        require(
+            bytes(_name).length > 0,
+            "No Name Found For This Token!"
+        );
         totalChannels++;
-        channels[totalChannels] = Channel(totalChannels, _tokenAdress, _name);
+        channels[totalChannels] = Channel(totalChannels, _tokenAdress, _name, _tokenType);
         // auto-assign owner as mod, 
         // can create process to transfer power to mod later
         mods[totalChannels] = owner;
@@ -153,8 +179,8 @@ contract AlphaPING is ERC721 {
     function getChannel(uint _channelId) 
     public 
     view 
-    returns (Channel memory) 
-    onlyLegitChannels(_channelId){
+    onlyLegitChannels(_channelId)
+    returns (Channel memory) {
         return channels[_channelId];
     }
 
