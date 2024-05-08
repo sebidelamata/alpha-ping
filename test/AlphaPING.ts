@@ -6,7 +6,7 @@ import {
   AddressLike
 } from 'ethers'
 import { AlphaPING } from "../typechain-types/contracts/AlphaPING.sol/AlphaPING";
-import { ERC20Faucet } from "../typechain-types/contracts/ERC20Faucet.sol/ERC20Faucet";
+import { ERC20Faucet } from "../typechain-types/contracts/ERC20Faucet";
 
 const tokens = (n: number) => {
   return ethers.parseUnits(n.toString(), 'ether')
