@@ -58,6 +58,7 @@ export interface AlphaPINGInterface extends Interface {
       | "isApprovedForAll"
       | "isBlackListed"
       | "isMember"
+      | "isSubscriptionActive"
       | "joinChannel"
       | "leaveChannel"
       | "mint"
@@ -68,19 +69,15 @@ export interface AlphaPINGInterface extends Interface {
       | "ownerOf"
       | "premiumMembershipExpiry"
       | "promoPeriod"
+      | "purchaseMonthlySubscription"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
-      | "setSubscriptionPriceMonth"
-      | "setSubscriptionPriceWeek"
-      | "setSubscriptionPriceYear"
-      | "startPromoPeriod"
-      | "stopPromoPeriod"
-      | "subscriptionPriceMonth"
-      | "subscriptionPriceWeek"
-      | "subscriptionPriceYear"
+      | "setSubscriptionPriceMonthly"
+      | "subscriptionPriceMonthly"
       | "supportsInterface"
       | "symbol"
+      | "togglePromoPeriod"
       | "tokenURI"
       | "totalChannels"
       | "totalSupply"
@@ -88,17 +85,11 @@ export interface AlphaPINGInterface extends Interface {
       | "transferMod"
       | "transferOwner"
       | "unBlacklistUser"
-      | "weekDuration"
       | "withdraw"
-      | "yearDuration"
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic:
-      | "Approval"
-      | "ApprovalForAll"
-      | "SubscriptionPurchased"
-      | "Transfer"
+    nameOrSignatureOrTopic: "Approval" | "ApprovalForAll" | "Transfer"
   ): EventFragment;
 
   encodeFunctionData(
@@ -166,6 +157,10 @@ export interface AlphaPINGInterface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "isSubscriptionActive",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "joinChannel",
     values: [BigNumberish]
   ): string;
@@ -194,6 +189,10 @@ export interface AlphaPINGInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "purchaseMonthlySubscription",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
@@ -206,35 +205,11 @@ export interface AlphaPINGInterface extends Interface {
     values: [AddressLike, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "setSubscriptionPriceMonth",
+    functionFragment: "setSubscriptionPriceMonthly",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setSubscriptionPriceWeek",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setSubscriptionPriceYear",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "startPromoPeriod",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "stopPromoPeriod",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "subscriptionPriceMonth",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "subscriptionPriceWeek",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "subscriptionPriceYear",
+    functionFragment: "subscriptionPriceMonthly",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -242,6 +217,10 @@ export interface AlphaPINGInterface extends Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "togglePromoPeriod",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "tokenURI",
     values: [BigNumberish]
@@ -270,15 +249,7 @@ export interface AlphaPINGInterface extends Interface {
     functionFragment: "unBlacklistUser",
     values: [AddressLike]
   ): string;
-  encodeFunctionData(
-    functionFragment: "weekDuration",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "yearDuration",
-    values?: undefined
-  ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -324,6 +295,10 @@ export interface AlphaPINGInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "isMember", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "isSubscriptionActive",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "joinChannel",
     data: BytesLike
   ): Result;
@@ -349,6 +324,10 @@ export interface AlphaPINGInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "purchaseMonthlySubscription",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
   ): Result;
@@ -361,35 +340,11 @@ export interface AlphaPINGInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setSubscriptionPriceMonth",
+    functionFragment: "setSubscriptionPriceMonthly",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setSubscriptionPriceWeek",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setSubscriptionPriceYear",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "startPromoPeriod",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "stopPromoPeriod",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "subscriptionPriceMonth",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "subscriptionPriceWeek",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "subscriptionPriceYear",
+    functionFragment: "subscriptionPriceMonthly",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -397,6 +352,10 @@ export interface AlphaPINGInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "togglePromoPeriod",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalChannels",
@@ -422,15 +381,7 @@ export interface AlphaPINGInterface extends Interface {
     functionFragment: "unBlacklistUser",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "weekDuration",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "yearDuration",
-    data: BytesLike
-  ): Result;
 }
 
 export namespace ApprovalEvent {
@@ -466,19 +417,6 @@ export namespace ApprovalForAllEvent {
     owner: string;
     operator: string;
     approved: boolean;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace SubscriptionPurchasedEvent {
-  export type InputTuple = [subscriber: AddressLike, expiry: BigNumberish];
-  export type OutputTuple = [subscriber: string, expiry: bigint];
-  export interface OutputObject {
-    subscriber: string;
-    expiry: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -634,6 +572,12 @@ export interface AlphaPING extends BaseContract {
 
   isMember: TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
 
+  isSubscriptionActive: TypedContractMethod<
+    [_subscriber: AddressLike],
+    [boolean],
+    "view"
+  >;
+
   joinChannel: TypedContractMethod<
     [_channelId: BigNumberish],
     [void],
@@ -666,6 +610,8 @@ export interface AlphaPING extends BaseContract {
 
   promoPeriod: TypedContractMethod<[], [boolean], "view">;
 
+  purchaseMonthlySubscription: TypedContractMethod<[], [void], "payable">;
+
   "safeTransferFrom(address,address,uint256)": TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
     [void],
@@ -689,33 +635,13 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
 
-  setSubscriptionPriceMonth: TypedContractMethod<
+  setSubscriptionPriceMonthly: TypedContractMethod<
     [_newSubscriptionPrice: BigNumberish],
     [void],
     "nonpayable"
   >;
 
-  setSubscriptionPriceWeek: TypedContractMethod<
-    [_newSubscriptionPrice: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
-  setSubscriptionPriceYear: TypedContractMethod<
-    [_newSubscriptionPrice: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
-  startPromoPeriod: TypedContractMethod<[], [void], "nonpayable">;
-
-  stopPromoPeriod: TypedContractMethod<[], [void], "nonpayable">;
-
-  subscriptionPriceMonth: TypedContractMethod<[], [bigint], "view">;
-
-  subscriptionPriceWeek: TypedContractMethod<[], [bigint], "view">;
-
-  subscriptionPriceYear: TypedContractMethod<[], [bigint], "view">;
+  subscriptionPriceMonthly: TypedContractMethod<[], [bigint], "view">;
 
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
@@ -724,6 +650,8 @@ export interface AlphaPING extends BaseContract {
   >;
 
   symbol: TypedContractMethod<[], [string], "view">;
+
+  togglePromoPeriod: TypedContractMethod<[], [void], "nonpayable">;
 
   tokenURI: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
 
@@ -755,11 +683,7 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
 
-  weekDuration: TypedContractMethod<[], [bigint], "view">;
-
   withdraw: TypedContractMethod<[], [void], "nonpayable">;
-
-  yearDuration: TypedContractMethod<[], [bigint], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -861,6 +785,9 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "isMember"
   ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
   getFunction(
+    nameOrSignature: "isSubscriptionActive"
+  ): TypedContractMethod<[_subscriber: AddressLike], [boolean], "view">;
+  getFunction(
     nameOrSignature: "joinChannel"
   ): TypedContractMethod<[_channelId: BigNumberish], [void], "nonpayable">;
   getFunction(
@@ -891,6 +818,9 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "promoPeriod"
   ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
+    nameOrSignature: "purchaseMonthlySubscription"
+  ): TypedContractMethod<[], [void], "payable">;
+  getFunction(
     nameOrSignature: "safeTransferFrom(address,address,uint256)"
   ): TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
@@ -917,40 +847,14 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "setSubscriptionPriceMonth"
+    nameOrSignature: "setSubscriptionPriceMonthly"
   ): TypedContractMethod<
     [_newSubscriptionPrice: BigNumberish],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "setSubscriptionPriceWeek"
-  ): TypedContractMethod<
-    [_newSubscriptionPrice: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "setSubscriptionPriceYear"
-  ): TypedContractMethod<
-    [_newSubscriptionPrice: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "startPromoPeriod"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "stopPromoPeriod"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "subscriptionPriceMonth"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "subscriptionPriceWeek"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "subscriptionPriceYear"
+    nameOrSignature: "subscriptionPriceMonthly"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "supportsInterface"
@@ -958,6 +862,9 @@ export interface AlphaPING extends BaseContract {
   getFunction(
     nameOrSignature: "symbol"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "togglePromoPeriod"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "tokenURI"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
@@ -988,14 +895,8 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "unBlacklistUser"
   ): TypedContractMethod<[_blacklistedUser: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "weekDuration"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
     nameOrSignature: "withdraw"
   ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "yearDuration"
-  ): TypedContractMethod<[], [bigint], "view">;
 
   getEvent(
     key: "Approval"
@@ -1010,13 +911,6 @@ export interface AlphaPING extends BaseContract {
     ApprovalForAllEvent.InputTuple,
     ApprovalForAllEvent.OutputTuple,
     ApprovalForAllEvent.OutputObject
-  >;
-  getEvent(
-    key: "SubscriptionPurchased"
-  ): TypedContractEvent<
-    SubscriptionPurchasedEvent.InputTuple,
-    SubscriptionPurchasedEvent.OutputTuple,
-    SubscriptionPurchasedEvent.OutputObject
   >;
   getEvent(
     key: "Transfer"
@@ -1047,17 +941,6 @@ export interface AlphaPING extends BaseContract {
       ApprovalForAllEvent.InputTuple,
       ApprovalForAllEvent.OutputTuple,
       ApprovalForAllEvent.OutputObject
-    >;
-
-    "SubscriptionPurchased(address,uint256)": TypedContractEvent<
-      SubscriptionPurchasedEvent.InputTuple,
-      SubscriptionPurchasedEvent.OutputTuple,
-      SubscriptionPurchasedEvent.OutputObject
-    >;
-    SubscriptionPurchased: TypedContractEvent<
-      SubscriptionPurchasedEvent.InputTuple,
-      SubscriptionPurchasedEvent.OutputTuple,
-      SubscriptionPurchasedEvent.OutputObject
     >;
 
     "Transfer(address,address,uint256)": TypedContractEvent<

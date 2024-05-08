@@ -8,7 +8,7 @@ import {
 import { AlphaPING } from "../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 
 const tokens = (n: number) => {
-  return ethers.utils.parseUnits(n.toString(), 'ether')
+  return ethers.parseUnits(n.toString(), 'ether')
 }
 
 describe("AlphaPING", function () {
@@ -239,7 +239,7 @@ describe("AlphaPING", function () {
     let isPromoPeriodBefore: boolean
     beforeEach(async () => {
       isPromoPeriodBefore = await alphaPING.promoPeriod()
-      let tx = await alphaPING.connect(deployer).stopPromoPeriod()
+      let tx = await alphaPING.connect(deployer).togglePromoPeriod()
       await tx.wait()
     })
 
@@ -251,68 +251,84 @@ describe("AlphaPING", function () {
       expect(isPromoPeriod).to.equal(false)
     })
     it("Can turn promo period back on", async () => {
-      let tx = await alphaPING.connect(deployer).startPromoPeriod()
+      let tx = await alphaPING.connect(deployer).togglePromoPeriod()
       let isPromoPeriod: boolean = await alphaPING.promoPeriod()
       expect(isPromoPeriod).to.equal(true)
     })
   })
 
   describe("Set Premium Subscription Prices", function() {
-    let initialSubscriptionPriceWeek = 2000000
     let initialSubscriptionPriceMonth = 5000000
-    let initialSubscriptionPriceYear = 50000000
 
     it("Premium subscription prices starts at deployment", async () => {
-      let subscriptionPriceWeek = await alphaPING.subscriptionPriceWeek()
-      let subscriptionPriceMonth = await alphaPING.subscriptionPriceMonth()
-      let subscriptionPriceYear = await alphaPING.subscriptionPriceYear()
-      expect(subscriptionPriceWeek).to.equal(initialSubscriptionPriceWeek)
+      let subscriptionPriceMonth = await alphaPING.subscriptionPriceMonthly()
       expect(subscriptionPriceMonth).to.equal(initialSubscriptionPriceMonth)
-      expect(subscriptionPriceYear).to.equal(initialSubscriptionPriceYear)
-    })
-    it("Can set new weekly subscription price", async () => {
-      let newPrice = 3000
-      let tx = await alphaPING.setSubscriptionPriceWeek(newPrice)
-      await tx.wait()
-      let newWeeklyPrice = await alphaPING.subscriptionPriceWeek()
-      expect(newWeeklyPrice).to.equal(newPrice)
     })
     it("Can set new monthly subscription price", async () => {
       let newPrice = 3000
-      let tx = await alphaPING.setSubscriptionPriceMonth(newPrice)
+      let tx = await alphaPING.setSubscriptionPriceMonthly(newPrice)
       await tx.wait()
-      let newMonthlyPrice = await alphaPING.subscriptionPriceMonth()
+      let newMonthlyPrice = await alphaPING.subscriptionPriceMonthly()
       expect(newMonthlyPrice).to.equal(newPrice)
-    })
-    it("Can set new yearly subscription price", async () => {
-      let newPrice = 3000
-      let tx = await alphaPING.setSubscriptionPriceYear(newPrice)
-      await tx.wait()
-      let newYearlyPrice = await alphaPING.subscriptionPriceYear()
-      expect(newYearlyPrice).to.equal(newPrice)
     })
   })
 
-  // describe("Withdrawing", function() {
-  //   const ID = 1;
-  //   const AMOUNT = ethers.utils.parseUnits("10", "ether")
-  //   let balanceBefore
+  describe("Purchase and verify premium memberships", function() {
+    let isPremiumSunscribedBefore: boolean
+    this.beforeEach(async() => {
+      let tx = await alphaPING.connect(user).mint()
+      await tx.wait()
+      isPremiumSunscribedBefore = await alphaPING.isSubscriptionActive(user)
+    })
 
-  //   beforeEach(async() => {
-  //     balanceBefore = await ethers.provider.getBalance(deployer.address)
-  //     let tx = await dappcord.connect(user).mint(ID, { value: AMOUNT})
-  //     await tx.wait()
-  //     tx = await dappcord.connect(deployer).withdraw()
-  //     await tx.wait()
-  //   })
+    it("Owner is premium subscriber by default (no fee)", async () => {
+      let isOwnerPremium = await alphaPING.isSubscriptionActive(deployer)
+      expect(isOwnerPremium).to.equal(true)
+    })
+    it("User starts out with no subscription", async () => {
+      expect(isPremiumSunscribedBefore).to.equal(false)
+    })
+    it("User can buy a premium subscription", async () => {
+      let subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
+      let tx = await alphaPING.connect(user).purchaseMonthlySubscription({ value: subscriptionPrice })
+      await tx.wait()
+      let isUserPremium = await alphaPING.isSubscriptionActive(user)
+      expect(isUserPremium).to.equal(true)
+    })
+    it("Confirm premium subscription expiration", async () => {
+      let numberOfSecondsInMonth = 2592000
+      let subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
+      let tx = await alphaPING.connect(user).purchaseMonthlySubscription({ value: subscriptionPrice })
+      await tx.wait()
+      let userPremiumExpiration = await alphaPING.premiumMembershipExpiry(user)
+      let currentBlock = await ethers.provider.getBlock()
+      expect(userPremiumExpiration).to.equal(currentBlock.timestamp + numberOfSecondsInMonth)
+    })
+  })
 
-  //   it("Updates owner balance", async () => {
-  //     let balanceAfter = await ethers.provider.getBalance(deployer.address)
-  //     expect(balanceAfter).to.be.greaterThan(balanceBefore)
-  //   })
-  //   it("Updates contract balance", async () => {
-  //     let result = await ethers.provider.getBalance(dappcord.address)
-  //     expect(result).to.be.equal(0)
-  //   })
-  // })
+  describe("Withdrawing", function() {
+    let balanceBefore: number
+
+    beforeEach(async() => {
+      balanceBefore = await ethers.provider.getBalance(deployer)
+      let tx = await alphaPING.connect(user).mint()
+      await tx.wait()
+      tx = await alphaPING.connect(deployer).setSubscriptionPriceMonthly(tokens(1))
+      await tx.wait()
+      let subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
+      tx = await alphaPING.connect(user).purchaseMonthlySubscription({ value: subscriptionPrice })
+      await tx.wait()
+      tx = await alphaPING.connect(deployer).withdraw()
+      await tx.wait()
+    })
+
+    it("Updates owner balance", async () => {
+      let balanceAfter = await ethers.provider.getBalance(deployer)
+      expect(balanceAfter).to.be.greaterThan(balanceBefore)
+    })
+    it("Updates contract balance", async () => {
+      let result = await ethers.provider.getBalance(alphaPING)
+      expect(result).to.be.equal(0)
+    })
+  })
 })

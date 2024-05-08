@@ -39,20 +39,16 @@ contract AlphaPING is ERC721 {
     mapping(uint256 => mapping(address => bool)) public channelBans;
 
     // promo period
-    bool public promoPeriod;
+    bool public promoPeriod = true;
 
     // premium membership subscription
     mapping(address => uint256) public premiumMembershipExpiry;
 
     // to buy a premium subscription we need some other stuff
     // the expiry (how long the subscription lasts in seconds)
-    uint256 public weekDuration = 604800;
     uint256 public monthDuration = 2592000;
-    uint256 public yearDuration = 31536000;
     // the cost (how long much the subscription costs for a period)
-    uint256 public subscriptionPriceWeek;
-    uint256 public subscriptionPriceMonth;
-    uint256 public subscriptionPriceYear;
+    uint256 public subscriptionPriceMonthly;
 
     // personal account blocking
 
@@ -117,14 +113,9 @@ contract AlphaPING is ERC721 {
     {
         owner = msg.sender;
         mint();
-        startPromoPeriod();
         // set up some initial subscription prices
-        // $2 a week
-        setSubscriptionPriceWeek(2000000);
         // $5 a month
-        setSubscriptionPriceMonth(5000000);
-        // $50 a year
-        setSubscriptionPriceYear(50000000);
+        setSubscriptionPriceMonthly(5000000);
     }
 
     // this is how to join the app in general
@@ -220,7 +211,6 @@ contract AlphaPING is ERC721 {
     function joinChannel(uint _channelId) 
     public 
     onlyMember 
-    onlyGoodOnes 
     onlyLegitChannels(_channelId){
         require(
             hasJoinedChannel[_channelId][msg.sender] != true,
@@ -233,7 +223,6 @@ contract AlphaPING is ERC721 {
     // only members can leave channels
     function leaveChannel(uint _channelId) 
     public 
-    onlyMember
     onlyLegitChannels(_channelId){
         require(
             hasJoinedChannel[_channelId][msg.sender] == true,
@@ -253,7 +242,7 @@ contract AlphaPING is ERC721 {
     }
 
     // transfer owner with some extra rules
-    function transferOwner(address _newOwner) public onlyOwner onlyGoodOnes{
+    function transferOwner(address _newOwner) public onlyOwner{
         // new owner must be a member
         require(
             isMember[_newOwner] == true,
@@ -271,8 +260,7 @@ contract AlphaPING is ERC721 {
     function transferMod(address _newMod, uint256 _channelId) 
     public 
     onlyLegitChannels(_channelId)
-    onlyMod(_channelId) 
-    onlyGoodOnes{
+    onlyMod(_channelId){
         // new mod must be a member
         require(
             isMember[_newMod] == true,
@@ -345,27 +333,35 @@ contract AlphaPING is ERC721 {
         isBlackListed[_bannedMod] = true;
     }
 
-    function startPromoPeriod() public onlyOwner{
-        promoPeriod = true;
+    // these are functions for turning off and on free 
+    // premium membership promotion period
+    function togglePromoPeriod() public onlyOwner{
+        promoPeriod = !promoPeriod;
     }
 
-    function stopPromoPeriod() public onlyOwner{
-        promoPeriod = false;
+    // these functions allow the owner to set new subscription prices
+    function setSubscriptionPriceMonthly(uint256 _newSubscriptionPrice) public onlyOwner{
+        subscriptionPriceMonthly = _newSubscriptionPrice;
     }
 
-    function setSubscriptionPriceWeek(uint256 _newSubscriptionPrice) public onlyOwner{
-        subscriptionPriceWeek = _newSubscriptionPrice;
+    // allow users to purchase premium memberships
+    function purchaseMonthlySubscription() external payable onlyMember{
+        require(
+            msg.value >= subscriptionPriceMonthly, 
+            "Insufficient Funds Provided!"
+        );
+        premiumMembershipExpiry[msg.sender] = block.timestamp + monthDuration;
     }
-    function setSubscriptionPriceMonth(uint256 _newSubscriptionPrice) public onlyOwner{
-        subscriptionPriceMonth = _newSubscriptionPrice;
-    }
-    function setSubscriptionPriceYear(uint256 _newSubscriptionPrice) public onlyOwner{
-        subscriptionPriceYear = _newSubscriptionPrice;
+    // we also need a function to check if the subscription has expired
+    function isSubscriptionActive(address _subscriber) external view returns (bool) {
+        // owner is premium by default
+        if(_subscriber == owner){
+            return true;
+        }
+        return premiumMembershipExpiry[_subscriber] > block.timestamp;
     }
 
-    event SubscriptionPurchased(address indexed subscriber, uint256 expiry);
-
-    function withdraw() public onlyOwner onlyGoodOnes{
+    function withdraw() public onlyOwner{
         (bool success, ) = owner.call{value: address(this).balance}("");
         require(success);
     }
