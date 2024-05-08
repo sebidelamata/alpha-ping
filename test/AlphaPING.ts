@@ -3,7 +3,8 @@ const { ethers } = require("hardhat")
 import {
   Signer,
   ContractFactory,
-  AddressLike
+  AddressLike,
+  ContractTransaction
 } from 'ethers'
 import { AlphaPING } from "../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { ERC20Faucet } from "../typechain-types/contracts/ERC20Faucet";
@@ -242,6 +243,52 @@ describe("AlphaPING", function () {
     })
   })
 
+  describe("Personal Block List", function() {
+    let isBlockedBefore: Boolean
+    beforeEach(async () => {
+      isBlockedBefore = await alphaPING.personalBlockList(user, deployer)
+      let tx = await alphaPING.connect(user).addToPersonalBlockList(deployer)
+      await tx.wait()
+    })
+
+    it("Deployer in not blocked by User at first", async () => {
+      expect(isBlockedBefore).to.equal(false)
+    })
+    it("User can block Deployer", async () => {
+      let isBlocked: boolean = await alphaPING.personalBlockList(user, deployer)
+      expect(isBlocked).to.equal(true)
+    })
+    it("User can unblock Deployer", async () => {
+      let tx = await alphaPING.connect(user).removeFromPersonalBlockList(deployer)
+      await tx.wait()
+      let isBlocked: boolean = await alphaPING.personalBlockList(user, deployer)
+      expect(isBlocked).to.equal(false)
+    })
+  })
+
+  describe("Personal Follow List", function() {
+    let isFollowedBefore: Boolean
+    beforeEach(async () => {
+      isFollowedBefore = await alphaPING.personalFollowList(user, deployer)
+      let tx = await alphaPING.connect(user).addToPersonalFollowList(deployer)
+      await tx.wait()
+    })
+
+    it("Deployer in not followed by User at first", async () => {
+      expect(isFollowedBefore).to.equal(false)
+    })
+    it("User can follow Deployer", async () => {
+      let isFollowed: boolean = await alphaPING.personalFollowList(user, deployer)
+      expect(isFollowed).to.equal(true)
+    })
+    it("User can unblock Deployer", async () => {
+      let tx = await alphaPING.connect(user).removeFromPersonalFollowList(deployer)
+      await tx.wait()
+      let isFollowed: boolean = await alphaPING.personalFollowList(user, deployer)
+      expect(isFollowed).to.equal(false)
+    })
+  })
+
   describe("Promotion Periods", function() {
     let isPromoPeriodBefore: boolean
     beforeEach(async () => {
@@ -326,7 +373,7 @@ describe("AlphaPING", function () {
   })
 
   describe("Withdrawing", function() {
-    let balanceBefore: number
+    let balanceBefore: BigInt
     let subscriptionPrice: BigInt
     beforeEach(async() => {
       // deploy our mock usdc 

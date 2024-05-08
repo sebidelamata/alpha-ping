@@ -42,6 +42,8 @@ export declare namespace AlphaPING {
 export interface AlphaPINGInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "addToPersonalBlockList"
+      | "addToPersonalFollowList"
       | "approve"
       | "balanceOf"
       | "banMod"
@@ -67,9 +69,13 @@ export interface AlphaPINGInterface extends Interface {
       | "name"
       | "owner"
       | "ownerOf"
+      | "personalBlockList"
+      | "personalFollowList"
       | "premiumMembershipExpiry"
       | "promoPeriod"
       | "purchaseMonthlySubscription"
+      | "removeFromPersonalBlockList"
+      | "removeFromPersonalFollowList"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
@@ -94,6 +100,14 @@ export interface AlphaPINGInterface extends Interface {
     nameOrSignatureOrTopic: "Approval" | "ApprovalForAll" | "Transfer"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "addToPersonalBlockList",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addToPersonalFollowList",
+    values: [AddressLike]
+  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [AddressLike, BigNumberish]
@@ -183,6 +197,14 @@ export interface AlphaPINGInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "personalBlockList",
+    values: [AddressLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "personalFollowList",
+    values: [AddressLike, AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "premiumMembershipExpiry",
     values: [AddressLike]
   ): string;
@@ -193,6 +215,14 @@ export interface AlphaPINGInterface extends Interface {
   encodeFunctionData(
     functionFragment: "purchaseMonthlySubscription",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "removeFromPersonalBlockList",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "removeFromPersonalFollowList",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
@@ -261,6 +291,14 @@ export interface AlphaPINGInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "addToPersonalBlockList",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "addToPersonalFollowList",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "banMod", data: BytesLike): Result;
@@ -326,6 +364,14 @@ export interface AlphaPINGInterface extends Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "personalBlockList",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "personalFollowList",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "premiumMembershipExpiry",
     data: BytesLike
   ): Result;
@@ -335,6 +381,14 @@ export interface AlphaPINGInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "purchaseMonthlySubscription",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "removeFromPersonalBlockList",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "removeFromPersonalFollowList",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -503,6 +557,18 @@ export interface AlphaPING extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  addToPersonalBlockList: TypedContractMethod<
+    [_blacklistedAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  addToPersonalFollowList: TypedContractMethod<
+    [_followedAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
   approve: TypedContractMethod<
     [to: AddressLike, tokenId: BigNumberish],
     [void],
@@ -620,6 +686,18 @@ export interface AlphaPING extends BaseContract {
 
   ownerOf: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
 
+  personalBlockList: TypedContractMethod<
+    [arg0: AddressLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+
+  personalFollowList: TypedContractMethod<
+    [arg0: AddressLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+
   premiumMembershipExpiry: TypedContractMethod<
     [arg0: AddressLike],
     [bigint],
@@ -629,6 +707,18 @@ export interface AlphaPING extends BaseContract {
   promoPeriod: TypedContractMethod<[], [boolean], "view">;
 
   purchaseMonthlySubscription: TypedContractMethod<[], [void], "nonpayable">;
+
+  removeFromPersonalBlockList: TypedContractMethod<
+    [_blacklistedAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  removeFromPersonalFollowList: TypedContractMethod<
+    [_followedAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   "safeTransferFrom(address,address,uint256)": TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
@@ -715,6 +805,16 @@ export interface AlphaPING extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "addToPersonalBlockList"
+  ): TypedContractMethod<
+    [_blacklistedAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "addToPersonalFollowList"
+  ): TypedContractMethod<[_followedAddress: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "approve"
   ): TypedContractMethod<
@@ -838,6 +938,20 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "ownerOf"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
   getFunction(
+    nameOrSignature: "personalBlockList"
+  ): TypedContractMethod<
+    [arg0: AddressLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "personalFollowList"
+  ): TypedContractMethod<
+    [arg0: AddressLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
     nameOrSignature: "premiumMembershipExpiry"
   ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
   getFunction(
@@ -846,6 +960,16 @@ export interface AlphaPING extends BaseContract {
   getFunction(
     nameOrSignature: "purchaseMonthlySubscription"
   ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "removeFromPersonalBlockList"
+  ): TypedContractMethod<
+    [_blacklistedAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "removeFromPersonalFollowList"
+  ): TypedContractMethod<[_followedAddress: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "safeTransferFrom(address,address,uint256)"
   ): TypedContractMethod<

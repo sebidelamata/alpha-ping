@@ -8,7 +8,6 @@ interface IERC20 {
     // Events
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
-
     // Functions
     function name() external view returns (string memory);
     function decimals() external view returns (uint8);
@@ -54,9 +53,9 @@ contract AlphaPING is ERC721 {
     // our payment currency
     address public subscriptionCurrency;
     // personal blocking
-
+    mapping(address => mapping(address => bool)) public personalBlockList;
     // personal following
-    
+    mapping(address => mapping(address => bool)) public personalFollowList;
     // channel object
     struct Channel {
         uint256 id;
@@ -336,6 +335,22 @@ contract AlphaPING is ERC721 {
         );
         mods[_channelId] = owner;
         isBlackListed[_bannedMod] = true;
+    }
+    
+    // these functions add and remover users from a personal blocklist
+    function addToPersonalBlockList(address _blacklistedAddress) public {
+        personalBlockList[msg.sender][_blacklistedAddress] = true;
+    }
+    function removeFromPersonalBlockList(address _blacklistedAddress) public {
+        personalBlockList[msg.sender][_blacklistedAddress] = false;
+    }
+
+    // these functions add and remover users from a personal blocklist
+    function addToPersonalFollowList(address _followedAddress) public {
+        personalFollowList[msg.sender][_followedAddress] = true;
+    }
+    function removeFromPersonalFollowList(address _followedAddress) public {
+        personalFollowList[msg.sender][_followedAddress] = false;
     }
 
     // these are functions for turning off and on free 
