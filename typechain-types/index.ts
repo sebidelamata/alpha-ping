@@ -12,6 +12,8 @@ export type { IERC20Errors } from "./@openzeppelin/contracts/interfaces/draft-IE
 export { IERC20Errors__factory } from "./factories/@openzeppelin/contracts/interfaces/draft-IERC6093.sol/IERC20Errors__factory";
 export type { IERC721Errors } from "./@openzeppelin/contracts/interfaces/draft-IERC6093.sol/IERC721Errors";
 export { IERC721Errors__factory } from "./factories/@openzeppelin/contracts/interfaces/draft-IERC6093.sol/IERC721Errors__factory";
+export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
+export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
 export type { ERC721 } from "./@openzeppelin/contracts/token/ERC721/ERC721";
 export { ERC721__factory } from "./factories/@openzeppelin/contracts/token/ERC721/ERC721__factory";
 export type { IERC721Metadata } from "./@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata";
@@ -30,5 +32,5 @@ export type { Strings } from "./@openzeppelin/contracts/utils/Strings";
 export { Strings__factory } from "./factories/@openzeppelin/contracts/utils/Strings__factory";
 export type { AlphaPING } from "./contracts/AlphaPING.sol/AlphaPING";
 export { AlphaPING__factory } from "./factories/contracts/AlphaPING.sol/AlphaPING__factory";
-export type { IERC20 } from "./contracts/AlphaPING.sol/IERC20";
-export { IERC20__factory } from "./factories/contracts/AlphaPING.sol/IERC20__factory";
+export type { ERC20Faucet } from "./contracts/ERC20Faucet";
+export { ERC20Faucet__factory } from "./factories/contracts/ERC20Faucet__factory";

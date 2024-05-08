@@ -21,9 +21,9 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from "../common";
 
-export interface IERC20Interface extends Interface {
+export interface ERC20FaucetInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "allowance"
@@ -32,6 +32,7 @@ export interface IERC20Interface extends Interface {
       | "decimals"
       | "name"
       | "sendTokens"
+      | "symbol"
       | "totalSupply"
       | "transfer"
       | "transferFrom"
@@ -57,6 +58,7 @@ export interface IERC20Interface extends Interface {
     functionFragment: "sendTokens",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
@@ -76,6 +78,7 @@ export interface IERC20Interface extends Interface {
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sendTokens", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
@@ -123,11 +126,11 @@ export namespace TransferEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface IERC20 extends BaseContract {
-  connect(runner?: ContractRunner | null): IERC20;
+export interface ERC20Faucet extends BaseContract {
+  connect(runner?: ContractRunner | null): ERC20Faucet;
   waitForDeployment(): Promise<this>;
 
-  interface: IERC20Interface;
+  interface: ERC20FaucetInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -190,6 +193,8 @@ export interface IERC20 extends BaseContract {
     "nonpayable"
   >;
 
+  symbol: TypedContractMethod<[], [string], "view">;
+
   totalSupply: TypedContractMethod<[], [bigint], "view">;
 
   transfer: TypedContractMethod<
@@ -238,6 +243,9 @@ export interface IERC20 extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "symbol"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "totalSupply"
   ): TypedContractMethod<[], [bigint], "view">;

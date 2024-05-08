@@ -73,7 +73,9 @@ export interface AlphaPINGInterface extends Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
+      | "setSubscriptionCurrency"
       | "setSubscriptionPriceMonthly"
+      | "subscriptionCurrency"
       | "subscriptionPriceMonthly"
       | "supportsInterface"
       | "symbol"
@@ -205,8 +207,16 @@ export interface AlphaPINGInterface extends Interface {
     values: [AddressLike, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "setSubscriptionCurrency",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setSubscriptionPriceMonthly",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "subscriptionCurrency",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "subscriptionPriceMonthly",
@@ -340,7 +350,15 @@ export interface AlphaPINGInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setSubscriptionCurrency",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setSubscriptionPriceMonthly",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "subscriptionCurrency",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -610,7 +628,7 @@ export interface AlphaPING extends BaseContract {
 
   promoPeriod: TypedContractMethod<[], [boolean], "view">;
 
-  purchaseMonthlySubscription: TypedContractMethod<[], [void], "payable">;
+  purchaseMonthlySubscription: TypedContractMethod<[], [void], "nonpayable">;
 
   "safeTransferFrom(address,address,uint256)": TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
@@ -635,11 +653,19 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
 
+  setSubscriptionCurrency: TypedContractMethod<
+    [_subscriptionCurrency: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
   setSubscriptionPriceMonthly: TypedContractMethod<
     [_newSubscriptionPrice: BigNumberish],
     [void],
     "nonpayable"
   >;
+
+  subscriptionCurrency: TypedContractMethod<[], [string], "view">;
 
   subscriptionPriceMonthly: TypedContractMethod<[], [bigint], "view">;
 
@@ -819,7 +845,7 @@ export interface AlphaPING extends BaseContract {
   ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
     nameOrSignature: "purchaseMonthlySubscription"
-  ): TypedContractMethod<[], [void], "payable">;
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "safeTransferFrom(address,address,uint256)"
   ): TypedContractMethod<
@@ -847,12 +873,22 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "setSubscriptionCurrency"
+  ): TypedContractMethod<
+    [_subscriptionCurrency: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "setSubscriptionPriceMonthly"
   ): TypedContractMethod<
     [_newSubscriptionPrice: BigNumberish],
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "subscriptionCurrency"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "subscriptionPriceMonthly"
   ): TypedContractMethod<[], [bigint], "view">;

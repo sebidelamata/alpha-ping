@@ -6,7 +6,7 @@ import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
   IERC20,
   IERC20Interface,
-} from "../../../contracts/AlphaPING.sol/IERC20";
+} from "../../../../../@openzeppelin/contracts/token/ERC20/IERC20";
 
 const _abi = [
   {
@@ -92,7 +92,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "amount",
+        name: "value",
         type: "uint256",
       },
     ],
@@ -128,55 +128,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "decimals",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "sendTokens",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "totalSupply",
     outputs: [
       {
@@ -192,12 +143,12 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "recipient",
+        name: "to",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "amount",
+        name: "value",
         type: "uint256",
       },
     ],
@@ -216,17 +167,17 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "sender",
+        name: "from",
         type: "address",
       },
       {
         internalType: "address",
-        name: "recipient",
+        name: "to",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "amount",
+        name: "value",
         type: "uint256",
       },
     ],

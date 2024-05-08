@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as alphaPingSol from "./AlphaPING.sol";
+export { ERC20Faucet__factory } from "./ERC20Faucet__factory";

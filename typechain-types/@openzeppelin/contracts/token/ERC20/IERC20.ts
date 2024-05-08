@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from "../../../../common";
 
 export interface IERC20Interface extends Interface {
   getFunction(
@@ -29,9 +29,6 @@ export interface IERC20Interface extends Interface {
       | "allowance"
       | "approve"
       | "balanceOf"
-      | "decimals"
-      | "name"
-      | "sendTokens"
       | "totalSupply"
       | "transfer"
       | "transferFrom"
@@ -51,12 +48,6 @@ export interface IERC20Interface extends Interface {
     functionFragment: "balanceOf",
     values: [AddressLike]
   ): string;
-  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "sendTokens",
-    values: [AddressLike, AddressLike, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
@@ -73,9 +64,6 @@ export interface IERC20Interface extends Interface {
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "sendTokens", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
@@ -173,33 +161,23 @@ export interface IERC20 extends BaseContract {
   >;
 
   approve: TypedContractMethod<
-    [spender: AddressLike, amount: BigNumberish],
+    [spender: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
 
   balanceOf: TypedContractMethod<[account: AddressLike], [bigint], "view">;
 
-  decimals: TypedContractMethod<[], [bigint], "view">;
-
-  name: TypedContractMethod<[], [string], "view">;
-
-  sendTokens: TypedContractMethod<
-    [token: AddressLike, recipient: AddressLike, amount: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
   totalSupply: TypedContractMethod<[], [bigint], "view">;
 
   transfer: TypedContractMethod<
-    [recipient: AddressLike, amount: BigNumberish],
+    [to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
 
   transferFrom: TypedContractMethod<
-    [sender: AddressLike, recipient: AddressLike, amount: BigNumberish],
+    [from: AddressLike, to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
@@ -218,7 +196,7 @@ export interface IERC20 extends BaseContract {
   getFunction(
     nameOrSignature: "approve"
   ): TypedContractMethod<
-    [spender: AddressLike, amount: BigNumberish],
+    [spender: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
@@ -226,32 +204,19 @@ export interface IERC20 extends BaseContract {
     nameOrSignature: "balanceOf"
   ): TypedContractMethod<[account: AddressLike], [bigint], "view">;
   getFunction(
-    nameOrSignature: "decimals"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "name"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "sendTokens"
-  ): TypedContractMethod<
-    [token: AddressLike, recipient: AddressLike, amount: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
     nameOrSignature: "totalSupply"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "transfer"
   ): TypedContractMethod<
-    [recipient: AddressLike, amount: BigNumberish],
+    [to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
   getFunction(
     nameOrSignature: "transferFrom"
   ): TypedContractMethod<
-    [sender: AddressLike, recipient: AddressLike, amount: BigNumberish],
+    [from: AddressLike, to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;

@@ -3,3 +3,4 @@
 /* eslint-disable */
 import type * as alphaPingSol from "./AlphaPING.sol";
 export type { alphaPingSol };
+export type { ERC20Faucet } from "./ERC20Faucet";

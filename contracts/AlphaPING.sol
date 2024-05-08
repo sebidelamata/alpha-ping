@@ -2,63 +2,69 @@
 pragma solidity ^0.8.20;
 
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import "hardhat/console.sol";
 
 interface IERC20 {
+    // Events
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+
+    // Functions
     function name() external view returns (string memory);
     function decimals() external view returns (uint8);
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function sendTokens(address token, address recipient, uint256 amount) external;
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
 }
 
 contract AlphaPING is ERC721 {
-
     // total nft supply (for keeping track of members)
     uint256 public totalSupply;
-
     // owner and admins
     address public owner;
     // the uint corresponds to the id of the channel
     mapping(uint256 => address) public mods;
-
     // keeps track of total number of channels
     uint256 public totalChannels;
-
     // mapping to track whether a channel has been created for a token address
     mapping(address => bool) public channelExistsForToken;
-
      // maps each channel id to a channel object
     mapping(uint256 => Channel) public channels;
     // maps each channel id to a mapping of each address if it has joined
     mapping(uint256 => mapping(address => bool)) public hasJoinedChannel;
-
     // we also want to hold memberships
     mapping(address => bool) public isMember;
-
     // need to be able to ban bad behaviour and bots
     mapping(address => bool) public isBlackListed;
-
     // keep track of channel bans
     mapping(uint256 => mapping(address => bool)) public channelBans;
-
     // promo period
     bool public promoPeriod = true;
-
     // premium membership subscription
     mapping(address => uint256) public premiumMembershipExpiry;
-
     // to buy a premium subscription we need some other stuff
     // the expiry (how long the subscription lasts in seconds)
     uint256 public monthDuration = 2592000;
     // the cost (how long much the subscription costs for a period)
     uint256 public subscriptionPriceMonthly;
+    // our payment currency
+    address public subscriptionCurrency;
+    // personal blocking
 
-    // personal account blocking
-
+    // personal following
+    
+    // channel object
     struct Channel {
         uint256 id;
         address tokenAdress;
         string name;
         string tokenType;
     }
-
+    //modifiers
     modifier onlyOwner() {
         require(
             msg.sender == owner, 
@@ -66,7 +72,6 @@ contract AlphaPING is ERC721 {
             );
         _;
     }
-
     // we also have mod role per channel, but owner can also do anything a mod can do
     modifier onlyMod(uint256 _channelId) {
         require(
@@ -75,7 +80,6 @@ contract AlphaPING is ERC721 {
             );
         _;
     }
-
     // members can create, join, and leave channels
     modifier onlyMember(){
         require(
@@ -84,7 +88,6 @@ contract AlphaPING is ERC721 {
             );
         _;
     }
-
     // bad behavior and bots are banned from pretty much everything
     modifier onlyGoodOnes(){
         require(
@@ -93,7 +96,6 @@ contract AlphaPING is ERC721 {
             );
         _;
     }
-
     // we verify if it is a real channel a lot
     modifier onlyLegitChannels(uint256 _channelId){
         require(
@@ -106,18 +108,20 @@ contract AlphaPING is ERC721 {
             );
         _;
     }
-
+    // Constructor
     // need to pass in these args when we deploy
     constructor(string memory _name, string memory _symbol) 
     ERC721(_name, _symbol)
     {
         owner = msg.sender;
         mint();
+        // set up subscription currency (usdc)
+        setSubscriptionCurrency(0xaf88d065e77c8cC2239327C5EDb3A432268e5831);
         // set up some initial subscription prices
         // $5 a month
         setSubscriptionPriceMonthly(5000000);
     }
-
+    // Functions
     // this is how to join the app in general
     function mint() public{
         // mint nft
@@ -320,6 +324,7 @@ contract AlphaPING is ERC721 {
         isBlackListed[_blacklistedUser] = false;
     }
 
+    // this function will remove mode role and add them to blacklist
     function banMod(address _bannedMod, uint256 _channelId) public onlyOwner{
         require(
             isBlackListed[_bannedMod] != true,
@@ -339,16 +344,35 @@ contract AlphaPING is ERC721 {
         promoPeriod = !promoPeriod;
     }
 
+    // set our payment currency
+    function setSubscriptionCurrency(address _subscriptionCurrency) public onlyOwner{
+        subscriptionCurrency = _subscriptionCurrency;
+    }
+
     // these functions allow the owner to set new subscription prices
     function setSubscriptionPriceMonthly(uint256 _newSubscriptionPrice) public onlyOwner{
         subscriptionPriceMonthly = _newSubscriptionPrice;
     }
 
     // allow users to purchase premium memberships
-    function purchaseMonthlySubscription() external payable onlyMember{
+    function purchaseMonthlySubscription() external onlyMember{
         require(
-            msg.value >= subscriptionPriceMonthly, 
-            "Insufficient Funds Provided!"
+            IERC20(subscriptionCurrency).balanceOf(msg.sender) >= subscriptionPriceMonthly, 
+            "You do not have enough USDC balance!"
+        );
+        // Check the allowance
+        uint256 allowed = IERC20(subscriptionCurrency).allowance(msg.sender, address(this));
+        console.log(allowed);
+        require(
+            allowed >= subscriptionPriceMonthly, 
+            "Allowance is not sufficient"
+        );
+        // Transfer USDC tokens from the sender to the contract
+        bool success = IERC20(subscriptionCurrency).transferFrom(msg.sender, address(this), subscriptionPriceMonthly);
+        console.log(success);
+        require(
+            success,
+            "Transfer Failed"
         );
         premiumMembershipExpiry[msg.sender] = block.timestamp + monthDuration;
     }
@@ -361,6 +385,7 @@ contract AlphaPING is ERC721 {
         return premiumMembershipExpiry[_subscriber] > block.timestamp;
     }
 
+    // allow owner to witdhraw subscription payments
     function withdraw() public onlyOwner{
         (bool success, ) = owner.call{value: address(this).balance}("");
         require(success);

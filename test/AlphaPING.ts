@@ -6,6 +6,7 @@ import {
   AddressLike
 } from 'ethers'
 import { AlphaPING } from "../typechain-types/contracts/AlphaPING.sol/AlphaPING";
+import { ERC20Faucet } from "../typechain-types/contracts/ERC20Faucet.sol/ERC20Faucet";
 
 const tokens = (n: number) => {
   return ethers.parseUnits(n.toString(), 'ether')
@@ -24,8 +25,14 @@ describe("AlphaPING", function () {
 
   let AlphaPING: ContractFactory
   let alphaPING: AlphaPING
+  let alphaPINGContract: AddressLike
   let deployer: Signer, user: Signer, nonMember: Signer
   let userIsMemberBefore: boolean;
+
+  // mock usdc user will deploy
+  let ERC20Faucet: ContractFactory
+  let eRC20Faucet: ERC20Faucet
+
   beforeEach( async () => {
     [deployer, user, nonMember] = await ethers.getSigners()
     AlphaPING = await ethers.getContractFactory("AlphaPING")
@@ -275,8 +282,21 @@ describe("AlphaPING", function () {
 
   describe("Purchase and verify premium memberships", function() {
     let isPremiumSunscribedBefore: boolean
+    let subscriptionPrice: BigInt
     this.beforeEach(async() => {
-      let tx = await alphaPING.connect(user).mint()
+      // deploy some mock usdc for our test
+      ERC20Faucet = await ethers.getContractFactory("ERC20Faucet")
+      eRC20Faucet = await ERC20Faucet.connect(user).deploy()
+
+      let tokenAddress = await eRC20Faucet.getAddress()
+      // approve spending first
+      alphaPINGContract = await alphaPING.getAddress()
+      subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
+      let tx = await eRC20Faucet.approve(alphaPINGContract, subscriptionPrice)
+      // set our subscription to our mock usdc
+      tx = await alphaPING.setSubscriptionCurrency(tokenAddress)
+      await tx.wait()
+      tx = await alphaPING.connect(user).mint()
       await tx.wait()
       isPremiumSunscribedBefore = await alphaPING.isSubscriptionActive(user)
     })
@@ -289,16 +309,15 @@ describe("AlphaPING", function () {
       expect(isPremiumSunscribedBefore).to.equal(false)
     })
     it("User can buy a premium subscription", async () => {
-      let subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
-      let tx = await alphaPING.connect(user).purchaseMonthlySubscription({ value: subscriptionPrice })
+      let tx = await alphaPING.connect(user).purchaseMonthlySubscription()
       await tx.wait()
+     
       let isUserPremium = await alphaPING.isSubscriptionActive(user)
       expect(isUserPremium).to.equal(true)
     })
     it("Confirm premium subscription expiration", async () => {
       let numberOfSecondsInMonth = 2592000
-      let subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
-      let tx = await alphaPING.connect(user).purchaseMonthlySubscription({ value: subscriptionPrice })
+      let tx = await alphaPING.connect(user).purchaseMonthlySubscription()
       await tx.wait()
       let userPremiumExpiration = await alphaPING.premiumMembershipExpiry(user)
       let currentBlock = await ethers.provider.getBlock()
@@ -310,24 +329,34 @@ describe("AlphaPING", function () {
     let balanceBefore: number
 
     beforeEach(async() => {
-      balanceBefore = await ethers.provider.getBalance(deployer)
-      let tx = await alphaPING.connect(user).mint()
+      // deploy our mock usdc 
+      ERC20Faucet = await ethers.getContractFactory("ERC20Faucet")
+      eRC20Faucet = await ERC20Faucet.connect(user).deploy()
+
+      balanceBefore = await eRC20Faucet.balanceOf(user)
+
+      // set mock usdc as currency
+      let tokenAddress = await eRC20Faucet.getAddress()
+
+      // set our subscription to our mock usdc
+      let tx = await alphaPING.setSubscriptionCurrency(tokenAddress)
       await tx.wait()
-      tx = await alphaPING.connect(deployer).setSubscriptionPriceMonthly(tokens(1))
+
+      tx = await alphaPING.connect(user).mint()
       await tx.wait()
       let subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
-      tx = await alphaPING.connect(user).purchaseMonthlySubscription({ value: subscriptionPrice })
+      tx = await alphaPING.connect(user).purchaseMonthlySubscription()
       await tx.wait()
       tx = await alphaPING.connect(deployer).withdraw()
       await tx.wait()
     })
 
     it("Updates owner balance", async () => {
-      let balanceAfter = await ethers.provider.getBalance(deployer)
+      let balanceAfter = await eRC20Faucet.balanceOf(user)
       expect(balanceAfter).to.be.greaterThan(balanceBefore)
     })
     it("Updates contract balance", async () => {
-      let result = await ethers.provider.getBalance(alphaPING)
+      let result = await eRC20Faucet.balanceOf(alphaPING)
       expect(result).to.be.equal(0)
     })
   })
