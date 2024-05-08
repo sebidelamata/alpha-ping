@@ -327,13 +327,13 @@ describe("AlphaPING", function () {
 
   describe("Withdrawing", function() {
     let balanceBefore: number
-
+    let subscriptionPrice: BigInt
     beforeEach(async() => {
       // deploy our mock usdc 
       ERC20Faucet = await ethers.getContractFactory("ERC20Faucet")
       eRC20Faucet = await ERC20Faucet.connect(user).deploy()
 
-      balanceBefore = await eRC20Faucet.balanceOf(user)
+      balanceBefore = await eRC20Faucet.balanceOf(deployer)
 
       // set mock usdc as currency
       let tokenAddress = await eRC20Faucet.getAddress()
@@ -341,10 +341,13 @@ describe("AlphaPING", function () {
       // set our subscription to our mock usdc
       let tx = await alphaPING.setSubscriptionCurrency(tokenAddress)
       await tx.wait()
+      // approve spending first
+      alphaPINGContract = await alphaPING.getAddress()
+      subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
+      tx = await eRC20Faucet.approve(alphaPINGContract, subscriptionPrice)
 
       tx = await alphaPING.connect(user).mint()
       await tx.wait()
-      let subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
       tx = await alphaPING.connect(user).purchaseMonthlySubscription()
       await tx.wait()
       tx = await alphaPING.connect(deployer).withdraw()
@@ -352,11 +355,11 @@ describe("AlphaPING", function () {
     })
 
     it("Updates owner balance", async () => {
-      let balanceAfter = await eRC20Faucet.balanceOf(user)
+      let balanceAfter = await eRC20Faucet.balanceOf(deployer)
       expect(balanceAfter).to.be.greaterThan(balanceBefore)
     })
     it("Updates contract balance", async () => {
-      let result = await eRC20Faucet.balanceOf(alphaPING)
+      let result = await eRC20Faucet.balanceOf(alphaPINGContract)
       expect(result).to.be.equal(0)
     })
   })

@@ -362,14 +362,12 @@ contract AlphaPING is ERC721 {
         );
         // Check the allowance
         uint256 allowed = IERC20(subscriptionCurrency).allowance(msg.sender, address(this));
-        console.log(allowed);
         require(
             allowed >= subscriptionPriceMonthly, 
             "Allowance is not sufficient"
         );
         // Transfer USDC tokens from the sender to the contract
         bool success = IERC20(subscriptionCurrency).transferFrom(msg.sender, address(this), subscriptionPriceMonthly);
-        console.log(success);
         require(
             success,
             "Transfer Failed"
@@ -387,7 +385,15 @@ contract AlphaPING is ERC721 {
 
     // allow owner to witdhraw subscription payments
     function withdraw() public onlyOwner{
-        (bool success, ) = owner.call{value: address(this).balance}("");
-        require(success);
+        bool approved = IERC20(subscriptionCurrency).approve(address(this), subscriptionPriceMonthly);
+        bool success = IERC20(subscriptionCurrency).transferFrom(
+            address(this), 
+            owner, 
+            subscriptionPriceMonthly
+        );
+        require(
+            success,
+            "Transfer Failed"
+        );
     }
 }
