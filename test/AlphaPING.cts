@@ -32,7 +32,7 @@ describe("AlphaPING", function () {
 
   // mock usdc user will deploy
   let ERC20Faucet: ContractFactory
-  let eRC20Faucet: ERC20Faucet
+  let eRC20Faucet: any
 
   beforeEach( async () => {
     [deployer, user, nonMember] = await ethers.getSigners()
