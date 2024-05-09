@@ -17,6 +17,10 @@
     "@openzeppelin/contracts": "^5.0.2",
     "@uniswap/sdk-core": "^5.0.0",
     "@uniswap/v3-sdk": "^3.11.2",
-    "dotenv": "^16.4.5"
-  }
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0",
+    "socket.io": "^4.7.5"
+  },
+  "type": "module"
 }
