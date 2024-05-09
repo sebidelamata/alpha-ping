@@ -14,19 +14,19 @@ const socket = io('ws://localhost:3030')
 interface MessagesProps {
     account: string | null;
     messages: Message[];
-    currentChannel: Channel;
+    currentChannel: Channel | null;
   }
 
 const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel }) => {
   const [message, setMessage] = useState("")
 
   const messageEndRef = useRef<HTMLDivElement | null>(null)
-  
+
   const sendMessage:MouseEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
     const messageObj = {
-      channel: currentChannel.id.toString(),
+      channel: currentChannel?.id.toString(),
       account: account,
       text: message
     }

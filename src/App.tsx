@@ -83,7 +83,7 @@ const App:React.FC = () => {
         <img src="/Apes.svg" alt="AlphaPING Logo" />
       </div>
       <h1>AlphaPING</h1>
-      <Messages/>
+      <Messages account={account} messages={messages} currentChannel={currentChannel}/>
     </div>
   )
 }
