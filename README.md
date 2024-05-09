@@ -1,3 +1,3 @@
 # AlphaPING
 
-![Logo](images/Apes.svg)
+![Logo](/Apes.svg)
