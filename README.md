@@ -18,7 +18,7 @@ Open a new terminal after starting local Hardhat node (step 2) and run `npx hard
 
 #### 4. Deploying Smart Contracts
 
-Open a new terminal after starting local Hardhat node (step 2) and run `npx hardhat ignition deploy ignition/modules/AlphaPING.ts --network localhost`
+Open a new terminal after starting local Hardhat node (step 2) and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network localhost`
 
 #### 5. Starting Express Server with Websocket (socket.io) API
 
