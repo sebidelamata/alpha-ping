@@ -11,6 +11,8 @@ const socket = io('ws://localhost:3030');
 
 // navbar
 import Navbar from './components/Navbar'
+// messages
+import Messages from './components/Messages'
 
 const App:React.FC = () => {
 
@@ -52,7 +54,6 @@ const App:React.FC = () => {
 
   useEffect(() => {
     loadBlockchainData()
-    console.log(account)
 
     // --> https://socket.io/how-to/use-with-react-hooks
 
@@ -82,9 +83,7 @@ const App:React.FC = () => {
         <img src="/Apes.svg" alt="AlphaPING Logo" />
       </div>
       <h1>AlphaPING</h1>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Messages/>
     </div>
   )
 }
