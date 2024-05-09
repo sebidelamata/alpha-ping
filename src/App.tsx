@@ -79,10 +79,6 @@ const App:React.FC = () => {
   return (
     <div className='app-container'>
       <Navbar account={account} setAccount={setAccount}/>
-      <div className='logo-container'>
-        <img src="/Apes.svg" alt="AlphaPING Logo" />
-      </div>
-      <h1>AlphaPING</h1>
       <Messages account={account} messages={messages} currentChannel={currentChannel}/>
     </div>
   )

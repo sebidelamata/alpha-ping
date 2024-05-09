@@ -15,7 +15,10 @@ const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
   return (
     <nav>
       <div className='nav__brand'>
-        <h1>Dappcord</h1>
+        <h1>AlphaPING</h1>
+        <div className='logo-container'>
+          <img src="../Apes.svg" alt="AlphaPING Logo" />
+        </div>
       </div>
 
       {account ? (
