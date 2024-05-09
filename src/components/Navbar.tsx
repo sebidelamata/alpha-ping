@@ -1,8 +1,8 @@
 import { ethers } from 'ethers'
 
 interface NavbarProps {
-  account: ethers.JsonRpcSigner | null;
-  setAccount: React.Dispatch<React.SetStateAction<ethers.JsonRpcSigner | null>>;
+  account: string | null;
+  setAccount: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {

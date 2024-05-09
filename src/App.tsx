@@ -15,7 +15,7 @@ import Navbar from './components/Navbar'
 const App:React.FC = () => {
 
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null)
-  const [account, setAccount] = useState<ethers.JsonRpcSigner | null>(null)
+  const [account, setAccount] = useState<string | null>(null)
 
   const [alphaPING, setAlphaPING] = useState<ethers.Contract | null>(null)
   const [channels, setChannels] = useState<Channel[]>([])
@@ -81,7 +81,7 @@ const App:React.FC = () => {
       <div className='logo-container'>
         <img src="/Apes.svg" alt="AlphaPING Logo" />
       </div>
-      <h1>AlphaPING {account}</h1>
+      <h1>AlphaPING</h1>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
