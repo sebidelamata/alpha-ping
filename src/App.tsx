@@ -9,10 +9,13 @@ import config from './blockChainConfigs.json';
 // Socket
 const socket = io('ws://localhost:3030');
 
-const App: React.FC = () => {
+// navbar
+import Navbar from './components/Navbar'
+
+const App:React.FC = () => {
 
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null)
-  const [account, setAccount] = useState<any | null>(null)
+  const [account, setAccount] = useState<ethers.JsonRpcSigner | null>(null)
 
   const [alphaPING, setAlphaPING] = useState<ethers.Contract | null>(null)
   const [channels, setChannels] = useState<Channel[]>([])
@@ -47,8 +50,34 @@ const App: React.FC = () => {
     })
   }
 
+  useEffect(() => {
+    loadBlockchainData()
+    console.log(account)
+
+    // --> https://socket.io/how-to/use-with-react-hooks
+
+    socket.on("connect", () => {
+      socket.emit('get messages')
+    })
+
+    socket.on('new message', (messages) => {
+      setMessages(messages)
+    })
+
+    socket.on('get messages', (messages) => {
+      setMessages(messages)
+    })
+
+    return () => {
+      socket.off('connect')
+      socket.off('new message')
+      socket.off('get messages')
+    }
+  }, [])
+
   return (
     <div className='app-container'>
+      <Navbar account={account} setAccount={setAccount}/>
       <div className='logo-container'>
         <img src="/Apes.svg" alt="AlphaPING Logo" />
       </div>
