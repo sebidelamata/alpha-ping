@@ -11,8 +11,11 @@ const socket = io('ws://localhost:3030');
 
 // navbar
 import Navbar from './components/Navbar'
+//channels
+import Channels from './components/Channels'
 // messages
 import Messages from './components/Messages'
+
 
 const App:React.FC = () => {
 
@@ -79,6 +82,14 @@ const App:React.FC = () => {
   return (
     <div className='app-container'>
       <Navbar account={account} setAccount={setAccount}/>
+      <Channels 
+        provider={provider} 
+        account={account} 
+        alphaPING={alphaPING} 
+        channels={channels} 
+        currentChannel={currentChannel} 
+        setCurrentChannel={setCurrentChannel}
+      />
       <Messages account={account} messages={messages} currentChannel={currentChannel}/>
     </div>
   )

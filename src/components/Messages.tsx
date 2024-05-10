@@ -7,6 +7,7 @@ import React,
 } from 'react'
 import { io } from "socket.io-client"
 import banana from '/Banana.svg'
+import monkeyIconPlaceholder from '/monkeyIconPlaceholder.svg'
 
 
 // Socket
@@ -59,7 +60,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         currentChannel && 
         messages.filter(message => message.channel === currentChannel.id.toString()).map((message, index) => (
           <div className="message" key={index}>
-            {/* <img src={person} alt="Person" /> */}
+            <img src={monkeyIconPlaceholder} alt="Person" />
             <div className="message_content">
               <h3>{message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}</h3>
               <p>
@@ -70,16 +71,26 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         ))}
 
         <div ref={messageEndRef} />
-
       </div>
-
       <form onSubmit={sendMessage}>
-        {currentChannel && account ? (
-          <input type="text" value={message} placeholder={`Message #${currentChannel.name}`} onChange={(e) => setMessage(e.target.value)} />
-        ) : (
-          <input type="text" value="" placeholder={`Please Connect Wallet / Join the Channel`} disabled />
-        )}
-
+        {
+          currentChannel && 
+          account ? (
+            <input 
+              type="text" 
+              value={message} 
+              placeholder={`Message #${currentChannel.name}`} 
+              onChange={(e) => setMessage(e.target.value)} 
+            />
+          ) : (
+            <input 
+              type="text" 
+              value="" 
+              placeholder={`Please Connect Wallet / Join the Channel`} 
+              disabled 
+            />
+          )
+        }
         <button type="submit">
           <img src={banana} alt="Send Message" className='banana-send-icon'/>
         </button>
