@@ -3,11 +3,13 @@ import { ethers } from 'ethers';
 import { io } from "socket.io-client"
 
 // ABIs
-import AlphaPING from '../artifacts/contracts/AlphaPING.sol/AlphaPING.json'
+import AlphaPINGABI from '../artifacts/contracts/AlphaPING.sol/AlphaPING.json'
 // Config
 import config from './blockChainConfigs.json';
 // Socket
 const socket = io('ws://localhost:3030');
+// types
+import { AlphaPING } from '../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 
 // navbar
 import Navbar from './components/Navbar'
@@ -29,30 +31,34 @@ const App:React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
 
   const loadBlockchainData = async () => {
-    const provider = new ethers.BrowserProvider(window.ethereum)
-    setProvider(provider)
+    try{
+      
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      setProvider(provider)
+      let network = await provider.send('eth_chainId',[]);
+      network = parseInt(network, 16).toString()
+      const alphaPING = new ethers.Contract(
+        config[network].AlphaPING.address, 
+        AlphaPINGABI.abi, 
+        provider
+      )
+      setAlphaPING(alphaPING)
+      const totalChannels:number = await alphaPING.totalChannels()
+      const channels = []
 
-    const network = await provider.getNetwork()
-    const alphaPING = new ethers.Contract(
-      config[network.chainId.toString() as keyof typeof config].AlphaPING.address, 
-      AlphaPING.abi, 
-      provider
-    )
-    setAlphaPING(alphaPING)
+      for (var i = 1; i <= totalChannels; i++) {
+        const channel = await alphaPING.getChannel(i)
+        channels.push(channel)
+      }
 
-    const totalChannels = await alphaPING.totalChannels()
-    const channels = []
+      setChannels(channels)
 
-    for (var i = 1; i <= totalChannels; i++) {
-      const channel = await alphaPING.getChannel(i)
-      channels.push(channel)
+      window.ethereum.on('accountsChanged', async () => {
+        window.location.reload()
+      })
+    }catch(error){
+      console.error("Error loading blockchain data:", error);
     }
-
-    setChannels(channels)
-
-    window.ethereum.on('accountsChanged', async () => {
-      window.location.reload()
-    })
   }
 
   useEffect(() => {

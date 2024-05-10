@@ -7,7 +7,7 @@ import React,
 } from 'react'
 import { io } from "socket.io-client"
 import banana from '/Banana.svg'
-import monkeyIconPlaceholder from '/monkeyIconPlaceholder.svg'
+import monkey from '/monkey.svg'
 
 
 // Socket
@@ -60,7 +60,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         currentChannel && 
         messages.filter(message => message.channel === currentChannel.id.toString()).map((message, index) => (
           <div className="message" key={index}>
-            <img src={monkeyIconPlaceholder} alt="Person" />
+            <img src={monkey} alt="Person" className='monkey-icon'/>
             <div className="message_content">
               <h3>{message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}</h3>
               <p>

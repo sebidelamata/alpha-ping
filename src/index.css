@@ -61,6 +61,14 @@ button:focus-visible {
   height: 2svh;
 }
 
+.monkey-icon{
+  display: grid;
+  object-fit: contain;
+  width: 4vw;
+  height: 4svh;
+}
+
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
