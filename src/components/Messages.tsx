@@ -6,6 +6,7 @@ import React,
     MouseEventHandler
 } from 'react'
 import { io } from "socket.io-client"
+import banana from '/Banana.svg'
 
 
 // Socket
@@ -80,7 +81,10 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         )}
 
         <button type="submit">
-          {/* <img src={send} alt="Send Message" /> */}
+          <img src={banana} alt="Send Message" className='banana-send-icon'/>
+        </button>
+        <button type="button">
+          Trade
         </button>
       </form>
     </div>

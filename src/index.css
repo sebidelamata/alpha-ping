@@ -54,6 +54,13 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.banana-send-icon{
+  display: grid;
+  object-fit: contain;
+  width: 2vw;
+  height: 2svh;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
