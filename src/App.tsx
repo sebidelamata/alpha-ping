@@ -19,15 +19,24 @@ import Channels from './components/Channels'
 import Messages from './components/Messages'
 
 
+interface BlockChainConfig {
+  [key: string]: {
+    AlphaPING: {
+      address: string;
+    };
+  };
+}
+
+
 const App:React.FC = () => {
 
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null)
   const [account, setAccount] = useState<string | null>(null)
 
-  const [alphaPING, setAlphaPING] = useState<ethers.Contract | null>(null)
-  const [channels, setChannels] = useState<Channel[]>([])
+  const [alphaPING, setAlphaPING] = useState<AlphaPING | null>(null)
+  const [channels, setChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
 
-  const [currentChannel, setCurrentChannel] = useState<Channel | null>(null)
+  const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
 
   const loadBlockchainData = async () => {
@@ -38,15 +47,15 @@ const App:React.FC = () => {
       let network = await provider.send('eth_chainId',[]);
       network = parseInt(network, 16).toString()
       const alphaPING = new ethers.Contract(
-        config[network].AlphaPING.address, 
-        AlphaPINGABI.abi, 
+        (config as BlockChainConfig)[network].AlphaPING.address,
+        AlphaPINGABI.abi,
         provider
-      )
+      ) as unknown as AlphaPING
       setAlphaPING(alphaPING)
-      const totalChannels:number = await alphaPING.totalChannels()
+      const totalChannels:BigInt = await alphaPING.totalChannels()
       const channels = []
 
-      for (var i = 1; i <= totalChannels; i++) {
+      for (var i = 1; i <= Number(totalChannels); i++) {
         const channel = await alphaPING.getChannel(i)
         channels.push(channel)
       }

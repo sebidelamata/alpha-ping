@@ -8,6 +8,7 @@ import React,
 import { io } from "socket.io-client"
 import banana from '/Banana.svg'
 import monkey from '/monkey.svg'
+import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 
 
 // Socket
@@ -16,7 +17,7 @@ const socket = io('ws://localhost:3030')
 interface MessagesProps {
     account: string | null;
     messages: Message[];
-    currentChannel: Channel | null;
+    currentChannel: AlphaPING.ChannelStructOutput | null;
   }
 
 const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel }) => {

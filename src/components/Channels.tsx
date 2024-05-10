@@ -6,9 +6,9 @@ interface ChannelsProps {
   provider: ethers.BrowserProvider | null;
   account: string | null;
   alphaPING: AlphaPING | null;
-  channels: Channel[];
-  currentChannel: Channel | null;
-  setCurrentChannel: React.Dispatch<React.SetStateAction<Channel | null>>;
+  channels: AlphaPING.ChannelStructOutput[];
+  currentChannel: AlphaPING.ChannelStructOutput | null;
+  setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
@@ -19,7 +19,7 @@ const Channels:React.FC<ChannelsProps> = ({
   currentChannel, 
   setCurrentChannel 
 }) => {
-    const channelHandler = async (channel:Channel) => {
+    const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
       // Check if user has joined
       // If they haven't allow them to mint.
       const hasJoined = await alphaPING?.hasJoinedChannel(
