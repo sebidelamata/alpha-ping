@@ -14,24 +14,26 @@ const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
 
   return (
     <nav>
-      <div className='nav__brand'>
-        <h1>AlphaPING</h1>
+      <div className='nav_brand'>
         <div className='logo-container'>
           <img src="../Apes.svg" alt="AlphaPING Logo" />
         </div>
+        <h1>
+          A<span style={{ fontStyle: "italic", fontSize: "medium"}}>lpha</span>PING
+        </h1>
       </div>
 
       {account ? (
         <button
           type="button"
-          className='nav__connect'
+          className='nav_connect'
         >
           {account.slice(0, 6) + '...' + account.slice(38, 42)}
         </button>
       ) : (
         <button
           type="button"
-          className='nav__connect'
+          className='nav_connect'
           onClick={connectHandler}
         >
           Connect
