@@ -17,8 +17,10 @@
   --icon-height-med: 4svh; 
   --icon-width-large: 8vh;
   --icon-height-large: 8svh; 
+  --navbar-height: 12svh;
   color: var(--color-2);
   background-color: var(--color-1);
+  display: grid;
 }
 
 a {
@@ -53,8 +55,19 @@ button:hover {
   grid-template-rows: 5svh 95svh;
 }
 
-nav{
-  height: 5svh;
+.nav-bar{
+  height: var(--navbar-height);
+  display: grid;
+  grid-template-columns: 50% 50%;
+  position: fixed;
+  width: 100vw;
+}
+
+.nav-brand{
+  display: grid;
+  grid-template-columns: repeat(2,auto);
+  justify-content: center;
+  align-items: center;
 }
 
 .brand-header{
@@ -68,6 +81,34 @@ nav{
   height: var(--icon-height-large);
   width: var(--icon-width-large);
   object-fit: contain;
+}
+
+.app-body{
+  display: grid;
+  grid-template-columns: 20% 80%;
+  position: relative;
+  top: var(--navbar-height);
+  height: calc(100svh - var(--navbar-height));
+}
+
+.messages{
+  display: grid;
+  grid-template-rows: 88% 12%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.messages-feed{
+  overflow-y: scroll;
+  display: grid;
+}
+
+.message-submit-form{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(3, auto);
+  gap: min(2em);
 }
 
 .banana-send-icon{

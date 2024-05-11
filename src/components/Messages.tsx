@@ -54,8 +54,8 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
   })
 
   return (
-    <div className="text">
-      <div className="messages">
+    <div className="messages">
+      <div className="messages-feed">
 
         {
         currentChannel && 
@@ -73,7 +73,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
 
         <div ref={messageEndRef} />
       </div>
-      <form onSubmit={sendMessage}>
+      <form onSubmit={sendMessage} className='message-submit-form'>
         {
           currentChannel && 
           account ? (

@@ -13,7 +13,7 @@ const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
   }
 
   return (
-    <nav>
+    <nav className='nav-bar'>
       <div className='nav-brand'>
         <div className='logo-container'>
           <img src="../Apes.svg" alt="AlphaPING Logo" className='logo'/>
