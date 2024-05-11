@@ -97,15 +97,21 @@ const App:React.FC = () => {
   return (
     <div className='app-container'>
       <Navbar account={account} setAccount={setAccount}/>
-      <Channels 
-        provider={provider} 
-        account={account} 
-        alphaPING={alphaPING} 
-        channels={channels} 
-        currentChannel={currentChannel} 
-        setCurrentChannel={setCurrentChannel}
-      />
-      <Messages account={account} messages={messages} currentChannel={currentChannel}/>
+      <div className='app-body'>
+        <Channels 
+          provider={provider} 
+          account={account} 
+          alphaPING={alphaPING} 
+          channels={channels} 
+          currentChannel={currentChannel} 
+          setCurrentChannel={setCurrentChannel}
+        />
+        <Messages 
+          account={account} 
+          messages={messages} 
+          currentChannel={currentChannel}
+        />
+      </div>
     </div>
   )
 }

@@ -6,75 +6,80 @@
   -moz-osx-font-smoothing: grayscale;
   --color-1: #242424;
   --color-2:  rgba(255, 255, 255, 0.87);
+  --color-3: rgb(188, 146, 222, 0.8);
+  --color-4: rgb(167, 165, 168, 0.8);
+  --button-radius: 8px;
+  --transition-speed-1: 0.25s;
+  --border-width: 1px;
+  --icon-width-small: 2vh;
+  --icon-height-small: 2svh; 
+  --icon-width-med: 4vh;
+  --icon-height-med: 4svh; 
+  --icon-width-large: 8vh;
+  --icon-height-large: 8svh; 
   color: var(--color-2);
   background-color: var(--color-1);
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
+  color: var(--color-3);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  display: grid;
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  border-radius: var(--button-radius);
+  border: var(--border-width) solid transparent;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color var(--transition-speed-1);
+  background-color: var(--color-1);
+  color: inherit;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--color-3);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+.app-container{
+  display: grid;
+  grid-template-rows: 5svh 95svh;
+}
+
+nav{
+  height: 5svh;
+}
+
+.brand-header{
+  font-size: xx-large;
+}
+
+.logo{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: var(--icon-height-large);
+  width: var(--icon-width-large);
+  object-fit: contain;
 }
 
 .banana-send-icon{
   display: grid;
   object-fit: contain;
-  width: 2vw;
-  height: 2svh;
+  width: var(--icon-width-small);
+  height: var(--icon-height-small);
 }
 
 .monkey-icon{
   display: grid;
   object-fit: contain;
-  width: 4vw;
-  height: 4svh;
-}
-
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  width: var(--icon-width-med);
+  height: var(--icon-height-med);
 }
