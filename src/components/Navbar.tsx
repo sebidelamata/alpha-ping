@@ -22,23 +22,24 @@ const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
           A<span className='header-mid-word-break'>lpha</span>PING
         </h1>
       </div>
-
-      {account ? (
-        <button
-          type="button"
-          className='nav-connect'
-        >
-          {account.slice(0, 6) + '...' + account.slice(38, 42)}
-        </button>
-      ) : (
-        <button
-          type="button"
-          className='nav-connect'
-          onClick={connectHandler}
-        >
-          Connect
-        </button>
-      )}
+      <div className='connect-container'>
+        {account ? (
+          <button
+            type="button"
+            className='connect-button connected'
+          >
+            {account.slice(0, 6) + '...' + account.slice(38, 42)}
+          </button>
+        ) : (
+          <button
+            type="button"
+            className='connect-button'
+            onClick={connectHandler}
+          >
+            Connect
+          </button>
+        )}
+      </div>
     </nav>
   );
 }

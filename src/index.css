@@ -9,7 +9,7 @@
   --color-3: rgb(188, 146, 222, 0.8);
   --color-4: rgb(167, 165, 168, 0.8);
   --button-radius: 8px;
-  --transition-speed-1: 0.25s;
+  --transition-speed-1: 0.6s;
   --border-width: 1px;
   --icon-width-small: 2vh;
   --icon-height-small: 2svh; 
@@ -18,6 +18,9 @@
   --icon-width-large: 8vh;
   --icon-height-large: 8svh; 
   --navbar-height: 12svh;
+  --large-button-padding: 1em;
+  --large-button-padding-side: 2em;
+  --body-padding: 1em;
   color: var(--color-2);
   background-color: var(--color-1);
   display: grid;
@@ -36,18 +39,23 @@ body {
   display: grid;
   min-width: 320px;
   min-height: 100vh;
+  padding-left: var(--body-padding);
+  padding-right: var(--body-padding);
 }
 
 button {
   border-radius: var(--button-radius);
-  border: var(--border-width) solid transparent;
+  border: var(--border-width) solid var(--color-3);
   cursor: pointer;
   transition: border-color var(--transition-speed-1);
   background-color: var(--color-1);
   color: inherit;
+  transition: filter var(--transition-speed-1), transform var(--transition-speed-1);
 }
 button:hover {
   border-color: var(--color-3);
+  filter: brightness(1.1);
+  transform: scale(1.04);
 }
 
 .app-container{
@@ -66,12 +74,19 @@ button:hover {
 .nav-brand{
   display: grid;
   grid-template-columns: repeat(2,auto);
-  justify-content: center;
+  justify-content: left;
   align-items: center;
 }
 
 .brand-header{
   font-size: xx-large;
+  font-weight: 900;
+}
+
+.header-mid-word-break{
+  font-size: small;
+  font-weight: 300;
+  font-style: italic;
 }
 
 .logo{
@@ -81,6 +96,23 @@ button:hover {
   height: var(--icon-height-large);
   width: var(--icon-width-large);
   object-fit: contain;
+}
+
+.connect-container{
+  display: grid;
+  justify-content: right;
+  align-items: center;
+  padding-right: calc(var(--body-padding)*2);
+}
+
+.connect-button{
+  padding: var(--large-button-padding) var(--large-button-padding-side);
+  font-size: larger;
+  transition: width var(--transition-speed-1);
+}
+
+.connected{
+  font-size: medium;
 }
 
 .app-body{
