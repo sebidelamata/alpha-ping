@@ -62,13 +62,12 @@ const Channels:React.FC<ChannelsProps> = ({
           </ul>
         </div>
   
-        <div className="channels__voice">
-          <h2>Voice Channels</h2>
-  
-          <ul>
-            <li>Channel 1</li>
-            <li>Channel 2</li>
-            <li>Channel 3</li>
+        <div className="channel_actions">
+          <h2>Channel Actions</h2>
+          <ul className="channel-actions-list">
+            <li className="channel-action-items">Chat</li>
+            <li className="channel-action-items">Analyze</li>
+            <li className="channel-action-items">Trade</li>
           </ul>
         </div>
       </div>
