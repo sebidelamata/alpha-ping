@@ -39,17 +39,26 @@ const Channels:React.FC<ChannelsProps> = ({
   
     return (
       <div className="channels">
-        <div className="channels__text">
-          <h2>Text Channels</h2>
-  
-          <ul>
-            {channels.map((channel, index) => (
-              <li
-                onClick={() => channelHandler(channel)} key={index}
-                className={currentChannel && currentChannel.id.toString() === channel.id.toString() ? "active" : ""}>
-                {channel.name}
-              </li>
-            ))}
+        <div className="channels-text">
+          <h2 className="channels-title">
+            Channels
+          </h2>
+          <ul className="channels-list">
+            {
+              channels.map((channel, index) => (
+                <li
+                  onClick={() => channelHandler(channel)} key={index}
+                  className={
+                    currentChannel && 
+                    currentChannel.id.toString() === channel.id.toString() ? 
+                    "channel channel-active" : 
+                    "channel"
+                  }
+                >
+                  {channel.name}
+                </li>
+              ))
+            }
           </ul>
         </div>
   

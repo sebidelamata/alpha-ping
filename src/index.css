@@ -11,6 +11,7 @@
   --button-radius: 8px;
   --transition-speed-1: 0.6s;
   --border-width: 1px;
+  --border-width-thick: 4px;
   --icon-width-small: 2vw;
   --icon-height-small: 2svh; 
   --icon-width-med: 4vw;
@@ -24,6 +25,7 @@
   --large-button-padding-side: 2em;
   --body-padding: 1em;
   --gap: 2em;
+  --gap-small: 0.5em;
   color: var(--color-2);
   background-color: var(--color-1);
   display: grid;
@@ -35,6 +37,14 @@ a {
 }
 a:hover {
   
+}
+
+ul{
+  display: grid;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  gap: var(--gap-small);
 }
 
 body {
@@ -59,6 +69,11 @@ button:hover {
   border-color: var(--color-3);
   filter: brightness(1.1);
   transform: scale(1.04);
+}
+
+a{
+  color: var(--color-2);
+  text-decoration: none;
 }
 
 .app-container{
@@ -194,6 +209,73 @@ button:hover {
   position: relative;
   top: var(--navbar-height);
   height: calc(100svh - var(--navbar-height));
+}
+
+.error-page{
+  display: grid;
+  justify-content: right;
+  align-items: bottom;
+  height: 100svh;
+  width: 100vw;
+  max-width: 100vw;
+  text-align: right;
+  grid-template-rows: repeat(3, min-content);
+  position: fixed;
+  top: 54%;
+  right: var(--body-padding);
+}
+
+.banana-container{
+  position: fixed;
+  top: 10svh;
+  left: 10vw;
+}
+
+.error-banana{
+  display: grid;
+  object-fit: contain;
+  height: 60svh;
+}
+
+.error-container{
+  display: grid;
+  grid-template-columns: auto min(60%);
+  height: max(20%);
+}
+
+.error-return-link{
+  border-bottom: var(--border-width-thick) solid var(--color-3);
+  transition: filter var(--transition-speed-1),
+    transform var(--transition-speed-1);
+}
+.error-return-link:hover{
+  filter: brightness(1.1);
+  transform: scale(1.01);
+}
+
+.channels-title{
+  font-weight: 900;
+}
+
+.channels-list{
+}
+
+.channel{
+  border-bottom: var(--border-width-thick) solid transparent;
+  filter: brightness(0.6);
+  transition: border-bottom var(--transition-speed-1),
+    filter var(--transition-speed-1),
+    transform var(--transition-speed-1);
+}
+.channel:hover{
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
+.channel-active{
+  font-weight: 900;
+  border-bottom: var(--border-width-thick) solid var(--color-3);
+  filter: brightness(1);
 }
 
 .messages{
