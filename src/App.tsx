@@ -17,6 +17,8 @@ import Navbar from './components/Navbar'
 import Channels from './components/Channels'
 // messages
 import Messages from './components/Messages'
+// join alpha ping modal
+import JoinAlphaPING from './components/JoinAlphaPING'
 
 
 interface BlockChainConfig {
@@ -38,6 +40,8 @@ const App:React.FC = () => {
 
   const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
+
+  const [isMember, setIsMember] = useState<boolean>(false)
 
   const loadBlockchainData = async () => {
     try{
@@ -94,29 +98,51 @@ const App:React.FC = () => {
     }
   }, [])
 
+  const findIsMember = async () => {
+    if(account){
+      const isMember = await alphaPING?.isMember(account)
+      if(isMember){
+        setIsMember(isMember)
+      }
+    }
+  }
+
+  useEffect(() => {
+    findIsMember()
+  }, [account])
+
   return (
-    <div className='app-container'>
-      <Navbar 
-        account={account} 
-        setAccount={setAccount}
-        //pass provider to navbar to find ens, will pass back to messages
-        />
-      <div className='app-body'>
-        <Channels 
-          provider={provider} 
+    <>
+      <div className='app-container'>
+        <Navbar 
           account={account} 
-          alphaPING={alphaPING} 
-          channels={channels} 
-          currentChannel={currentChannel} 
-          setCurrentChannel={setCurrentChannel}
-        />
-        <Messages 
-          account={account} 
-          messages={messages} 
-          currentChannel={currentChannel}
-        />
+          setAccount={setAccount}
+          />
+        <div className='app-body'>
+          <Channels 
+            provider={provider} 
+            account={account} 
+            alphaPING={alphaPING} 
+            channels={channels} 
+            currentChannel={currentChannel} 
+            setCurrentChannel={setCurrentChannel}
+          />
+          <Messages 
+            account={account} 
+            messages={messages} 
+            currentChannel={currentChannel}
+          />
+        </div>
       </div>
-    </div>
+      {
+        isMember === false &&
+        <JoinAlphaPING
+          alphaPING={alphaPING}
+          provider={provider}
+          setIsMember={setIsMember}
+        />
+      }
+    </>
   )
 }
 

@@ -11,12 +11,14 @@
   --button-radius: 8px;
   --transition-speed-1: 0.6s;
   --border-width: 1px;
-  --icon-width-small: 2vh;
+  --icon-width-small: 2vw;
   --icon-height-small: 2svh; 
-  --icon-width-med: 4vh;
+  --icon-width-med: 4vw;
   --icon-height-med: 4svh; 
-  --icon-width-large: 8vh;
+  --icon-width-large: 8vw;
   --icon-height-large: 8svh; 
+  --icon-width-x-large: 16vw;
+  --icon-height-x-large: 16svh; 
   --navbar-height: 12svh;
   --large-button-padding: 1em;
   --large-button-padding-side: 2em;
@@ -62,6 +64,76 @@ button:hover {
 .app-container{
   display: grid;
   grid-template-rows: 5svh 95svh;
+}
+
+.join-alpha-ping{
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: calc(100svh - var(--navbar-height));
+  background-color: var(--color-1);
+}
+
+.join-container{
+  position: relative;
+  display: grid;
+  border-radius: var(--button-radius);
+  border: var(--border-width) solid var(--color-3);
+  justify-content: center;
+  align-items: center;
+  padding: var(--large-button-padding) var(--large-button-padding-side);
+  grid-template-rows: repeat(4, auto);
+  gap: var(--gap);
+  height: 70svh;
+  width: 50vw;
+}
+
+.join-header{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  font-size: xx-large;
+  font-weight: 900;
+}
+
+.join-icon{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  perspective-origin: bottom;
+}
+
+.join-body{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.join-logo{
+  width: var(--icon-width-x-large);
+  height: var(--icon-height-x-large);
+  display: grid;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px var(--color-3));
+  animation: spin 5s linear infinite;
+}
+
+.join-button-container{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.join-button{
+  display: grid;
+  padding: var(--large-button-padding) var(--large-button-padding-side);
+  font-size: x-large;
+  font-weight: 900;
 }
 
 .nav-bar{
@@ -150,7 +222,7 @@ button:hover {
 
 .message-submit-form{
   display: grid;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   grid-template-columns: repeat(3, auto);
   gap: min(var(--gap));
@@ -168,4 +240,14 @@ button:hover {
   object-fit: contain;
   width: var(--icon-width-med);
   height: var(--icon-height-med);
+}
+
+
+@keyframes spin {
+  from {
+      transform: rotateY(0deg);
+  }
+  to {
+      transform: rotateY(360deg);
+  }
 }
