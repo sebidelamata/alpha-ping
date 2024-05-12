@@ -5,10 +5,16 @@ import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPI
 interface JoinAlphaPINGProps {
     alphaPING: AlphaPING | null;
     provider: ethers.BrowserProvider | null;
-    setIsMember: React.Dispatch<React.SetStateAction<boolean>>
+    setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
+    account: string | null;
   }
 
-const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({alphaPING, provider, setIsMember}) => {
+const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
+    alphaPING, 
+    provider, 
+    setIsMember, 
+    account
+}) => {
 
     const joinAlphaPING = async() => {
         if(provider){
@@ -32,9 +38,18 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({alphaPING, provider, setIsM
                 Mint a Membership and Swing into the Chat!
             </h3>
             <div className="join-button-container">
-                <button className="join-button" onClick={() => joinAlphaPING()}>
-                    Join
-                </button>
+                {
+                    account ? (
+                        <button className="join-button" onClick={() => joinAlphaPING()}>
+                            Join
+                        </button>
+                    ) : (
+                        <button className="join-button disabled" disabled>
+                            Connect To Join
+                        </button>
+                    )
+
+                }
             </div>
           </div>
         </div>

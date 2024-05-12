@@ -140,6 +140,7 @@ const App:React.FC = () => {
           alphaPING={alphaPING}
           provider={provider}
           setIsMember={setIsMember}
+          account={account}
         />
       }
     </>
