@@ -21,6 +21,7 @@
   --large-button-padding: 1em;
   --large-button-padding-side: 2em;
   --body-padding: 1em;
+  --gap: 2em;
   color: var(--color-2);
   background-color: var(--color-1);
   display: grid;
@@ -135,12 +136,24 @@ button:hover {
   display: grid;
 }
 
+.message{
+  display: grid;
+  grid-template-columns: var(--icon-width-large) auto;
+  align-items: center;
+  gap: min(var(--gap));
+}
+
+.message-content{
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+}
+
 .message-submit-form{
   display: grid;
   justify-content: center;
   align-items: center;
   grid-template-columns: repeat(3, auto);
-  gap: min(2em);
+  gap: min(var(--gap));
 }
 
 .banana-send-icon{

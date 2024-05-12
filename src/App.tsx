@@ -96,7 +96,11 @@ const App:React.FC = () => {
 
   return (
     <div className='app-container'>
-      <Navbar account={account} setAccount={setAccount}/>
+      <Navbar 
+        account={account} 
+        setAccount={setAccount}
+        //pass provider to navbar to find ens, will pass back to messages
+        />
       <div className='app-body'>
         <Channels 
           provider={provider} 

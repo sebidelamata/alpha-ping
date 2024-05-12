@@ -61,10 +61,14 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         currentChannel && 
         messages.filter(message => message.channel === currentChannel.id.toString()).map((message, index) => (
           <div className="message" key={index}>
-            <img src={monkey} alt="Person" className='monkey-icon'/>
-            <div className="message_content">
-              <h3>{message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}</h3>
-              <p>
+            <div className='message-header'>
+              <img src={monkey} alt="User Icon" className='monkey-icon'/>
+            </div>
+            <div className="message-content">
+              <h3 className='message-poster-address'>
+                {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
+              </h3>
+              <p className='message-content-text'>
                 {message.text}
               </p>
             </div>
@@ -82,6 +86,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
               value={message} 
               placeholder={`Message #${currentChannel.name}`} 
               onChange={(e) => setMessage(e.target.value)} 
+              className='message-form-input'
             />
           ) : (
             <input 
@@ -89,10 +94,11 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
               value="" 
               placeholder={`Please Connect Wallet / Join the Channel`} 
               disabled 
+              className='message-form-input disabled'
             />
           )
         }
-        <button type="submit">
+        <button type="submit" className='message-form-submit-button'>
           <img src={banana} alt="Send Message" className='banana-send-icon'/>
         </button>
         <button type="button">
