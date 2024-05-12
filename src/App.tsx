@@ -134,11 +134,22 @@ const App:React.FC = () => {
             channelAction={channelAction}
             setChannelAction={setChannelAction}
           />
-          <Messages 
-            account={account} 
-            messages={messages} 
-            currentChannel={currentChannel}
-          />
+          {
+            channelAction === 'chat' ? (
+              <Messages 
+                account={account} 
+                messages={messages} 
+                currentChannel={currentChannel}
+              />
+            ) : (
+              channelAction === 'analyze' ? (
+                <p>Analyze</p>
+              ) : (
+                <p>Trade</p>
+              )
+            )
+
+          }
         </div>
       </div>
       {
