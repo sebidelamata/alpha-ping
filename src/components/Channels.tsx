@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import {ethers} from 'ethers';
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 
@@ -9,6 +9,8 @@ interface ChannelsProps {
   channels: AlphaPING.ChannelStructOutput[];
   currentChannel: AlphaPING.ChannelStructOutput | null;
   setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
+  channelAction: string;
+  setChannelAction: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
@@ -17,7 +19,9 @@ const Channels:React.FC<ChannelsProps> = ({
   alphaPING, 
   channels, 
   currentChannel, 
-  setCurrentChannel 
+  setCurrentChannel,
+  channelAction,
+  setChannelAction 
 }) => {
     const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
       // Check if user has joined
@@ -35,6 +39,11 @@ const Channels:React.FC<ChannelsProps> = ({
         await transaction?.wait()
         setCurrentChannel(channel)
       }
+    }
+
+    const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
+      const action = (e.target as HTMLElement).id
+      setChannelAction(action)
     }
   
     return (
@@ -62,12 +71,46 @@ const Channels:React.FC<ChannelsProps> = ({
           </ul>
         </div>
   
-        <div className="channel_actions">
+        <div className="channel-actions">
           <h2>Channel Actions</h2>
           <ul className="channel-actions-list">
-            <li className="channel-action-items">Chat</li>
-            <li className="channel-action-items">Analyze</li>
-            <li className="channel-action-items">Trade</li>
+            <li 
+              className= {
+                channelAction ==  "chat" ? (
+                  "channel-action-items channel-action-active"
+                ) : (
+                  "channel-action-items"
+                )
+              }
+              id="chat"
+              onClick={(e) => channelActionHandler(e)}
+            >
+              Chat
+            </li>
+            <li 
+              className= {
+                channelAction ==  "analyze" ? (
+                  "channel-action-items channel-action-active"
+                ) : (
+                  "channel-action-items"
+                )
+              }
+              id="analyze"
+              onClick={(e) => channelActionHandler(e)}
+            >Analyze</li>
+            <li 
+              className= {
+                channelAction ==  "trade" ? (
+                  "channel-action-items channel-action-active"
+                ) : (
+                  "channel-action-items"
+                )
+              }
+              id="trade"
+              onClick={(e) => channelActionHandler(e)}
+            >
+              Trade
+            </li>
           </ul>
         </div>
       </div>

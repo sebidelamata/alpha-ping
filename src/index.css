@@ -271,10 +271,28 @@ a{
   filter: brightness(1.1);
   transform: scale(1.05);
 }
-
 .channel-active{
   font-weight: 900;
   border-bottom: var(--border-width-thick) solid var(--color-3);
+  filter: brightness(1);
+}
+
+.channel-action-items{
+  border: var(--border-width) solid transparent;
+  border-radius: var(--button-radius);
+  padding: var(--large-button-padding);
+  filter: brightness(0.6);
+  transition: border var(--transition-speed-1),
+    filter var(--transition-speed-1),
+    transform var(--transition-speed-1);
+}
+.channel-action-items:hover{
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+.channel-action-active{
+  font-weight: 900;
+  border: var(--border-width) solid var(--color-3);
   filter: brightness(1);
 }
 

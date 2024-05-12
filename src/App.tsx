@@ -32,15 +32,20 @@ interface BlockChainConfig {
 
 const App:React.FC = () => {
 
+  // account stuff
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null)
   const [account, setAccount] = useState<string | null>(null)
-
+  // the alpha ping contract object
   const [alphaPING, setAlphaPING] = useState<AlphaPING | null>(null)
+  // list of all channels
   const [channels, setChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
-
+  // selected channel
   const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
+  // selected channel's actions
+  const [channelAction, setChannelAction] = useState<string>("chat")
+  // list of all messages
   const [messages, setMessages] = useState<Message[]>([])
-
+  // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
 
   const loadBlockchainData = async () => {
@@ -126,6 +131,8 @@ const App:React.FC = () => {
             channels={channels} 
             currentChannel={currentChannel} 
             setCurrentChannel={setCurrentChannel}
+            channelAction={channelAction}
+            setChannelAction={setChannelAction}
           />
           <Messages 
             account={account} 
