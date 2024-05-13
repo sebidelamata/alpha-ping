@@ -266,6 +266,8 @@ a{
   transition: border-bottom var(--transition-speed-1),
     filter var(--transition-speed-1),
     transform var(--transition-speed-1);
+  display: grid;
+  grid-template-columns: 80% 20%;
 }
 .channel:hover{
   filter: brightness(1.1);
@@ -276,6 +278,19 @@ a{
   border-bottom: var(--border-width-thick) solid var(--color-3);
   filter: brightness(1);
 }
+
+.channel-logo-image{
+  display: grid;
+  object-fit: contain;
+  height: 2svh;
+  transition: transform var(--transition-speed-1);
+  position: relative;
+  bottom: 0.5svh;
+}
+.channel-logo-image-active{
+  transform: scale(1.5);
+}
+
 
 .channel-action-items{
   border: var(--border-width) solid transparent;

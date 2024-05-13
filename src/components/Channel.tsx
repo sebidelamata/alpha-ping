@@ -13,8 +13,6 @@ interface ChannelProps{
     account: string | null;
     provider: ethers.BrowserProvider | null;
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
-    setTokenMetaData:React.Dispatch<React.SetStateAction<tokenMetadata>>;
-    tokenMetada:tokenMetadata;
 }
 
 const Channel:React.FC<ChannelProps> = ({
@@ -24,12 +22,55 @@ const Channel:React.FC<ChannelProps> = ({
     alphaPING,
     account,
     provider,
-    setCurrentChannel,
-    setTokenMetaData,
-    tokenMetada
+    setCurrentChannel
 }) => {
 
     // holds metadata fetched from coinmarketcap
+    const defaultTokenMetadata:tokenMetadata = {
+        id: 0,
+        name: '',
+        category: '',
+        description: '',
+        contract_address: [],
+        date_added: '',
+        date_launched: '',
+        infinite_supply: false,
+        is_hidden: 0,
+        logo: '',
+        notice: '',
+        platform: {
+            coin: {
+                id: '',
+                name: '',
+                slug: '',
+                symbol: '',
+            },
+            name: '',
+        },
+        self_reported_market_circulating_supply: '',
+        self_reported_market_cap: '',
+        self_reported_tags: '',
+        slug: '',
+        subreddit: '',
+        symbol: '',
+        "tag-groups": [],
+        "tag-names": [],
+        tags: [],
+        twitter_username: [],
+        urls: {
+            announcement: [],
+            chat: [],
+            explorer: [],
+            facebook: [],
+            message_board: [],
+            reddit: [],
+            source_code: [],
+            technical_doc: [],
+            twitter: [],
+            website: [],
+        }
+      };
+      const [tokenMetada, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
     
     // handles clicking on channel names from channels list
     const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
@@ -87,8 +128,21 @@ const Channel:React.FC<ChannelProps> = ({
             "channel"
             }
         >
-            {channel.name}
-            <img src={tokenMetada.logo} alt="logo" />
+            <div className="channel-name">
+                {channel.name}
+            </div>
+            <div className="channel-logo">
+                <img 
+                    src={tokenMetada.logo} 
+                    alt="Token Logo"
+                    className={
+                        currentChannel && 
+                        currentChannel.id.toString() === channel.id.toString() ? 
+                        "channel-logo-image channel-logo-image-active" : 
+                        "channel-logo-image"
+                        }
+                />
+            </div>
         </li>
     )
 }
