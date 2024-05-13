@@ -2,7 +2,7 @@ import React, {
     useState, 
     useEffect,
     useRef,
-    MouseEventHandler
+    FormEvent
 } from "react";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import {ethers} from 'ethers'
@@ -23,7 +23,7 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
         setShowAddChannelModal(true)
     }
 
-    const createChannel:MouseEventHandler<HTMLFormElement> = async (e) => {
+    const createChannel = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log(tokenType)
         if(tokenAddress === ""){return}
