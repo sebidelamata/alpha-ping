@@ -13,6 +13,8 @@ interface ChannelProps{
     account: string | null;
     provider: ethers.BrowserProvider | null;
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
+    setTokenMetaData:React.Dispatch<React.SetStateAction<tokenMetadata>>;
+    tokenMetada:tokenMetadata;
 }
 
 const Channel:React.FC<ChannelProps> = ({
@@ -22,11 +24,13 @@ const Channel:React.FC<ChannelProps> = ({
     alphaPING,
     account,
     provider,
-    setCurrentChannel
+    setCurrentChannel,
+    setTokenMetaData,
+    tokenMetada
 }) => {
 
     // holds metadata fetched from coinmarketcap
-    const [tokenMetada, setTokenMetaData] = useState({})
+    
     // handles clicking on channel names from channels list
     const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
       // Check if user has joined
@@ -57,7 +61,6 @@ const Channel:React.FC<ChannelProps> = ({
             }
             response = await response.json();
             const dynamicKey = Object.keys(response.data)[0];
-            console.log(dynamicKey)
             setTokenMetaData(response.data[dynamicKey])
             
         }catch(error:any){

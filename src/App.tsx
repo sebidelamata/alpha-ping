@@ -47,6 +47,52 @@ const App:React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
+  // token metadata fetched from coinmarketcap
+  const defaultTokenMetadata:tokenMetadata = {
+    id: 0,
+    name: '',
+    category: '',
+    description: '',
+    contract_address: [],
+    date_added: '',
+    date_launched: '',
+    infinite_supply: false,
+    is_hidden: 0,
+    logo: '',
+    notice: '',
+    platform: {
+        coin: {
+            id: '',
+            name: '',
+            slug: '',
+            symbol: '',
+        },
+        name: '',
+    },
+    self_reported_market_circulating_supply: '',
+    self_reported_market_cap: '',
+    self_reported_tags: '',
+    slug: '',
+    subreddit: '',
+    symbol: '',
+    "tag-groups": [],
+    "tag-names": [],
+    tags: [],
+    twitter_username: [],
+    urls: {
+        announcement: [],
+        chat: [],
+        explorer: [],
+        facebook: [],
+        message_board: [],
+        reddit: [],
+        source_code: [],
+        technical_doc: [],
+        twitter: [],
+        website: [],
+    }
+  };
+  const [tokenMetada, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
 
   const loadBlockchainData = async () => {
     try{
@@ -133,6 +179,8 @@ const App:React.FC = () => {
             setCurrentChannel={setCurrentChannel}
             channelAction={channelAction}
             setChannelAction={setChannelAction}
+            setTokenMetaData={setTokenMetaData}
+            tokenMetada={tokenMetada}
           />
           {
             channelAction === 'chat' ? (

@@ -12,6 +12,8 @@ interface ChannelsProps {
   setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
   channelAction: string;
   setChannelAction: React.Dispatch<React.SetStateAction<string>>;
+  setTokenMetaData:React.Dispatch<React.SetStateAction<tokenMetadata>>;
+  tokenMetada:tokenMetadata;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
@@ -22,7 +24,9 @@ const Channels:React.FC<ChannelsProps> = ({
   currentChannel, 
   setCurrentChannel,
   channelAction,
-  setChannelAction 
+  setChannelAction,
+  setTokenMetaData,
+  tokenMetada
 }) => {
 
     const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
@@ -47,6 +51,8 @@ const Channels:React.FC<ChannelsProps> = ({
                   account={account}
                   provider={provider}
                   setCurrentChannel={setCurrentChannel}
+                  setTokenMetaData={setTokenMetaData}
+                  tokenMetada={tokenMetada}
                 />
               ))
             }
