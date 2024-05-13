@@ -1,5 +1,7 @@
 import React, {
     useState, 
+    useEffect,
+    useRef,
     MouseEventHandler
 } from "react";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
@@ -15,6 +17,7 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
     const [showAddChannelModal, setShowAddChannelModal] = useState<boolean>(false)
     const [tokenAddress, setTokenAddress] = useState<string>("")
     const [tokenType, setTokenType] = useState<string>("ERC20")
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const addChannelModal = () => {
         setShowAddChannelModal(true)
@@ -36,6 +39,21 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
 
     }
 
+    // handling closing the modal when clicking outside of it
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                setShowAddChannelModal(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return(
         <>
             <div className="add-channel">
@@ -47,7 +65,7 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
             {
                 showAddChannelModal === true &&
                 <div className="add-channel-greyout">
-                    <div className="add-channel-modal">
+                    <div className="add-channel-modal" ref={modalRef}>
                         <h2 className="add-channel-title">
                             Add Channel
                         </h2>
