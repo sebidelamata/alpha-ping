@@ -1,6 +1,7 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useState, useEffect } from "react";
 import {ethers} from 'ethers';
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+import Channel from "./Channel";
 
 interface ChannelsProps {
   provider: ethers.BrowserProvider | null;
@@ -23,23 +24,6 @@ const Channels:React.FC<ChannelsProps> = ({
   channelAction,
   setChannelAction 
 }) => {
-    const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
-      // Check if user has joined
-      // If they haven't allow them to mint.
-      const hasJoined = await alphaPING?.hasJoinedChannel(
-        BigInt(channel.id), 
-        account || ethers.ZeroAddress
-      )
-  
-      if (hasJoined) {
-        setCurrentChannel(channel)
-      } else {
-        const signer:any = await provider?.getSigner()
-        const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
-        await transaction?.wait()
-        setCurrentChannel(channel)
-      }
-    }
 
     const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
       const action = (e.target as HTMLElement).id
@@ -55,17 +39,15 @@ const Channels:React.FC<ChannelsProps> = ({
           <ul className="channels-list">
             {
               channels.map((channel, index) => (
-                <li
-                  onClick={() => channelHandler(channel)} key={index}
-                  className={
-                    currentChannel && 
-                    currentChannel.id.toString() === channel.id.toString() ? 
-                    "channel channel-active" : 
-                    "channel"
-                  }
-                >
-                  {channel.name}
-                </li>
+                <Channel
+                  channel={channel}
+                  index={index}
+                  currentChannel={currentChannel}
+                  alphaPING={alphaPING}
+                  account={account}
+                  provider={provider}
+                  setCurrentChannel={setCurrentChannel}
+                />
               ))
             }
           </ul>

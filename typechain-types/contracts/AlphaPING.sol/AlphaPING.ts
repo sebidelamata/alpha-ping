@@ -26,17 +26,17 @@ import type {
 export declare namespace AlphaPING {
   export type ChannelStruct = {
     id: BigNumberish;
-    tokenAdress: AddressLike;
+    tokenAddress: AddressLike;
     name: string;
     tokenType: string;
   };
 
   export type ChannelStructOutput = [
     id: bigint,
-    tokenAdress: string,
+    tokenAddress: string,
     name: string,
     tokenType: string
-  ] & { id: bigint; tokenAdress: string; name: string; tokenType: string };
+  ] & { id: bigint; tokenAddress: string; name: string; tokenType: string };
 }
 
 export interface AlphaPINGInterface extends Interface {
@@ -618,7 +618,7 @@ export interface AlphaPING extends BaseContract {
     [
       [bigint, string, string, string] & {
         id: bigint;
-        tokenAdress: string;
+        tokenAddress: string;
         name: string;
         tokenType: string;
       }
@@ -866,7 +866,7 @@ export interface AlphaPING extends BaseContract {
     [
       [bigint, string, string, string] & {
         id: bigint;
-        tokenAdress: string;
+        tokenAddress: string;
         name: string;
         tokenType: string;
       }

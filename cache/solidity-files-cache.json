@@ -488,46 +488,6 @@
         "IERC20"
       ]
     },
-    "/Users/migueldelamata/alpha-ping/contracts/AlphaPING.sol": {
-      "lastModificationDate": 1715208627366,
-      "contentHash": "7559dd439056901b5748b2be17950e61",
-      "sourceName": "contracts/AlphaPING.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 1000
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
-        "hardhat/console.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "AlphaPING",
-        "IERC20"
-      ]
-    },
     "/Users/migueldelamata/alpha-ping/contracts/ERC20Faucet.sol": {
       "lastModificationDate": 1715208627366,
       "contentHash": "3bf458ccc920d060ce9559aa56fad852",
@@ -565,6 +525,46 @@
       ],
       "artifacts": [
         "ERC20Faucet"
+      ]
+    },
+    "/Users/migueldelamata/alpha-ping/contracts/AlphaPING.sol": {
+      "lastModificationDate": 1715540855155,
+      "contentHash": "bb05f82bd8a47e7a8803461f41459778",
+      "sourceName": "contracts/AlphaPING.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "AlphaPING",
+        "IERC20"
       ]
     }
   }

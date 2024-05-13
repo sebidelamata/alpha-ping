@@ -59,7 +59,7 @@ contract AlphaPING is ERC721 {
     // channel object
     struct Channel {
         uint256 id;
-        address tokenAdress;
+        address tokenAddress;
         string name;
         string tokenType;
     }
