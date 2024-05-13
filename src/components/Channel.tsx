@@ -13,6 +13,7 @@ interface ChannelProps{
     account: string | null;
     provider: ethers.BrowserProvider | null;
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
+    setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
 }
 
 const Channel:React.FC<ChannelProps> = ({
@@ -22,7 +23,8 @@ const Channel:React.FC<ChannelProps> = ({
     alphaPING,
     account,
     provider,
-    setCurrentChannel
+    setCurrentChannel,
+    setSelectedChannelMetadata
 }) => {
 
     // holds metadata fetched from coinmarketcap
@@ -70,7 +72,7 @@ const Channel:React.FC<ChannelProps> = ({
             website: [],
         }
       };
-      const [tokenMetada, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
+    const [tokenMetada, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
     
     // handles clicking on channel names from channels list
     const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
@@ -113,10 +115,16 @@ const Channel:React.FC<ChannelProps> = ({
     useEffect(() => {
         if(channel){
             fetchChannelIcons(channel.tokenAddress)
-        }
-        console.log(tokenMetada)
-        
+        }     
     }, [account, channel])
+
+    useEffect(() => {
+        console.log(currentChannel?.id)
+        if(currentChannel && currentChannel.id.toString() === channel.id.toString()){
+            setSelectedChannelMetadata(tokenMetada)
+        }
+        console.log('hi')
+    },[currentChannel])
 
     return(
         <li
