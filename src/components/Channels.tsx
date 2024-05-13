@@ -2,6 +2,7 @@ import React, { MouseEventHandler, useState, useEffect } from "react";
 import {ethers} from 'ethers';
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import Channel from "./Channel";
+import AddChannel from "./AddChannel";
 
 interface ChannelsProps {
   provider: ethers.BrowserProvider | null;
@@ -34,7 +35,7 @@ const Channels:React.FC<ChannelsProps> = ({
   
     return (
       <div className="channels">
-        <div className="channels-text">
+        <div className="channels-menu">
           <h2 className="channels-title">
             Channels
           </h2>
@@ -55,7 +56,10 @@ const Channels:React.FC<ChannelsProps> = ({
             }
           </ul>
         </div>
-  
+        <AddChannel
+          alphaPING={alphaPING}
+          provider={provider}
+        />
         <div className="channel-actions">
           <h2>Channel Actions</h2>
           <ul className="channel-actions-list">

@@ -257,9 +257,6 @@ a{
   font-weight: 900;
 }
 
-.channels-list{
-}
-
 .channel{
   border-bottom: var(--border-width-thick) solid transparent;
   filter: brightness(0.6);
@@ -289,6 +286,21 @@ a{
 }
 .channel-logo-image-active{
   transform: scale(1.5);
+}
+
+.add-channel-modal{
+  display: grid;
+  width: 50vw;
+  height: 40svh;
+  position: absolute;
+  left: 50vw;
+  top: 50svh;
+  border-radius: var(--button-radius);
+  border: var(--border-width) solid var(--color-3);
+  background-color: var(--color-1);
+  transform: translateX(-50%) translateY(-100%);
+  justify-content: center;
+  align-items: center;
 }
 
 

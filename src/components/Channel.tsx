@@ -119,11 +119,9 @@ const Channel:React.FC<ChannelProps> = ({
     }, [account, channel])
 
     useEffect(() => {
-        console.log(currentChannel?.id)
         if(currentChannel && currentChannel.id.toString() === channel.id.toString()){
             setSelectedChannelMetadata(tokenMetada)
         }
-        console.log('hi')
     },[currentChannel])
 
     return(
