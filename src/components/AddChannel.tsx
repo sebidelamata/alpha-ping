@@ -6,18 +6,22 @@ import React, {
 } from "react";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import {ethers} from 'ethers'
+import Loading from "./Loading";
 
 interface AddChannelProps{
     alphaPING:AlphaPING | null;
     provider: ethers.BrowserProvider | null; 
+    addChannelLoading: boolean;
+    setAddChannelLoadingLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
+const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider, addChannelLoading, setAddChannelLoadingLoading}) => {
 
     const [showAddChannelModal, setShowAddChannelModal] = useState<boolean>(false)
     const [tokenAddress, setTokenAddress] = useState<string>("")
     const [tokenType, setTokenType] = useState<string>("ERC20")
     const modalRef = useRef<HTMLDivElement>(null);
+    const[error, setError] = useState<string | null>(null)
 
     const addChannelModal = () => {
         setShowAddChannelModal(true)
@@ -25,17 +29,34 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
 
     const createChannel = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(tokenType)
         if(tokenAddress === ""){return}
         if(tokenAddress.length !== 42){return}
+
+        setAddChannelLoadingLoading(true)
         
         const signer:any = await provider?.getSigner()
-        let transaction = await alphaPING?.connect(signer).createChannel(tokenAddress,tokenType)
-        await transaction?.wait()
+        try{
+            let transaction = await alphaPING?.connect(signer).createChannel(tokenAddress,tokenType)
+            await transaction?.wait()
 
-        setShowAddChannelModal(false)
-        setTokenAddress("")
-        setTokenType("ERC20")
+            setShowAddChannelModal(false)
+            setTokenAddress("")
+            setTokenType("ERC20")
+            setError(null)
+        }catch(error: any){
+            if(error.reason){
+                setError(error.reason)
+            }
+            if(error){
+                console.log(error)
+                // setError(error.toString())
+            }
+        } finally{
+            setTokenAddress("")
+            setTokenType("ERC20")
+            setError(null)
+            setAddChannelLoadingLoading(false)
+        }
 
     }
 
@@ -44,6 +65,7 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 setShowAddChannelModal(false);
+                setError(null)
             }
         };
 
@@ -71,6 +93,10 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
                         </h2>
                         <h4 className="add-channel-text">
                             Enter the address of any token (ERC-20) or NFT (ERC-721).
+                            {
+                                error !== null &&
+                                <h2>{error}</h2>
+                            }
                         </h4>
                         <form action="" className="add-channel-form" onSubmit={(e) => createChannel(e)}>
                             <div className="form-line-one">
@@ -102,6 +128,10 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
                                 </button>
                             </div>
                         </form>
+                        {
+                            addChannelLoading &&
+                            <Loading/>
+                        }
                     </div>
                 </div>
 

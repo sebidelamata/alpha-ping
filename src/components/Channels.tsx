@@ -14,6 +14,7 @@ interface ChannelsProps {
   channelAction: string;
   setChannelAction: React.Dispatch<React.SetStateAction<string>>;
   setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
+  setChannels: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput[]>>;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
@@ -25,13 +26,35 @@ const Channels:React.FC<ChannelsProps> = ({
   setCurrentChannel,
   channelAction,
   setChannelAction,
-  setSelectedChannelMetadata
+  setSelectedChannelMetadata,
+  setChannels
 }) => {
 
-    const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
-      const action = (e.target as HTMLElement).id
-      setChannelAction(action)
+    // weve elevated this state from add channels to make the channels list rerender on add channel
+  const [addChannelLoading, setAddChannelLoadingLoading] = useState<boolean>(false)
+
+  // reload our channels if we get a new one
+  const reloadChannels = async () => {
+    const totalChannels:BigInt | undefined = await alphaPING?.totalChannels()
+    const channels = []
+
+    for (var i = 1; i <= Number(totalChannels); i++) {
+      const channel = await alphaPING?.getChannel(i)
+      if(channel){
+        channels.push(channel)
+      }
     }
+    
+    setChannels(channels)
+  }
+  useEffect(() => {
+    reloadChannels()
+  }, [addChannelLoading])
+
+  const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
+    const action = (e.target as HTMLElement).id
+    setChannelAction(action)
+  }
   
     return (
       <div className="channels">
@@ -59,6 +82,8 @@ const Channels:React.FC<ChannelsProps> = ({
         <AddChannel
           alphaPING={alphaPING}
           provider={provider}
+          addChannelLoading={addChannelLoading}
+          setAddChannelLoadingLoading={setAddChannelLoadingLoading}
         />
         <div className="channel-actions">
           <h2>Channel Actions</h2>

@@ -136,6 +136,7 @@ const App:React.FC = () => {
             channelAction={channelAction}
             setChannelAction={setChannelAction}
             setSelectedChannelMetadata={setSelectedChannelMetadata}
+            setChannels={setChannels}
           />
           {
             channelAction === 'chat' ? (
