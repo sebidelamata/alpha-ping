@@ -139,7 +139,11 @@ const Channel:React.FC<ChannelProps> = ({
             </div>
             <div className="channel-logo">
                 <img 
-                    src={tokenMetada.logo} 
+                    src={
+                        tokenMetada.logo === '' ? 
+                        '/blank_nft.svg' : 
+                        tokenMetada.logo
+                    } 
                     alt="Token Logo"
                     className={
                         currentChannel && 

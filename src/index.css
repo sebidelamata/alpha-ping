@@ -297,6 +297,18 @@ a{
   opacity: 95%;
 }
 
+.add-channel{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--large-button-padding);
+  padding-bottom: var(--large-button-padding);
+}
+
+.add-channel-button{
+  font-weight: 900;
+}
+
 .add-channel-modal{
   display: grid;
   width: 50vw;
