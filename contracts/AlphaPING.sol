@@ -207,7 +207,7 @@ contract AlphaPING is ERC721 {
         // can create process to transfer power to mod later
         mods[totalChannels] = owner;
         // add to channel exists for token
-        channelExistsForToken[_tokenAddress] == true;
+        channelExistsForToken[_tokenAddress] = true;
     }
 
     // must be a member to join a channel

@@ -87,7 +87,6 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider}) => {
                                     className="token-type-selector" 
                                     name="type"
                                     onChange={(e) => setTokenType(e.target.value)}
-                                    defaultValue="ERC20"
                                     value={tokenType}
                                 >
                                     <option value="ERC20">ERC-20</option>
