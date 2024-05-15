@@ -47,6 +47,8 @@ const App:React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
+  // an array to keep track of which channels the user has joined
+  const [hasJoined, setHasJoined] = useState<boolean[]>([])
   // token metadata fetched from coinmarketcap
   const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
 
@@ -73,6 +75,22 @@ const App:React.FC = () => {
 
       setChannels(channels)
 
+      const signer:any = await provider?.getSigner()
+      console.log(signer)
+      const hasJoinedChannel = []
+
+      for (var i = 1; i <= Number(totalChannels); i++) {
+        const hasJoined = await alphaPING.hasJoinedChannel(
+          (i as ethers.BigNumberish), 
+          await signer.getAddress()
+        )
+        console.log(hasJoined)
+        hasJoinedChannel.push(hasJoined)
+      }
+
+      setHasJoined(hasJoinedChannel as boolean[])
+      
+
       window.ethereum.on('accountsChanged', async () => {
         window.location.reload()
       })
@@ -83,6 +101,7 @@ const App:React.FC = () => {
 
   useEffect(() => {
     loadBlockchainData()
+    console.log(hasJoined)
 
     // --> https://socket.io/how-to/use-with-react-hooks
 
