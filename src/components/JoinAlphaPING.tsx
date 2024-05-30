@@ -1,24 +1,20 @@
 import React from "react";
-import {ethers} from 'ethers';
-import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+import { useEtherProviderContext } from '../contexts/ProviderContext';
 
 interface JoinAlphaPINGProps {
-    alphaPING: AlphaPING | null;
-    provider: ethers.BrowserProvider | null;
     setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
     account: string | null;
   }
 
 const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
-    alphaPING, 
-    provider, 
     setIsMember, 
     account
 }) => {
 
+    const { alphaPING, signer, provider} = useEtherProviderContext()
+
     const joinAlphaPING = async() => {
         if(provider){
-            const signer = await provider.getSigner()
             const tx = await alphaPING?.connect(signer).mint()
             await tx?.wait()
             setIsMember(true)

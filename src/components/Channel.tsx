@@ -3,29 +3,28 @@ import React, {
     useEffect
 } from "react"
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
-import {ethers} from 'ethers'
+import { ethers } from 'ethers'
+import { useEtherProviderContext } from '../contexts/ProviderContext';
 
 interface ChannelProps{
-    channel: AlphaPING.ChannelStructOutput;
     index: number;
     currentChannel: AlphaPING.ChannelStructOutput | null;
-    alphaPING: AlphaPING | null
     account: string | null;
-    provider: ethers.BrowserProvider | null;
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
     setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
 }
 
 const Channel:React.FC<ChannelProps> = ({
-    channel, 
     index, 
     currentChannel,
-    alphaPING,
     account,
-    provider,
     setCurrentChannel,
     setSelectedChannelMetadata
 }) => {
+
+    const { alphaPING, signer, channels} = useEtherProviderContext()
+
+    const channel = channels[index]
 
     // holds metadata fetched from coinmarketcap
     const defaultTokenMetadata:tokenMetadata = {
@@ -86,7 +85,6 @@ const Channel:React.FC<ChannelProps> = ({
       if (hasJoined) {
         setCurrentChannel(channel)
       } else {
-        const signer:any = await provider?.getSigner()
         const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
         await transaction?.wait()
         setCurrentChannel(channel)
@@ -106,14 +104,14 @@ const Channel:React.FC<ChannelProps> = ({
             const dynamicKey = Object.keys(response.data)[0];
             setTokenMetaData(response.data[dynamicKey])
             
-        }catch(error:any){
+        }catch(error: unknown){
             response = null;
-            console.error("Error: " + error.toString())
+            console.error("Error: " + (error as Error).toString())
         }
     }
 
     useEffect(() => {
-        if(channel){
+        if((channel !== undefined) && (channel !== null)){
             fetchChannelIcons(channel.tokenAddress)
         }     
     }, [account, channel])

@@ -3,6 +3,7 @@ import {createRoot} from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./Routes";
 import './index.css'
+import ProviderProvider from "./contexts/ProviderContext";
 
 const router = createBrowserRouter(routes);
 
@@ -14,7 +15,9 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ProviderProvider>
+      <RouterProvider router={router} />
+    </ProviderProvider>
   </React.StrictMode>
 );
 

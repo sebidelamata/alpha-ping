@@ -4,18 +4,21 @@ import React, {
     useRef,
     FormEvent
 } from "react";
-import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
-import {ethers} from 'ethers'
 import Loading from "./Loading";
+import { useEtherProviderContext } from '../contexts/ProviderContext';
 
 interface AddChannelProps{
-    alphaPING:AlphaPING | null;
-    provider: ethers.BrowserProvider | null; 
     addChannelLoading: boolean;
     setAddChannelLoadingLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider, addChannelLoading, setAddChannelLoadingLoading}) => {
+interface ErrorType {
+    reason: string
+}
+
+const AddChannel:React.FC<AddChannelProps> = ({addChannelLoading, setAddChannelLoadingLoading}) => {
+
+    const { alphaPING, signer } = useEtherProviderContext()
 
     const [showAddChannelModal, setShowAddChannelModal] = useState<boolean>(false)
     const [tokenAddress, setTokenAddress] = useState<string>("")
@@ -33,19 +36,18 @@ const AddChannel:React.FC<AddChannelProps> = ({alphaPING, provider, addChannelLo
         if(tokenAddress.length !== 42){return}
 
         setAddChannelLoadingLoading(true)
-        
-        const signer:any = await provider?.getSigner()
+
         try{
-            let transaction = await alphaPING?.connect(signer).createChannel(tokenAddress,tokenType)
+            const transaction = await alphaPING?.connect(signer).createChannel(tokenAddress,tokenType)
             await transaction?.wait()
 
             setShowAddChannelModal(false)
             setTokenAddress("")
             setTokenType("ERC20")
             setError(null)
-        }catch(error: any){
-            if(error.reason){
-                setError(error.reason)
+        }catch(error: unknown){
+            if((error as ErrorType).reason){
+                setError((error as ErrorType).reason)
             }
             if(error){
                 console.log(error)

@@ -1,44 +1,38 @@
 import React, { MouseEventHandler, useState, useEffect } from "react";
-import {ethers} from 'ethers';
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import Channel from "./Channel";
 import AddChannel from "./AddChannel";
+import { useEtherProviderContext } from '../contexts/ProviderContext';
 
 interface ChannelsProps {
-  provider: ethers.BrowserProvider | null;
   account: string | null;
-  alphaPING: AlphaPING | null;
-  channels: AlphaPING.ChannelStructOutput[];
   currentChannel: AlphaPING.ChannelStructOutput | null;
   setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
   channelAction: string;
   setChannelAction: React.Dispatch<React.SetStateAction<string>>;
   setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
-  setChannels: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput[]>>;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
-  provider, 
   account, 
-  alphaPING, 
-  channels, 
   currentChannel, 
   setCurrentChannel,
   channelAction,
   setChannelAction,
   setSelectedChannelMetadata,
-  setChannels
 }) => {
+
+  const { alphaPING, channels, setChannels } = useEtherProviderContext()
 
     // weve elevated this state from add channels to make the channels list rerender on add channel
   const [addChannelLoading, setAddChannelLoadingLoading] = useState<boolean>(false)
 
   // reload our channels if we get a new one
   const reloadChannels = async () => {
-    const totalChannels:BigInt | undefined = await alphaPING?.totalChannels()
+    const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
     const channels = []
 
-    for (var i = 1; i <= Number(totalChannels); i++) {
+    for (let i = 1; i <= Number(totalChannels); i++) {
       const channel = await alphaPING?.getChannel(i)
       if(channel){
         channels.push(channel)
@@ -66,22 +60,18 @@ const Channels:React.FC<ChannelsProps> = ({
             {
               channels.map((channel, index) => (
                 <Channel
-                  channel={channel}
                   index={index}
                   currentChannel={currentChannel}
-                  alphaPING={alphaPING}
                   account={account}
-                  provider={provider}
                   setCurrentChannel={setCurrentChannel}
                   setSelectedChannelMetadata={setSelectedChannelMetadata}
+                  key={index}
                 />
               ))
             }
           </ul>
         </div>
         <AddChannel
-          alphaPING={alphaPING}
-          provider={provider}
           addChannelLoading={addChannelLoading}
           setAddChannelLoadingLoading={setAddChannelLoadingLoading}
         />
@@ -111,7 +101,9 @@ const Channels:React.FC<ChannelsProps> = ({
               }
               id="analyze"
               onClick={(e) => channelActionHandler(e)}
-            >Analyze</li>
+            >
+              Analyze
+            </li>
             <li 
               className= {
                 channelAction ==  "trade" ? (
