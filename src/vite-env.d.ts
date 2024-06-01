@@ -15,6 +15,7 @@ interface Message {
     channel: string;
     account: string;
     text: string;
+    timestamp: Date;
   }
 
   interface tokenMetadataContract_address{

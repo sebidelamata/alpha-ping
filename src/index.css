@@ -148,10 +148,69 @@ a{
   font-weight: 900;
 }
 
+.join-channel-loading-container{
+  display: grid;
+  position: absolute;
+  top: 50svh;
+  left: 50vw;
+  border-radius: var(--button-radius);
+  border: var(--border-width) solid var(--color-3);
+  justify-content: center;
+  align-items: center;
+  padding: var(--large-button-padding) var(--large-button-padding-side);
+  grid-template-rows: repeat(4, auto);
+  gap: var(--gap);
+  height: 70svh;
+  width: 50vw;
+  transform: translateX(-50%) translateY(-70%);
+  background-color: var(--color-1);
+  transition: none;
+}
+
+.join-channel-loading{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  transition: none;
+  font-size: x-large;
+  font-weight: 800;
+}
+
+.loading-container{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-container-text{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.loading-banana-container{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  height: 80%;
+  width: 100%;
+}
+
+.loading-banana{
+  display: grid;
+  object-fit: contain;
+  width: 70%;
+  height: 70%;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(15%);
+}
+
 .nav-bar{
   height: var(--navbar-height);
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 33% 33% 33%;
   position: fixed;
   width: 100vw;
 }
@@ -181,6 +240,21 @@ a{
   height: var(--icon-height-large);
   width: var(--icon-width-large);
   object-fit: contain;
+}
+
+.search{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+}
+
+.search-bar{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: repeat(2, auto);
+  gap: var(--gap);
 }
 
 .connect-container{
@@ -410,6 +484,14 @@ a{
 .message-content{
   display: grid;
   grid-template-rows: repeat(2, auto);
+}
+
+.message-content-row-one{
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: left;
+  align-items: center;
+  gap: var(--gap);
 }
 
 .message-submit-form{

@@ -9,6 +9,8 @@ import { io } from "socket.io-client"
 import banana from '/Banana.svg'
 import monkey from '/monkey.svg'
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
+import { DateTime } from 'luxon';
+
 
 
 // Socket
@@ -28,11 +30,15 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
   const sendMessage:MouseEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
+    const now: Date = new Date
+
     const messageObj = {
       channel: currentChannel?.id.toString(),
       account: account,
-      text: message
+      text: message,
+      timestamp: now
     }
+    console.log(messageObj)
 
     if (message !== "") {
       socket.emit('new message', messageObj)
@@ -65,12 +71,19 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
               <img src={monkey} alt="User Icon" className='monkey-icon'/>
             </div>
             <div className="message-content">
-              <h3 className='message-poster-address'>
-                {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
-              </h3>
-              <p className='message-content-text'>
-                {message.text}
-              </p>
+              <div className='message-content-row-one'>
+                 <h3 className='message-poster-address'>
+                  {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
+                </h3>
+                <div className='message-timestamp'>
+                  {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
+                </div>
+              </div>
+              <div className='message-content-row-two'>
+                <p className='message-content-text'>
+                  {message.text}
+                </p>
+              </div>
             </div>
           </div>
         ))}

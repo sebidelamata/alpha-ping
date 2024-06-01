@@ -5,6 +5,7 @@ import React, {
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from '../contexts/ProviderContext';
+import Loading from "./Loading";
 
 interface ChannelProps{
     index: number;
@@ -72,6 +73,7 @@ const Channel:React.FC<ChannelProps> = ({
         }
       };
     const [tokenMetada, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
+    const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
     
     // handles clicking on channel names from channels list
     const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
@@ -85,9 +87,11 @@ const Channel:React.FC<ChannelProps> = ({
       if (hasJoined) {
         setCurrentChannel(channel)
       } else {
+        setJoinChannelLoading(true)
         const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
         await transaction?.wait()
         setCurrentChannel(channel)
+        setJoinChannelLoading(false)
       }
     }
 
@@ -123,35 +127,45 @@ const Channel:React.FC<ChannelProps> = ({
     },[currentChannel])
 
     return(
-        <li
-            onClick={() => channelHandler(channel)} key={index}
-            className={
-            currentChannel && 
-            currentChannel.id.toString() === channel.id.toString() ? 
-            "channel channel-active" : 
-            "channel"
+        <>
+             <li
+                onClick={() => channelHandler(channel)} key={index}
+                className={
+                currentChannel && 
+                currentChannel.id.toString() === channel.id.toString() ? 
+                "channel channel-active" : 
+                "channel"
+                }
+            >
+                <div className="channel-name">
+                    {channel.name}
+                </div>
+                <div className="channel-logo">
+                    <img 
+                        src={
+                            tokenMetada.logo === '' ? 
+                            '/blank_nft.svg' : 
+                            tokenMetada.logo
+                        } 
+                        alt="Token Logo"
+                        className={
+                            currentChannel && 
+                            currentChannel.id.toString() === channel.id.toString() ? 
+                            "channel-logo-image channel-logo-image-active" : 
+                            "channel-logo-image"
+                            }
+                    />
+                </div>
+            </li>
+            {
+                joinChannelLoading === true &&
+                <div className="join-channel-loading-container">
+                    <div className="join-channel-loading">
+                        <Loading/>
+                    </div>
+                </div>
             }
-        >
-            <div className="channel-name">
-                {channel.name}
-            </div>
-            <div className="channel-logo">
-                <img 
-                    src={
-                        tokenMetada.logo === '' ? 
-                        '/blank_nft.svg' : 
-                        tokenMetada.logo
-                    } 
-                    alt="Token Logo"
-                    className={
-                        currentChannel && 
-                        currentChannel.id.toString() === channel.id.toString() ? 
-                        "channel-logo-image channel-logo-image-active" : 
-                        "channel-logo-image"
-                        }
-                />
-            </div>
-        </li>
+        </>
     )
 }
 

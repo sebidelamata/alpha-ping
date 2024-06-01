@@ -22,6 +22,12 @@ const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
           A<span className='header-mid-word-break'>lpha</span>PING
         </h1>
       </div>
+      <div className='search'>
+        <form action="" className='search-bar'>
+          <label htmlFor="">Search</label>
+          <input type="text" name='search' placeholder='Search Tokens, NFT, Users...'/>
+        </form>
+      </div>
       <div className='connect-container'>
         {account ? (
           <button

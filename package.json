@@ -17,6 +17,7 @@
     "@uniswap/v3-sdk": "^3.11.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "luxon": "^3.4.4",
     "nodemon": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/luxon": "^3.4.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
