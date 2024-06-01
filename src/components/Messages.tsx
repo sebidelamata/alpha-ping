@@ -94,12 +94,18 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
             </div>
             <div className="message-content">
               <div className='message-content-row-one'>
-                 <h3 className='message-poster-address'>
-                  {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
-                </h3>
+                <a 
+                  href={`https://arbiscan.io/address/${message.account}`}
+                  className='message-poster-address'
+                  target='_blank'
+                  >
+                    <h3>
+                      {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
+                    </h3>
+                  </a>
                 <div className='post-timestamp-token-amount'>
                   <div className='post-timestamp-token-amount-title'>
-                    Message Timestamp {currentChannel.name} Balance:
+                    Post {currentChannel.name} Balance:
                   </div>
                   <div className='post-timestamp-token-amount-value'>
                     {

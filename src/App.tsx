@@ -17,7 +17,6 @@ import JoinAlphaPING from './components/JoinAlphaPING'
 
 import { useEtherProviderContext } from './contexts/ProviderContext';
 
-
 const App:React.FC = () => {
 
   const { alphaPING } = useEtherProviderContext()
