@@ -488,10 +488,18 @@ a{
 
 .message-content-row-one{
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(3, auto);
   justify-content: left;
   align-items: center;
   gap: var(--gap);
+}
+
+.post-timestamp-token-amount{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+  grid-template-columns: repeat(2, auto);
 }
 
 .message-submit-form{

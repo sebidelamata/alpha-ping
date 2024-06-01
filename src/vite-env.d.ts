@@ -16,6 +16,7 @@ interface Message {
     account: string;
     text: string;
     timestamp: Date;
+    messageTimestampTokenAmount: number;
   }
 
   interface tokenMetadataContract_address{

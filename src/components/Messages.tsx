@@ -10,6 +10,9 @@ import banana from '/Banana.svg'
 import monkey from '/monkey.svg'
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import { DateTime } from 'luxon';
+import { ethers } from 'ethers'
+import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import { useEtherProviderContext } from '../contexts/ProviderContext'
 
 
 
@@ -23,7 +26,26 @@ interface MessagesProps {
   }
 
 const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel }) => {
-  const [message, setMessage] = useState("")
+
+  const { signer } = useEtherProviderContext()
+
+  const [message, setMessage] = useState<string>("")
+  const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
+
+  const fetchTokenDecimals = async () => {
+    if(currentChannel?.tokenAddress !== undefined){
+      const token = new ethers.Contract(
+        currentChannel?.tokenAddress,
+        ERC20Faucet.abi,
+        signer
+      )
+      const tokenDecimals = await token.decimals()
+      setTokenDecimals(tokenDecimals as number)
+    }
+  }
+  useEffect(() => {
+    fetchTokenDecimals()
+  }, [currentChannel])
 
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
@@ -75,6 +97,20 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
                  <h3 className='message-poster-address'>
                   {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
                 </h3>
+                <div className='post-timestamp-token-amount'>
+                  <div className='post-timestamp-token-amount-title'>
+                    Message Timestamp {currentChannel.name} Balance:
+                  </div>
+                  <div className='post-timestamp-token-amount-value'>
+                    {
+                      tokenDecimals !== null &&
+                        ethers.formatUnits(
+                          message.messageTimestampTokenAmount.toString(), 
+                          tokenDecimals
+                        )
+                    }
+                  </div>
+                </div>
                 <div className='message-timestamp'>
                   {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
                 </div>
