@@ -105,7 +105,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
                   </a>
                 <div className='post-timestamp-token-amount'>
                   <div className='post-timestamp-token-amount-title'>
-                    Post {currentChannel.name} Balance:
+                    Post Balance:
                   </div>
                   <div className='post-timestamp-token-amount-value'>
                     {
