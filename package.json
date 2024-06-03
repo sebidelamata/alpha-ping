@@ -11,11 +11,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.2.1",
+    "@emoji-mart/react": "^1.1.1",
     "@openzeppelin/contracts": "^5.0.2",
     "@types/react-router-dom": "5.3.3",
     "@uniswap/sdk-core": "^5.0.0",
     "@uniswap/v3-sdk": "^3.11.2",
     "dotenv": "^16.4.5",
+    "emoji-mart": "^5.6.0",
     "express": "^4.19.2",
     "luxon": "^3.4.4",
     "nodemon": "^3.1.0",

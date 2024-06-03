@@ -5,6 +5,7 @@ import React, {
 import banana from '/Banana.svg'
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import { io } from "socket.io-client"
+import MessageAttachments from "./MessageAttachments"
 
 
 interface SubmitMessageProps {
@@ -44,6 +45,10 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
 
     return(
         <form onSubmit={sendMessage} className='message-submit-form'>
+          <MessageAttachments
+            message={message}
+            setMessage={setMessage}
+          />
         {
           currentChannel && 
           account ? (
@@ -64,12 +69,11 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
             />
           )
         }
-        <button type="submit" className='message-form-submit-button'>
-          <img src={banana} alt="Send Message" className='banana-send-icon'/>
-        </button>
-        <button type="button">
-          Trade
-        </button>
+        <div className="submit-button-container">
+          <button type="submit" className='message-form-submit-button'>
+            <img src={banana} alt="Send Message" className='banana-send-icon'/>
+          </button>
+        </div>
       </form>
     )
 }
