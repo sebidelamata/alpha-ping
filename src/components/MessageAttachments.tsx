@@ -12,6 +12,10 @@ interface MessageAttachmentsProps {
     setMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
+interface emoji {
+    native: string
+}
+
 const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMessage }) => {
 
     const [active, setActive] = useState<boolean>(false)
@@ -39,7 +43,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
         };
     }, []);
 
-    const handleEmojiClick = (emoji) => {
+    const handleEmojiClick = (emoji: emoji) => {
         setMessage(message + emoji.native)
     }
 
@@ -66,7 +70,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                     {
                         selectedOption === "emoji" ?
                         <div className="emoji-keyboard">
-                            <Picker data={data} onEmojiSelect={(emoji) => handleEmojiClick(emoji)} />
+                            <Picker data={data} onEmojiSelect={(emoji: emoji) => handleEmojiClick(emoji)} />
                         </div> :
                         <div className="picture-attach">picture</div>
                     }
