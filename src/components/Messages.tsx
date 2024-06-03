@@ -2,22 +2,18 @@ import React,
 { 
     useEffect, 
     useState, 
-    useRef, 
-    MouseEventHandler
+    useRef
 } from 'react'
-import { io } from "socket.io-client"
-import banana from '/Banana.svg'
-import monkey from '/monkey.svg'
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
-import { DateTime } from 'luxon';
-import { ethers } from 'ethers'
+import { 
+  ethers, 
+  Contract 
+} from 'ethers'
 import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { useEtherProviderContext } from '../contexts/ProviderContext'
+import Message from './Message'
+import SubmitMessage from './SubmitMessage'
 
-
-
-// Socket
-const socket = io('ws://localhost:3030')
 
 interface MessagesProps {
     account: string | null;
@@ -29,45 +25,44 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
 
   const { signer } = useEtherProviderContext()
 
-  const [message, setMessage] = useState<string>("")
+  const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
+  const [userBalance, setUserBalance] = useState<string | null>(null)
 
-  const fetchTokenDecimals = async () => {
+  useEffect(() => {
     if(currentChannel?.tokenAddress !== undefined){
       const token = new ethers.Contract(
         currentChannel?.tokenAddress,
         ERC20Faucet.abi,
         signer
       )
+      setToken(token)
+    }
+  }, [currentChannel])
+
+  const fetchTokenDecimals = async () => {
+    if(token !== null){
       const tokenDecimals = await token.decimals()
       setTokenDecimals(tokenDecimals as number)
     }
   }
   useEffect(() => {
     fetchTokenDecimals()
-  }, [currentChannel])
+  }, [token])
+
+  const getUserBalance = async () => {
+    if(token !== null){
+      const userBalance = await token.balanceOf(signer)
+      setUserBalance(userBalance.toString())
+    }
+  }
+  useEffect(() => {
+    getUserBalance()
+  }, [token])
+
 
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
-  const sendMessage:MouseEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault()
-
-    const now: Date = new Date
-
-    const messageObj = {
-      channel: currentChannel?.id.toString(),
-      account: account,
-      text: message,
-      timestamp: now
-    }
-    console.log(messageObj)
-
-    if (message !== "") {
-      socket.emit('new message', messageObj)
-    }
-
-    setMessage("")
-  }
 
   const scrollHandler = () => {
     setTimeout(() => {
@@ -88,78 +83,22 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         {
         currentChannel && 
         messages.filter(message => message.channel === currentChannel.id.toString()).map((message, index) => (
-          <div className="message" key={index}>
-            <div className='message-header'>
-              <img src={monkey} alt="User Icon" className='monkey-icon'/>
-            </div>
-            <div className="message-content">
-              <div className='message-content-row-one'>
-                <a 
-                  href={`https://arbiscan.io/address/${message.account}`}
-                  className='message-poster-address'
-                  target='_blank'
-                  >
-                    <h3>
-                      {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
-                    </h3>
-                  </a>
-                <div className='post-timestamp-token-amount'>
-                  <div className='post-timestamp-token-amount-title'>
-                    Post Balance:
-                  </div>
-                  <div className='post-timestamp-token-amount-value'>
-                    {
-                      tokenDecimals !== null &&
-                        ethers.formatUnits(
-                          message.messageTimestampTokenAmount.toString(), 
-                          tokenDecimals
-                        )
-                    }
-                  </div>
-                </div>
-                <div className='message-timestamp'>
-                  {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
-                </div>
-              </div>
-              <div className='message-content-row-two'>
-                <p className='message-content-text'>
-                  {message.text}
-                </p>
-              </div>
-            </div>
-          </div>
+          <Message
+            key={index}
+            message={message}
+            index={index}
+            tokenDecimals={tokenDecimals}
+            tokenAddress={currentChannel?.tokenAddress}
+          />
         ))}
 
         <div ref={messageEndRef} />
       </div>
-      <form onSubmit={sendMessage} className='message-submit-form'>
-        {
-          currentChannel && 
-          account ? (
-            <input 
-              type="text" 
-              value={message} 
-              placeholder={`Message #${currentChannel.name}`} 
-              onChange={(e) => setMessage(e.target.value)} 
-              className='message-form-input'
-            />
-          ) : (
-            <input 
-              type="text" 
-              value="" 
-              placeholder={`Please Connect Wallet / Join the Channel`} 
-              disabled 
-              className='message-form-input disabled'
-            />
-          )
-        }
-        <button type="submit" className='message-form-submit-button'>
-          <img src={banana} alt="Send Message" className='banana-send-icon'/>
-        </button>
-        <button type="button">
-          Trade
-        </button>
-      </form>
+      <SubmitMessage
+        currentChannel={currentChannel}
+        account={account}
+        userBalance={userBalance}
+      />
     </div>
   );
 }
