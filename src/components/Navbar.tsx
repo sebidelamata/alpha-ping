@@ -6,9 +6,23 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
+
   const connectHandler = async () => {
+    // 0xa4b1 arbitrum
+    const arbitrumChainID = '0x7a69' // localhost
+
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
     const account = ethers.getAddress(accounts[0])
+
+    // handle user on different network
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (currentChainId !== arbitrumChainID) {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: arbitrumChainID }],
+        });
+      }
+
     setAccount(account)
   }
 

@@ -22,8 +22,6 @@ const alphaPINGModule = buildModule("AlphaPING", (m) => {
     )
   }
 
-
-
   return { alphaPING };
 });
 
