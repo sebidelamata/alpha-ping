@@ -2,7 +2,8 @@ import React, {
     useState,
     MouseEventHandler,
     KeyboardEventHandler,
-    useRef
+    useRef,
+    useEffect
 } from "react"
 import banana from '/Banana.svg'
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
@@ -59,6 +60,52 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
         }
     };
 
+    const [imageUrls, setImageUrls] = useState<string[]>([])
+    const [iframeStrings, setIframeStrings] = useState<string[]>([])
+    const [cleanMessageText, setCleanMessageText] = useState<string>("")
+    
+    const cleanMessage = (message: string) => {
+
+      // Function to extract image URLs from message text
+      const extractImageUrls = (text: string): string[] => {
+        const regex = /!\[image\]\((.*?)\)/g;
+        let match;
+        const urls: string[] = [];
+        while ((match = regex.exec(text)) !== null) {
+            urls.push(match[1]);
+        }
+        return urls;
+      };
+      const imageUrls = extractImageUrls(message);
+      setImageUrls(imageUrls)
+
+      // Function to extract iframe strings from message text
+      const extractIframeStrings = (text: string): string[] => {
+        const regex = /<iframe src="(.*?)"/g;
+        let match;
+        const urls: string[] = [];
+        while ((match = regex.exec(text)) !== null) {
+          urls.push(match[1]);
+        }
+        return urls;
+      };
+
+      const iframeStrings = extractIframeStrings(message);
+      setIframeStrings(iframeStrings)
+
+      // Remove all image markdowns from message text
+      const cleanMessageText = message
+        .replace(/!\[image\]\(.*?\)/g, '')
+        .replace(/<iframe src="(.*?)"/g, "")
+        .replace(/\/>/g, "")
+      setCleanMessageText(cleanMessageText)
+    }
+
+    useEffect(() => {
+      cleanMessage(message)
+    }, [message])
+
+
     return(
         <form onSubmit={sendMessageMouse} className='message-submit-form'>
         {
@@ -79,6 +126,28 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
                 ref={inputRef}
                 onKeyDown={sendMessageKeyboard}
               />
+              {
+                imageUrls.length > 0 &&
+                imageUrls.map((url, idx) => (
+                  <img 
+                    key={idx} 
+                    src={url} 
+                    alt={`Linked content ${idx}`} 
+                    className='image-preview' 
+                  />
+                ))
+              }
+              {
+                iframeStrings.length > 0 &&
+                iframeStrings.map((iframeString, idx) => (
+                  <iframe
+                    key={idx}
+                    src={iframeString}
+                    title={`Embedded content ${idx}`}
+                    className="image-preview"
+                  />
+                ))
+              }
             </>
           ) : (
             <>
