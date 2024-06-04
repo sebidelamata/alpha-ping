@@ -496,6 +496,12 @@ a{
   gap: var(--gap);
 }
 
+.message-content-row-two{
+  display: grid;
+  overflow-y: scroll;
+  height: auto;
+}
+
 .message-poster-address>h3{
   color: var(--color-3);
 }
@@ -570,7 +576,17 @@ a{
   justify-content: center;
   align-items: center;
   gap: var(--gap);
-  grid-template-columns: repeat(2,auto);
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+}
+
+.pictures,
+.emojis,
+.dune-analytics{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .attach-button-container{
@@ -588,14 +604,20 @@ a{
   font-weight: 800;
 }
 
+.attach-button.disabled{
+  border-color: var(--color-4);
+}
+
 .emoji-select{
   display: grid;
   justify-content: center;
   align-items: center;
   padding: var(--med-button-padding);
+  width: 100%;
 }
 
-.picture-icon{
+.picture-icon,
+.dune-icon{
   display: grid;
   justify-content: center;
   align-items: center;
@@ -621,6 +643,14 @@ a{
   max-height: 50%;
   max-width: 80%;
   object-fit: contain;
+}
+
+.message-iframe{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: 200%;
+  width: 90%;
 }
 
 .message-form-input,

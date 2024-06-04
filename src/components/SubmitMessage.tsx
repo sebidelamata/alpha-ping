@@ -61,31 +61,44 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
 
     return(
         <form onSubmit={sendMessageMouse} className='message-submit-form'>
-          <MessageAttachments
-            message={message}
-            setMessage={setMessage}
-            inputRef={inputRef}
-          />
         {
           currentChannel && 
           account ? (
-            <input 
-              type="text" 
-              value={message} 
-              placeholder={`Message #${currentChannel.name}`} 
-              onChange={(e) => setMessage(e.target.value)} 
-              className='message-form-input'
-              ref={inputRef}
-              onKeyDown={sendMessageKeyboard}
-            />
+            <>
+              <MessageAttachments
+                message={message}
+                setMessage={setMessage}
+                inputRef={inputRef}
+              />
+              <input 
+                type="text" 
+                value={message} 
+                placeholder={`Message #${currentChannel.name}`} 
+                onChange={(e) => setMessage(e.target.value)} 
+                className='message-form-input'
+                ref={inputRef}
+                onKeyDown={sendMessageKeyboard}
+              />
+            </>
           ) : (
-            <input 
-              type="text" 
-              value="" 
-              placeholder={`Please Connect Wallet / Join the Channel`} 
-              disabled 
-              className='message-form-input disabled'
-            />
+            <>
+              <div className="attach-button-container">
+                <button 
+                    className="attach-button disabled"
+                    type="button"
+                    disabled
+                >
+                +
+                </button>
+              </div>
+              <input 
+                type="text" 
+                value="" 
+                placeholder={`Please Connect Wallet / Join the Channel`} 
+                disabled 
+                className='message-form-input disabled'
+              />
+            </>
           )
         }
         <div className="submit-button-container">

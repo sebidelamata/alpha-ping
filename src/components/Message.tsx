@@ -49,8 +49,24 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
 
     const imageUrls = extractImageUrls(message.text);
 
-    // Remove all image markdowns from message text
-    const cleanMessageText = message.text.replace(/!\[image\]\(.*?\)/g, '');
+    // Function to extract iframe strings from message text
+    const extractIframeStrings = (text: string): string[] => {
+      const regex = /<iframe src="(.*?)"/g;
+      let match;
+      const urls: string[] = [];
+      while ((match = regex.exec(text)) !== null) {
+        urls.push(match[1]);
+      }
+      return urls;
+    };
+
+  const iframeStrings = extractIframeStrings(message.text);
+
+  // Remove all image markdowns from message text
+  const cleanMessageText = message.text
+    .replace(/!\[image\]\(.*?\)/g, '')
+    .replace(/<iframe src="(.*?)"/g, "")
+    .replace(/\/>/g, "")
 
     return(
         <div className="message" key={index}>
@@ -112,6 +128,16 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
                       src={url} 
                       alt={`Linked content ${idx}`} 
                       className='message-image' 
+                    />
+                  ))
+                }
+                {
+                  iframeStrings.map((iframeString, idx) => (
+                    <iframe
+                      key={idx}
+                      src={iframeString}
+                      title={`Embedded content ${idx}`}
+                      className="message-iframe"
                     />
                   ))
                 }

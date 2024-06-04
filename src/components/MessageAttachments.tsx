@@ -24,6 +24,9 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
     const [selectedOption, setSelectedOption] = useState<string>('emoji')
     const [imageUrl, setImageUrl] = useState<string>('')
     const [imagePreview, setImagePreview] = useState<string | null>(null)
+    const [duneURL, setDuneURL] = useState<string>('')
+    const [dunePreview, setDunePreview] = useState<string | null>(null)
+    const [duneSrc, setDuneSrc] = useState<string>('');
 
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -65,6 +68,31 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
             setImageUrl('')
             setImagePreview(null)
             setActive(false)
+            setSelectedOption('emoji')
+            inputRef.current?.focus();
+        }
+    }
+
+    const handleDuneUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const url = event.target.value
+        console.log(url)
+        setDuneURL(url)
+        const srcIndex = url.indexOf("src=");
+        if (srcIndex !== -1) {
+            const src = url.slice(srcIndex + 5).replace(/"/g, ''); // Extract the src part and remove quotes
+            setDuneSrc(src);
+        }
+        setDunePreview(duneSrc)
+    }
+
+    const handleAddDuneUrl = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault(); 
+        if (duneURL) {
+            setMessage(message + `${duneURL}`)
+            setDuneURL('')
+            setDunePreview(null)
+            setActive(false)
+            setSelectedOption('emoji')
             inputRef.current?.focus();
         }
     }
@@ -94,29 +122,52 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                         <div className="emoji-keyboard">
                             <Picker 
                                 data={data} 
-                                onEmojiSelect={(emoji: emoji) => handleEmojiClick(emoji)} 
+                                onEmojiSelect={(emoji: Emoji) => handleEmojiClick(emoji)} 
                             />
                         </div> :
-                         <div className="picture-attach">
-                         <input
-                             type="text"
-                             placeholder="Paste image URL"
-                             value={imageUrl}
-                             onChange={handleImageUrlChange}
-                         />
-                         {
-                            imagePreview !== null && 
-                            <img 
-                                src={imagePreview} 
-                                alt="Image preview" 
-                                className="image-preview" 
-                            />}
-                         <button 
-                            onClick={(e) => handleAddImageUrl(e)}
-                        >
-                            Add Image
-                        </button>
-                     </div>
+                            selectedOption === "picture" ?
+                                <div className="picture-attach">
+                                    <input
+                                        type="text"
+                                        placeholder="Paste image URL"
+                                        value={imageUrl}
+                                        onChange={handleImageUrlChange}
+                                    />
+                                    {
+                                        imagePreview !== null && 
+                                        <img 
+                                            src={imagePreview} 
+                                            alt="Image preview" 
+                                            className="image-preview" 
+                                        />
+                                    }
+                                    <button 
+                                        onClick={(e) => handleAddImageUrl(e)}
+                                    >
+                                        Add Image
+                                    </button>
+                                </div> :
+                                <div className="dune-attach">
+                                    <input
+                                        type="text"
+                                        placeholder="Paste Dune Embed Link"
+                                        value={duneURL}
+                                        onChange={handleDuneUrlChange}
+                                    />
+                                    {
+                                        duneSrc !== null && 
+                                        <iframe
+                                                src={duneSrc}
+                                                title="Dune Preview"
+                                                className="dune-preview"
+                                        />
+                                    }
+                                    <button 
+                                        onClick={(e) => handleAddDuneUrl(e)}
+                                    >
+                                        Add Dune Embed Link
+                                    </button>
+                                </div>
                     }
                 </div>
                 <ul className="options-list">
@@ -128,7 +179,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                             😊
                         </button>
                     </li>
-                    <li>
+                    <li className="pictures">
                         <button
                             className="picture-select"
                             onClick={() => setSelectedOption("picture")}
@@ -137,6 +188,18 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                                 src="/picture.svg" 
                                 alt="add picture" 
                                 className="picture-icon"
+                            />
+                        </button>
+                    </li>
+                    <li className="dune-analytics">
+                        <button 
+                            className="dune-select"
+                            onClick={() => setSelectedOption('dune')}
+                        >
+                            <img 
+                                src="https://dune.com/assets/DuneLogoCircle.svg" 
+                                alt="Dune Analytics Icon" 
+                                className="dune-icon"
                             />
                         </button>
                     </li>
