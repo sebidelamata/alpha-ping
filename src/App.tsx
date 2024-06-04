@@ -35,7 +35,6 @@ const App:React.FC = () => {
   const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
 
   useEffect(() => {
-
     // --> https://socket.io/how-to/use-with-react-hooks
 
     socket.on("connect", () => {
@@ -50,10 +49,19 @@ const App:React.FC = () => {
       setMessages(messages)
     })
 
+    socket.on('message update', (updatedMessage) => {
+      setMessages(prevMessages =>
+        prevMessages.map(msg =>
+          msg.id === updatedMessage.id ? updatedMessage : msg
+        )
+      )
+    })
+
     return () => {
       socket.off('connect')
       socket.off('new message')
       socket.off('get messages')
+      socket.off('message update')
     }
   }, [])
 

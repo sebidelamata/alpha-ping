@@ -22,6 +22,7 @@ interface MessagesProps {
   }
 
 const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel }) => {
+  console.log(messages)
 
   const { signer } = useEtherProviderContext()
 
@@ -98,6 +99,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         currentChannel={currentChannel}
         account={account}
         userBalance={userBalance}
+        messagesLength={messages.length}
       />
     </div>
   );

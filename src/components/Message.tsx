@@ -126,7 +126,7 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
           </div>
           {
             hoverOptions === true &&
-            <MessageHoverOptions/>
+            <MessageHoverOptions message={message}/>
           }
         </div>
         <div className='message-content-row-two'>
@@ -154,6 +154,20 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
             ))
           }
         </div>
+        <ul className="message-content-row-three">
+          {
+            Object.keys(message.reactions).length > 0 &&
+            Object.entries(message.reactions).map(([key, value]) => (
+              <li
+                key={key}
+                className="reaction-item"
+              >
+                <div className="reaction-emoji">{key}</div>
+                <div className="reaction-count">{value.length}</div>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
   )

@@ -486,7 +486,7 @@ a{
 
 .message-content{
   display: grid;
-  grid-template-rows: repeat(2, auto);
+  grid-template-rows: repeat(3, auto);
 }
 
 .message-content-row-one{
@@ -519,6 +519,14 @@ a{
   border-style: solid;
 }
 
+.emoji-reaction{
+  display: grid;
+  position: absolute;
+  top: 50%;
+  right: -50%;
+  z-index: 2;
+}
+
 .text-reply{
   display: grid;
   object-fit: contain;
@@ -530,6 +538,17 @@ a{
   display: grid;
   overflow-y: scroll;
   height: auto;
+}
+
+.message-content-row-three{
+  display: flex;
+  justify-content: left;
+}
+
+.reaction-item{
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: calc(0.5 * var(--gap-small));
 }
 
 .message-poster-address>h3{

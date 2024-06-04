@@ -15,9 +15,10 @@ interface SubmitMessageProps {
     currentChannel: AlphaPING.ChannelStructOutput | null;
     account: string | null;
     userBalance: string | null;
+    messagesLength: number;
 }
 
-const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, userBalance }) => {
+const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, userBalance, messagesLength }) => {
 
 
     // Socket
@@ -31,11 +32,13 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
         const now: Date = new Date
     
         const messageObj = {
+          id: messagesLength,
           channel: currentChannel?.id.toString(),
           account: account,
           text: message,
           timestamp: now,
-          messageTimestampTokenAmount: userBalance
+          messageTimestampTokenAmount: userBalance,
+          reactions: {}
         }
         console.log(messageObj)
     
@@ -62,7 +65,6 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
 
     const [imageUrls, setImageUrls] = useState<string[]>([])
     const [iframeStrings, setIframeStrings] = useState<string[]>([])
-    const [cleanMessageText, setCleanMessageText] = useState<string>("")
     
     const cleanMessage = (message: string) => {
 
@@ -93,12 +95,11 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
       const iframeStrings = extractIframeStrings(message);
       setIframeStrings(iframeStrings)
 
-      // Remove all image markdowns from message text
-      const cleanMessageText = message
-        .replace(/!\[image\]\(.*?\)/g, '')
-        .replace(/<iframe src="(.*?)"/g, "")
-        .replace(/\/>/g, "")
-      setCleanMessageText(cleanMessageText)
+      // // Remove all image markdowns from message text
+      // const cleanMessageText = message
+      //   .replace(/!\[image\]\(.*?\)/g, '')
+      //   .replace(/<iframe src="(.*?)"/g, "")
+      //   .replace(/\/>/g, "")
     }
 
     useEffect(() => {

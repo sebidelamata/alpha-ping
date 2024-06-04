@@ -12,11 +12,13 @@ interface Window {
 }
 
 interface Message {
+    id: number;
     channel: string;
     account: string;
     text: string;
     timestamp: Date;
     messageTimestampTokenAmount: number;
+    reactions: Record<string, string[]>;
   }
 
   interface tokenMetadataContract_address{
