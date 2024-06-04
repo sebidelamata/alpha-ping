@@ -22,6 +22,7 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
 
     const [userBalance, setUserBalance] = useState<string | null>(null)
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
+    const [hoverReactions, sethoverReactions] = useState<string | null>(null)
 
     const getUserBalance = async () => {
         if(tokenAddress !== null){
@@ -158,14 +159,35 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
           {
             Object.keys(message.reactions).length > 0 &&
             Object.entries(message.reactions).map(([key, value]) => (
-              <li
-                key={key}
-                className="reaction-item"
-              >
-                <div className="reaction-emoji">{key}</div>
-                <div className="reaction-count">{value.length}</div>
-              </li>
+              (
+                message.reactions[key].length > 0 && 
+                <li
+                  key={key}
+                  className="reaction-item"
+                  onMouseEnter={() => sethoverReactions(key)}
+                  onMouseLeave={() => sethoverReactions(null)}
+                >
+                  <div className="reaction-emoji">{key}</div>
+                  <div className="reaction-count">{value.length}</div>
+                </li>
+              )
             ))
+          }
+          {
+            hoverReactions !== null &&
+            <div className="hover-reactions-accounts">
+              <div className="hover-reaction-icon">{hoverReactions}</div>
+              <ul className="hover-reaction-address-list">
+                {
+                  message.reactions[hoverReactions].length > 0 &&
+                  message.reactions[hoverReactions].map((address) => (
+                    <li className="hover-reaction-address" key={address}>
+                      {address.slice(0,4)}...{address.slice(38,42)}
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
           }
         </ul>
       </div>

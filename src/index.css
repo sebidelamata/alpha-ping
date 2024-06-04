@@ -551,6 +551,20 @@ a{
   gap: calc(0.5 * var(--gap-small));
 }
 
+.hover-reactions-accounts{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 30%;
+  bottom: 25%;
+  border-radius: var(--button-radius);
+  border-color: var(--color-2);
+  border-style: solid;
+  border-width: var(--border-width);
+  background-color: var(--color-1);
+  padding: var(--med-button-padding);
+}
+
 .message-poster-address>h3{
   color: var(--color-3);
 }
