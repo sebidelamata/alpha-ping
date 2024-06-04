@@ -1,6 +1,8 @@
 import React, {
     useState,
-    MouseEventHandler
+    MouseEventHandler,
+    KeyboardEventHandler,
+    useRef
 } from "react"
 import banana from '/Banana.svg'
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
@@ -21,9 +23,9 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
     const socket = io('ws://localhost:3030')
 
     const [message, setMessage] = useState<string>("")
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const sendMessage:MouseEventHandler<HTMLFormElement> = async (e) => {
-        e.preventDefault()
+    const sendMessage = async () => {
     
         const now: Date = new Date
     
@@ -41,13 +43,28 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
         }
     
         setMessage("")
+        inputRef.current?.focus()
       }
 
+      const sendMessageMouse: MouseEventHandler<HTMLFormElement> = (e) => {
+        e.preventDefault()
+
+        sendMessage();
+    }
+
+    const sendMessageKeyboard: KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    };
+
     return(
-        <form onSubmit={sendMessage} className='message-submit-form'>
+        <form onSubmit={sendMessageMouse} className='message-submit-form'>
           <MessageAttachments
             message={message}
             setMessage={setMessage}
+            inputRef={inputRef}
           />
         {
           currentChannel && 
@@ -58,6 +75,8 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
               placeholder={`Message #${currentChannel.name}`} 
               onChange={(e) => setMessage(e.target.value)} 
               className='message-form-input'
+              ref={inputRef}
+              onKeyDown={sendMessageKeyboard}
             />
           ) : (
             <input 

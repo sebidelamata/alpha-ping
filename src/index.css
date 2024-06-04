@@ -605,6 +605,24 @@ a{
   padding: var(--med-button-padding);
 }
 
+.image-preview{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  object-fit: contain;
+  width: 96%;
+  height: 96%;
+}
+
+.message-image{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  max-height: 50%;
+  max-width: 80%;
+  object-fit: contain;
+}
+
 .message-form-input,
 .message-form-input:focus,
 .message-form-input:active,

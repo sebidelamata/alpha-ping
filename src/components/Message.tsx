@@ -36,6 +36,22 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
         getUserBalance()
     }, [tokenAddress])
 
+    // Function to extract image URLs from message text
+    const extractImageUrls = (text: string): string[] => {
+      const regex = /!\[image\]\((.*?)\)/g;
+      let match;
+      const urls: string[] = [];
+      while ((match = regex.exec(text)) !== null) {
+          urls.push(match[1]);
+      }
+      return urls;
+    };
+
+    const imageUrls = extractImageUrls(message.text);
+
+    // Remove all image markdowns from message text
+    const cleanMessageText = message.text.replace(/!\[image\]\(.*?\)/g, '');
+
     return(
         <div className="message" key={index}>
             <div className='message-header'>
@@ -87,8 +103,18 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
               </div>
               <div className='message-content-row-two'>
                 <p className='message-content-text'>
-                  {message.text}
+                  {cleanMessageText}
                 </p>
+                {
+                  imageUrls.map((url, idx) => (
+                    <img 
+                      key={idx} 
+                      src={url} 
+                      alt={`Linked content ${idx}`} 
+                      className='message-image' 
+                    />
+                  ))
+                }
               </div>
             </div>
           </div>

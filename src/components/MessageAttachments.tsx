@@ -2,7 +2,8 @@ import React, {
     MouseEventHandler,
     useState,
     useEffect,
-    useRef
+    useRef,
+    ChangeEvent
 } from "react"
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
@@ -10,16 +11,19 @@ import Picker from '@emoji-mart/react'
 interface MessageAttachmentsProps {
     message: string;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
+    inputRef: React.RefObject<HTMLInputElement>;
 }
 
-interface emoji {
+interface Emoji {
     native: string
 }
 
-const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMessage }) => {
+const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMessage, inputRef }) => {
 
     const [active, setActive] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<string>('emoji')
+    const [imageUrl, setImageUrl] = useState<string>('')
+    const [imagePreview, setImagePreview] = useState<string | null>(null)
 
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -43,8 +47,26 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
         };
     }, []);
 
-    const handleEmojiClick = (emoji: emoji) => {
+    const handleEmojiClick = (emoji: Emoji) => {
         setMessage(message + emoji.native)
+        inputRef.current?.focus();
+    }
+
+    const handleImageUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const url = event.target.value
+        setImageUrl(url)
+        setImagePreview(url)
+    }
+
+    const handleAddImageUrl = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault(); 
+        if (imageUrl) {
+            setMessage(message + `![image](${imageUrl})`)
+            setImageUrl('')
+            setImagePreview(null)
+            setActive(false)
+            inputRef.current?.focus();
+        }
     }
 
     return(
@@ -70,9 +92,31 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                     {
                         selectedOption === "emoji" ?
                         <div className="emoji-keyboard">
-                            <Picker data={data} onEmojiSelect={(emoji: emoji) => handleEmojiClick(emoji)} />
+                            <Picker 
+                                data={data} 
+                                onEmojiSelect={(emoji: emoji) => handleEmojiClick(emoji)} 
+                            />
                         </div> :
-                        <div className="picture-attach">picture</div>
+                         <div className="picture-attach">
+                         <input
+                             type="text"
+                             placeholder="Paste image URL"
+                             value={imageUrl}
+                             onChange={handleImageUrlChange}
+                         />
+                         {
+                            imagePreview !== null && 
+                            <img 
+                                src={imagePreview} 
+                                alt="Image preview" 
+                                className="image-preview" 
+                            />}
+                         <button 
+                            onClick={(e) => handleAddImageUrl(e)}
+                        >
+                            Add Image
+                        </button>
+                     </div>
                     }
                 </div>
                 <ul className="options-list">
@@ -89,7 +133,11 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                             className="picture-select"
                             onClick={() => setSelectedOption("picture")}
                         >
-                            <img src="/picture.svg" alt="add picture" className="picture-icon"/>
+                            <img 
+                                src="/picture.svg" 
+                                alt="add picture" 
+                                className="picture-icon"
+                            />
                         </button>
                     </li>
                 </ul>
