@@ -24,7 +24,6 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
     const [userBalance, setUserBalance] = useState<string | null>(null)
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
     const [hoverReactions, sethoverReactions] = useState<string | null>(null)
-    console.log(`Message ID: ${message.id}, Reply ID: ${message.reply}, Found Reply:`, reply);
 
     const getUserBalance = async () => {
         if(tokenAddress !== null){
