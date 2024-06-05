@@ -19,6 +19,7 @@ interface Message {
     timestamp: Date;
     messageTimestampTokenAmount: number;
     reactions: Record<string, string[]>;
+    replyId: number | null;
   }
 
   interface tokenMetadataContract_address{

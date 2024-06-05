@@ -15,9 +15,10 @@ interface Emoji {
 
 interface MessageHoverOptionsProps {
     message: Message;
+    setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message}) => {
+const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setReplyId}) => {
 
     const { socket } = useSocketProviderContext()
 
@@ -65,6 +66,12 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message}) => {
             socket.emit('update reactions', { messageId: message.id, reactions: newReactions });
         }
     };
+
+    const handleReplyClick = () => {
+        setReplyId(message.id)
+        const inputField = document.getElementById('message-form-input')
+        inputField?.focus()
+    }
     
     // handling closing the modal when clicking outside of it
     useEffect(() => {
@@ -110,7 +117,10 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message}) => {
                             </div>
                         }
                     </li>
-                    <li className="text-reply">
+                    <li 
+                        className="text-reply"
+                        onClick={() => handleReplyClick()}    
+                    >
                         <img src="/reply.svg" alt="text reply" className="text-reply"/>
                     </li>
                 </ul>

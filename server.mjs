@@ -14,7 +14,8 @@ const messages = [
     text: "Welcome to AlphaPING!",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 1,
@@ -23,7 +24,8 @@ const messages = [
     text: "Welcome to AlphaPING everyone! My name is John and I've been a blockchain developer for 2+ years.",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 2,
@@ -32,7 +34,8 @@ const messages = [
     text: "Hello everyone!",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 3,
@@ -41,7 +44,8 @@ const messages = [
     text: "Hey there! My name is Ann and I'm an aspiring blockchain developer!",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 4,
@@ -50,7 +54,8 @@ const messages = [
     text: "Hey everyone!",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 5,
@@ -59,7 +64,8 @@ const messages = [
     text: "Hey there, great to be here!",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 6,
@@ -68,7 +74,8 @@ const messages = [
     text: "Hope everyone is having a good day ;)",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 7,
@@ -77,7 +84,8 @@ const messages = [
     text: "Hello!",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
   {
     id: 8,
@@ -86,7 +94,8 @@ const messages = [
     text: "Does anyone have any tips on becoming a blockchain developer?",
     timestamp: new Date,
     messageTimestampTokenAmount: 1* (10**18),
-    reactions: {}
+    reactions: {},
+    replyId: null
   },
 ]
 

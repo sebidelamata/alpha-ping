@@ -30,6 +30,9 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
   const [userBalance, setUserBalance] = useState<string | null>(null)
 
+  // this holds the value (if there is one) of the reply id of a message
+  const [replyId, setReplyId] = useState<number | null>(null)
+
   useEffect(() => {
     if(currentChannel?.tokenAddress !== undefined){
       const token = new ethers.Contract(
@@ -90,6 +93,12 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
             index={index}
             tokenDecimals={tokenDecimals}
             tokenAddress={currentChannel?.tokenAddress}
+            setReplyId={setReplyId}
+            reply={
+              message.replyId !== null && message.replyId ? 
+              messages.find((targetMessage) => { return targetMessage.id === message.replyId }) || null :
+              null
+            }
           />
         ))}
 
@@ -100,6 +109,8 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         account={account}
         userBalance={userBalance}
         messagesLength={messages.length}
+        replyId={replyId}
+        setReplyId={setReplyId}
       />
     </div>
   );

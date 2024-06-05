@@ -16,9 +16,11 @@ interface SubmitMessageProps {
     account: string | null;
     userBalance: string | null;
     messagesLength: number;
+    replyId: number | null;
+    setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, userBalance, messagesLength }) => {
+const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, userBalance, messagesLength, replyId, setReplyId }) => {
 
 
     const { socket } = useSocketProviderContext()
@@ -29,7 +31,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
     const sendMessage = async () => {
     
         const now: Date = new Date
-    
+  
         const messageObj = {
           id: messagesLength,
           channel: currentChannel?.id.toString(),
@@ -37,15 +39,16 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
           text: message,
           timestamp: now,
           messageTimestampTokenAmount: userBalance,
-          reactions: {}
+          reactions: {},
+          replyId: replyId
         }
-        console.log(messageObj)
     
         if (message !== "" && socket !== null) {
           socket.emit('new message', messageObj)
         }
     
         setMessage("")
+        setReplyId(null)
         inputRef.current?.focus()
       }
 
@@ -125,6 +128,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
                 className='message-form-input'
                 ref={inputRef}
                 onKeyDown={sendMessageKeyboard}
+                id="message-form-input"
               />
               {
                 imageUrls.length > 0 &&

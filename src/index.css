@@ -542,6 +542,34 @@ a{
   width: 1em;
 }
 
+.message-content-reply-container{
+  display: grid;
+  align-items: center;
+  justify-content: left;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--gap-small);
+}
+
+.reply-preview-icon{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  object-fit: contain;
+  height: 1em;
+  width: 1em;
+  filter: brightness(0.6);
+}
+
+.reply-author{
+  font-size: small;
+  filter: brightness(0.6);
+}
+
+.message-content-reply{
+  font-size: small;
+  filter: brightness(0.6);
+}
+
 .message-content-row-two{
   display: grid;
   overflow-y: scroll;
@@ -724,7 +752,20 @@ a{
   width: 90%;
 }
 
-.message-form-input,
+.message-form-input{
+  display: grid;
+  background-color: var(--color-5);
+  padding: var(--large-button-padding);
+  color: var(--color-2);
+  border-radius: var(--button-radius);
+  border-style: solid;
+  border-width: var(--border-width);
+  border-color: var(--color-2);
+  width: 90%;
+  outline: none;
+  font-size: large;
+}
+
 .message-form-input:focus,
 .message-form-input:active,
 textarea:focus, 
@@ -736,7 +777,7 @@ textarea:active{
   border-radius: var(--button-radius);
   border-style: solid;
   border-width: var(--border-width);
-  border-color: var(--color-2);
+  border-color: var(--color-3);
   width: 90%;
   outline: none;
   font-size: large;

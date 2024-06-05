@@ -14,15 +14,17 @@ interface MessageProps {
     index: number;
     tokenDecimals: number | null;
     tokenAddress: string | null;
+    setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
+    reply: Message | null;
 }
 
-const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAddress}) => {
-
+const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAddress, setReplyId, reply}) => {
     const { signer } = useEtherProviderContext()
 
     const [userBalance, setUserBalance] = useState<string | null>(null)
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
     const [hoverReactions, sethoverReactions] = useState<string | null>(null)
+    console.log(`Message ID: ${message.id}, Reply ID: ${message.reply}, Found Reply:`, reply);
 
     const getUserBalance = async () => {
         if(tokenAddress !== null){
@@ -127,10 +129,30 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
           </div>
           {
             hoverOptions === true &&
-            <MessageHoverOptions message={message}/>
+            <MessageHoverOptions 
+              message={message}
+              setReplyId={setReplyId}
+            />
           }
         </div>
         <div className='message-content-row-two'>
+          {
+            reply !== null &&
+            message.replyId !== null &&
+              <div className="message-content-reply-container">
+                <div className="reply-icon-preview">
+                  <img src="/monkey.svg" alt="default icon" className="reply-preview-icon"/>
+                </div>
+                <div className="reply-author">
+                  {`${reply.account.slice(0,4)}...${reply.account.slice(28,32)}`}
+                </div>
+                <p className="message-content-reply">
+                  {
+                  `${reply.text}...`
+                  }
+                </p>
+              </div>
+          }
           <p className='message-content-text'>
             {cleanMessageText}
           </p>
