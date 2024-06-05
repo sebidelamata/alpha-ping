@@ -7,7 +7,7 @@ import React, {
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { useEtherProviderContext } from "../contexts/ProviderContext"
-import { io } from "socket.io-client"
+import { useSocketProviderContext } from "../contexts/SocketContext"
 
 interface Emoji {
     native: string
@@ -19,8 +19,7 @@ interface MessageHoverOptionsProps {
 
 const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message}) => {
 
-    // Socket
-    const socket = io('ws://localhost:3030')
+    const { socket } = useSocketProviderContext()
 
     const { signer } = useEtherProviderContext()
 
@@ -61,8 +60,10 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message}) => {
             ...message.reactions,
             [emoji.native]: newEmojiReactions,
         };
-
-        socket.emit('update reactions', { messageId: message.id, reactions: newReactions });
+        
+        if(socket !== null){
+            socket.emit('update reactions', { messageId: message.id, reactions: newReactions });
+        }
     };
     
     // handling closing the modal when clicking outside of it

@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { io } from "socket.io-client"
-
-// Socket
-const socket = io('ws://localhost:3030');
 // types
 import { AlphaPING } from '../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 
@@ -16,10 +12,12 @@ import Messages from './components/Messages'
 import JoinAlphaPING from './components/JoinAlphaPING'
 
 import { useEtherProviderContext } from './contexts/ProviderContext';
+import { useSocketProviderContext } from './contexts/SocketContext';
 
 const App:React.FC = () => {
 
   const { alphaPING } = useEtherProviderContext()
+  const { socket } = useSocketProviderContext()
 
   // account stuff
   const [account, setAccount] = useState<string | null>(null)
@@ -35,7 +33,8 @@ const App:React.FC = () => {
   const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
 
   useEffect(() => {
-    // --> https://socket.io/how-to/use-with-react-hooks
+    if(socket !== null){
+      // --> https://socket.io/how-to/use-with-react-hooks
 
     socket.on("connect", () => {
       socket.emit('get messages')
@@ -63,7 +62,8 @@ const App:React.FC = () => {
       socket.off('get messages')
       socket.off('message update')
     }
-  }, [])
+    }
+  }, [socket])
 
   const findIsMember = async () => {
     if(account){

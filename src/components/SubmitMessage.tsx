@@ -7,8 +7,8 @@ import React, {
 } from "react"
 import banana from '/Banana.svg'
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
-import { io } from "socket.io-client"
 import MessageAttachments from "./MessageAttachments"
+import { useSocketProviderContext } from "../contexts/SocketContext"
 
 
 interface SubmitMessageProps {
@@ -21,8 +21,7 @@ interface SubmitMessageProps {
 const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, userBalance, messagesLength }) => {
 
 
-    // Socket
-    const socket = io('ws://localhost:3030')
+    const { socket } = useSocketProviderContext()
 
     const [message, setMessage] = useState<string>("")
     const inputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +41,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
         }
         console.log(messageObj)
     
-        if (message !== "") {
+        if (message !== "" && socket !== null) {
           socket.emit('new message', messageObj)
         }
     

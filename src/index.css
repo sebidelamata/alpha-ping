@@ -482,6 +482,11 @@ a{
   align-items: center;
   gap: var(--gap);
   max-height: 80svh;
+  transition: filter 0.6s;
+  background-color: var(--color-1);
+}
+.message:hover{
+  filter: brightness(1.2);
 }
 
 .message-content{
@@ -503,6 +508,7 @@ a{
   justify-content: center;
   gap: var(--gap);
   grid-template-columns: repeat(2, auto);
+  filter: brightness(1);
 }
 
 .message-hover-options>li{
@@ -512,11 +518,13 @@ a{
   border-color: var(--color-3);
   border-width: var(--border-width);
   padding: var(--med-button-padding);
+  filter: brightness(1);
 }
 .message-hover-options>li:hover{
   filter: brightness(1.1);
   transform: scale(1.1);
   border-style: solid;
+  filter: brightness(1);
 }
 
 .emoji-reaction{

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./Routes";
 import './index.css'
 import ProviderProvider from "./contexts/ProviderContext";
+import SocketProvider from "./contexts/SocketContext";
 
 const router = createBrowserRouter(routes);
 
@@ -16,7 +17,9 @@ if (!rootElement) {
 createRoot(rootElement).render(
   <React.StrictMode>
     <ProviderProvider>
-      <RouterProvider router={router} />
+      <SocketProvider>
+        <RouterProvider router={router} />
+      </SocketProvider>
     </ProviderProvider>
   </React.StrictMode>
 );
