@@ -72,6 +72,7 @@ export interface AlphaPINGInterface extends Interface {
       | "personalBlockList"
       | "personalFollowList"
       | "premiumMembershipExpiry"
+      | "profilePic"
       | "promoPeriod"
       | "purchaseMonthlySubscription"
       | "removeFromPersonalBlockList"
@@ -79,8 +80,10 @@ export interface AlphaPINGInterface extends Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
+      | "setProfilePic"
       | "setSubscriptionCurrency"
       | "setSubscriptionPriceMonthly"
+      | "setUsername"
       | "subscriptionCurrency"
       | "subscriptionPriceMonthly"
       | "supportsInterface"
@@ -93,6 +96,7 @@ export interface AlphaPINGInterface extends Interface {
       | "transferMod"
       | "transferOwner"
       | "unBlacklistUser"
+      | "username"
       | "withdraw"
   ): FunctionFragment;
 
@@ -209,6 +213,10 @@ export interface AlphaPINGInterface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "profilePic",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "promoPeriod",
     values?: undefined
   ): string;
@@ -237,6 +245,10 @@ export interface AlphaPINGInterface extends Interface {
     values: [AddressLike, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "setProfilePic",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setSubscriptionCurrency",
     values: [AddressLike]
   ): string;
@@ -244,6 +256,7 @@ export interface AlphaPINGInterface extends Interface {
     functionFragment: "setSubscriptionPriceMonthly",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setUsername", values: [string]): string;
   encodeFunctionData(
     functionFragment: "subscriptionCurrency",
     values?: undefined
@@ -287,6 +300,10 @@ export interface AlphaPINGInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "unBlacklistUser",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "username",
     values: [AddressLike]
   ): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
@@ -375,6 +392,7 @@ export interface AlphaPINGInterface extends Interface {
     functionFragment: "premiumMembershipExpiry",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "profilePic", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "promoPeriod",
     data: BytesLike
@@ -404,11 +422,19 @@ export interface AlphaPINGInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setProfilePic",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setSubscriptionCurrency",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setSubscriptionPriceMonthly",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setUsername",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -453,6 +479,7 @@ export interface AlphaPINGInterface extends Interface {
     functionFragment: "unBlacklistUser",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "username", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 }
 
@@ -704,6 +731,8 @@ export interface AlphaPING extends BaseContract {
     "view"
   >;
 
+  profilePic: TypedContractMethod<[arg0: AddressLike], [string], "view">;
+
   promoPeriod: TypedContractMethod<[], [boolean], "view">;
 
   purchaseMonthlySubscription: TypedContractMethod<[], [void], "nonpayable">;
@@ -743,6 +772,12 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
 
+  setProfilePic: TypedContractMethod<
+    [_picString: string],
+    [void],
+    "nonpayable"
+  >;
+
   setSubscriptionCurrency: TypedContractMethod<
     [_subscriptionCurrency: AddressLike],
     [void],
@@ -754,6 +789,8 @@ export interface AlphaPING extends BaseContract {
     [void],
     "nonpayable"
   >;
+
+  setUsername: TypedContractMethod<[_username: string], [void], "nonpayable">;
 
   subscriptionCurrency: TypedContractMethod<[], [string], "view">;
 
@@ -798,6 +835,8 @@ export interface AlphaPING extends BaseContract {
     [void],
     "nonpayable"
   >;
+
+  username: TypedContractMethod<[arg0: AddressLike], [string], "view">;
 
   withdraw: TypedContractMethod<[], [void], "nonpayable">;
 
@@ -955,6 +994,9 @@ export interface AlphaPING extends BaseContract {
     nameOrSignature: "premiumMembershipExpiry"
   ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
   getFunction(
+    nameOrSignature: "profilePic"
+  ): TypedContractMethod<[arg0: AddressLike], [string], "view">;
+  getFunction(
     nameOrSignature: "promoPeriod"
   ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
@@ -997,6 +1039,9 @@ export interface AlphaPING extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "setProfilePic"
+  ): TypedContractMethod<[_picString: string], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "setSubscriptionCurrency"
   ): TypedContractMethod<
     [_subscriptionCurrency: AddressLike],
@@ -1010,6 +1055,9 @@ export interface AlphaPING extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "setUsername"
+  ): TypedContractMethod<[_username: string], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "subscriptionCurrency"
   ): TypedContractMethod<[], [string], "view">;
@@ -1054,6 +1102,9 @@ export interface AlphaPING extends BaseContract {
   getFunction(
     nameOrSignature: "unBlacklistUser"
   ): TypedContractMethod<[_blacklistedUser: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "username"
+  ): TypedContractMethod<[arg0: AddressLike], [string], "view">;
   getFunction(
     nameOrSignature: "withdraw"
   ): TypedContractMethod<[], [void], "nonpayable">;

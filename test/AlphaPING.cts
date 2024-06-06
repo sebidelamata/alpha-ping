@@ -62,55 +62,69 @@ describe("AlphaPING", function () {
   describe("Deployment", function() {
 
     it("Sets the name", async () => {
-      let name = await alphaPING.name()
+      const name = await alphaPING.name()
       expect(name).to.equal(NAME)
     })
     it("Sets the symbol", async () => {
-      let symbol = await alphaPING.symbol()
+      const symbol = await alphaPING.symbol()
       expect(symbol).to.equal(SYMBOL)
     })
     it("Sets the owner", async () => {
-      let owner = await alphaPING.owner()
+      const owner = await alphaPING.owner()
       expect(owner).to.equal(await deployer.getAddress())
     })
   })
 
   describe("Adding Members", function () {
     it("Sets the owner as member", async () => {
-      let ownerIsMember = await alphaPING.isMember(await deployer.getAddress())
+      const ownerIsMember = await alphaPING.isMember(await deployer.getAddress())
       expect(ownerIsMember).to.equal(true)
     })
     it("User is not a member before signing up", async () => {
       expect(userIsMemberBefore).to.equal(false)
     })
     it("User is member after minting", async () => {
-      let userIsMember = await alphaPING.isMember(await user.getAddress())
+      const userIsMember = await alphaPING.isMember(await user.getAddress())
       expect(userIsMember).to.equal(true)
     })
     it("Increases member nft total supply", async () => {
-      let result = await alphaPING.totalSupply()
+      const result = await alphaPING.totalSupply()
       expect(result).to.be.equal(2)
+    })
+    it("user can set profile pic", async () => {
+      const picString = 'https://i.seadn.io/s/raw/files/1290ff5e51b6aa39e74bdf246066491d.png?auto=format&dpr=1&w=1000'
+      const tx = await alphaPING.connect(user).setProfilePic(picString)
+      await tx.wait()
+      const result = await alphaPING.profilePic(await user.getAddress())
+      expect(result).to.be.equal(picString)
+    })
+    it("user can set username", async () => {
+      const username = 'sebidelamata'
+      const tx = await alphaPING.connect(user).setUsername(username)
+      await tx.wait()
+      const result = await alphaPING.username(await user.getAddress())
+      expect(result).to.be.equal(username)
     })
   })
 
   describe("Creating and Getting Channels", function() {
 
     it("Returns total channels", async () => {
-      let totalChannels = await alphaPING.totalChannels()
+      const totalChannels = await alphaPING.totalChannels()
       expect(totalChannels).to.equal(2)
     })
     it("Returns channel attributes for ERC20 type tokens", async () => {
-      let arbitrumToken = await alphaPING.getChannel(1)
+      const arbitrumToken = await alphaPING.getChannel(1)
       expect(arbitrumToken.id).to.equal(1)
       expect(arbitrumToken.name).to.equal(ARBITRUM_TOKEN_NAME)
-      expect(arbitrumToken.tokenAdress).to.equal(ARBITRUM_TOKEN_CONTRACT_ADDRESS)
+      expect(arbitrumToken.tokenAddress).to.equal(ARBITRUM_TOKEN_CONTRACT_ADDRESS)
       expect(arbitrumToken.tokenType).to.equal(ARBITRUM_TOKEN_TYPE)
     })
     it("Returns channel attributes for ERC721 type tokens", async () => {
-      let gbcToken = await alphaPING.getChannel(2)
+      const gbcToken = await alphaPING.getChannel(2)
       expect(gbcToken.id).to.equal(2)
       expect(gbcToken.name).to.equal(GBC_TOKEN_NAME)
-      expect(gbcToken.tokenAdress).to.equal(GBC_TOKEN_CONTRACT_ADDRESS)
+      expect(gbcToken.tokenAddress).to.equal(GBC_TOKEN_CONTRACT_ADDRESS)
       expect(gbcToken.tokenType).to.equal(GBC_TOKEN_TYPE)
     })
   })

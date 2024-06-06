@@ -37,6 +37,10 @@ contract AlphaPING is ERC721 {
     mapping(uint256 => mapping(address => bool)) public hasJoinedChannel;
     // we also want to hold memberships
     mapping(address => bool) public isMember;
+    // user profile pics
+    mapping(address => string) public profilePic;
+    // username
+    mapping(address => string) public username;
     // need to be able to ban bad behaviour and bots
     mapping(address => bool) public isBlackListed;
     // keep track of channel bans
@@ -127,6 +131,16 @@ contract AlphaPING is ERC721 {
         totalSupply++;
         _safeMint(msg.sender, totalSupply);
         isMember[msg.sender] = true;
+    }
+
+    // set string for profile pic
+    function setProfilePic(string memory _picString) public{
+        profilePic[msg.sender] = _picString;
+    }
+
+    // set string for username
+    function setUsername(string memory _username) public{
+        username[msg.sender] = _username;
     }
     
     // anyone can create a channel if it doesnt exist yet

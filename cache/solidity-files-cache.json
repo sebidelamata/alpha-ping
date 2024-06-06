@@ -528,8 +528,8 @@
       ]
     },
     "/Users/migueldelamata/alpha-ping/contracts/AlphaPING.sol": {
-      "lastModificationDate": 1715694973751,
-      "contentHash": "77d4a189f72284922c500bd749774094",
+      "lastModificationDate": 1717678910419,
+      "contentHash": "198a94a389a7f4f26e7df100c3542f9c",
       "sourceName": "contracts/AlphaPING.sol",
       "solcConfig": {
         "version": "0.8.24",

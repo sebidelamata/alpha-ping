@@ -1,8 +1,12 @@
-import React, { MouseEventHandler, useState, useEffect } from "react";
+import React, { 
+  useState, 
+  useEffect 
+} from "react";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import Channel from "./Channel";
 import AddChannel from "./AddChannel";
 import { useEtherProviderContext } from '../contexts/ProviderContext';
+import ChannelActions from "./ChannelActions";
 
 interface ChannelsProps {
   account: string | null;
@@ -44,11 +48,6 @@ const Channels:React.FC<ChannelsProps> = ({
   useEffect(() => {
     reloadChannels()
   }, [addChannelLoading])
-
-  const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
-    const action = (e.target as HTMLElement).id
-    setChannelAction(action)
-  }
   
     return (
       <div className="channels">
@@ -75,50 +74,7 @@ const Channels:React.FC<ChannelsProps> = ({
           addChannelLoading={addChannelLoading}
           setAddChannelLoadingLoading={setAddChannelLoadingLoading}
         />
-        <div className="channel-actions">
-          <h2>Channel Actions</h2>
-          <ul className="channel-actions-list">
-            <li 
-              className= {
-                channelAction ==  "chat" ? (
-                  "channel-action-items channel-action-active"
-                ) : (
-                  "channel-action-items"
-                )
-              }
-              id="chat"
-              onClick={(e) => channelActionHandler(e)}
-            >
-              Chat
-            </li>
-            <li 
-              className= {
-                channelAction ==  "analyze" ? (
-                  "channel-action-items channel-action-active"
-                ) : (
-                  "channel-action-items"
-                )
-              }
-              id="analyze"
-              onClick={(e) => channelActionHandler(e)}
-            >
-              Analyze
-            </li>
-            <li 
-              className= {
-                channelAction ==  "trade" ? (
-                  "channel-action-items channel-action-active"
-                ) : (
-                  "channel-action-items"
-                )
-              }
-              id="trade"
-              onClick={(e) => channelActionHandler(e)}
-            >
-              Trade
-            </li>
-          </ul>
-        </div>
+        <ChannelActions channelAction={channelAction} setChannelAction={setChannelAction}/>
       </div>
     );
   }
