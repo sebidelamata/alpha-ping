@@ -182,6 +182,9 @@ a{
   display: grid;
   align-items: center;
   justify-content: center;
+  background-color: var(--color-1);
+  width: 50vw;
+  height: 50svh;
 }
 
 .loading-container-text{
@@ -328,7 +331,8 @@ a{
 
 .channels{
   display: grid;
-  grid-template-rows: 35% 10% 55%;
+  grid-template-rows: 45% 10% 35% 10%;
+  height: calc(100svh - var(--navbar-height));
 }
 
 .channels-menu{
@@ -337,7 +341,8 @@ a{
 }
 
 .channels-list{
-  display: grid;
+  display: flex;
+  flex-direction: column;
   max-height: 100%;
   overflow-y: scroll;
 }
@@ -354,10 +359,11 @@ a{
     transform var(--transition-speed-1);
   display: grid;
   grid-template-columns: 80% 20%;
+  max-height: 15%;
 }
 .channel:hover{
   filter: brightness(1.1);
-  transform: scale(1.05);
+  transform: scale(1.01);
 }
 .channel-active{
   font-weight: 900;
@@ -478,6 +484,129 @@ a{
   font-weight: 900;
   border: var(--border-width) solid var(--color-3);
   filter: brightness(1);
+}
+
+.edit-profile-container{
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: left;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.edit-profile-image{
+  display: grid;
+  height: 2.5em;
+  width: 2.5em;
+  object-fit: contain;
+}
+
+.edit-porfile-button-icon{
+  display: grid;
+  height: 1.5em;
+  width: 1.5em;
+  object-fit: contain;
+}
+
+.edit-profile-modal{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-rows: repeat(3, auto);
+  height: 50svh;
+  width: 50vw;
+  position: fixed;
+  background-color: var(--color-1);
+  border-radius: var(--button-radius);
+  border-style: solid;
+  border-width: var(--border-width);
+  border-color: var(--color-3);
+  top: 25svh;
+  left: 25vw;
+  z-index: 3;
+  padding: var(--large-button-padding);
+}
+
+.edit-profile-header{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-username-and-pic,
+.edit-profile-row-two{
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  justify-content: center;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.edit-username-container,
+.edit-profile-pic-container{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: var(--large-button-padding);
+}
+
+.current-profile-pic,
+.current-username{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-profile-form{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+  grid-template-rows: repeat(2, 50%);
+}
+
+.edit-profile-form-row-two{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-rows: repeat(2, 50%);
+  gap: var(--gap);
+}
+
+.edit-profile-form-submit-button{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: var(--med-button-padding);
+}
+
+.edit-profile-loading-container{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  position: fixed;
+  width: 50vw;
+  height: 50svh;
+  left: 25vw;
+  top: 25svh;
+}
+
+.edit-button{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: var(--large-button-padding);
+}
+.edit-button-selected{
+  background-color: var(--color-3);
+  color: var(--color-2);
+}
+
+.error-message{
+  display: grid;
+  align-items: center;
+  justify-content: center;
 }
 
 .messages{
