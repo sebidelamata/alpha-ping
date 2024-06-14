@@ -17,6 +17,9 @@ interface MessageProps {
     setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
     reply: Message | null;
     profilePic: string | null;
+    profilePicsLoading: boolean;
+    username: string | null;
+    usernameArrayLoading: boolean;
 }
 
 const Message: React.FC<MessageProps> = ({
@@ -26,7 +29,10 @@ const Message: React.FC<MessageProps> = ({
   tokenAddress, 
   setReplyId, 
   reply, 
-  profilePic
+  profilePic,
+  profilePicsLoading,
+  username,
+  usernameArrayLoading
 }) => {
     const { signer } = useEtherProviderContext()
 
@@ -91,9 +97,11 @@ const Message: React.FC<MessageProps> = ({
     >
       <div className='message-header'>
         {
-          (profilePic !== null && profilePic !== '') ?
-          <img src={profilePic} alt="User Icon" className='monkey-icon'/> :
-          <img src={monkey} alt="User Icon" className='monkey-icon'/>
+          profilePicsLoading === true ?
+          <img src={monkey} alt="User Icon" className='monkey-icon'/> :
+            (profilePic !== null && profilePic !== '') ?
+            <img src={profilePic} alt="User Icon" className='monkey-icon'/> :
+            <img src={monkey} alt="User Icon" className='monkey-icon'/>
         }
       </div>
       <div className="message-content">
@@ -104,7 +112,13 @@ const Message: React.FC<MessageProps> = ({
             target='_blank'
             >
               <h3>
-                {message.account.slice(0, 6) + '...' + message.account.slice(38, 42)}
+              {
+                usernameArrayLoading === true ?
+                message.account.slice(0, 6) + '...' + message.account.slice(38, 42) :
+                  (username !== null && username !== '') ?
+                  username :
+                  message.account.slice(0, 6) + '...' + message.account.slice(38, 42)
+              }
               </h3>
             </a>
           <div className='post-timestamp-token-amount'>

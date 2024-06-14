@@ -25,8 +25,11 @@ interface ProfilePics {
   [account: string]: string | null;
 }
 
+interface Usernames {
+  [account: string]: string | null;
+}
+
 const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel }) => {
-  console.log(messages)
 
   const { signer, alphaPING } = useEtherProviderContext()
 
@@ -69,7 +72,9 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
   }, [token])
 
   const [profilePics, setProfilePics] = useState<ProfilePics>({})
+  const [profilePicsLoading, setProfilePicsLoading] = useState<boolean>(false)
   const getProfilePics = async () => {
+    setProfilePicsLoading(true)
     if(currentChannel !== null){
       const uniqueProfiles: string[] = []
       messages.filter(message => message.channel === currentChannel.id.toString()).map((message) => {
@@ -79,19 +84,53 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
         }
       )
       const profilePicsData: ProfilePics = {};
-      uniqueProfiles.map( async (profile) => {
-        const profilePic = await alphaPING?.profilePic(profile)
-        profilePicsData[profile] = profilePic || null
-      })
+      await Promise.all(
+        uniqueProfiles.map( async (profile) => {
+          const profilePic = await alphaPING?.profilePic(profile)
+          profilePicsData[profile] = profilePic || null
+        })
+      )
       setProfilePics(profilePicsData)
+      setProfilePicsLoading(false)
     }
   }
   useEffect(() => {
-    getProfilePics()
-    console.log(profilePics)
+    if (currentChannel) {
+      getProfilePics();
+    }
+  }, [currentChannel])
+
+  const [usernameArray, setUsernameArray] = useState<Usernames>({})
+  const [usernameArrayLoading, setUsernameArrayLoading] = useState<boolean>(false)
+  const getUsernames = async () => {
+    setUsernameArrayLoading(true)
+    if(currentChannel !== null){
+      const uniqueProfiles: string[] = []
+      messages.filter(message => message.channel === currentChannel.id.toString()).map((message) => {
+        if(!uniqueProfiles.includes(message.account)){
+          uniqueProfiles.push(message.account)
+        }
+        }
+      )
+      const usernamesData: Usernames = {};
+      await Promise.all(
+        uniqueProfiles.map( async (profile) => {
+          const username = await alphaPING?.username(profile)
+          usernamesData[profile] = username || null
+        })
+      )
+      setUsernameArray(usernamesData)
+      setUsernameArrayLoading(false)
+    }
+  }
+  useEffect(() => {
+    if (currentChannel) {
+      getUsernames();
+    }
   }, [currentChannel])
 
 
+  // scroll to end
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
 
@@ -127,6 +166,9 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
               null
             }
             profilePic={profilePics[message.account]}
+            profilePicsLoading={profilePicsLoading}
+            username={usernameArray[message.account]}
+            usernameArrayLoading={usernameArrayLoading}
           />
         ))}
 
