@@ -21,10 +21,14 @@ interface MessagesProps {
     currentChannel: AlphaPING.ChannelStructOutput | null;
   }
 
+interface ProfilePics {
+  [account: string]: string | null;
+}
+
 const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel }) => {
   console.log(messages)
 
-  const { signer } = useEtherProviderContext()
+  const { signer, alphaPING } = useEtherProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -64,6 +68,29 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
     getUserBalance()
   }, [token])
 
+  const [profilePics, setProfilePics] = useState<ProfilePics>({})
+  const getProfilePics = async () => {
+    if(currentChannel !== null){
+      const uniqueProfiles: string[] = []
+      messages.filter(message => message.channel === currentChannel.id.toString()).map((message) => {
+        if(!uniqueProfiles.includes(message.account)){
+          uniqueProfiles.push(message.account)
+        }
+        }
+      )
+      const profilePicsData: ProfilePics = {};
+      uniqueProfiles.map( async (profile) => {
+        const profilePic = await alphaPING?.profilePic(profile)
+        profilePicsData[profile] = profilePic || null
+      })
+      setProfilePics(profilePicsData)
+    }
+  }
+  useEffect(() => {
+    getProfilePics()
+    console.log(profilePics)
+  }, [currentChannel])
+
 
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
@@ -99,6 +126,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
               messages.find((targetMessage) => { return targetMessage.id === message.replyId }) || null :
               null
             }
+            profilePic={profilePics[message.account]}
           />
         ))}
 

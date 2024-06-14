@@ -16,9 +16,18 @@ interface MessageProps {
     tokenAddress: string | null;
     setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
     reply: Message | null;
+    profilePic: string | null;
 }
 
-const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAddress, setReplyId, reply}) => {
+const Message: React.FC<MessageProps> = ({
+  message, 
+  index, 
+  tokenDecimals, 
+  tokenAddress, 
+  setReplyId, 
+  reply, 
+  profilePic
+}) => {
     const { signer } = useEtherProviderContext()
 
     const [userBalance, setUserBalance] = useState<string | null>(null)
@@ -81,7 +90,11 @@ const Message: React.FC<MessageProps> = ({message, index, tokenDecimals, tokenAd
       onMouseLeave={() => sethoverOptions(false)}
     >
       <div className='message-header'>
-        <img src={monkey} alt="User Icon" className='monkey-icon'/>
+        {
+          (profilePic !== null && profilePic !== '') ?
+          <img src={profilePic} alt="User Icon" className='monkey-icon'/> :
+          <img src={monkey} alt="User Icon" className='monkey-icon'/>
+        }
       </div>
       <div className="message-content">
         <div className='message-content-row-one'>

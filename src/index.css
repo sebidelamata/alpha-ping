@@ -939,8 +939,11 @@ textarea:active{
 .monkey-icon{
   display: grid;
   object-fit: contain;
+  justify-content: center;
+  align-items: center;
   width: var(--icon-width-med);
   height: var(--icon-height-med);
+  padding-left: var(--large-button-padding);
 }
 
 
