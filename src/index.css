@@ -218,6 +218,7 @@ a{
   grid-template-columns: 33% 33% 33%;
   position: fixed;
   width: 100vw;
+  z-index: 3;
 }
 
 .nav-brand{
@@ -252,6 +253,7 @@ a{
   align-items: center;
   justify-content: center;
   gap: var(--gap);
+  position: relative;
 }
 
 .search-bar{
@@ -260,6 +262,45 @@ a{
   justify-content: center;
   grid-template-columns: repeat(2, auto);
   gap: var(--gap);
+  position: relative;
+}
+
+.search-channels-options{
+  display: grid;
+  position: absolute;
+  top: 80%;
+  left: -15%;
+  z-index: 100;
+  background-color: var(--color-1);
+  overflow-y: auto;
+  width: 50vw;
+  gap: var(--gap-small);
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--button-radius);
+  border-style: solid;
+  border-width: var(--border-width);
+  border-color: var(--color-2);
+  padding: var(--med-button-padding);
+}
+
+.search-channels-option{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  transition: filter var(--transition-speed-1), 
+    transform var(--transition-speed-1);
+  background-color: var(--color-1);
+  padding: var(--med-button-padding);
+  width: 100%;
+}
+.search-channels-option:hover{
+  filter: brightness(1.2);
+  transform: scale(1.01);
+  border-color: var(--color-3);
+  border-width: var(--border-width);
+  border-radius: var(--button-radius);
+  border-style: solid;
 }
 
 .connect-container{
