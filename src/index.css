@@ -265,15 +265,30 @@ a{
   position: relative;
 }
 
+.search-bar>input{
+  width: 40vw;
+  padding: var(--med-button-padding);
+  color: var(--color-2);
+  background-color: var(--color-1);
+  border-style: none;
+}
+
+.search-bar>input:focus,
+.search-bar>input:active{
+  border-color: var(--color-3);
+  border-style: solid;
+  border-radius: var(--button-radius);
+  outline: none;
+}
+
 .search-channels-options{
   display: grid;
   position: absolute;
-  top: 80%;
-  left: -15%;
+  top: 65%;
+  left: -4%;
   z-index: 100;
   background-color: var(--color-1);
-  overflow-y: auto;
-  width: 50vw;
+  width: 40vw;
   gap: var(--gap-small);
   justify-content: center;
   align-items: center;
@@ -282,6 +297,8 @@ a{
   border-width: var(--border-width);
   border-color: var(--color-2);
   padding: var(--med-button-padding);
+  max-height: 10svh;
+  overflow-y: scroll;
 }
 
 .search-channels-option{
@@ -292,7 +309,7 @@ a{
     transform var(--transition-speed-1);
   background-color: var(--color-1);
   padding: var(--med-button-padding);
-  width: 100%;
+  width: 38vw;
 }
 .search-channels-option:hover{
   filter: brightness(1.2);

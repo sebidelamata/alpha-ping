@@ -84,6 +84,7 @@ const App:React.FC = () => {
         <Navbar 
           account={account} 
           setAccount={setAccount}
+          setCurrentChannel={setCurrentChannel}
           />
         <div className='app-body'>
           <Channels 

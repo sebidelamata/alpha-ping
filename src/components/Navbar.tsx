@@ -1,12 +1,14 @@
 import { ethers } from 'ethers'
 import SearchChannels from './SearchChannels';
+import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 
 interface NavbarProps {
   account: string | null;
   setAccount: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
+const Navbar: React.FC<NavbarProps> = ({ account, setAccount, setCurrentChannel }) => {
 
   const connectHandler = async () => {
     // 0xa4b1 arbitrum
@@ -37,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ account, setAccount }) => {
           A<span className='header-mid-word-break'>lpha</span>PING
         </h1>
       </div>
-      <SearchChannels/>
+      <SearchChannels setCurrentChannel={setCurrentChannel}/>
       <div className='connect-container'>
         {account ? (
           <button
