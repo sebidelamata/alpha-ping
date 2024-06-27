@@ -270,7 +270,9 @@ a{
   padding: var(--med-button-padding);
   color: var(--color-2);
   background-color: var(--color-1);
-  border-style: none;
+  border-color: var(--color-2);
+  border-style: solid;
+  border-radius: var(--button-radius);
 }
 
 .search-bar>input:focus,

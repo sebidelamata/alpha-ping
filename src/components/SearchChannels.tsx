@@ -2,6 +2,7 @@ import React,
 {
     useState,
     useEffect,
+    useRef,
     ChangeEvent
 } from "react"
 import { useEtherProviderContext } from "../contexts/ProviderContext"
@@ -18,6 +19,7 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [filteredOptions, setFilteredOptions] = useState<AlphaPING.ChannelStructOutput[]>([])
     const [isFocused, setIsFocused] = useState<boolean>(false)
+    const modalRef = useRef<HTMLUListElement>(null);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const term = e.target.value
@@ -42,23 +44,18 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
     };
 
     useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (e.target instanceof Node && !(e.target as HTMLElement).closest(".search")) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 setIsFocused(false);
-                setFilteredOptions([]);
             }
         };
 
-        if (isFocused) {
-            document.addEventListener("mousedown", handleClickOutside);
-        } else {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
+        document.addEventListener("mousedown", handleClickOutside);
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isFocused]);
+    }, [])
 
     return(
         <div className='search'>
@@ -77,13 +74,13 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
             {
                 filteredOptions.length > 0 &&
                 isFocused &&
-                    <ul className="search-channels-options">
+                    <ul className="search-channels-options" ref={modalRef}>
                     {
                         filteredOptions.map((channel, index) => (
                             <li 
                                 className="search-channels-option" 
                                 key={index} 
-                                onClick={() => setCurrentChannel(channel)}
+                                onMouseDown={() => setCurrentChannel(channel)}
                             >
                                 {channel.name} - {channel.tokenAddress}
                             </li>
