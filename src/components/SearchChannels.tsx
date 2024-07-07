@@ -7,6 +7,8 @@ import React,
 } from "react"
 import { useEtherProviderContext } from "../contexts/ProviderContext"
 import { type AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
+import { ethers } from 'ethers'
+import Loading from "./Loading.tsx"
 
 interface SearchChannelsProps {
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
@@ -14,11 +16,12 @@ interface SearchChannelsProps {
 
 const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) => {
 
-    const { channels } = useEtherProviderContext()
+    const { channels, alphaPING, signer } = useEtherProviderContext()
 
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [filteredOptions, setFilteredOptions] = useState<AlphaPING.ChannelStructOutput[]>([])
     const [isFocused, setIsFocused] = useState<boolean>(false)
+    const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
     const modalRef = useRef<HTMLUListElement>(null);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +60,26 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
         };
     }, [])
 
+    const handleChannelClick = async (channel: AlphaPING.ChannelStructOutput) => {
+        const account = await signer?.getAddress()
+        // Check if user has joined
+        // If they haven't allow them to mint.
+        const hasJoined = await alphaPING?.hasJoinedChannel(
+            BigInt(channel.id), 
+            account || ethers.ZeroAddress
+        )
+
+        if (hasJoined) {
+            setCurrentChannel(channel)
+          } else {
+            setJoinChannelLoading(true)
+            const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
+            await transaction?.wait()
+            setCurrentChannel(channel)
+            setJoinChannelLoading(false)
+          }
+    }
+
     return(
         <div className='search'>
             <form action="" className='search-bar'>
@@ -80,13 +103,21 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
                             <li 
                                 className="search-channels-option" 
                                 key={index} 
-                                onMouseDown={() => setCurrentChannel(channel)}
+                                onMouseDown={() => handleChannelClick(channel)}
                             >
                                 {channel.name} - {channel.tokenAddress}
                             </li>
                         ))
                     }
                     </ul>
+            }
+            {
+                joinChannelLoading === true &&
+                <div className="join-channel-loading-container">
+                    <div className="join-channel-loading">
+                        <Loading/>
+                    </div>
+                </div>
             }
         </div>
     )
