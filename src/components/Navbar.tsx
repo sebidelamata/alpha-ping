@@ -6,9 +6,17 @@ interface NavbarProps {
   account: string | null;
   setAccount: React.Dispatch<React.SetStateAction<string | null>>;
   setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
+  joinChannelLoading: boolean;
+  setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ account, setAccount, setCurrentChannel }) => {
+const Navbar: React.FC<NavbarProps> = ({ 
+  account, 
+  setAccount, 
+  setCurrentChannel,
+  joinChannelLoading, 
+  setJoinChannelLoading 
+}) => {
 
   const connectHandler = async () => {
     // 0xa4b1 arbitrum
@@ -39,7 +47,11 @@ const Navbar: React.FC<NavbarProps> = ({ account, setAccount, setCurrentChannel 
           A<span className='header-mid-word-break'>lpha</span>PING
         </h1>
       </div>
-      <SearchChannels setCurrentChannel={setCurrentChannel}/>
+      <SearchChannels 
+        setCurrentChannel={setCurrentChannel}
+        joinChannelLoading={joinChannelLoading}
+        setJoinChannelLoading={setJoinChannelLoading}
+      />
       <div className='connect-container'>
         {account ? (
           <button

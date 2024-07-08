@@ -18,7 +18,7 @@ interface ErrorType {
 
 const AddChannel:React.FC<AddChannelProps> = ({addChannelLoading, setAddChannelLoadingLoading}) => {
 
-    const { alphaPING, signer } = useEtherProviderContext()
+    const { alphaPING, signer, setChannels } = useEtherProviderContext()
 
     const [showAddChannelModal, setShowAddChannelModal] = useState<boolean>(false)
     const [tokenAddress, setTokenAddress] = useState<string>("")
@@ -40,6 +40,18 @@ const AddChannel:React.FC<AddChannelProps> = ({addChannelLoading, setAddChannelL
         try{
             const transaction = await alphaPING?.connect(signer).createChannel(tokenAddress,tokenType)
             await transaction?.wait()
+
+            if(alphaPING !== null){
+                const totalChannels:bigint = await alphaPING.totalChannels()
+                const channels = []
+
+                for (let i = 1; i <= Number(totalChannels); i++) {
+                    const channel = await alphaPING.getChannel(i)
+                    channels.push(channel)
+                }
+
+                setChannels(channels)
+            }
 
             setShowAddChannelModal(false)
             setTokenAddress("")

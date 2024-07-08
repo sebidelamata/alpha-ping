@@ -8,6 +8,7 @@ import AddChannel from "./AddChannel";
 import { useEtherProviderContext } from '../contexts/ProviderContext';
 import ChannelActions from "./ChannelActions";
 import EditProfile from "./EditProfile";
+import { ethers } from 'ethers'
 
 interface ChannelsProps {
   account: string | null;
@@ -16,6 +17,7 @@ interface ChannelsProps {
   channelAction: string;
   setChannelAction: React.Dispatch<React.SetStateAction<string>>;
   setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
+  joinChannelLoading: boolean;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
@@ -25,11 +27,27 @@ const Channels:React.FC<ChannelsProps> = ({
   channelAction,
   setChannelAction,
   setSelectedChannelMetadata,
+  joinChannelLoading
 }) => {
 
-  const { alphaPING, channels, setChannels } = useEtherProviderContext()
+  const { alphaPING, channels, setChannels, hasJoined, signer, setHasJoined } = useEtherProviderContext()
 
-    // weve elevated this state from add channels to make the channels list rerender on add channel
+  const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
+  const loadUserChannels = ():void => {
+    const userChannels: AlphaPING.ChannelStructOutput[] = []
+    hasJoined.map((joined, index) => {
+      if(joined === true){
+        userChannels.push(channels[index])
+      }
+    })
+    console.log(userChannels)
+    setUserChannels(userChannels)
+  }
+  useEffect(() => {
+    loadUserChannels()
+  }, [channels, joinChannelLoading, hasJoined])
+
+  // weve elevated this state from add channels to make the channels list rerender on add channel
   const [addChannelLoading, setAddChannelLoadingLoading] = useState<boolean>(false)
 
   // reload our channels if we get a new one
@@ -45,10 +63,24 @@ const Channels:React.FC<ChannelsProps> = ({
     }
     
     setChannels(channels)
+
+    const hasJoinedChannel = []
+
+      if(alphaPING !== null && signer !== null){
+        for (let i = 1; i <= Number(totalChannels); i++) {
+          const hasJoined = await alphaPING.hasJoinedChannel(
+            (i as ethers.BigNumberish), 
+            await signer.getAddress()
+          )
+          hasJoinedChannel.push(hasJoined)
+        }
+  
+        setHasJoined(hasJoinedChannel as boolean[])
+      }
   }
   useEffect(() => {
     reloadChannels()
-  }, [addChannelLoading])
+  }, [addChannelLoading, joinChannelLoading, hasJoined])
   
     return (
       <div className="channels">
@@ -58,7 +90,7 @@ const Channels:React.FC<ChannelsProps> = ({
           </h2>
           <ul className="channels-list">
             {
-              channels.map((channel, index) => (
+              userChannels.map((channel, index) => (
                 <Channel
                   index={index}
                   currentChannel={currentChannel}

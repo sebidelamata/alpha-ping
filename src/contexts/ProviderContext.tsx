@@ -114,7 +114,8 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             alphaPING, 
             channels, 
             setChannels, 
-            hasJoined 
+            hasJoined,
+            setHasJoined 
         }}>
             {children}
         </ProviderContext.Provider>

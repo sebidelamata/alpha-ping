@@ -12,16 +12,21 @@ import Loading from "./Loading.tsx"
 
 interface SearchChannelsProps {
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
+    joinChannelLoading: boolean;
+    setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) => {
+const SearchChannels: React.FC<SearchChannelsProps> = ({ 
+    setCurrentChannel,
+    joinChannelLoading,
+    setJoinChannelLoading
+}) => {
 
     const { channels, alphaPING, signer } = useEtherProviderContext()
 
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [filteredOptions, setFilteredOptions] = useState<AlphaPING.ChannelStructOutput[]>([])
     const [isFocused, setIsFocused] = useState<boolean>(false)
-    const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
     const modalRef = useRef<HTMLUListElement>(null);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,6 +66,7 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
     }, [])
 
     const handleChannelClick = async (channel: AlphaPING.ChannelStructOutput) => {
+        
         const account = await signer?.getAddress()
         // Check if user has joined
         // If they haven't allow them to mint.
@@ -82,7 +88,7 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
 
     return(
         <div className='search'>
-            <form action="" className='search-bar'>
+            <form action="" className='search-bar' onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="">Search</label>
                 <input
                     type="text"
@@ -92,6 +98,7 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({ setCurrentChannel }) =>
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     placeholder="Search Tokens or NFTs (name or address)..."
+                    onSubmit={(e) => e.preventDefault()}
                 />
             </form>
             {

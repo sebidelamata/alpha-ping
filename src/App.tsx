@@ -31,6 +31,8 @@ const App:React.FC = () => {
   const [isMember, setIsMember] = useState<boolean>(false)
   // token metadata fetched from coinmarketcap
   const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
+  // elevate joinchannel loading
+  const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if(socket !== null){
@@ -85,6 +87,8 @@ const App:React.FC = () => {
           account={account} 
           setAccount={setAccount}
           setCurrentChannel={setCurrentChannel}
+          joinChannelLoading={joinChannelLoading}
+          setJoinChannelLoading={setJoinChannelLoading}
           />
         <div className='app-body'>
           <Channels 
@@ -94,6 +98,7 @@ const App:React.FC = () => {
             channelAction={channelAction}
             setChannelAction={setChannelAction}
             setSelectedChannelMetadata={setSelectedChannelMetadata}
+            joinChannelLoading={joinChannelLoading}
           />
           {
             channelAction === 'chat' ? (
