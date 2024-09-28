@@ -8,6 +8,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { useEtherProviderContext } from "../contexts/ProviderContext"
 import { useSocketProviderContext } from "../contexts/SocketContext"
+import DeleteMessage from "./DeleteMessage"
 
 interface Emoji {
     native: string
@@ -122,6 +123,9 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
                         onClick={() => handleReplyClick()}    
                     >
                         <img src="/reply.svg" alt="text reply" className="text-reply"/>
+                    </li>
+                    <li className="delete-message-container">
+                        <DeleteMessage></DeleteMessage>
                     </li>
                 </ul>
             </>

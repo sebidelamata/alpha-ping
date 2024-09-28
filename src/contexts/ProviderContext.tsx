@@ -80,8 +80,6 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
       const signer:Signer = await provider?.getSigner()
       setSigner(signer)
 
-
-
       const hasJoinedChannel = []
 
       for (let i = 1; i <= Number(totalChannels); i++) {

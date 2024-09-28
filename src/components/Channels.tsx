@@ -40,11 +40,11 @@ const Channels:React.FC<ChannelsProps> = ({
         userChannels.push(channels[index])
       }
     })
-    console.log(userChannels)
     setUserChannels(userChannels)
   }
   useEffect(() => {
     loadUserChannels()
+    console.log(userChannels)
   }, [channels, joinChannelLoading, hasJoined])
 
   // weve elevated this state from add channels to make the channels list rerender on add channel
@@ -61,7 +61,6 @@ const Channels:React.FC<ChannelsProps> = ({
         channels.push(channel)
       }
     }
-    
     setChannels(channels)
 
     const hasJoinedChannel = []
@@ -80,7 +79,7 @@ const Channels:React.FC<ChannelsProps> = ({
   }
   useEffect(() => {
     reloadChannels()
-  }, [addChannelLoading, joinChannelLoading, hasJoined])
+  }, [currentChannel, joinChannelLoading])
   
     return (
       <div className="channels">

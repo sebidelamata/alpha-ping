@@ -44,6 +44,7 @@ const EditProfile: React.FC = () => {
             } else {
                 setUserProfilePic(profilePic)
             }
+            console.log(userProfilePic)
         }
     }
     useEffect(() => {

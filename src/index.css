@@ -708,11 +708,11 @@ a{
 }
 
 .message-hover-options{
-  display: grid;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: var(--gap);
-  grid-template-columns: repeat(2, auto);
   filter: brightness(1);
 }
 
