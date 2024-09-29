@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { AlphaPING } from '../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 
 // navbar
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar/Navbar'
 //channels
-import Channels from './components/Channels'
+import Channels from './components/Channels/Channels'
 // messages
-import Messages from './components/Messages'
+import Messages from './components/Messages/Messages'
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
 

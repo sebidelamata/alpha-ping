@@ -2,10 +2,10 @@ import React, {
     useState, 
     useEffect
 } from "react"
-import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { ethers } from 'ethers'
-import { useEtherProviderContext } from '../contexts/ProviderContext';
-import Loading from "./Loading";
+import { useEtherProviderContext } from '../../contexts/ProviderContext';
+import Loading from "../Loading";
 
 interface ChannelProps{
     index: number;

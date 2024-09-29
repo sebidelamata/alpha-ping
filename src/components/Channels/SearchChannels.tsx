@@ -5,10 +5,10 @@ import React,
     useRef,
     ChangeEvent
 } from "react"
-import { useEtherProviderContext } from "../contexts/ProviderContext"
-import { type AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
+import { useEtherProviderContext } from "../../contexts/ProviderContext"
+import { type AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
 import { ethers } from 'ethers'
-import Loading from "./Loading.tsx"
+import Loading from "../Loading.tsx"
 
 interface SearchChannelsProps {
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;

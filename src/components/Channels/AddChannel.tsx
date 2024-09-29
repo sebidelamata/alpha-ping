@@ -4,8 +4,8 @@ import React, {
     useRef,
     FormEvent
 } from "react";
-import Loading from "./Loading";
-import { useEtherProviderContext } from '../contexts/ProviderContext';
+import Loading from ".././Loading";
+import { useEtherProviderContext } from '../../contexts/ProviderContext';
 
 interface AddChannelProps{
     addChannelLoading: boolean;

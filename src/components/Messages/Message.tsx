@@ -5,8 +5,8 @@ import React, {
 import monkey from '/monkey.svg'
 import { DateTime } from 'luxon';
 import { ethers } from 'ethers'
-import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
-import { useEtherProviderContext } from '../contexts/ProviderContext'
+import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import { useEtherProviderContext } from '../../contexts/ProviderContext'
 import MessageHoverOptions from "./MessageHoverOptions";
 
 interface MessageProps {

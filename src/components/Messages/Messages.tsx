@@ -4,13 +4,13 @@ import React,
     useState, 
     useRef
 } from 'react'
-import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
+import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import { 
   ethers, 
   Contract 
 } from 'ethers'
-import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
-import { useEtherProviderContext } from '../contexts/ProviderContext'
+import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import { useEtherProviderContext } from '../../contexts/ProviderContext'
 import Message from './Message'
 import SubmitMessage from './SubmitMessage'
 

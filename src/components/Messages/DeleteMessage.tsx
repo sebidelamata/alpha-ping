@@ -2,7 +2,7 @@ import React, {
     useState,
     useEffect
 } from "react";
-import { useSocketProviderContext } from "../contexts/SocketContext";
+import { useSocketProviderContext } from "../../contexts/SocketContext";
 
 interface DeleteMessageProps {
     messageID: string;

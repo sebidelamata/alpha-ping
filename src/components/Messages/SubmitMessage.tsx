@@ -6,9 +6,9 @@ import React, {
     useEffect
 } from "react"
 import banana from '/Banana.svg'
-import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
+import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import MessageAttachments from "./MessageAttachments"
-import { useSocketProviderContext } from "../contexts/SocketContext"
+import { useSocketProviderContext } from "../../contexts/SocketContext"
 
 
 interface SubmitMessageProps {

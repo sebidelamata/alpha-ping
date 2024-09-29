@@ -6,8 +6,8 @@ import React, {
 } from "react"
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
-import { useEtherProviderContext } from "../contexts/ProviderContext"
-import { useSocketProviderContext } from "../contexts/SocketContext"
+import { useEtherProviderContext } from "../../contexts/ProviderContext"
+import { useSocketProviderContext } from "../../contexts/SocketContext"
 import DeleteMessage from "./DeleteMessage"
 
 interface Emoji {

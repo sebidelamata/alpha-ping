@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
-import SearchChannels from './SearchChannels';
-import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+import SearchChannels from '../Channels/SearchChannels';
+import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 
 interface NavbarProps {
   account: string | null;
