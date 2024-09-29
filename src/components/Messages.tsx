@@ -18,6 +18,7 @@ import SubmitMessage from './SubmitMessage'
 interface MessagesProps {
     account: string | null;
     messages: Message[];
+    setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
     currentChannel: AlphaPING.ChannelStructOutput | null;
   }
 
@@ -29,7 +30,7 @@ interface Usernames {
   [account: string]: string | null;
 }
 
-const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel }) => {
+const Messages:React.FC<MessagesProps> = ({ account, messages, setMessages, currentChannel }) => {
 
   const { signer, alphaPING } = useEtherProviderContext()
 
@@ -156,6 +157,7 @@ const Messages:React.FC<MessagesProps> = ({ account, messages, currentChannel })
           <Message
             key={index}
             message={message}
+            setMessages={setMessages}
             index={index}
             tokenDecimals={tokenDecimals}
             tokenAddress={currentChannel?.tokenAddress}

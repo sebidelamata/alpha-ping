@@ -105,6 +105,7 @@ const App:React.FC = () => {
               <Messages 
                 account={account} 
                 messages={messages} 
+                setMessages={setMessages}
                 currentChannel={currentChannel}
               />
             ) : (
