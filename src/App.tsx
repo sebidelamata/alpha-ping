@@ -12,12 +12,12 @@ import Messages from './components/Messages/Messages'
 import JoinAlphaPING from './components/JoinAlphaPING'
 
 import { useEtherProviderContext } from './contexts/ProviderContext';
-import { useSocketProviderContext } from './contexts/SocketContext';
+import { useMessagesProviderContext } from './contexts/MessagesContext';
 
 const App:React.FC = () => {
 
   const { alphaPING } = useEtherProviderContext()
-  const { socket } = useSocketProviderContext()
+  const { messages, setMessages } = useMessagesProviderContext()
 
   // account stuff
   const [account, setAccount] = useState<string | null>(null)
@@ -25,47 +25,12 @@ const App:React.FC = () => {
   const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
   // selected channel's actions
   const [channelAction, setChannelAction] = useState<string>("chat")
-  // list of all messages
-  const [messages, setMessages] = useState<Message[]>([])
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
   // token metadata fetched from coinmarketcap
   const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
   // elevate joinchannel loading
   const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
-
-  useEffect(() => {
-    if(socket !== null){
-      // --> https://socket.io/how-to/use-with-react-hooks
-
-    socket.on("connect", () => {
-      socket.emit('get messages')
-    })
-
-    socket.on('new message', (messages) => {
-      setMessages(messages)
-    })
-
-    socket.on('get messages', (messages) => {
-      setMessages(messages)
-    })
-
-    socket.on('message update', (updatedMessage) => {
-      setMessages(prevMessages =>
-        prevMessages.map(msg =>
-          msg.id === updatedMessage.id ? updatedMessage : msg
-        )
-      )
-    })
-
-    return () => {
-      socket.off('connect')
-      socket.off('new message')
-      socket.off('get messages')
-      socket.off('message update')
-    }
-    }
-  }, [socket])
 
   const findIsMember = async () => {
     if(account){
@@ -103,9 +68,7 @@ const App:React.FC = () => {
           {
             channelAction === 'chat' ? (
               <Messages 
-                account={account} 
-                messages={messages} 
-                setMessages={setMessages}
+                account={account}
                 currentChannel={currentChannel}
               />
             ) : (

@@ -11,7 +11,6 @@ import MessageHoverOptions from "./MessageHoverOptions";
 
 interface MessageProps {
     message: Message;
-    setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
     index: number;
     tokenDecimals: number | null;
     tokenAddress: string | null;
@@ -25,7 +24,6 @@ interface MessageProps {
 
 const Message: React.FC<MessageProps> = ({
   message, 
-  setMessages,
   index, 
   tokenDecimals, 
   tokenAddress, 
@@ -159,7 +157,6 @@ const Message: React.FC<MessageProps> = ({
             hoverOptions === true &&
             <MessageHoverOptions 
               message={message}
-              setMessages={setMessages}
               setReplyId={setReplyId}
             />
           }

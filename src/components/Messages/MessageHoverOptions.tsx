@@ -16,11 +16,10 @@ interface Emoji {
 
 interface MessageHoverOptionsProps {
     message: Message;
-    setMessages: React.Dispatch<React.SetStateAction<Message[]>>
     setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setMessages, setReplyId}) => {
+const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setReplyId}) => {
 
     const { socket } = useSocketProviderContext()
 
@@ -128,7 +127,6 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setMe
                     <li className="delete-message-container">
                         <DeleteMessage
                             messageID={message.id as unknown as string}
-                            setMessages={setMessages}
                         />
                     </li>
                 </ul>

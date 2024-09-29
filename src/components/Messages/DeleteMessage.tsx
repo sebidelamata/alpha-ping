@@ -1,37 +1,32 @@
 import React, {
-    useState,
-    useEffect
+    useState
 } from "react";
 import { useSocketProviderContext } from "../../contexts/SocketContext";
 
 interface DeleteMessageProps {
     messageID: string;
-    setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
-const DeleteMessage:React.FC<DeleteMessageProps> = ({messageID, setMessages}) => {
+const DeleteMessage:React.FC<DeleteMessageProps> = ({messageID}) => {
 
     const { socket } = useSocketProviderContext()
 
-
-    const [messageDelete, setMessageDelete] = useState<boolean>(false)
     const [messageDeleteLoading, setMessageDeleteLoading] = useState<boolean>(false)
     const [messageDeleteError, setMessageDeleteError] = useState<string>('')
 
     const deleteMessage = async () => {
         if (socket) {
-            socket.emit('deleteMessage', { id: messageID });
+            socket.emit('delete message', { id: messageID });
         }
     }
 
-    const handleClick = async (e: any): Promise<void> => {
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         try{
             e.preventDefault()
             setMessageDeleteLoading(true)
             await deleteMessage()
-            setMessages()
         }catch(err: unknown){
-            setMessageDeleteError(err.message as string)
+            setMessageDeleteError((err as Error).message)
         }finally{
             setMessageDeleteLoading(true)
         }
@@ -43,8 +38,9 @@ const DeleteMessage:React.FC<DeleteMessageProps> = ({messageID, setMessages}) =>
                 className="delete-message-button"
                 onClick={(e) => handleClick(e)}
             >
-                Test
+                {messageDeleteLoading ? 'Deleting...' : 'Delete'}
             </button>
+            {messageDeleteError && <p className="error-message">{messageDeleteError}</p>}
         </div>
     )
 }

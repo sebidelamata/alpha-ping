@@ -13,12 +13,11 @@ import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Fauce
 import { useEtherProviderContext } from '../../contexts/ProviderContext'
 import Message from './Message'
 import SubmitMessage from './SubmitMessage'
+import { useMessagesProviderContext } from '../../contexts/MessagesContext'
 
 
 interface MessagesProps {
     account: string | null;
-    messages: Message[];
-    setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
     currentChannel: AlphaPING.ChannelStructOutput | null;
   }
 
@@ -30,9 +29,10 @@ interface Usernames {
   [account: string]: string | null;
 }
 
-const Messages:React.FC<MessagesProps> = ({ account, messages, setMessages, currentChannel }) => {
+const Messages:React.FC<MessagesProps> = ({ account, currentChannel }) => {
 
   const { signer, alphaPING } = useEtherProviderContext()
+  const { messages, setMessages } = useMessagesProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)

@@ -126,4 +126,17 @@ io.on('connection', (socket) => {
       io.emit('message update', message);
     }
   });
+
+  // Handle deleting a message
+  socket.on('delete message', ({ id }) => {
+    const filteredMessages = messages.filter(msg => msg.id !== id);
+    
+    // Broadcast the updated list to all clients
+    io.emit('get messages', filteredMessages);  
+  });
+
+socket.on('disconnect', () => {
+  console.log('A user disconnected');
+});
+
 })
