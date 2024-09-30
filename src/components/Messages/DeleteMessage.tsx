@@ -14,21 +14,17 @@ const DeleteMessage:React.FC<DeleteMessageProps> = ({messageID}) => {
     const [messageDeleteLoading, setMessageDeleteLoading] = useState<boolean>(false)
     const [messageDeleteError, setMessageDeleteError] = useState<string>('')
 
-    const deleteMessage = async () => {
-        if (socket) {
-            socket.emit('delete message', { id: messageID });
-        }
-    }
-
     const handleClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
-        try{
-            e.preventDefault()
-            setMessageDeleteLoading(true)
-            await deleteMessage()
-        }catch(err: unknown){
-            setMessageDeleteError((err as Error).message)
-        }finally{
-            setMessageDeleteLoading(true)
+        e.preventDefault()
+        if (!socket) {
+            return
+        }
+        try {
+            socket.emit('delete message', { id: messageID });
+        } catch (err: unknown) {
+            setMessageDeleteError((err as Error).message);
+        } finally {
+            setMessageDeleteLoading(false);
         }
     }
 

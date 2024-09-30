@@ -6,7 +6,7 @@ dotenv.config()
 const PORT = process.env.PORT || 3030
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}\n`))
 
-const messages = [
+let messages = [
   {
     id: 0,
     channel: "1",
@@ -129,10 +129,10 @@ io.on('connection', (socket) => {
 
   // Handle deleting a message
   socket.on('delete message', ({ id }) => {
-    const filteredMessages = messages.filter(msg => msg.id !== id);
+    messages = messages.filter(msg => msg.id !== id);
     
     // Broadcast the updated list to all clients
-    io.emit('get messages', filteredMessages);  
+    io.emit('get messages', messages);  
   });
 
 socket.on('disconnect', () => {

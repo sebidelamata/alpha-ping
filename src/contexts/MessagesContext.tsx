@@ -53,12 +53,17 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             )
           )
         })
+
+        socket.on('delete message', ({ id }) => {
+          setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
+      });
     
         return () => {
           socket.off('connect')
           socket.off('new message')
           socket.off('get messages')
           socket.off('message update')
+          socket.off('delete message');
         }
         }
       }, [socket])
