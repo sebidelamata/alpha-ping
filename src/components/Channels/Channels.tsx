@@ -6,31 +6,27 @@ import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/Alph
 import Channel from "./Channel";
 import AddChannel from "./AddChannel";
 import { useEtherProviderContext } from '../../contexts/ProviderContext';
+import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import ChannelActions from "./ChannelActions";
 import EditProfile from "../EditProfile";
 import { ethers } from 'ethers'
 
 interface ChannelsProps {
   account: string | null;
-  currentChannel: AlphaPING.ChannelStructOutput | null;
-  setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
   channelAction: string;
   setChannelAction: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
   joinChannelLoading: boolean;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
   account, 
-  currentChannel, 
-  setCurrentChannel,
   channelAction,
   setChannelAction,
-  setSelectedChannelMetadata,
   joinChannelLoading
 }) => {
 
   const { alphaPING, channels, setChannels, hasJoined, signer, setHasJoined } = useEtherProviderContext()
+  const { currentChannel } = useChannelProviderContext()
 
   const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
   const loadUserChannels = ():void => {
@@ -92,10 +88,7 @@ const Channels:React.FC<ChannelsProps> = ({
               userChannels.map((channel, index) => (
                 <Channel
                   index={index}
-                  currentChannel={currentChannel}
                   account={account}
-                  setCurrentChannel={setCurrentChannel}
-                  setSelectedChannelMetadata={setSelectedChannelMetadata}
                   key={index}
                 />
               ))

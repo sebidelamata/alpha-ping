@@ -4,13 +4,13 @@ import React,
     useState, 
     useRef
 } from 'react'
-import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import { 
   ethers, 
   Contract 
 } from 'ethers'
 import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { useEtherProviderContext } from '../../contexts/ProviderContext'
+import { useChannelProviderContext } from '../../contexts/ChannelContext'
 import Message from './Message'
 import SubmitMessage from './SubmitMessage'
 import { useMessagesProviderContext } from '../../contexts/MessagesContext'
@@ -18,7 +18,6 @@ import { useMessagesProviderContext } from '../../contexts/MessagesContext'
 
 interface MessagesProps {
     account: string | null;
-    currentChannel: AlphaPING.ChannelStructOutput | null;
   }
 
 interface ProfilePics {
@@ -29,10 +28,11 @@ interface Usernames {
   [account: string]: string | null;
 }
 
-const Messages:React.FC<MessagesProps> = ({ account, currentChannel }) => {
+const Messages:React.FC<MessagesProps> = ({ account }) => {
 
   const { signer, alphaPING } = useEtherProviderContext()
-  const { messages, setMessages } = useMessagesProviderContext()
+  const { currentChannel } = useChannelProviderContext()
+  const { messages } = useMessagesProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -157,7 +157,6 @@ const Messages:React.FC<MessagesProps> = ({ account, currentChannel }) => {
           <Message
             key={index}
             message={message}
-            setMessages={setMessages}
             index={index}
             tokenDecimals={tokenDecimals}
             tokenAddress={currentChannel?.tokenAddress}

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// types
-import { AlphaPING } from '../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 
 // navbar
 import Navbar from './components/Navbar/Navbar'
@@ -12,23 +10,17 @@ import Messages from './components/Messages/Messages'
 import JoinAlphaPING from './components/JoinAlphaPING'
 
 import { useEtherProviderContext } from './contexts/ProviderContext';
-import { useMessagesProviderContext } from './contexts/MessagesContext';
 
 const App:React.FC = () => {
 
   const { alphaPING } = useEtherProviderContext()
-  const { messages, setMessages } = useMessagesProviderContext()
 
   // account stuff
   const [account, setAccount] = useState<string | null>(null)
-  // selected channel
-  const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
   // selected channel's actions
   const [channelAction, setChannelAction] = useState<string>("chat")
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
-  // token metadata fetched from coinmarketcap
-  const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
   // elevate joinchannel loading
   const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
 
@@ -51,25 +43,20 @@ const App:React.FC = () => {
         <Navbar 
           account={account} 
           setAccount={setAccount}
-          setCurrentChannel={setCurrentChannel}
           joinChannelLoading={joinChannelLoading}
           setJoinChannelLoading={setJoinChannelLoading}
           />
         <div className='app-body'>
           <Channels 
-            account={account} 
-            currentChannel={currentChannel} 
-            setCurrentChannel={setCurrentChannel}
+            account={account}
             channelAction={channelAction}
             setChannelAction={setChannelAction}
-            setSelectedChannelMetadata={setSelectedChannelMetadata}
             joinChannelLoading={joinChannelLoading}
           />
           {
             channelAction === 'chat' ? (
               <Messages 
                 account={account}
-                currentChannel={currentChannel}
               />
             ) : (
               channelAction === 'analyze' ? (

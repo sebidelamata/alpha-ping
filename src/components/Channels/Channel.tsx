@@ -5,25 +5,21 @@ import React, {
 import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from '../../contexts/ProviderContext';
+import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import Loading from "../Loading";
 
 interface ChannelProps{
     index: number;
-    currentChannel: AlphaPING.ChannelStructOutput | null;
     account: string | null;
-    setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
-    setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
 }
 
 const Channel:React.FC<ChannelProps> = ({
     index, 
-    currentChannel,
-    account,
-    setCurrentChannel,
-    setSelectedChannelMetadata
+    account
 }) => {
 
     const { alphaPING, signer, channels} = useEtherProviderContext()
+    const { currentChannel, setCurrentChannel, setSelectedChannelMetadata } = useChannelProviderContext()
 
     const channel = channels[index]
 

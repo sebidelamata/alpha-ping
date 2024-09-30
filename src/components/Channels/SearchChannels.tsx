@@ -6,23 +6,23 @@ import React,
     ChangeEvent
 } from "react"
 import { useEtherProviderContext } from "../../contexts/ProviderContext"
+import { useChannelProviderContext } from "../../contexts/ChannelContext.tsx"
 import { type AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
 import { ethers } from 'ethers'
 import Loading from "../Loading.tsx"
 
 interface SearchChannelsProps {
-    setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
     joinChannelLoading: boolean;
     setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchChannels: React.FC<SearchChannelsProps> = ({ 
-    setCurrentChannel,
     joinChannelLoading,
     setJoinChannelLoading
 }) => {
 
     const { channels, alphaPING, signer } = useEtherProviderContext()
+    const { setCurrentChannel } = useChannelProviderContext()
 
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [filteredOptions, setFilteredOptions] = useState<AlphaPING.ChannelStructOutput[]>([])
