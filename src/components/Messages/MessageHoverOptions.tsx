@@ -8,6 +8,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { useEtherProviderContext } from "../../contexts/ProviderContext"
 import { useSocketProviderContext } from "../../contexts/SocketContext"
+import { useUserProviderContext } from "../../contexts/UserContext"
 import DeleteMessage from "./DeleteMessage"
 
 interface Emoji {
@@ -25,9 +26,29 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
 
     const { signer } = useEtherProviderContext()
 
+    const {
+        owner,
+        mod,
+        banned,
+        blacklisted,
+        author
+    } = useUserProviderContext()
+
     if (!signer) {
         throw new Error("Signer is not defined");
     }
+
+    // check if user is the author of this message
+    const [isAuthor, setIsAuthor] = useState<boolean>(false)
+    const findIsAuthor = (): void => {
+        const authored = author.some((a) => (
+            a.toString() === message.id.toString()
+        ))
+        setIsAuthor(authored)
+    }
+    useEffect(() => {
+        findIsAuthor()
+    }, [message])
 
     const modalRef = useRef<HTMLLIElement>(null);
 
@@ -44,7 +65,6 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
             console.error("Invalid emoji selected:", emoji);
             return;
         }
-        console.log(message.reactions)
         const emojiReactions = message.reactions && message.reactions[emoji.native] || [];
         const signerIndex = emojiReactions.findIndex((s: string) => s === address);
 
@@ -124,11 +144,20 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
                     >
                         <img src="/reply.svg" alt="text reply" className="text-reply"/>
                     </li>
-                    <li className="delete-message-container">
-                        <DeleteMessage
-                            messageID={message.id as unknown as string}
-                        />
-                    </li>
+                    {
+                        (
+                            owner === true ||
+                            mod === true ||
+                            isAuthor === true
+                        ) &&
+                        banned === false &&
+                        blacklisted === false &&
+                        <li className="delete-message-container">
+                            <DeleteMessage
+                                messageID={message.id as unknown as string}
+                            />
+                        </li>
+                    }
                 </ul>
             </>
     )

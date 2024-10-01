@@ -7,6 +7,7 @@ import ProviderProvider from "./contexts/ProviderContext";
 import SocketProvider from "./contexts/SocketContext";
 import MessagesProvider from "./contexts/MessagesContext";
 import ChannelProvider from "./contexts/ChannelContext";
+import UserProvider from "./contexts/UserContext";
 
 const router = createBrowserRouter(routes);
 
@@ -22,7 +23,9 @@ createRoot(rootElement).render(
       <SocketProvider>
         <ChannelProvider>
           <MessagesProvider>
-            <RouterProvider router={router} />
+            <UserProvider>
+              <RouterProvider router={router} />
+            </UserProvider>
           </MessagesProvider>
         </ChannelProvider>
       </SocketProvider>
