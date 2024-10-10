@@ -49,10 +49,18 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         socket.on('message update', (updatedMessage) => {
           setMessages(prevMessages =>
             prevMessages.map(msg =>
-              msg.id === updatedMessage.id ? updatedMessage : msg
+              msg.id === updatedMessage.id ? { ...msg, reactions: updatedMessage.reactions } : msg
             )
           )
         })
+
+        socket.on("update reactions", ({ messageId, reactions }) => {
+          setMessages(prevMessages =>
+            prevMessages.map(msg =>
+              msg.id === messageId ? { ...msg, reactions: { ...reactions } } : msg
+            )
+          );
+        });
 
         socket.on('delete message', ({ id }) => {
           setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
@@ -63,6 +71,7 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
           socket.off('new message')
           socket.off('get messages')
           socket.off('message update')
+          socket.off('update reactions')
           socket.off('delete message');
         }
         }

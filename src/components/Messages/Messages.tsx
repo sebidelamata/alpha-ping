@@ -155,7 +155,7 @@ const Messages:React.FC<MessagesProps> = ({ account }) => {
         currentChannel && 
         messages.filter(message => message.channel === currentChannel.id.toString()).map((message, index) => (
           <Message
-            key={index}
+            key={message.id}
             message={message}
             index={index}
             tokenDecimals={tokenDecimals}
