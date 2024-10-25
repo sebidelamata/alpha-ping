@@ -129,12 +129,13 @@ const Channel:React.FC<ChannelProps> = ({
     return(
         <>
              <li
-                onClick={() => channelHandler(channel)} key={index}
+                onClick={() => channelHandler(channel)} 
+                key={index}
                 className={
-                currentChannel && 
-                currentChannel.id.toString() === channel.id.toString() ? 
-                "channel channel-active" : 
-                "channel"
+                    currentChannel && 
+                    currentChannel.id.toString() === channel.id.toString() ? 
+                    "channel channel-active" : 
+                    "channel"
                 }
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
@@ -142,7 +143,7 @@ const Channel:React.FC<ChannelProps> = ({
                 <div className="channel-name">
                     {channel.name}
                 </div>
-                <LeaveChannel isHovered={isHovered}/>
+                <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
                 <div className="channel-logo">
                     <img 
                         src={
@@ -164,7 +165,7 @@ const Channel:React.FC<ChannelProps> = ({
                 joinChannelLoading === true &&
                 <div className="join-channel-loading-container">
                     <div className="join-channel-loading">
-                        <Loading isHovered={isHovered}/>
+                        <Loading/>
                     </div>
                 </div>
             }

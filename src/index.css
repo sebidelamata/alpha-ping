@@ -438,6 +438,10 @@ a{
 }
 .leave-channel{
   flex: 1 1 10%;
+  transition: var(--transition-speed-1);
+}
+.leave-channel:hover{
+  transform: scale(1.01);
 }
 
 .channel-logo-image{
