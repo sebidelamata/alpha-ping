@@ -142,7 +142,7 @@ describe("AlphaPING", function () {
       expect(resultBefore).to.equal(false)
     })
     it("Joins the user", async () => {
-      let result = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
+      const result = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
       expect(result).to.equal(true)
     })
   })
@@ -162,7 +162,7 @@ describe("AlphaPING", function () {
       expect(resultBefore).to.equal(true)
     })
     it("Allows the user to leave the channel", async () => {
-      let result = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
+      const result = await alphaPING.hasJoinedChannel(ID, await user.getAddress())
       expect(result).to.equal(false)
     })
   })

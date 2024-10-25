@@ -417,9 +417,11 @@ a{
   transition: border-bottom var(--transition-speed-1),
     filter var(--transition-speed-1),
     transform var(--transition-speed-1);
-  display: grid;
-  grid-template-columns: 80% 20%;
+  display: flex;
+  flex-direction: row;
   max-height: 15%;
+  justify-content: center;
+  align-items: center;
 }
 .channel:hover{
   filter: brightness(1.1);
@@ -431,6 +433,13 @@ a{
   filter: brightness(1);
 }
 
+.channel-name{
+  flex: 1 1 40%;
+}
+.leave-channel{
+  flex: 1 1 10%;
+}
+
 .channel-logo-image{
   display: grid;
   object-fit: contain;
@@ -438,6 +447,7 @@ a{
   transition: transform var(--transition-speed-1);
   position: relative;
   bottom: 0.5svh;
+  flex: 1 1 50%;
 }
 .channel-logo-image-active{
   transform: scale(1.5);

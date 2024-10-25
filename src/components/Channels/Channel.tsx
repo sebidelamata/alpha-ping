@@ -7,6 +7,7 @@ import { ethers } from 'ethers'
 import { useEtherProviderContext } from '../../contexts/ProviderContext';
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import Loading from "../Loading";
+import LeaveChannel from "./LeaveChannel";
 
 interface ChannelProps{
     index: number;
@@ -91,6 +92,9 @@ const Channel:React.FC<ChannelProps> = ({
       }
     }
 
+    // pass hover info to leaveChannel component to make icon appear
+    const [isHovered, setIsHovered] = useState(false);
+
     const fetchChannelIcons = async (tokenAddress:string) => {
         let response
         const url=`https://alpha-ping-proxy-server-670fa5485762.herokuapp.com/token-metadata/${tokenAddress}`
@@ -132,10 +136,13 @@ const Channel:React.FC<ChannelProps> = ({
                 "channel channel-active" : 
                 "channel"
                 }
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
             >
                 <div className="channel-name">
                     {channel.name}
                 </div>
+                <LeaveChannel isHovered={isHovered}/>
                 <div className="channel-logo">
                     <img 
                         src={
@@ -157,7 +164,7 @@ const Channel:React.FC<ChannelProps> = ({
                 joinChannelLoading === true &&
                 <div className="join-channel-loading-container">
                     <div className="join-channel-loading">
-                        <Loading/>
+                        <Loading isHovered={isHovered}/>
                     </div>
                 </div>
             }
