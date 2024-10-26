@@ -24,7 +24,11 @@ const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channelID }) => {
         <div className="leave-channel" onClick={() => handleClick()}>
             {
                 isHovered === true ?
-                'Leave' :
+                <img 
+                        src='leave-icon.svg'
+                        alt="Leave Channel"
+                        className='leave-channel-icon'
+                    /> :
                 ''
             }
         </div>

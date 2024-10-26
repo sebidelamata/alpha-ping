@@ -439,9 +439,18 @@ a{
 .leave-channel{
   flex: 1 1 10%;
   transition: var(--transition-speed-1);
+  height: 100%;
 }
 .leave-channel:hover{
   transform: scale(1.01);
+}
+
+.leave-channel-icon{
+  display: grid;
+  object-fit: contain;
+  height: 60%;
+  justify-content: center;
+  align-items: center;
 }
 
 .channel-logo-image{
