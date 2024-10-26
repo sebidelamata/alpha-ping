@@ -60,9 +60,15 @@ const App:React.FC = () => {
               />
             ) : (
               channelAction === 'analyze' ? (
-                <p>Analyze</p>
+                <div>
+                  <h2>Analyze</h2>
+                  <p>This is being built in beta and will allow users to use sentiment analysis from each feed</p>
+                </div>
               ) : (
-                <p>Trade</p>
+                <div>
+                  <h2>Trade</h2>
+                  <p>This is being built in beta and will allow users to swap assets in-app using 1Inch router</p>
+                </div>
               )
             )
 
