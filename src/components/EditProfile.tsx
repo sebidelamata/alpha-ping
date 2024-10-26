@@ -187,7 +187,12 @@ const EditProfile: React.FC = () => {
                         <div className="current-username-and-pic">
                             <div className="current-profile-pic">
                                 {
-                                    userProfilePic !== null ?
+                                    (
+                                        userProfilePic !== null &&
+                                        userProfilePic !== undefined &&
+                                        userProfilePic !== ''
+                                    )
+                                    ?
                                     <img 
                                         src={userProfilePic} 
                                         alt="default profile" 
