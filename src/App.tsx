@@ -10,7 +10,6 @@ import Messages from './components/Messages/Messages'
 import Profile from './components/Profile/Profile';
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
-import { Signer } from 'ethers'
 
 import { useEtherProviderContext } from './contexts/ProviderContext';
 
@@ -53,7 +52,7 @@ const App:React.FC = () => {
                   <p>This is being built in beta and will allow users to swap assets in-app using 1Inch router</p>
                 </div>
       case 'profile':
-        <Profile/>
+        return <Profile/>
     }
   }
 
