@@ -6,14 +6,14 @@ import React, {
     MouseEvent as ReactMouseEvent
 } from "react";
 import { type Signer } from 'ethers'
-import { useEtherProviderContext } from "../contexts/ProviderContext";
-import Loading from "./Loading";
+import { useEtherProviderContext } from "../../contexts/ProviderContext";
+import Loading from "../Loading";
 
 interface ErrorType {
     reason: string
 }
 
-const EditProfile: React.FC = () => {
+const Profile: React.FC = () => {
 
     const { signer, alphaPING } = useEtherProviderContext()
 
@@ -283,4 +283,4 @@ const EditProfile: React.FC = () => {
     )
 }
 
-export default EditProfile
+export default Profile

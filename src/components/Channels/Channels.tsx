@@ -8,7 +8,6 @@ import AddChannel from "./AddChannel";
 import { useEtherProviderContext } from '../../contexts/ProviderContext';
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import ChannelActions from "./ChannelActions";
-import EditProfile from "../EditProfile";
 import { ethers } from 'ethers'
 
 interface ChannelsProps {
@@ -97,7 +96,6 @@ const Channels:React.FC<ChannelsProps> = ({
           setAddChannelLoadingLoading={setAddChannelLoadingLoading}
         />
         <ChannelActions channelAction={channelAction} setChannelAction={setChannelAction}/>
-        <EditProfile/>
       </div>
     );
   }

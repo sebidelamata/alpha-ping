@@ -6,8 +6,11 @@ import Navbar from './components/Navbar/Navbar'
 import Channels from './components/Channels/Channels'
 // messages
 import Messages from './components/Messages/Messages'
+// profile
+import Profile from './components/Profile/Profile';
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
+import { Signer } from 'ethers'
 
 import { useEtherProviderContext } from './contexts/ProviderContext';
 
@@ -35,6 +38,25 @@ const App:React.FC = () => {
     findIsMember()
   }, [signer])
 
+  const renderChannelAction = () => {
+    switch(channelAction){
+      case 'chat':
+        return <Messages/>
+      case 'analyze':
+        return <div>
+                <h2>Analyze</h2>
+                <p>This is being built in beta and will allow users to use sentiment analysis from each feed</p>
+              </div>
+      case 'trade':
+        return  <div>
+                  <h2>Trade</h2>
+                  <p>This is being built in beta and will allow users to swap assets in-app using 1Inch router</p>
+                </div>
+      case 'profile':
+        <Profile/>
+    }
+  }
+
   return (
     <>
       <div className='app-container'>
@@ -48,24 +70,7 @@ const App:React.FC = () => {
             setChannelAction={setChannelAction}
             joinChannelLoading={joinChannelLoading}
           />
-          {
-            channelAction === 'chat' ? (
-              <Messages/>
-            ) : (
-              channelAction === 'analyze' ? (
-                <div>
-                  <h2>Analyze</h2>
-                  <p>This is being built in beta and will allow users to use sentiment analysis from each feed</p>
-                </div>
-              ) : (
-                <div>
-                  <h2>Trade</h2>
-                  <p>This is being built in beta and will allow users to swap assets in-app using 1Inch router</p>
-                </div>
-              )
-            )
-
-          }
+          {renderChannelAction()}
         </div>
       </div>
       {

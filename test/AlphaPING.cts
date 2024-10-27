@@ -169,9 +169,9 @@ describe("AlphaPING", function () {
 
   describe("Transfer Owners", function() {
     it("Allows owner to transfer ownership", async () => {
-      let tx = await alphaPING.connect(deployer).transferOwner(user)
+      const tx = await alphaPING.connect(deployer).transferOwner(user)
       await tx.wait()
-      let newOwner = await alphaPING.owner()
+      const newOwner = await alphaPING.owner()
       expect(newOwner).to.equal(user)
     })
   })
