@@ -13,7 +13,7 @@ import { useEtherProviderContext } from './contexts/ProviderContext';
 
 const App:React.FC = () => {
 
-  const { alphaPING } = useEtherProviderContext()
+  const { alphaPING, signer } = useEtherProviderContext()
 
   // account stuff
   const [account, setAccount] = useState<string | null>(null)
@@ -25,8 +25,8 @@ const App:React.FC = () => {
   const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
 
   const findIsMember = async () => {
-    if(account){
-      const isMember = await alphaPING?.isMember(account)
+    if(signer){
+      const isMember = await alphaPING?.isMember(signer)
       if(isMember){
         setIsMember(isMember)
       }
@@ -35,7 +35,7 @@ const App:React.FC = () => {
 
   useEffect(() => {
     findIsMember()
-  }, [account])
+  }, [signer])
 
   return (
     <>

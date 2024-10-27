@@ -19,6 +19,7 @@ import {
  // types
  import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
  import { EtherProviderType } from '../types/EtherProviderType';
+ import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 
 
  interface BlockChainConfig {
@@ -41,6 +42,11 @@ return context
 }
 
 const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
+
+  const { isConnected } = useAppKitAccount()
+  const { walletProvider } = useAppKitProvider<ethers.Eip1193Provider>('eip155')
+
+  //if (!isConnected) throw Error('User disconnected')
   
   // account stuff
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null)
@@ -57,16 +63,17 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
   const loadBlockchainData = async () => {
     try{
       
-      const provider = new ethers.BrowserProvider(window.ethereum)
+      const provider = new ethers.BrowserProvider(walletProvider)
       setProvider(provider)
-      let network = await provider.send('eth_chainId',[]);
-      network = parseInt(network, 16).toString()
+      const network = await provider.getNetwork()//await provider.send('eth_chainId',[]);
+      const chainId = network.chainId.toString()
       const alphaPING = new ethers.Contract(
-        (config as BlockChainConfig)[network].AlphaPING.address,
+        (config as BlockChainConfig)[chainId].AlphaPING.address,
         AlphaPINGABI.abi,
         provider
       ) as unknown as AlphaPING
       setAlphaPING(alphaPING)
+  
       const totalChannels:bigint = await alphaPING.totalChannels()
       const channels = []
 
@@ -103,7 +110,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
   useEffect(() => {
     loadBlockchainData()
-    }, [])
+    }, [isConnected])
 
     return (
         <ProviderContext.Provider value={{ 

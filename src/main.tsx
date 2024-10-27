@@ -8,6 +8,7 @@ import SocketProvider from "./contexts/SocketContext";
 import MessagesProvider from "./contexts/MessagesContext";
 import ChannelProvider from "./contexts/ChannelContext";
 import UserProvider from "./contexts/UserContext";
+import Web3WalletConnectProvider from "./contexts/Web3ConnectContext";
 
 const router = createBrowserRouter(routes);
 
@@ -20,15 +21,17 @@ if (!rootElement) {
 createRoot(rootElement).render(
   <React.StrictMode>
     <ProviderProvider>
-      <SocketProvider>
-        <ChannelProvider>
-          <MessagesProvider>
-            <UserProvider>
-              <RouterProvider router={router} />
-            </UserProvider>
-          </MessagesProvider>
-        </ChannelProvider>
-      </SocketProvider>
+      <Web3WalletConnectProvider>
+        <SocketProvider>
+          <ChannelProvider>
+            <MessagesProvider>
+              <UserProvider>
+                <RouterProvider router={router} />
+              </UserProvider>
+            </MessagesProvider>
+          </ChannelProvider>
+        </SocketProvider>
+      </Web3WalletConnectProvider>
     </ProviderProvider>
   </React.StrictMode>
 );
