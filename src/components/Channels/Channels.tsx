@@ -12,14 +12,12 @@ import EditProfile from "../EditProfile";
 import { ethers } from 'ethers'
 
 interface ChannelsProps {
-  account: string | null;
   channelAction: string;
   setChannelAction: React.Dispatch<React.SetStateAction<string>>;
   joinChannelLoading: boolean;
 }
 
 const Channels:React.FC<ChannelsProps> = ({ 
-  account, 
   channelAction,
   setChannelAction,
   joinChannelLoading
@@ -41,7 +39,7 @@ const Channels:React.FC<ChannelsProps> = ({
   useEffect(() => {
     loadUserChannels()
     console.log(userChannels)
-  }, [channels, joinChannelLoading, hasJoined])
+  }, [channels, joinChannelLoading, hasJoined, signer])
 
   // weve elevated this state from add channels to make the channels list rerender on add channel
   const [addChannelLoading, setAddChannelLoadingLoading] = useState<boolean>(false)
@@ -75,7 +73,7 @@ const Channels:React.FC<ChannelsProps> = ({
   }
   useEffect(() => {
     reloadChannels()
-  }, [currentChannel, joinChannelLoading])
+  }, [currentChannel, joinChannelLoading, signer])
   
     return (
       <div className="channels">
@@ -88,7 +86,6 @@ const Channels:React.FC<ChannelsProps> = ({
               userChannels.map((channel, index) => (
                 <Channel
                   index={index}
-                  account={account}
                   key={index}
                 />
               ))

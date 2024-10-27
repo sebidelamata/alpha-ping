@@ -1,8 +1,6 @@
 import SearchChannels from '../Channels/SearchChannels';
 
 interface NavbarProps {
-  account: string | null;
-  setAccount: React.Dispatch<React.SetStateAction<string | null>>;
   joinChannelLoading: boolean;
   setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

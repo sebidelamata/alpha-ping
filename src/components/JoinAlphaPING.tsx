@@ -3,12 +3,10 @@ import { useEtherProviderContext } from '../contexts/ProviderContext';
 
 interface JoinAlphaPINGProps {
     setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
-    account: string | null;
   }
 
 const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
-    setIsMember, 
-    account
+    setIsMember
 }) => {
 
     const { alphaPING, signer, provider} = useEtherProviderContext()
@@ -35,7 +33,7 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
             </h3>
             <div className="join-button-container">
                 {
-                    account ? (
+                    signer ? (
                         <button className="join-button" onClick={() => joinAlphaPING()}>
                             Join
                         </button>

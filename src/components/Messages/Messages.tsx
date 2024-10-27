@@ -15,11 +15,6 @@ import Message from './Message'
 import SubmitMessage from './SubmitMessage'
 import { useMessagesProviderContext } from '../../contexts/MessagesContext'
 
-
-interface MessagesProps {
-    account: string | null;
-  }
-
 interface ProfilePics {
   [account: string]: string | null;
 }
@@ -28,7 +23,7 @@ interface Usernames {
   [account: string]: string | null;
 }
 
-const Messages:React.FC<MessagesProps> = ({ account }) => {
+const Messages:React.FC = () => {
 
   const { signer, alphaPING } = useEtherProviderContext()
   const { currentChannel } = useChannelProviderContext()
@@ -177,7 +172,6 @@ const Messages:React.FC<MessagesProps> = ({ account }) => {
       </div>
       <SubmitMessage
         currentChannel={currentChannel}
-        account={account}
         userBalance={userBalance}
         messagesLength={messages.length}
         replyId={replyId}

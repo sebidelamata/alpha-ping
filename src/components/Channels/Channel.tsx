@@ -11,12 +11,10 @@ import LeaveChannel from "./LeaveChannel";
 
 interface ChannelProps{
     index: number;
-    account: string | null;
 }
 
 const Channel:React.FC<ChannelProps> = ({
-    index, 
-    account
+    index
 }) => {
 
     const { alphaPING, signer, channels} = useEtherProviderContext()
@@ -78,7 +76,7 @@ const Channel:React.FC<ChannelProps> = ({
       // If they haven't allow them to mint.
       const hasJoined = await alphaPING?.hasJoinedChannel(
         BigInt(channel.id), 
-        account || ethers.ZeroAddress
+        await signer?.getAddress() || ethers.ZeroAddress
       )
   
       if (hasJoined) {
@@ -118,7 +116,7 @@ const Channel:React.FC<ChannelProps> = ({
         if((channel !== undefined) && (channel !== null)){
             fetchChannelIcons(channel.tokenAddress)
         }     
-    }, [account, channel])
+    }, [signer, channel])
 
     useEffect(() => {
         if(currentChannel && currentChannel.id.toString() === channel.id.toString()){

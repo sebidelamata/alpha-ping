@@ -9,21 +9,22 @@ import banana from '/Banana.svg'
 import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import MessageAttachments from "./MessageAttachments"
 import { useSocketProviderContext } from "../../contexts/SocketContext"
+import { useEtherProviderContext } from "../../contexts/ProviderContext"
 
 
 interface SubmitMessageProps {
     currentChannel: AlphaPING.ChannelStructOutput | null;
-    account: string | null;
     userBalance: string | null;
     messagesLength: number;
     replyId: number | null;
     setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, userBalance, messagesLength, replyId, setReplyId }) => {
+const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, userBalance, messagesLength, replyId, setReplyId }) => {
 
 
     const { socket } = useSocketProviderContext()
+    const { signer } = useEtherProviderContext()
 
     const [message, setMessage] = useState<string>("")
     const inputRef = useRef<HTMLInputElement>(null);
@@ -35,7 +36,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
         const messageObj = {
           id: messagesLength,
           channel: currentChannel?.id.toString(),
-          account: account,
+          account: await signer?.getAddress(),
           text: message,
           timestamp: now,
           messageTimestampTokenAmount: userBalance,
@@ -113,7 +114,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, account, 
         <form onSubmit={sendMessageMouse} className='message-submit-form'>
         {
           currentChannel && 
-          account ? (
+          signer ? (
             <>
               <MessageAttachments
                 message={message}

@@ -15,8 +15,6 @@ const App:React.FC = () => {
 
   const { alphaPING, signer } = useEtherProviderContext()
 
-  // account stuff
-  const [account, setAccount] = useState<string | null>(null)
   // selected channel's actions
   const [channelAction, setChannelAction] = useState<string>("chat")
   // is this user a member of the app
@@ -40,24 +38,19 @@ const App:React.FC = () => {
   return (
     <>
       <div className='app-container'>
-        <Navbar 
-          account={account} 
-          setAccount={setAccount}
+        <Navbar
           joinChannelLoading={joinChannelLoading}
           setJoinChannelLoading={setJoinChannelLoading}
           />
         <div className='app-body'>
-          <Channels 
-            account={account}
+          <Channels
             channelAction={channelAction}
             setChannelAction={setChannelAction}
             joinChannelLoading={joinChannelLoading}
           />
           {
             channelAction === 'chat' ? (
-              <Messages 
-                account={account}
-              />
+              <Messages/>
             ) : (
               channelAction === 'analyze' ? (
                 <div>
@@ -79,7 +72,6 @@ const App:React.FC = () => {
         isMember === false &&
         <JoinAlphaPING
           setIsMember={setIsMember}
-          account={account}
         />
       }
     </>
