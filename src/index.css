@@ -575,8 +575,8 @@ a{
 }
 
 .edit-profile-container{
-  display: grid;
-  grid-template-rows: repeat(3, auto);
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: var(--gap);

@@ -5,6 +5,8 @@ import React, {
 } from "react";
 import { type Signer } from 'ethers'
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
+import { useUserProviderContext } from "../../contexts/UserContext";
+import { useChannelProviderContext } from "../../contexts/ChannelContext";
 
 interface ErrorType {
     reason: string
@@ -13,6 +15,8 @@ interface ErrorType {
 const Profile: React.FC = () => {
 
     const { signer, alphaPING } = useEtherProviderContext()
+    const { owner, mod, banned, blacklisted } = useUserProviderContext()
+    const { currentChannel } = useChannelProviderContext()
 
     const [editPicOrName, setEditPicOrName] = useState<string>('picture')
     const [editProfileFormString, setEditProfileFormString] = useState<string>('')
@@ -38,7 +42,6 @@ const Profile: React.FC = () => {
             } else {
                 setUserProfilePic(profilePic)
             }
-            console.log(userProfilePic)
         }
     }
     useEffect(() => {
@@ -59,6 +62,7 @@ const Profile: React.FC = () => {
     }
     useEffect(() => {
         fetchUserUsername(userAddress)
+        console.log(owner)
     }, [userAddress])
 
     const handleProfileEditFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +109,20 @@ const Profile: React.FC = () => {
             <h2 className="edit-profile-header">
                 Edit Profile
             </h2>
+            {
+                owner === true &&
+                <div>
+                    You currently have Owner admin role.
+                </div>
+            }
+            {
+                mod === true &&
+                <div>
+                    {
+                        `You are currently have Moderator admin role for ${currentChannel?.name.toString()}`
+                    }
+                </div>
+            }
             <div className="current-username-and-pic">
                 <div className="current-profile-pic">
                     {
