@@ -110,7 +110,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
   useEffect(() => {
     loadBlockchainData()
-    }, [isConnected])
+    }, [isConnected, walletProvider])
 
     return (
         <ProviderContext.Provider value={{ 

@@ -64,20 +64,27 @@ const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => 
     }
 
     return(
-        <div>
-            <h3>
+        <div className="mod-banner">
+            <h3 className="mod-banner-header">
                 {
                     `You are currently have Moderator admin role for ${currentChannel?.name.toString()}`
                 }
             </h3>
-            <button
-                onClick={(e) => handleClick(e)}
-            >Transfer Mod Role</button>
+            {
+                showModal === false &&
+                    <button
+                        onClick={(e) => handleClick(e)}
+                        className="mod-banner-button"
+                    >
+                        Transfer Mod Role
+                    </button>
+            }
             {
                 showModal === true &&
                 <form 
                     action=""
                     onSubmit={(e) => handleSubmit(e)}
+                    className="mod-banner-form"
                 >
                     <label 
                         htmlFor="newMod"

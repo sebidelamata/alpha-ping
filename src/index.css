@@ -590,6 +590,65 @@ a{
   gap: var(--gap);
 }
 
+.owner-banner,
+.mod-banner{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: var(--gap-small);
+}
+
+.owner-banner-header,
+.mod-banner-header{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.owner-banner-button,
+.mod-banner-button{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.owner-banner-form,
+.mod-banner-form{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--gap-small);
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-3);
+  padding: var(--large-button-padding);
+  border-radius: var(--button-radius);
+}
+
+.owner-banner-form>label,
+.mod-banner-form>label{
+  color: var(--color-1);
+  font-weight: 700;
+}
+
+.owner-banner-form>input,
+.mod-banner-form>input{
+  padding: var(--med-button-padding);
+  color: var(--color-2);
+  background-color: var(--color-1);
+  border-color: var(--color-2);
+  border-style: solid;
+  border-radius: var(--button-radius);
+}
+.owner-banner-form>input:focus,
+.mod-banner-form>input:active{
+  border-color: var(--color-3);
+  border-style: solid;
+  border-radius: var(--button-radius);
+  outline: none;
+}
+
 .edit-profile-image{
   display: grid;
   height: 2.5em;

@@ -60,16 +60,25 @@ const OwnerBanner:React.FC<OwnerBannerProps> = ({txMessageOwner, setTxMessageOwn
     }
 
     return(
-        <div>
-            <h3>You currently have Owner admin role.</h3>
-            <button
-                onClick={(e) => handleClick(e)}
-            >Transfer Owner Role</button>
+        <div className="owner-banner">
+            <h3 className="owner-banner-header">
+                You currently have Owner admin role
+            </h3>
+            {
+                showModal === false &&
+                    <button
+                        onClick={(e) => handleClick(e)}
+                        className="owner-banner-button"
+                    >
+                        Transfer Owner Role
+                    </button>
+            }
             {
                 showModal === true &&
                 <form 
                     action=""
                     onSubmit={(e) => handleSubmit(e)}
+                    className="owner-banner-form"
                 >
                     <label 
                         htmlFor="newOwner"
