@@ -9,6 +9,7 @@ import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Fauce
 import { useEtherProviderContext } from '../../contexts/ProviderContext'
 import { useUserProviderContext } from "../../contexts/UserContext";
 import MessageHoverOptions from "./MessageHoverOptions";
+import BanUser from "./BanUser";
 
 interface MessageProps {
     message: Message;
@@ -107,9 +108,8 @@ const Message: React.FC<MessageProps> = ({
         }
         {
           mod === true &&
-          <button className="ban-button">
-            Ban User
-          </button>
+          hoverOptions === true &&
+          <BanUser/>
         }
       </div>
       <div className="message-content">
