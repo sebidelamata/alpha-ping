@@ -12,7 +12,9 @@ import { useMessagesProviderContext } from "./MessagesContext";
 
 interface UserProviderType{
     owner: boolean;
+    setOwner: React.Dispatch<React.SetStateAction<boolean>>;
     mod: boolean;
+    setMod: React.Dispatch<React.SetStateAction<boolean>>;
     banned: boolean;
     blacklisted: boolean;
     author: number[];
@@ -98,7 +100,9 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     return (
         <UserContext.Provider value={{ 
             owner,
+            setOwner,
             mod,
+            setMod,
             banned,
             blacklisted,
             author

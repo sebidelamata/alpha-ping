@@ -7,6 +7,8 @@ import { type Signer } from 'ethers'
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
+import OwnerBanner from "./OwnerBanner";
+import ModBanner from "./ModBanner";
 
 interface ErrorType {
     reason: string
@@ -21,6 +23,10 @@ const Profile: React.FC = () => {
     const [editPicOrName, setEditPicOrName] = useState<string>('picture')
     const [editProfileFormString, setEditProfileFormString] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
+
+    // pass tx message state to transferOwner
+    const [txMessageOwner, setTxMessageOwner] = useState<string | null | undefined>(null)
+    const [txMessageMod, setTxMessageMod] = useState<string | null | undefined>(null)
 
     const [userAddress, setUserAddress] = useState<string | null>(null)
     const getUserAddress = async(signer: Signer | null) => {
@@ -62,7 +68,6 @@ const Profile: React.FC = () => {
     }
     useEffect(() => {
         fetchUserUsername(userAddress)
-        console.log(owner)
     }, [userAddress])
 
     const handleProfileEditFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,15 +116,57 @@ const Profile: React.FC = () => {
             </h2>
             {
                 owner === true &&
-                <div>
-                    You currently have Owner admin role.
-                </div>
+                <OwnerBanner 
+                    txMessageOwner={txMessageOwner} 
+                    setTxMessageOwner={setTxMessageOwner}
+                />
+            }
+            {
+                txMessageOwner !== null &&
+                txMessageOwner !== undefined &&
+                <p>
+                    Ownership Transfer Confirmed!
+                    <a 
+                        href={`https://arbiscan.io/tx/${txMessageOwner}`}
+                        target="_blank"
+                    >
+                        <strong>Transaction Link</strong>
+                    </a>
+                </p>
             }
             {
                 mod === true &&
+                <ModBanner
+                    txMessageMod={txMessageMod}
+                    setTxMessageMod={setTxMessageMod}
+                />
+            }
+            {
+                txMessageMod !== null &&
+                txMessageMod !== undefined &&
+                <p>
+                    Moderator Transfer Confirmed!
+                    <a 
+                        href={`https://arbiscan.io/tx/${txMessageMod}`}
+                        target="_blank"
+                    >
+                        <strong>Transaction Link</strong>
+                    </a>
+                </p>
+            }
+            {
+                banned === true &&
                 <div>
                     {
-                        `You are currently have Moderator admin role for ${currentChannel?.name.toString()}`
+                        `You are currently Banned from ${currentChannel?.name.toString()}`
+                    }
+                </div>
+            }
+            {
+                blacklisted === true &&
+                <div>
+                    {
+                        `You are currently Blacklisted from AlphaPING`
                     }
                 </div>
             }
