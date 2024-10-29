@@ -199,13 +199,13 @@ describe("AlphaPING", function () {
       expect(isBannedBefore).to.equal(false)
     })
     it("Allows mod to ban user", async () => {
-      let isBanned = await alphaPING.channelBans(ID, user)
+      const isBanned = await alphaPING.channelBans(ID, user)
       expect(isBanned).to.equal(true)
     })
     it("Allows mod to unban user", async () => {
-      let tx = await alphaPING.connect(deployer).channelUnban(user, ID)
+      const tx = await alphaPING.connect(deployer).channelUnban(user, ID)
       await tx.wait()
-      let isBanned = await alphaPING.channelBans(ID, user)
+      const isBanned = await alphaPING.channelBans(ID, user)
       expect(isBanned).to.equal(false)
     })
   })

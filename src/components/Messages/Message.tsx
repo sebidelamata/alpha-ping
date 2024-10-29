@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 import { ethers } from 'ethers'
 import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { useEtherProviderContext } from '../../contexts/ProviderContext'
+import { useUserProviderContext } from "../../contexts/UserContext";
 import MessageHoverOptions from "./MessageHoverOptions";
 
 interface MessageProps {
@@ -35,6 +36,7 @@ const Message: React.FC<MessageProps> = ({
   usernameArrayLoading
 }) => {
     const { signer } = useEtherProviderContext()
+    const { mod } = useUserProviderContext()
 
     const [userBalance, setUserBalance] = useState<string | null>(null)
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
@@ -102,6 +104,12 @@ const Message: React.FC<MessageProps> = ({
             (profilePic !== null && profilePic !== '') ?
             <img src={profilePic} alt="User Icon" className='monkey-icon'/> :
             <img src={monkey} alt="User Icon" className='monkey-icon'/>
+        }
+        {
+          mod === true &&
+          <button className="ban-button">
+            Ban User
+          </button>
         }
       </div>
       <div className="message-content">
