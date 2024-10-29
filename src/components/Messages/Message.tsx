@@ -10,6 +10,7 @@ import { useEtherProviderContext } from '../../contexts/ProviderContext'
 import { useUserProviderContext } from "../../contexts/UserContext";
 import MessageHoverOptions from "./MessageHoverOptions";
 import BanUser from "./BanUser";
+import BlacklistUser from "./BlacklistUser";
 
 interface MessageProps {
     message: Message;
@@ -37,7 +38,7 @@ const Message: React.FC<MessageProps> = ({
   usernameArrayLoading
 }) => {
     const { signer } = useEtherProviderContext()
-    const { mod } = useUserProviderContext()
+    const { mod, owner } = useUserProviderContext()
 
     const [userBalance, setUserBalance] = useState<string | null>(null)
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
@@ -110,6 +111,11 @@ const Message: React.FC<MessageProps> = ({
           mod === true &&
           hoverOptions === true &&
           <BanUser user={message.account}/>
+        }
+        {
+          owner === true &&
+          hoverOptions === true &&
+          <BlacklistUser user={message.account}/>
         }
       </div>
       <div className="message-content">
