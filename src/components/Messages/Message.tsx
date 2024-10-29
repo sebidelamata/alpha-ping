@@ -109,7 +109,7 @@ const Message: React.FC<MessageProps> = ({
         {
           mod === true &&
           hoverOptions === true &&
-          <BanUser/>
+          <BanUser user={message.account}/>
         }
       </div>
       <div className="message-content">
