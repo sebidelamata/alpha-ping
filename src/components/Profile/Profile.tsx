@@ -135,7 +135,8 @@ const Profile: React.FC = () => {
                 </p>
             }
             {
-                mod === true &&
+                mod === true ||
+                owner === true &&
                 <ModBanner
                     txMessageMod={txMessageMod}
                     setTxMessageMod={setTxMessageMod}

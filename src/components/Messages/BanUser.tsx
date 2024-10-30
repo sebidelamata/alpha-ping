@@ -6,6 +6,7 @@ import React,
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
+import Loading from "../Loading";
 
 interface ErrorType {
     reason: string
@@ -50,12 +51,18 @@ const BanUser:React.FC<BanUSerProps> = ({user}) => {
     }
 
     return(
-        <button 
-            className="ban-button"
-            onClick={(e) => handleClick(e)}
-        >
-            Ban User
-        </button>
+        <>
+            <button 
+                className="ban-button"
+                onClick={(e) => handleClick(e)}
+            >
+                Ban User
+            </button>
+            {
+                loading &&
+                    <Loading/>
+            }
+        </>
     )
 }
 

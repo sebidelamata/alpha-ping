@@ -21,7 +21,7 @@ interface ModBannerProps{
 const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => {
 
     const { alphaPING, signer } = useEtherProviderContext()
-    const { setMod } = useUserProviderContext()
+    const { mod, setMod } = useUserProviderContext()
     const { currentChannel } = useChannelProviderContext()
 
     const [showModal, setShowModal] = useState<boolean>(false)
@@ -65,18 +65,21 @@ const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => 
 
     return(
         <div className="mod-banner">
-            <h3 className="mod-banner-header">
-                {
-                    `You are currently have Moderator admin role for ${currentChannel?.name.toString()}`
-                }
-            </h3>
+            {
+                mod &&
+                <h3 className="mod-banner-header">
+                    {
+                        `You are currently have Moderator admin role for ${currentChannel?.name.toString()}`
+                    }
+                </h3>
+            }
             {
                 showModal === false &&
                     <button
                         onClick={(e) => handleClick(e)}
                         className="mod-banner-button"
                     >
-                        Transfer Mod Role
+                        {`Transfer Mod Role for ${currentChannel?.name.toString()}`}
                     </button>
             }
             {

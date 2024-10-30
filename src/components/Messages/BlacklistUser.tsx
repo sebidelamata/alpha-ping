@@ -6,6 +6,7 @@ import React,
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
+import Loading from "../Loading";
 
 interface ErrorType {
     reason: string
@@ -47,12 +48,19 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
     }
 
     return(
-        <button 
-            className="blacklist-button"
-            onClick={(e) => handleClick(e)}
-        >
-            Blacklist User
-        </button>
+        <>
+            <button 
+                className="blacklist-button"
+                onClick={(e) => handleClick(e)}
+            >
+                Blacklist User
+                
+            </button>
+            {
+                loading &&
+                    <Loading/>
+            }
+        </>
     )
 }
 
