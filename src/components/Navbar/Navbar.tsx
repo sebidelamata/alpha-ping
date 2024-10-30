@@ -17,7 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({
           <img src="../Apes.svg" alt="AlphaPING Logo" className='logo'/>
         </div>
         <h1 className='brand-header'>
-          A<span className='header-mid-word-break'>lpha</span>PING
+          A<span className='header-mid-word-break'>lpha</span>PING (beta)
         </h1>
       </div>
       <SearchChannels

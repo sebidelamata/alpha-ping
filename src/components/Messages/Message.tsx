@@ -108,7 +108,10 @@ const Message: React.FC<MessageProps> = ({
             <img src={monkey} alt="User Icon" className='monkey-icon'/>
         }
         {
-          mod === true &&
+          (
+            mod === true ||
+            owner === true
+          ) &&
           hoverOptions === true &&
           <BanUser user={message.account}/>
         }

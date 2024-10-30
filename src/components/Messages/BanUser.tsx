@@ -19,7 +19,7 @@ interface BanUSerProps{
 const BanUser:React.FC<BanUSerProps> = ({user}) => {
 
     const { currentChannel } = useChannelProviderContext()
-    const { mod } = useUserProviderContext()
+    const { mod, owner } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [loading, setLoading] = useState<boolean>(false)
@@ -34,7 +34,10 @@ const BanUser:React.FC<BanUSerProps> = ({user}) => {
             if(
                 currentChannel && 
                 currentChannel.id !== undefined &&
-                mod === true
+                (
+                    mod === true ||
+                    owner === true
+                )
             ){
                 const tx = await alphaPING?.connect(signer).channelBan(user, currentChannel?.id)
                 await tx?.wait()
