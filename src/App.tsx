@@ -10,12 +10,14 @@ import Messages from './components/Messages/Messages'
 import Profile from './components/Profile/Profile';
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
+import { useAppKitAccount } from "@reown/appkit/react";
 
 import { useEtherProviderContext } from './contexts/ProviderContext';
 
 const App:React.FC = () => {
 
   const { alphaPING, signer } = useEtherProviderContext()
+  const { isConnected } = useAppKitAccount()
 
   // selected channel's actions
   const [channelAction, setChannelAction] = useState<string>("chat")
@@ -73,7 +75,10 @@ const App:React.FC = () => {
         </div>
       </div>
       {
-        isMember === false &&
+        (
+          isMember === false ||
+          isConnected === false
+        ) &&
         <JoinAlphaPING
           setIsMember={setIsMember}
         />

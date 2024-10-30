@@ -258,10 +258,10 @@ describe("AlphaPING", function () {
   })
 
   describe("Personal Block List", function() {
-    let isBlockedBefore: Boolean
+    let isBlockedBefore: boolean
     beforeEach(async () => {
       isBlockedBefore = await alphaPING.personalBlockList(user, deployer)
-      let tx = await alphaPING.connect(user).addToPersonalBlockList(deployer)
+      const tx = await alphaPING.connect(user).addToPersonalBlockList(deployer)
       await tx.wait()
     })
 
@@ -269,13 +269,13 @@ describe("AlphaPING", function () {
       expect(isBlockedBefore).to.equal(false)
     })
     it("User can block Deployer", async () => {
-      let isBlocked: boolean = await alphaPING.personalBlockList(user, deployer)
+      const isBlocked: boolean = await alphaPING.personalBlockList(user, deployer)
       expect(isBlocked).to.equal(true)
     })
     it("User can unblock Deployer", async () => {
-      let tx = await alphaPING.connect(user).removeFromPersonalBlockList(deployer)
+      const tx = await alphaPING.connect(user).removeFromPersonalBlockList(deployer)
       await tx.wait()
-      let isBlocked: boolean = await alphaPING.personalBlockList(user, deployer)
+      const isBlocked: boolean = await alphaPING.personalBlockList(user, deployer)
       expect(isBlocked).to.equal(false)
     })
   })

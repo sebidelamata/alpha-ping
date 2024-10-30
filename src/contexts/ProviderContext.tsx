@@ -120,7 +120,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             channels, 
             setChannels, 
             hasJoined,
-            setHasJoined 
+            setHasJoined
         }}>
             {children}
         </ProviderContext.Provider>
