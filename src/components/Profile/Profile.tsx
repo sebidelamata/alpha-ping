@@ -1,7 +1,8 @@
 import React, {
     useState,
     useEffect,
-    FormEvent
+    FormEvent,
+    MouseEvent
 } from "react";
 import { type Signer } from 'ethers'
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
@@ -109,12 +110,66 @@ const Profile: React.FC = () => {
         }
     }
 
+    // our options for tab in the profile section
+    const [availableProfileTabs, setAvailableProfileTabs] = useState<string[]>([])
+    // tabs only appear based on user role
+    const setProfileTabs = () => {
+        const tabsArray = ['edit']
+        if(mod === true){
+            tabsArray.push('mod')
+        }
+        if(owner === true){
+            tabsArray.push('owner')
+        }
+        setAvailableProfileTabs(tabsArray)
+    }
+    useEffect(() => {
+        setProfileTabs()
+    }, [owner, mod])
+    const [profileTabSelect, setProfileTabSelect] = useState<string>('edit')
+    const handleTabClick = (e:MouseEvent) => {
+        if(e !== null && e.target !== null){
+            e.preventDefault()
+            const value = e.target.id
+            setProfileTabSelect(value)
+            console.log(value)
+        }
+    }
+
     return(
         <div className="edit-profile-container">
             <h2 className="edit-profile-header">
-                Edit Profile
+                Profile
             </h2>
+            <ul className="profile-tabs">
+                {
+                    availableProfileTabs.map((tab) => {
+                        return (
+                            <li 
+                                key={tab} 
+                                id={tab}
+                                onClick={(e) => handleTabClick(e)}
+                                className={profileTabSelect === tab ? 'active' : ''}
+                            >
+                                {
+                                    tab === 'edit' &&
+                                    'Edit'
+                                }
+                                {
+                                    tab === 'mod' &&
+                                    'Mod'
+                                }
+                                {
+                                    tab === 'owner' &&
+                                    'Owner'
+                                }
+                            </li>
+                        )
+                    })
+                }
+            </ul>
             {
+                profileTabSelect === 'owner' &&
                 owner === true &&
                 <OwnerBanner 
                     txMessageOwner={txMessageOwner} 
@@ -122,6 +177,7 @@ const Profile: React.FC = () => {
                 />
             }
             {
+                profileTabSelect === 'owner' &&
                 txMessageOwner !== null &&
                 txMessageOwner !== undefined &&
                 <p>
@@ -135,14 +191,18 @@ const Profile: React.FC = () => {
                 </p>
             }
             {
-                mod === true ||
-                owner === true &&
+                profileTabSelect === 'mod' &&
+                (
+                    mod === true ||
+                    owner === true
+                ) &&
                 <ModBanner
                     txMessageMod={txMessageMod}
                     setTxMessageMod={setTxMessageMod}
                 />
             }
             {
+                profileTabSelect === 'mod' &&
                 txMessageMod !== null &&
                 txMessageMod !== undefined &&
                 <p>
@@ -171,98 +231,103 @@ const Profile: React.FC = () => {
                     }
                 </div>
             }
-            <div className="current-username-and-pic">
-                <div className="current-profile-pic">
-                    {
-                        (
-                            userProfilePic !== null &&
-                            userProfilePic !== undefined &&
-                            userProfilePic !== ''
-                        )
-                        ?
-                        <img 
-                            src={userProfilePic} 
-                            alt="default profile" 
-                            className="edit-profile-image"
-                        /> :
-                        <img 
-                            src="/monkey.svg" 
-                            alt="default profile" 
-                            className="edit-profile-image"
-                        />
-                    }
-                </div>
-                <div className="current-username">
-                    {
-                        userUsername ?
-                            <div className="current-username-value">
-                                {userUsername}
-                            </div> :
-                            userAddress !== null &&
-                            <div className="current-username-value">
-                                {`${userAddress?.slice(0,4)}...${userAddress?.slice(28,32)}`}
-                            </div>
-                    }
-                </div>
-            </div>
-            <div className="edit-profile-row-two">
-                <div className="edit-profile-pic-container">
-                    <button
-                        type="button"
-                        className={
-                            editPicOrName !== 'picture'?
-                            "edit-button" :
-                            "edit-button edit-button-selected"
-                        }
-                        onClick={() => setEditPicOrName("picture")}
-                    >
-                        Edit Profile Picture
-                    </button>
-                </div>
-                <div className="edit-username-container">
-                    <button
-                        type="button"
-                        className={
-                            editPicOrName !== 'username'?
-                            "edit-button" :
-                            "edit-button edit-button-selected"
-                        }
-                        onClick={() => setEditPicOrName('username')}
-                    >
-                        Edit Username
-                    </button>
-                </div>
-            </div>
-            <form 
-                action="" 
-                className="edit-profile-form"
-                onSubmit={(e) => handleEditProfileSubmit(e)}
-            >
-                <div className="edit-profile-form-row-two">
-                    <input 
-                        type="text" 
-                        placeholder={
-                            editPicOrName === "picture" ?
-                            "Enter Image URL..." :
-                            "Enter New Username"
-                        }
-                        value={editProfileFormString}
-                        onChange={(e) => handleProfileEditFormChange(e)}
-                    />
-                    <button 
-                        className="edit-profile-form-submit-button"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
-                </div>
-                {
-                    error && 
-                    <div className="error-message">
-                        {error}
+            {
+                profileTabSelect === 'edit' &&
+                <div className="current-username-and-pic-container">
+                     <div className="current-username-and-pic">
+                        <div className="current-profile-pic">
+                            {
+                                (
+                                    userProfilePic !== null &&
+                                    userProfilePic !== undefined &&
+                                    userProfilePic !== ''
+                                )
+                                ?
+                                <img 
+                                    src={userProfilePic} 
+                                    alt="default profile" 
+                                    className="edit-profile-image"
+                                /> :
+                                <img 
+                                    src="/monkey.svg" 
+                                    alt="default profile" 
+                                    className="edit-profile-image"
+                                />
+                            }
+                        </div>
+                        <div className="current-username">
+                            {
+                                userUsername ?
+                                    <div className="current-username-value">
+                                        {userUsername}
+                                    </div> :
+                                    userAddress !== null &&
+                                    <div className="current-username-value">
+                                        {`${userAddress?.slice(0,4)}...${userAddress?.slice(28,32)}`}
+                                    </div>
+                            }
+                        </div>
                     </div>
-                }
-            </form>
+                    <div className="edit-profile-row-two">
+                        <div className="edit-profile-pic-container">
+                            <button
+                                type="button"
+                                className={
+                                    editPicOrName !== 'picture'?
+                                    "edit-button" :
+                                    "edit-button edit-button-selected"
+                                }
+                                onClick={() => setEditPicOrName("picture")}
+                            >
+                                Edit Profile Picture
+                            </button>
+                        </div>
+                        <div className="edit-username-container">
+                            <button
+                                type="button"
+                                className={
+                                    editPicOrName !== 'username'?
+                                    "edit-button" :
+                                    "edit-button edit-button-selected"
+                                }
+                                onClick={() => setEditPicOrName('username')}
+                            >
+                                Edit Username
+                            </button>
+                        </div>
+                    </div>
+                    <form 
+                        action="" 
+                        className="edit-profile-form"
+                        onSubmit={(e) => handleEditProfileSubmit(e)}
+                    >
+                        <div className="edit-profile-form-row-two">
+                            <input 
+                                type="text" 
+                                placeholder={
+                                    editPicOrName === "picture" ?
+                                    "Enter Image URL..." :
+                                    "Enter New Username"
+                                }
+                                value={editProfileFormString}
+                                onChange={(e) => handleProfileEditFormChange(e)}
+                            />
+                            <button 
+                                className="edit-profile-form-submit-button"
+                                type="submit"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                        {
+                            error && 
+                            <div className="error-message">
+                                {error}
+                            </div>
+                        }
+                    </form>
+                </div>
+            }
         </div>   
     )
 }
