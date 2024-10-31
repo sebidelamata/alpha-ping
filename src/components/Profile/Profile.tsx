@@ -115,7 +115,7 @@ const Profile: React.FC = () => {
     // tabs only appear based on user role
     const setProfileTabs = () => {
         const tabsArray = ['edit']
-        if(mod === true){
+        if(mod && mod.length > 0){
             tabsArray.push('mod')
         }
         if(owner === true){
@@ -193,7 +193,7 @@ const Profile: React.FC = () => {
             {
                 profileTabSelect === 'mod' &&
                 (
-                    mod === true ||
+                    (mod && mod.length > 0) ||
                     owner === true
                 ) &&
                 <ModBanner

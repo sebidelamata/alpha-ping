@@ -1,17 +1,8 @@
-import React,
-{ 
-    useState, 
-    MouseEvent, 
-    FormEvent 
-} from "react";
+import React from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
-import Loading from "../Loading";
-
-interface ErrorType {
-    reason: string
-}
+import ModBannerListItem from "./ModBannerListItem";
 
 interface ModBannerProps{
     txMessageMod: string | null | undefined; 
@@ -24,98 +15,35 @@ const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => 
     const { mod, setMod } = useUserProviderContext()
     const { currentChannel } = useChannelProviderContext()
 
-    const [showModal, setShowModal] = useState<boolean>(false)
-
-    const handleClick = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(true)
-    }
-
-    const handleCancel = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(false)
-    }
-
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<string | null>(null)
-
-    const handleSubmit = async (e:FormEvent) => {
-        e.preventDefault()
-        const value = e.target.newMod.value
-        setError(null)
-        setTxMessageMod(null)
-        setLoading(true)
-        try{
-            if(currentChannel && currentChannel.id !== undefined){
-                const tx = await alphaPING?.connect(signer).transferMod(value, currentChannel?.id)
-                await tx?.wait()
-                console.log(tx?.hash)
-                setTxMessageMod(tx?.hash)
-                setMod(value)
-            }
-        }catch(error: unknown){
-            if((error as ErrorType).reason)
-            setError((error as ErrorType).reason)
-        }finally{
-            setLoading(false)
-            console.log(txMessageMod)
-        }
-
-    }
-
     return(
         <div className="mod-banner">
             {
                 mod &&
+                mod.length > 0 &&
                 <h3 className="mod-banner-header">
                     {
-                        `You are currently have Moderator admin role for ${currentChannel?.name.toString()}`
+                        `You are currently have Moderator admin role for:`
                     }
                 </h3>
             }
             {
-                showModal === false &&
-                    <button
-                        onClick={(e) => handleClick(e)}
-                        className="mod-banner-button"
-                    >
-                        {`Transfer Mod Role for ${currentChannel?.name.toString()}`}
-                    </button>
-            }
-            {
-                showModal === true &&
-                <form 
-                    action=""
-                    onSubmit={(e) => handleSubmit(e)}
-                    className="mod-banner-form"
-                >
-                    <label 
-                        htmlFor="newMod"
-                    >
-                        New Mod
-                    </label>
-                    <input 
-                        type="text" 
-                        name="newMod" 
-                        placeholder="0x..."
-                    />
-                    <input 
-                        type="submit" 
-                    />
-                    <button 
-                        onClick={(e) => handleCancel(e)}
-                    >
-                        Cancel
-                    </button>
-                </form>
-            }
-            {
-                loading === true &&
-                    <Loading/>
-            }
-            {
-                error !== null &&
-                    <p>{error}</p>
+                mod &&
+                mod.length > 0 &&
+                <ul>
+                    {
+                        mod.map((channel) => {
+                            return(
+                                <li key={channel.id}>
+                                    <ModBannerListItem 
+                                        channel={channel}
+                                        txMessageMod={txMessageMod}
+                                        setTxMessageMod={setTxMessageMod}
+                                    />
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
             }
         </div>
     )

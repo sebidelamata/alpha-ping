@@ -5,7 +5,7 @@ import React, {
     useState,
     useEffect
 } from "react"
-import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "./ProviderContext"
 import { useChannelProviderContext } from "./ChannelContext";
 import { useMessagesProviderContext } from "./MessagesContext";
@@ -13,8 +13,8 @@ import { useMessagesProviderContext } from "./MessagesContext";
 interface UserProviderType{
     owner: boolean;
     setOwner: React.Dispatch<React.SetStateAction<boolean>>;
-    mod: boolean;
-    setMod: React.Dispatch<React.SetStateAction<boolean>>;
+    mod: AlphaPING.ChannelStructOutput[];
+    setMod: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput[]>>;
     banned: boolean;
     blacklisted: boolean;
     author: number[];
@@ -36,11 +36,12 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const { currentChannel } = useChannelProviderContext()
     const { signer, alphaPING } = useEtherProviderContext()
     const { messages } = useMessagesProviderContext()
+    const { channels } = useEtherProviderContext()
 
     // vars
     const [account, setAccount] = useState<string>('')
     const [owner, setOwner] = useState<boolean>(false)
-    const [mod, setMod] = useState<boolean>(false)
+    const [mod, setMod] = useState<AlphaPING.ChannelStructOutput[]>([])
     const [banned, setBanned] = useState<boolean>(false)
     const [blacklisted, setBlacklisted] = useState<boolean>(false)
     const [author, setAuthor] = useState<number[]>([])
@@ -67,9 +68,15 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             //owner
             const owner = await alphaPING.owner()
             setOwner(owner === account ? true : false)
-            //mod
-            const mod = await alphaPING.mods(currentChannel.id)
-            setMod(mod === account ? true : false)
+            // fetch all channels for which this account is a mod
+            const modResults = []
+            for(let i=0; i<channels.length; i++){
+                const result = await alphaPING.mods(channels[i].id)
+                if(result === account){
+                    modResults.push(channels[i])
+                }
+            }
+            setMod(modResults)
             //banned
             const banned = await alphaPING.channelBans(currentChannel.id, account)
             setBanned(banned)
@@ -95,6 +102,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
     useEffect(() => {
         loadUserAttributes()
+        console.log(mod)
     }, [currentChannel, account, messages])
     
     return (
