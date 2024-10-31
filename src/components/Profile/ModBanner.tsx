@@ -1,7 +1,5 @@
 import React from "react";
-import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
-import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import ModBannerListItem from "./ModBannerListItem";
 
 interface ModBannerProps{
@@ -11,9 +9,7 @@ interface ModBannerProps{
 
 const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => {
 
-    const { alphaPING, signer } = useEtherProviderContext()
-    const { mod, setMod } = useUserProviderContext()
-    const { currentChannel } = useChannelProviderContext()
+    const { mod } = useUserProviderContext()
 
     return(
         <div className="mod-banner">
