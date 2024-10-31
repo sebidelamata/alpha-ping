@@ -7,6 +7,7 @@ import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { AlphaPING } from "../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import Loading from "../Loading";
+import ChannelBans from "./ChannelBans";
 
 interface ErrorType {
     reason: string
@@ -119,6 +120,7 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({
                 error !== null &&
                     <p>{error}</p>
             }
+            <ChannelBans channel={channel}/>
         </div>
     )
 }

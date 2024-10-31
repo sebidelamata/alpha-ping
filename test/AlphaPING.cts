@@ -179,9 +179,9 @@ describe("AlphaPING", function () {
   describe("Transfer Mods", function() {
     const ID = 1
     it("Allows owner to transfer moderator role", async () => {
-      let tx = await alphaPING.connect(deployer).transferMod(user, ID)
+      const tx = await alphaPING.connect(deployer).transferMod(user, ID)
       await tx.wait()
-      let newMod = await alphaPING.mods(ID)
+      const newMod = await alphaPING.mods(ID)
       expect(newMod).to.equal(user)
     })
   })
@@ -191,7 +191,7 @@ describe("AlphaPING", function () {
     let isBannedBefore: boolean
     this.beforeEach(async () => {
       isBannedBefore = await alphaPING.channelBans(ID, user)
-      let tx = await alphaPING.connect(deployer).channelBan(user, ID)
+      const tx = await alphaPING.connect(deployer).channelBan(user, ID)
       await tx.wait()
     })
 
