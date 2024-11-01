@@ -18,6 +18,8 @@ interface UserProviderType{
     banned: boolean;
     blacklisted: boolean;
     author: number[];
+    userUsername: string | null;
+    setUserUsername: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 // create context
@@ -45,6 +47,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [banned, setBanned] = useState<boolean>(false)
     const [blacklisted, setBlacklisted] = useState<boolean>(false)
     const [author, setAuthor] = useState<number[]>([])
+    // grab username
+    const [userUsername, setUserUsername] = useState<string | null>(null)
 
     // loadstates
     const [userAttributesLoading, setUserAttributesLoading] = useState<boolean>(false)
@@ -92,6 +96,15 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                 }
             }
             setAuthor(author)
+            // grab username
+            if(account !== null){
+                const username = await alphaPING?.username(account)
+                if(username === undefined){
+                    setUserUsername(null)
+                } else {
+                    setUserUsername(username)
+                }
+            }
         }catch(err: unknown){
             console.error(err as string)
             setUserAttributesError(err.message as string)
@@ -113,7 +126,9 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             setMod,
             banned,
             blacklisted,
-            author
+            author,
+            userUsername,
+            setUserUsername
         }}>
             {children}
         </UserContext.Provider>

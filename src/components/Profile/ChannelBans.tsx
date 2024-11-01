@@ -6,6 +6,7 @@ import { AlphaPING } from "../../../typechain-types/contracts/AlphaPING.sol/Alph
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useMessagesProviderContext } from "../../contexts/MessagesContext";
 import Loading from "../Loading";
+import BansListItem from "./BansListItem";
 
 interface ErrorType {
     reason: string
@@ -80,7 +81,7 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
             <h5
                 onClick={() => handleClick()}
             >
-                Channel Bans
+                Channel Bans {showBans === false ? '>' : ''}
             </h5>
             {
                 showBans === true &&
@@ -90,7 +91,10 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
                         channelBans.map((ban) => {
                             return(
                                 <li key={ban}>
-                                    {ban}
+                                    <BansListItem 
+                                        ban={ban}
+                                        channel={channel}
+                                    />
                                 </li>
                             )
                         })
