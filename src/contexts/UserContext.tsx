@@ -59,9 +59,9 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         if(alphaPING === null){
             return
         }
-        if(currentChannel === null){
-            return
-        }
+        // if(currentChannel === null){
+        //     return
+        // }
         if(signer === null){
             return
         }
@@ -82,13 +82,13 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             }
             setMod(modResults)
             //banned
-            const banned = await alphaPING.channelBans(currentChannel.id, account)
+            const banned = currentChannel ? await alphaPING.channelBans(currentChannel.id, account) : false
             setBanned(banned)
             //blacklisted
             const blacklisted = await alphaPING.isBlackListed(account)
             setBlacklisted(blacklisted)
             //author
-            const channelMessages = messages.filter(message => message.channel === currentChannel.id.toString())
+            const channelMessages = currentChannel ? messages.filter(message => message.channel === currentChannel.id.toString()) : messages
             const author = []
             for(let i=0; i<channelMessages.length; i++){
                 if(account === channelMessages[i].account){
@@ -116,7 +116,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     useEffect(() => {
         loadUserAttributes()
         console.log(mod)
-    }, [currentChannel, account, messages])
+    }, [currentChannel, account, messages, signer])
     
     return (
         <UserContext.Provider value={{ 

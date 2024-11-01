@@ -81,7 +81,6 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         const channel = await alphaPING.getChannel(i)
         channels.push(channel)
       }
-
       setChannels(channels)
 
       const signer:Signer = await provider?.getSigner()

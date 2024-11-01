@@ -7,7 +7,6 @@ import React, {
 import { type Signer } from 'ethers'
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
-import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import OwnerBanner from "./OwnerBanner";
 import ModBanner from "./ModBanner";
 
@@ -19,7 +18,6 @@ const Profile: React.FC = () => {
 
     const { signer, alphaPING } = useEtherProviderContext()
     const { owner, mod, banned, blacklisted } = useUserProviderContext()
-    const { currentChannel } = useChannelProviderContext()
 
     const [editPicOrName, setEditPicOrName] = useState<string>('picture')
     const [editProfileFormString, setEditProfileFormString] = useState<string>('')
@@ -125,7 +123,8 @@ const Profile: React.FC = () => {
     }
     useEffect(() => {
         setProfileTabs()
-    }, [owner, mod])
+    }, [owner, mod, signer])
+
     const [profileTabSelect, setProfileTabSelect] = useState<string>('edit')
     const handleTabClick = (e:MouseEvent) => {
         if(e !== null && e.target !== null){
@@ -215,7 +214,7 @@ const Profile: React.FC = () => {
                     </a>
                 </p>
             }
-            {
+            {/* {
                 banned === true &&
                 <div>
                     {
@@ -230,7 +229,7 @@ const Profile: React.FC = () => {
                         `You are currently Blacklisted from AlphaPING`
                     }
                 </div>
-            }
+            } */}
             {
                 profileTabSelect === 'edit' &&
                 <div className="current-username-and-pic-container">
