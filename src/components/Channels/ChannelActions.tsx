@@ -1,11 +1,6 @@
 import React,
-{
-    useState,
-    useEffect,
-    MouseEventHandler
-} from "react";
-import { Signer } from 'ethers'
-import { useEtherProviderContext } from "../../contexts/ProviderContext";
+  { MouseEventHandler } from "react";
+import { useUserProviderContext } from "../../contexts/UserContext";
 
 interface ChannelActionsProps{
     channelAction: string;
@@ -14,29 +9,12 @@ interface ChannelActionsProps{
 
 const ChannelActions: React.FC<ChannelActionsProps> = ({channelAction, setChannelAction}) => {
 
-  const { alphaPING, signer } = useEtherProviderContext()
+  const { userProfilePic } = useUserProviderContext()
 
   const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
     const action = (e.target as HTMLElement).id
     setChannelAction(action)
   }
-
-     // grab user picture
-   const [userProfilePic, setUserProfilePic] = useState<string | null>(null)
-   const fetchUserProfilePic = async (signer: Signer | null) => {
-       if(signer !== null){
-           const profilePic = await alphaPING?.profilePic(await signer.getAddress())
-           if(profilePic === undefined){
-               setUserProfilePic(null)
-           } else {
-               setUserProfilePic(profilePic)
-           }
-           console.log(userProfilePic)
-       }
-   }
-   useEffect(() => {
-       fetchUserProfilePic(signer)
-   }, [signer])
 
     return(
         <div className="channel-actions">

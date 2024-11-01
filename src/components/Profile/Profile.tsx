@@ -17,7 +17,17 @@ interface ErrorType {
 const Profile: React.FC = () => {
 
     const { signer, alphaPING } = useEtherProviderContext()
-    const { owner, mod, banned, blacklisted } = useUserProviderContext()
+    const { 
+        account, 
+        owner, 
+        mod, 
+        banned, 
+        blacklisted, 
+        userUsername,
+        setUserUsername,
+        userProfilePic,
+        setUserProfilePic 
+    } = useUserProviderContext()
 
     const [editPicOrName, setEditPicOrName] = useState<string>('picture')
     const [editProfileFormString, setEditProfileFormString] = useState<string>('')
@@ -26,48 +36,6 @@ const Profile: React.FC = () => {
     // pass tx message state to transferOwner
     const [txMessageOwner, setTxMessageOwner] = useState<string | null | undefined>(null)
     const [txMessageMod, setTxMessageMod] = useState<string | null | undefined>(null)
-
-    const [userAddress, setUserAddress] = useState<string | null>(null)
-    const getUserAddress = async(signer: Signer | null) => {
-        if(signer !== null){
-            setUserAddress(await signer.getAddress())
-        }
-    }
-    useEffect(() => {
-        getUserAddress(signer)
-    }, [signer])
-
-    // grab user picture
-    const [userProfilePic, setUserProfilePic] = useState<string | null>(null)
-    const fetchUserProfilePic = async (userAddress: string | null) => {
-        if(userAddress !== null){
-            const profilePic = await alphaPING?.profilePic(userAddress)
-            if(profilePic === undefined){
-                setUserProfilePic(null)
-            } else {
-                setUserProfilePic(profilePic)
-            }
-        }
-    }
-    useEffect(() => {
-        fetchUserProfilePic(userAddress)
-    }, [userAddress])
-
-    // grab username
-    const [userUsername, setUserUsername] = useState<string | null>(null)
-    const fetchUserUsername = async (userAddress: string | null) => {
-        if(userAddress !== null){
-            const username = await alphaPING?.username(userAddress)
-            if(username === undefined){
-                setUserUsername(null)
-            } else {
-                setUserUsername(username)
-            }
-        }
-    }
-    useEffect(() => {
-        fetchUserUsername(userAddress)
-    }, [userAddress])
 
     const handleProfileEditFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
@@ -90,12 +58,12 @@ const Profile: React.FC = () => {
                     }
                     const tx = await alphaPING?.connect(signer).setProfilePic(editProfileFormString)
                     await tx?.wait()
-                    fetchUserProfilePic(userAddress)
+                    setUserProfilePic(editProfileFormString)
                 }
                 if(editPicOrName === 'username'){
                     const tx = await alphaPING?.connect(signer).setUsername(editProfileFormString)
                     await tx?.wait()
-                    fetchUserUsername(userAddress)
+                    setUserUsername(editProfileFormString)
                 }
             }
         }catch(error: unknown){
@@ -260,9 +228,9 @@ const Profile: React.FC = () => {
                                     <div className="current-username-value">
                                         {userUsername}
                                     </div> :
-                                    userAddress !== null &&
+                                    account !== null &&
                                     <div className="current-username-value">
-                                        {`${userAddress?.slice(0,4)}...${userAddress?.slice(28,32)}`}
+                                        {`${account?.slice(0,4)}...${account?.slice(28,32)}`}
                                     </div>
                             }
                         </div>
