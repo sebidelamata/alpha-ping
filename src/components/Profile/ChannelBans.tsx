@@ -21,6 +21,9 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
     const { alphaPING } = useEtherProviderContext()
     const { messages } = useMessagesProviderContext()
 
+    //hold tx message for a ban
+    const [txMessageUnban, setTxMessageUnban] = useState<string | null | undefined>(null)
+
     const [showBans, setShowBans] = useState<boolean>(false)
     const handleClick = () => {
         setShowBans(!showBans)
@@ -74,7 +77,7 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
     }
     useEffect(() => {
         getChannelBans()
-    }, [showBans, messages])
+    }, [showBans, messages, txMessageUnban])
 
     return(
         <div className="ban-container">
@@ -94,6 +97,8 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
                                     <BansListItem 
                                         ban={ban}
                                         channel={channel}
+                                        txMessageUnban={txMessageUnban}
+                                        setTxMessageUnban={setTxMessageUnban}
                                     />
                                 </li>
                             )

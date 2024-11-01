@@ -1,17 +1,30 @@
 import React, {
     useState,
-    MouseEvent
+    MouseEvent,
+    FormEvent
 } from "react";
 import { AlphaPING } from "../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
+import Loading from "../Loading";
+
+interface ErrorType {
+    reason: string
+}
 
 interface BansListItemProps{
     ban: string;
     channel: AlphaPING.ChannelStructOutput
+    txMessageUnban: string | null | undefined; 
+    setTxMessageUnban: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
-const BansListItem:React.FC<BansListItemProps> = ({ban, channel}) => {
+const BansListItem:React.FC<BansListItemProps> = ({
+    ban, 
+    channel, 
+    txMessageUnban, 
+    setTxMessageUnban
+}) => {
 
     const { alphaPING, signer } = useEtherProviderContext()
     const { userUsername } = useUserProviderContext()
@@ -28,6 +41,26 @@ const BansListItem:React.FC<BansListItemProps> = ({ban, channel}) => {
     const handleCancel = (e:MouseEvent) => {
         e.preventDefault()
         setShowModal(false)
+    }
+
+    const handleSubmit = async (e:FormEvent) => {
+        e.preventDefault()
+        setError(null)
+        setTxMessageUnban(null)
+        setLoading(true)
+        try{
+            if(channel && channel.id !== undefined){
+                const tx = await alphaPING?.connect(signer).channelUnban(ban, channel?.id)
+                await tx?.wait()
+                setTxMessageUnban(tx?.hash)
+            }
+        }catch(error: unknown){
+            if((error as ErrorType).reason)
+            setError((error as ErrorType).reason)
+        }finally{
+            setLoading(false)
+        }
+
     }
 
     return(
@@ -54,23 +87,13 @@ const BansListItem:React.FC<BansListItemProps> = ({ban, channel}) => {
                         Unban
                     </button>
             }
-            {/* {
+            {
                 showModal === true &&
                 <form 
                     action=""
                     onSubmit={(e) => handleSubmit(e)}
-                    className="owner-banner-form"
+                    className="unban-form"
                 >
-                    <label 
-                        htmlFor="newOwner"
-                    >
-                        New Owner
-                    </label>
-                    <input 
-                        type="text" 
-                        name="newOwner" 
-                        placeholder="0x..."
-                    />
                     <input 
                         type="submit" 
                     />
@@ -88,7 +111,7 @@ const BansListItem:React.FC<BansListItemProps> = ({ban, channel}) => {
             {
                 error !== null &&
                     <p>{error}</p>
-            } */}
+            }
         </div>
     )
 }
