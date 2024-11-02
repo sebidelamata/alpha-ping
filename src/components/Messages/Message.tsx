@@ -8,6 +8,7 @@ import Avatar from "./Avatar";
 import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";
 import BanUser from "./BanUser";
+import UnbanUser from "./UnbanUser";
 import BlacklistUser from "./BlacklistUser";
 
 interface MessageProps {
@@ -107,7 +108,26 @@ const Message: React.FC<MessageProps> = ({
           <BanUser user={message.account}/>
         }
         {
+          (
+            currentChannelMod === true ||
+            owner === true
+          ) &&
+          hoverOptions === true &&
           userBan === true &&
+          <UnbanUser user={message.account}/>
+        }
+        {
+          currentChannelMod === false &&
+          owner === false &&
+          hoverOptions === true &&
+          userBan === true &&
+          <div className="user-banned">
+            Banned
+          </div>
+        }
+        {
+          userBan === true &&
+          hoverOptions === false &&
           <div className="user-banned">
             Banned
           </div>

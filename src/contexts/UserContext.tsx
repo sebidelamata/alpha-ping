@@ -26,6 +26,10 @@ interface UserProviderType{
     setUserProfilePic: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
+interface ErrorType{
+    message: string;
+}
+
 // create context
 const UserContext = createContext<UserProviderType | undefined>(undefined)
 
@@ -100,7 +104,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             }
             setMod(modResults)
 
-            // fetch current channel mode
+            // fetch current channel mod
             const checkCurrentChannelMod = currentChannel !== null ? 
                 await alphaPING.mods(currentChannel.id) === account : 
                 false
@@ -146,7 +150,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
         }catch(err: unknown){
             console.error(err as string)
-            setUserAttributesError(err.message as string)
+            setUserAttributesError((err as ErrorType).message)
         }finally{
             setUserAttributesLoading(false)
         }
@@ -154,7 +158,6 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
     useEffect(() => {
         loadUserAttributes()
-        console.log(mod)
     }, [currentChannel, account, messages, signer])
     
     return (
