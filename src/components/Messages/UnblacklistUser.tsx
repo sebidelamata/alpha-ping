@@ -11,11 +11,11 @@ interface ErrorType {
     reason: string
 }
 
-interface BlacklistUserProps{
+interface UnblacklistUserProps{
     user: string;
 }
 
-const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
+const UnblacklistUser:React.FC<UnblacklistUserProps> = ({user}) => {
 
     const { owner } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
@@ -32,7 +32,7 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
             if(
                 owner === true
             ){
-                const tx = await alphaPING?.connect(signer).blacklistUser(user)
+                const tx = await alphaPING?.connect(signer).unBlacklistUser(user)
                 await tx?.wait()
                 console.log(tx?.hash)
                 setTxMessageBlacklist(tx?.hash)
@@ -52,7 +52,7 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
                 className="blacklist-button"
                 onClick={(e) => handleClick(e)}
             >
-                Blacklist User
+                Unblacklist
                 
             </button>
             {
@@ -63,4 +63,4 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
     )
 }
 
-export default BlacklistUser;
+export default UnblacklistUser;

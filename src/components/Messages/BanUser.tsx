@@ -41,7 +41,6 @@ const BanUser:React.FC<BanUserProps> = ({user}) => {
             ){
                 const tx = await alphaPING?.connect(signer).channelBan(user, currentChannel?.id)
                 await tx?.wait()
-                console.log(tx?.hash)
                 setTxMessageBan(tx?.hash)
             }
         }catch(error: unknown){

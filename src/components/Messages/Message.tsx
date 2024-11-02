@@ -10,6 +10,7 @@ import MessageHoverOptions from "./MessageHoverOptions";
 import BanUser from "./BanUser";
 import UnbanUser from "./UnbanUser";
 import BlacklistUser from "./BlacklistUser";
+import UnblacklistUser from "./UnblacklistUser";
 
 interface MessageProps {
     message: Message;
@@ -143,6 +144,14 @@ const Message: React.FC<MessageProps> = ({
           <BlacklistUser user={message.account}/>
         }
         {
+          owner === true &&
+          hoverOptions === true &&
+          userBlacklist === true &&
+          <UnblacklistUser user={message.account}/>
+        }
+        {
+          owner === true &&
+          hoverOptions === false &&
           userBlacklist === true &&
           <div className="user-banned">
             Blacklisted
