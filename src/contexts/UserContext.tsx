@@ -18,7 +18,11 @@ interface UserProviderType{
     setMod: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput[]>>;
     currentChannelMod: boolean;
     banned: boolean;
+    txMessageBan: string | null | undefined;
+    setTxMessageBan: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     blacklisted: boolean;
+    txMessageBlacklist: string | null | undefined;
+    setTxMessageBlacklist: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     author: number[];
     userUsername: string | null;
     setUserUsername: React.Dispatch<React.SetStateAction<string | null>>;
@@ -58,8 +62,12 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const[currentChannelMod, setCurrentChannelMod] = useState<boolean>(false)
     // is the user banned from any channels
     const [banned, setBanned] = useState<boolean>(false)
+    // state changes on user ban or unban and tells the messages to update metadata
+    const [txMessageBan, setTxMessageBan] = useState<string | null | undefined>(null)
     // is the user blacklisted
     const [blacklisted, setBlacklisted] = useState<boolean>(false)
+    // state changes on user blacklist or unblacklist and tells the messages to update metadata
+    const [txMessageBlacklist, setTxMessageBlacklist] = useState<string | null | undefined>(null)
     // what messages is the user the author of
     const [author, setAuthor] = useState<number[]>([])
     // grab username
@@ -169,7 +177,11 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             setMod,
             currentChannelMod,
             banned,
+            txMessageBan, 
+            setTxMessageBan,
             blacklisted,
+            txMessageBlacklist, 
+            setTxMessageBlacklist,
             author,
             userUsername,
             setUserUsername,

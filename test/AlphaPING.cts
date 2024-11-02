@@ -248,11 +248,11 @@ describe("AlphaPING", function () {
       expect(isModBefore).to.equal(user)
     })
     it("Mod role has been transferred to owner", async () => {
-      let isMod: AddressLike = await alphaPING.mods(ID)
+      const isMod: AddressLike = await alphaPING.mods(ID)
       expect(isMod).to.equal(deployer)
     })
     it("Former mod is blacklisted", async () => {
-      let isBanned = await alphaPING.isBlackListed(user)
+      const isBanned = await alphaPING.isBlackListed(user)
       expect(isBanned).to.equal(true)
     })
   })
@@ -343,7 +343,7 @@ describe("AlphaPING", function () {
 
   describe("Purchase and verify premium memberships", function() {
     let isPremiumSunscribedBefore: boolean
-    let subscriptionPrice: BigInt
+    let subscriptionPrice: bigint
     this.beforeEach(async() => {
       // deploy some mock usdc for our test
       ERC20Faucet = await ethers.getContractFactory("ERC20Faucet")

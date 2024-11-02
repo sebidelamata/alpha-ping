@@ -14,6 +14,7 @@ import { useChannelProviderContext } from '../../contexts/ChannelContext'
 import Message from './Message'
 import SubmitMessage from './SubmitMessage'
 import { useMessagesProviderContext } from '../../contexts/MessagesContext'
+import { useUserProviderContext } from '../../contexts/UserContext'
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -40,6 +41,7 @@ const Messages:React.FC = () => {
   const { signer, alphaPING } = useEtherProviderContext()
   const { currentChannel } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()
+  const { txMessageBan, txMessageBlacklist } = useUserProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -157,7 +159,7 @@ const Messages:React.FC = () => {
     if (currentChannel) {
       fetchMessagesMetadata();
     }
-  }, [currentChannel])
+  }, [currentChannel, txMessageBan, txMessageBlacklist])
 
 
   // scroll to end

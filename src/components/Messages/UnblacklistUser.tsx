@@ -17,12 +17,11 @@ interface UnblacklistUserProps{
 
 const UnblacklistUser:React.FC<UnblacklistUserProps> = ({user}) => {
 
-    const { owner } = useUserProviderContext()
+    const { owner, txMessageBlacklist, setTxMessageBlacklist } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-    const [txMessageBlacklist, setTxMessageBlacklist] = useState<string | null | undefined>(null)
 
     const handleClick = async (e:MouseEvent) => {
         e.preventDefault()

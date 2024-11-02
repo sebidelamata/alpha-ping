@@ -19,12 +19,11 @@ interface UnbanUserProps{
 const UnbanUser:React.FC<UnbanUserProps> = ({user}) => {
 
     const { currentChannel } = useChannelProviderContext()
-    const { currentChannelMod, owner } = useUserProviderContext()
+    const { currentChannelMod, owner, txMessageBan, setTxMessageBan } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-    const [txMessageBan, setTxMessageBan] = useState<string | null | undefined>(null)
 
     const handleClick = async (e:MouseEvent) => {
         e.preventDefault()
