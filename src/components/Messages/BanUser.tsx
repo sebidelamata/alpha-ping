@@ -19,13 +19,12 @@ interface BanUserProps{
 const BanUser:React.FC<BanUserProps> = ({user}) => {
 
     const { currentChannel } = useChannelProviderContext()
-    const { mod, currentChannelMod, owner } = useUserProviderContext()
+    const { currentChannelMod, owner } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
     const [txMessageBan, setTxMessageBan] = useState<string | null | undefined>(null)
-    console.log(mod[0].id)
 
     const handleClick = async (e:MouseEvent) => {
         e.preventDefault()
