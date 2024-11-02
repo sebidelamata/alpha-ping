@@ -7,6 +7,7 @@ import React,
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import Loading from "../Loading";
+import BlacklistList from "./BlacklistList";
 
 interface ErrorType {
     reason: string
@@ -108,6 +109,7 @@ const OwnerBanner:React.FC<OwnerBannerProps> = ({txMessageOwner, setTxMessageOwn
                 error !== null &&
                     <p>{error}</p>
             }
+            <BlacklistList/>
         </div>
     )
 }
