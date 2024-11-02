@@ -16,6 +16,7 @@ interface UserProviderType{
     setOwner: React.Dispatch<React.SetStateAction<boolean>>;
     mod: AlphaPING.ChannelStructOutput[];
     setMod: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput[]>>;
+    currentChannelMod: boolean;
     banned: boolean;
     blacklisted: boolean;
     author: number[];
@@ -49,6 +50,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [owner, setOwner] = useState<boolean>(false)
     // is user mod for any channels
     const [mod, setMod] = useState<AlphaPING.ChannelStructOutput[]>([])
+    // is mod for current channel
+    const[currentChannelMod, setCurrentChannelMod] = useState<boolean>(false)
     // is the user banned from any channels
     const [banned, setBanned] = useState<boolean>(false)
     // is the user blacklisted
@@ -96,6 +99,12 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                 }
             }
             setMod(modResults)
+
+            // fetch current channel mode
+            const checkCurrentChannelMod = currentChannel !== null ? 
+                await alphaPING.mods(currentChannel.id) === account : 
+                false
+            setCurrentChannelMod(checkCurrentChannelMod)
             
             //banned
             const banned = currentChannel ? await alphaPING.channelBans(currentChannel.id, account) : false
@@ -155,6 +164,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             setOwner,
             mod,
             setMod,
+            currentChannelMod,
             banned,
             blacklisted,
             author,

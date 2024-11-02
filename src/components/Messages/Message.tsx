@@ -44,7 +44,7 @@ const Message: React.FC<MessageProps> = ({
   blacklistArrayLoading
 }) => {
 
-    const { mod, owner } = useUserProviderContext()
+    const { currentChannelMod, owner } = useUserProviderContext()
 
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
     const [hoverReactions, sethoverReactions] = useState<string | null>(null)
@@ -94,8 +94,12 @@ const Message: React.FC<MessageProps> = ({
           profilePicsLoading={profilePicsLoading}
         />
         {
+          bansArrayLoading === true &&
+          <div>...</div>
+        }
+        {
           (
-            (mod && mod.length > 0) ||
+            currentChannelMod === true ||
             owner === true
           ) &&
           hoverOptions === true &&
@@ -107,6 +111,10 @@ const Message: React.FC<MessageProps> = ({
           <div className="user-banned">
             Banned
           </div>
+        }
+        {
+          blacklistArrayLoading === true &&
+          <div>...</div>
         }
         {
           owner === true &&

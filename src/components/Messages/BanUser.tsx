@@ -12,19 +12,20 @@ interface ErrorType {
     reason: string
 }
 
-interface BanUSerProps{
+interface BanUserProps{
     user: string;
 }
 
-const BanUser:React.FC<BanUSerProps> = ({user}) => {
+const BanUser:React.FC<BanUserProps> = ({user}) => {
 
     const { currentChannel } = useChannelProviderContext()
-    const { mod, owner } = useUserProviderContext()
+    const { mod, currentChannelMod, owner } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
     const [txMessageBan, setTxMessageBan] = useState<string | null | undefined>(null)
+    console.log(mod[0].id)
 
     const handleClick = async (e:MouseEvent) => {
         e.preventDefault()
@@ -35,7 +36,7 @@ const BanUser:React.FC<BanUSerProps> = ({user}) => {
                 currentChannel && 
                 currentChannel.id !== undefined &&
                 (
-                    mod === true ||
+                    currentChannelMod === true ||
                     owner === true
                 )
             ){
@@ -64,6 +65,10 @@ const BanUser:React.FC<BanUSerProps> = ({user}) => {
             {
                 loading &&
                     <Loading/>
+            }
+            {
+                error !== null &&
+                    <p>{error}</p>
             }
         </>
     )
