@@ -147,7 +147,7 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
                     {
                         (
                             owner === true ||
-                            mod === true ||
+                            (mod && mod.length > 0) ||
                             isAuthor === true
                         ) &&
                         banned === false &&

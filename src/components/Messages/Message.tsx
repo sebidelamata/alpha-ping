@@ -1,13 +1,11 @@
 import React, {
-    useState, 
-    useEffect
-} from "react"
-import monkey from '/monkey.svg'
+    useState
+} from "react";
 import { DateTime } from 'luxon';
 import { ethers } from 'ethers'
-import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
-import { useEtherProviderContext } from '../../contexts/ProviderContext'
 import { useUserProviderContext } from "../../contexts/UserContext";
+import Avatar from "./Avatar";
+import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";
 import BanUser from "./BanUser";
 import BlacklistUser from "./BlacklistUser";
@@ -23,6 +21,10 @@ interface MessageProps {
     profilePicsLoading: boolean;
     username: string | null;
     usernameArrayLoading: boolean;
+    userBan: boolean;
+    bansArrayLoading: boolean;
+    userBlacklist: boolean;
+    blacklistArrayLoading: boolean;
 }
 
 const Message: React.FC<MessageProps> = ({
@@ -35,29 +37,17 @@ const Message: React.FC<MessageProps> = ({
   profilePic,
   profilePicsLoading,
   username,
-  usernameArrayLoading
+  usernameArrayLoading,
+  userBan,
+  bansArrayLoading,
+  userBlacklist,
+  blacklistArrayLoading
 }) => {
-    const { signer } = useEtherProviderContext()
+
     const { mod, owner } = useUserProviderContext()
 
-    const [userBalance, setUserBalance] = useState<string | null>(null)
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
     const [hoverReactions, sethoverReactions] = useState<string | null>(null)
-
-    const getUserBalance = async () => {
-        if(tokenAddress !== null){
-            const token = new ethers.Contract(
-                tokenAddress,
-                ERC20Faucet.abi,
-                signer
-            )
-            const userBalance = await token.balanceOf(message.account)
-            setUserBalance(userBalance.toString())
-        }
-    }
-    useEffect(() => {
-        getUserBalance()
-    }, [tokenAddress])
 
     // Function to extract image URLs from message text
     const extractImageUrls = (text: string): string[] => {
@@ -91,7 +81,6 @@ const Message: React.FC<MessageProps> = ({
     .replace(/<iframe src="(.*?)"/g, "")
     .replace(/\/>/g, "")
 
-
   return(
     <div 
       className="message" 
@@ -100,25 +89,36 @@ const Message: React.FC<MessageProps> = ({
       onMouseLeave={() => sethoverOptions(false)}
     >
       <div className='message-header'>
-        {
-          profilePicsLoading === true ?
-          <img src={monkey} alt="User Icon" className='monkey-icon'/> :
-            (profilePic !== null && profilePic !== '') ?
-            <img src={profilePic} alt="User Icon" className='monkey-icon'/> :
-            <img src={monkey} alt="User Icon" className='monkey-icon'/>
-        }
+        <Avatar
+          profilePic={profilePic}
+          profilePicsLoading={profilePicsLoading}
+        />
         {
           (
-            mod === true ||
+            (mod && mod.length > 0) ||
             owner === true
           ) &&
           hoverOptions === true &&
+          userBan === false &&
           <BanUser user={message.account}/>
+        }
+        {
+          userBan === true &&
+          <div className="user-banned">
+            Banned
+          </div>
         }
         {
           owner === true &&
           hoverOptions === true &&
+          userBlacklist === false &&
           <BlacklistUser user={message.account}/>
+        }
+        {
+          userBlacklist === true &&
+          <div className="user-banned">
+            Blacklisted
+          </div>
         }
       </div>
       <div className="message-content">
@@ -152,21 +152,7 @@ const Message: React.FC<MessageProps> = ({
               }
             </div>
           </div>
-          <div className='current-token-amount'>
-            <div className='current-token-amount-title'>
-              Current Balance:
-            </div>
-            <div className='current-token-amount-value'>
-              {
-                tokenDecimals !== null &&
-                userBalance !== null &&
-                  ethers.formatUnits(
-                      userBalance.toString(), 
-                    tokenDecimals
-                  )
-              }
-            </div>
-          </div>
+          <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
           <div className='message-timestamp'>
             {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
           </div>

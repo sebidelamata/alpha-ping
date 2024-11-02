@@ -23,6 +23,18 @@ interface Usernames {
   [account: string]: string | null;
 }
 
+interface Bans {
+  [account: string]: boolean;
+}
+
+interface Blacklists {
+  [account: string]: boolean;
+}
+
+interface ErrorType{
+  message: string;
+}
+
 const Messages:React.FC = () => {
 
   const { signer, alphaPING } = useEtherProviderContext()
@@ -69,59 +81,81 @@ const Messages:React.FC = () => {
 
   const [profilePics, setProfilePics] = useState<ProfilePics>({})
   const [profilePicsLoading, setProfilePicsLoading] = useState<boolean>(false)
-  const getProfilePics = async () => {
-    setProfilePicsLoading(true)
-    if(currentChannel !== null){
-      const uniqueProfiles: string[] = []
-      messages.filter(message => message.channel === currentChannel.id.toString()).map((message) => {
-        if(!uniqueProfiles.includes(message.account)){
-          uniqueProfiles.push(message.account)
-        }
-        }
-      )
-      const profilePicsData: ProfilePics = {};
-      await Promise.all(
-        uniqueProfiles.map( async (profile) => {
-          const profilePic = await alphaPING?.profilePic(profile)
-          profilePicsData[profile] = profilePic || null
-        })
-      )
-      setProfilePics(profilePicsData)
-      setProfilePicsLoading(false)
-    }
-  }
-  useEffect(() => {
-    if (currentChannel) {
-      getProfilePics();
-    }
-  }, [currentChannel])
-
   const [usernameArray, setUsernameArray] = useState<Usernames>({})
   const [usernameArrayLoading, setUsernameArrayLoading] = useState<boolean>(false)
-  const getUsernames = async () => {
-    setUsernameArrayLoading(true)
-    if(currentChannel !== null){
-      const uniqueProfiles: string[] = []
-      messages.filter(message => message.channel === currentChannel.id.toString()).map((message) => {
-        if(!uniqueProfiles.includes(message.account)){
-          uniqueProfiles.push(message.account)
-        }
-        }
-      )
-      const usernamesData: Usernames = {};
-      await Promise.all(
-        uniqueProfiles.map( async (profile) => {
-          const username = await alphaPING?.username(profile)
-          usernamesData[profile] = username || null
-        })
-      )
-      setUsernameArray(usernamesData)
+  const [bansArray, setBansArray] = useState<Bans>({})
+  const [bansArrayLoading, setBansArrayLoading] = useState<boolean>(false)
+  const [blacklistArray, setBlacklistArray] = useState<Blacklists>({})
+  const [blacklistArrayLoading, setBlacklistArrayLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const fetchMessagesMetadata = async () => {
+    try{
+      if(currentChannel !== null){
+        setError(null)
+        // store unique profiles for this message feed
+        const uniqueProfiles = new Set<string>(
+          messages
+            .filter(message => message.channel === currentChannel.id.toString())
+            .map(message => message.account)
+        );
+  
+        // grab unique user avatars
+        setProfilePicsLoading(true)
+        const profilePicsData: ProfilePics = {};
+        await Promise.all(
+          Array.from(uniqueProfiles).map( async (profile) => {
+            const profilePic = await alphaPING?.profilePic(profile)
+            profilePicsData[profile] = profilePic || null
+          })
+        )
+        setProfilePics(profilePicsData)
+  
+        // grab unique usernames
+        setUsernameArrayLoading(true)
+        const usernamesData: Usernames = {};
+        await Promise.all(
+          Array.from(uniqueProfiles).map( async (profile) => {
+            const username = await alphaPING?.username(profile)
+            usernamesData[profile] = username || null
+          })
+        )
+        setUsernameArray(usernamesData)
+  
+        // grab unique user channel ban status
+        setBansArrayLoading(true)
+        const bansData: Bans = {};
+        await Promise.all(
+          Array.from(uniqueProfiles).map( async (profile) => {
+            const ban = await alphaPING?.channelBans(currentChannel.id.toString(), profile) || false
+            bansData[profile] = ban
+          })
+        )
+        setBansArray(bansData)
+  
+        // grab unique user application blacklist status
+        setBlacklistArrayLoading(true)
+        const blacklistData: Blacklists = {};
+          await Promise.all(
+            Array.from(uniqueProfiles).map( async (profile) => {
+              const blacklist = await alphaPING?.isBlackListed(profile) || false
+              blacklistData[profile] = blacklist
+            })
+          )
+        setBlacklistArray(blacklistData)
+      }
+    }catch(error){
+      setError((error as ErrorType).message)
+    }finally{
+      setProfilePicsLoading(false)
       setUsernameArrayLoading(false)
+      setBansArrayLoading(false)
+      setBlacklistArrayLoading(false)
     }
   }
   useEffect(() => {
     if (currentChannel) {
-      getUsernames();
+      fetchMessagesMetadata();
     }
   }, [currentChannel])
 
@@ -165,10 +199,15 @@ const Messages:React.FC = () => {
             profilePicsLoading={profilePicsLoading}
             username={usernameArray[message.account]}
             usernameArrayLoading={usernameArrayLoading}
+            userBan={bansArray[message.account]}
+            bansArrayLoading={bansArrayLoading}
+            userBlacklist={blacklistArray[message.account]}
+            blacklistArrayLoading={blacklistArrayLoading}
           />
         ))}
 
         <div ref={messageEndRef} />
+        { error !== null && <p>{error}</p>}
       </div>
       <SubmitMessage
         currentChannel={currentChannel}

@@ -11,6 +11,7 @@ import { useChannelProviderContext } from "./ChannelContext";
 import { useMessagesProviderContext } from "./MessagesContext";
 
 interface UserProviderType{
+    account: string;
     owner: boolean;
     setOwner: React.Dispatch<React.SetStateAction<boolean>>;
     mod: AlphaPING.ChannelStructOutput[];
@@ -149,6 +150,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     
     return (
         <UserContext.Provider value={{ 
+            account,
             owner,
             setOwner,
             mod,
