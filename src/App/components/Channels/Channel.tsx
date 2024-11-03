@@ -81,11 +81,13 @@ const Channel:React.FC<ChannelProps> = ({
   
       if (hasJoined) {
         setCurrentChannel(channel)
+        document.title = `AlphaPING | ${channel.name}`;
       } else {
         setJoinChannelLoading(true)
         const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
         await transaction?.wait()
         setCurrentChannel(channel)
+        document.title = `AlphaPING | ${channel.name}`;
         setJoinChannelLoading(false)
       }
     }
