@@ -14,15 +14,13 @@ interface ErrorType {
 
 interface BansListItemProps{
     ban: string;
-    channel: AlphaPING.ChannelStructOutput
-    txMessageUnban: string | null | undefined; 
+    channel: AlphaPING.ChannelStructOutput;
     setTxMessageUnban: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
 const BansListItem:React.FC<BansListItemProps> = ({
     ban, 
     channel, 
-    txMessageUnban, 
     setTxMessageUnban
 }) => {
 

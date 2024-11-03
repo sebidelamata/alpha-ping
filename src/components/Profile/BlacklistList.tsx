@@ -72,13 +72,22 @@ const BlacklistList:React.FC = () => {
                         <li key={user} className="blacklist-list-item">
                             <BlacklistListItem 
                                 user={user}
-                                txMessageUnblacklist={txMessageUnblacklist}
                                 setTxMessageUnblacklist={setTxMessageUnblacklist}
                             />
                         </li>
                     ))
                 }
             </ul>
+            {
+                txMessageUnblacklist !== null &&
+                <a 
+                    href={`https://arbiscan.io/tx/${txMessageUnblacklist}`}
+                    target="_blank"
+                    className="unblacklist-tx-msg"
+                >
+                    Pardon Succesful. View tx.
+                </a>
+            }
         </div>
     )
 }

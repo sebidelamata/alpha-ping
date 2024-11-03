@@ -10,7 +10,6 @@ import Loading from "../Loading";
 
 interface BlacklistListItemProps{
     user: string;
-    txMessageUnblacklist: string | null | undefined; 
     setTxMessageUnblacklist: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
@@ -20,7 +19,6 @@ interface ErrorType{
 
 const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
     user,
-    txMessageUnblacklist,
     setTxMessageUnblacklist
 }) => {
 

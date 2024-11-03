@@ -97,7 +97,6 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
                                     <BansListItem 
                                         ban={ban}
                                         channel={channel}
-                                        txMessageUnban={txMessageUnban}
                                         setTxMessageUnban={setTxMessageUnban}
                                     />
                                 </li>
