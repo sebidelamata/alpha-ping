@@ -12,13 +12,13 @@ import {
 
 
  // ABIs
- import AlphaPINGABI from '../../artifacts/contracts/AlphaPING.sol/AlphaPING.json'
+ import AlphaPINGABI from '../../../artifacts/contracts/AlphaPING.sol/AlphaPING.json'
  // Config
- import config from '../blockChainConfigs.json';
+ import config from '../../blockChainConfigs.json';
 
  // types
- import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
- import { EtherProviderType } from '../types/EtherProviderType';
+ import { AlphaPING } from '../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+ import { EtherProviderType } from '../../types/EtherProviderType';
  import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 
 

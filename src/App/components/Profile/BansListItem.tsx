@@ -3,7 +3,7 @@ import React, {
     MouseEvent,
     FormEvent
 } from "react";
-import { AlphaPING } from "../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
+import { AlphaPING } from "../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import Loading from "../Loading";

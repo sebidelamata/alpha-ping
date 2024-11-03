@@ -4,7 +4,7 @@ import React, {
 } from "react";
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
-import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import ERC20Faucet from '../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 
 interface CurrentBalanceProps{
     message: Message;

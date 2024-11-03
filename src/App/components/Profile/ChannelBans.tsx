@@ -2,7 +2,7 @@ import React, {
     useState,
     useEffect
 } from "react";
-import { AlphaPING } from "../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
+import { AlphaPING } from "../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useMessagesProviderContext } from "../../contexts/MessagesContext";
 import Loading from "../Loading";

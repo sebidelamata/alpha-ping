@@ -8,7 +8,7 @@ import {
   ethers, 
   Contract 
 } from 'ethers'
-import ERC20Faucet from '../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import ERC20Faucet from '../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { useEtherProviderContext } from '../../contexts/ProviderContext'
 import { useChannelProviderContext } from '../../contexts/ChannelContext'
 import Message from './Message'

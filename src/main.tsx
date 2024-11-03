@@ -3,12 +3,12 @@ import {createRoot} from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./Routes";
 import './index.css'
-import ProviderProvider from "./contexts/ProviderContext";
-import SocketProvider from "./contexts/SocketContext";
-import MessagesProvider from "./contexts/MessagesContext";
-import ChannelProvider from "./contexts/ChannelContext";
-import UserProvider from "./contexts/UserContext";
-import Web3WalletConnectProvider from "./contexts/Web3ConnectContext";
+import ProviderProvider from "./App/contexts/ProviderContext";
+import SocketProvider from "./App/contexts/SocketContext";
+import MessagesProvider from "./App/contexts/MessagesContext";
+import ChannelProvider from "./App/contexts/ChannelContext";
+import UserProvider from "./App/contexts/UserContext";
+import Web3WalletConnectProvider from "./App/contexts/Web3ConnectContext";
 
 const router = createBrowserRouter(routes);
 
