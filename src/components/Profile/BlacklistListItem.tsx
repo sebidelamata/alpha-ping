@@ -124,6 +124,9 @@ const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
                 error !== null &&
                     <p>{error}</p>
             }
+            <div className="delete-all-messages">
+                Delete All User Posts
+            </div>
         </div>
     )
 }
