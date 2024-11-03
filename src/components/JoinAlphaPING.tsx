@@ -38,9 +38,11 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
                             Join
                         </button>
                     ) : (
-                        <button className="join-button disabled" disabled>
-                            Connect To Join
-                        </button>
+                        <w3m-button 
+                            size='xxl' 
+                            balance='hide'
+                            label="Connect to Join"
+                        />
                     )
 
                 }
