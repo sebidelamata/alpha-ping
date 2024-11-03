@@ -135,6 +135,19 @@ io.on('connection', (socket) => {
     io.emit('get messages', messages);  
   });
 
+  // Handle delete messages by author for blacklist menu
+  socket.on('delete messages by author', ({ user }) => {
+    if (!user) {
+      console.error("User ID is required to delete messages by author.");
+      return;
+    }
+    // filter out all messages where the user is the author
+    messages = messages.filter(msg => msg.account !== user);
+    
+    // Broadcast the updated list to all clients
+    io.emit('get messages', messages);  
+  });
+
 socket.on('disconnect', () => {
   console.log('A user disconnected');
 });

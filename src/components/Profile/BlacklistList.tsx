@@ -3,11 +3,13 @@ import React, {
     useEffect
 } from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
+import { useUserProviderContext } from "../../contexts/UserContext";
 import BlacklistListItem from "./BlacklistListItem";
 
 const BlacklistList:React.FC = () => {
 
     const { alphaPING } = useEtherProviderContext()
+    const { txMessageBlacklist } = useUserProviderContext()
 
     //hold tx message for a ban
     const [txMessageUnblacklist, setTxMessageUnblacklist] = useState<string | null | undefined>(null)
@@ -35,6 +37,7 @@ const BlacklistList:React.FC = () => {
 
     const [blacklistedUsers, setBlacklistedUsers] = useState<string[]>([])
     const fetchBlacklistedUsers = async () => {
+        console.log(allUsers)
         try{
             const blacklist = []
             for(let i=0; i<(allUsers?.length || 0); i++){
@@ -50,7 +53,7 @@ const BlacklistList:React.FC = () => {
     }
     useEffect(() => {
         fetchBlacklistedUsers()
-    },[allUsers, txMessageUnblacklist])
+    },[allUsers, txMessageUnblacklist, txMessageBlacklist])
 
     return(
         <div className="blacklist-list">

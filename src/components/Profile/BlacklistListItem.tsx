@@ -7,6 +7,7 @@ import React, {
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import monkey from '/monkey.svg'
 import Loading from "../Loading";
+import DeleteBlacklistPosts from "./DeleteBlacklistPosts";
 
 interface BlacklistListItemProps{
     user: string;
@@ -124,9 +125,7 @@ const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
                 error !== null &&
                     <p>{error}</p>
             }
-            <div className="delete-all-messages">
-                Delete All User Posts
-            </div>
+            <DeleteBlacklistPosts user={user}/>
         </div>
     )
 }
