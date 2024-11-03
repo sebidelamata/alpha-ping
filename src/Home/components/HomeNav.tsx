@@ -41,7 +41,7 @@ const HomeNav:React.FC = () => {
                     A<span className='header-mid-word-break'>lpha</span>PING {'{beta}'}
                 </h1>
             </div>
-            <ul>
+            <ul className="homenav-links-list">
                 <li>
                     <Link to={'/app'} target="_blank">
                         App
@@ -58,9 +58,12 @@ const HomeNav:React.FC = () => {
                     </Link>
                 </li>
                 <li>
-                    <p onClick={(e) => handleClick(e)}>
-                        Socials
-                    </p>
+                    {
+                        showSocials === false &&
+                        <p onClick={(e) => handleClick(e)}>
+                            Socials
+                        </p>
+                    }
                     {
                         showSocials === true &&
                         <ul className="socials-list">
