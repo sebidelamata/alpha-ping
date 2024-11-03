@@ -157,6 +157,13 @@ const Message: React.FC<MessageProps> = ({
             Blacklisted
           </div>
         }
+        {
+          userBlacklist === true &&
+          owner === false &&
+          <div className="user-banned">
+            Blacklisted
+          </div>
+        }
       </div>
       <div className="message-content">
         <div className='message-content-row-one'>
