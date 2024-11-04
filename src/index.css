@@ -489,6 +489,7 @@ a{
   flex-direction: column;
   height: calc(100svh - var(--navbar-height));
   gap: var(--gap);
+  padding-left: var(--body-padding);
 }
 
 .channels-menu{
