@@ -757,6 +757,13 @@ a{
   width: 90%;
 }
 
+.bans-list{
+  display: grid;
+  gap: var(--body-padding);
+  height: 100%;
+  overflow-y: auto;
+}
+
 .bans-list-item{
   display: grid;
   grid-template-columns: repeat(2, 50%);
