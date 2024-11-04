@@ -70,48 +70,50 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({
 
     return(
         <div className="mod-banner-li">
-            <h4 className="mod-banner-li-title">
+            <div className="mod-banner-row-one">
+                <h4 className="mod-banner-li-title">
+                    {
+                        channel &&
+                        channel?.name
+                    }
+                </h4>
                 {
-                    channel &&
-                    channel?.name
+                    showModal === false &&
+                        <button
+                            onClick={(e) => handleClick(e)}
+                            className="mod-banner-button"
+                        >
+                            {`Transfer Mod Role`}
+                        </button>
                 }
-            </h4>
-            {
-                showModal === false &&
-                    <button
-                        onClick={(e) => handleClick(e)}
-                        className="mod-banner-button"
+                {
+                    showModal === true &&
+                    <form 
+                        action=""
+                        onSubmit={(e) => handleSubmit(e)}
+                        className="mod-banner-form"
                     >
-                        {`Transfer Mod Role`}
-                    </button>
-            }
-            {
-                showModal === true &&
-                <form 
-                    action=""
-                    onSubmit={(e) => handleSubmit(e)}
-                    className="mod-banner-form"
-                >
-                    <label 
-                        htmlFor="newMod"
-                    >
-                        New Mod
-                    </label>
-                    <input 
-                        type="text" 
-                        name="newMod" 
-                        placeholder="0x..."
-                    />
-                    <input 
-                        type="submit" 
-                    />
-                    <button 
-                        onClick={(e) => handleCancel(e)}
-                    >
-                        Cancel
-                    </button>
-                </form>
-            }
+                        <label 
+                            htmlFor="newMod"
+                        >
+                            New Mod
+                        </label>
+                        <input 
+                            type="text" 
+                            name="newMod" 
+                            placeholder="0x..."
+                        />
+                        <input 
+                            type="submit" 
+                        />
+                        <button 
+                            onClick={(e) => handleCancel(e)}
+                        >
+                            Cancel
+                        </button>
+                    </form>
+                }
+            </div>
             {
                 loading === true &&
                     <Loading/>

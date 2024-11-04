@@ -83,8 +83,9 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
         <div className="ban-container">
             <h5
                 onClick={() => handleClick()}
+                className={`ban-container-header ${showBans === true ? 'active' : ''}`}
             >
-                Channel Bans {showBans === false ? '>' : ''}
+                Channel Bans
             </h5>
             {
                 showBans === true &&

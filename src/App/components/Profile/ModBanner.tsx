@@ -25,7 +25,7 @@ const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => 
             {
                 mod &&
                 mod.length > 0 &&
-                <ul>
+                <ul className="mod-ban-list">
                     {
                         mod.map((channel) => {
                             return(

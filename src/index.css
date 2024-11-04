@@ -709,16 +709,57 @@ a{
 .owner-banner,
 .mod-banner{
   display: grid;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   gap: var(--gap-small);
+  width: 100%;
+  padding-left: var(--body-padding);
 }
 
 .owner-banner-header,
 .mod-banner-header{
   display: grid;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
+  width: 100%;
+}
+
+.mod-banner-row-one{
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: var(--body-padding);
+}
+
+.mod-ban-list{
+  display: grid;
+  overflow-y: auto; 
+  height: 50svh;
+}
+
+.mod-banner-li{
+  border-radius: var(--button-radius);
+  border-color: var(--color-2);
+  border-width: var(--border-width);
+  border-style: solid;
+  padding: var(--large-button-padding);
+  min-width: 64vw;
+  gap: var(--body-padding);
+  display: grid;
+  align-items: center;
+}
+
+.ban-container{
+  border-radius: var(--button-radius);
+  border-color: var(--color-3);
+  border-width: var(--border-width);
+  border-style: solid;
+  padding: var(--large-button-padding);
+  width: 90%;
+}
+
+.bans-list-item{
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
 }
 
 .owner-banner-button,
