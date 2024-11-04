@@ -77,7 +77,7 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
     }
     useEffect(() => {
         getChannelBans()
-    }, [showBans, messages, txMessageUnban])
+    }, [showBans, messages, txMessageUnban, channelAuthors])
 
     return(
         <div className="ban-container">
