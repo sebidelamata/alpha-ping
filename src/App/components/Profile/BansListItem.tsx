@@ -1,5 +1,6 @@
 import React, {
     useState,
+    useEffect,
     MouseEvent,
     FormEvent
 } from "react";
@@ -7,6 +8,7 @@ import { AlphaPING } from "../../../../typechain-types/contracts/AlphaPING.sol/A
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import Loading from "../Loading";
+import monkey from '/monkey.svg'
 
 interface ErrorType {
     reason: string
@@ -25,7 +27,6 @@ const BansListItem:React.FC<BansListItemProps> = ({
 }) => {
 
     const { alphaPING, signer } = useEtherProviderContext()
-    const { userUsername } = useUserProviderContext()
 
     const [showModal, setShowModal] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -61,8 +62,31 @@ const BansListItem:React.FC<BansListItemProps> = ({
 
     }
 
+    const [username, setUsername] = useState<string | null>(null)
+    const [userPFP, setUserPFP] = useState<string | null>(null)
+    const fetchUserMetaData = async () => {
+        try{
+            const usernameResult = await alphaPING?.username(ban) || null
+            setUsername(usernameResult)
+            const pfpResult = await alphaPING?.profilePic(ban) || null
+            setUserPFP(pfpResult)
+        }catch(error){
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        fetchUserMetaData()
+    }, [ban])
+
     return(
         <div className="bans-list-item">
+            <div className="blacklisted-pfp">
+                {
+                    (userPFP !== null && userPFP !== '') ?
+                    <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
+                    <img src={monkey} alt="User Icon" className='monkey-icon'/>
+                }
+            </div>
             <a 
             href={`https://arbiscan.io/address/${ban}`}
             className='ban-address'
@@ -70,8 +94,8 @@ const BansListItem:React.FC<BansListItemProps> = ({
             >
               <h5>
               {
-                (userUsername !== null && userUsername !== '') ?
-                userUsername :
+                (username !== null && username !== '') ?
+                username :
                 ban.slice(0, 6) + '...' + ban.slice(38, 42)
               }
               </h5>

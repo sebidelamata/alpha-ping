@@ -754,7 +754,7 @@ a{
   border-width: var(--border-width);
   border-style: solid;
   padding: var(--large-button-padding);
-  width: 90%;
+  width: 96%;
 }
 
 .bans-list{
@@ -766,7 +766,9 @@ a{
 
 .bans-list-item{
   display: grid;
-  grid-template-columns: repeat(2, 50%);
+  grid-template-columns: 10% 30% 50%;
+  justify-content: center;
+  align-items: center;
 }
 
 .owner-banner-button,

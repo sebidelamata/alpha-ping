@@ -18,7 +18,7 @@ const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => 
                 mod.length > 0 &&
                 <h3 className="mod-banner-header">
                     {
-                        `You are currently have Moderator admin role for:`
+                        `You currently have Moderator admin role for:`
                     }
                 </h3>
             }
