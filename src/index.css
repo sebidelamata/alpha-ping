@@ -673,9 +673,29 @@ a{
 .edit-profile-container{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content:flex-start;
   align-items: center;
   gap: var(--gap);
+}
+
+.profile-tabs{
+  display: grid;
+  grid-template-columns: repeat(3, 25%);
+  gap: var(--large-button-padding-side);
+}
+.profile-tabs>li{
+  border-width: var(--border-width);
+  border-color: var(--color-3);
+  border-radius: var(--button-radius);
+  border-style: solid;
+  padding: var(--large-button-padding);
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+.profile-tabs>li.active{
+  background-color: var(--color-3);
+  color: var(--color-2);
 }
 
 #profile{
