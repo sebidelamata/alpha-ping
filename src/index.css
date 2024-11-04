@@ -156,6 +156,19 @@ a{
   left: 10%;
 }
 
+.docs-container{
+  display: grid;
+  grid-template-columns: 20% 80%;
+  width: 100vw;
+}
+
+.selector-container{
+  display: grid;
+  grid-template-rows: auto auto;
+  padding: var(--body-padding);
+  padding-top: calc(var(--body-padding) * 2);
+}
+
 .app-container{
   display: grid;
   grid-template-rows: 5svh 95svh;
