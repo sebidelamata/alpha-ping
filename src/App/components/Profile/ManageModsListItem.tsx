@@ -40,13 +40,13 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
         setError(null)
-        setTxMessageUnblacklist(null)
+        //setTxMessageUnblacklist(null)
         setLoading(true)
         try{
             if(mod && mod !== undefined){
-                const tx = await alphaPING?.connect(signer).banMod(mod?.key as unknown as AddressLike, mod.value)
+                const tx = await alphaPING?.connect(signer).banMod(Object.keys(mod)[0] as unknown as AddressLike, Object.values(mod)[0])
                 await tx?.wait()
-                setTxMessageUnblacklist(tx?.hash)
+                //setTxMessageUnblacklist(tx?.hash)
             }
         }catch(error: unknown){
             if((error as ErrorType).message)
@@ -59,6 +59,7 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
 
     const [username, setUsername] = useState<string | null>(null)
     const [userPFP, setUserPFP] = useState<string | null>(null)
+    const [channelNames, setChannelNames] = useState<(string | null)[]>([])
     const fetchUserMetaData = async () => {
         if(mod === undefined){
             console.error('Mod is undefined!')
@@ -69,6 +70,13 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
             setUsername(usernameResult)
             const pfpResult = await alphaPING?.profilePic(Object.keys(mod)[0]) || null
             setUserPFP(pfpResult)
+            const fetchedNames:string[] = []
+            for(let i=0; i<Object.values(mod)[0].length; i++){
+                const result = await alphaPING?.getChannel(Object.values(mod)[0][i])
+                const channelname = result?.name || ''
+                fetchedNames.push(channelname)
+            }
+            setChannelNames(fetchedNames)
         }catch(error){
             console.error(error)
         }
@@ -93,12 +101,15 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                     Object.keys(mod)[0].slice(0, 6) + '...' + Object.keys(mod)[0].slice(38, 42)
                 }
             </div>
+            <div className="mod-for">
+                Mod For:
+            </div>
             <ul className="ban-mod-channels-list">
                 {
-                    Object.values(mod)[0].map((channel) => {
+                    channelNames.map((name) => {
                         return(
-                            <li key={channel}>
-                                {channel}
+                            <li key={name}>
+                                {name}
                             </li>
                         )
                     })
