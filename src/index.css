@@ -716,6 +716,10 @@ a{
   padding-left: var(--body-padding);
 }
 
+.owner-banner{
+  grid-template-columns: 90%;
+}
+
 .owner-banner-header,
 .mod-banner-header{
   display: grid;
@@ -724,10 +728,24 @@ a{
   width: 100%;
 }
 
+.owner-banner-button{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
 .mod-banner-row-one{
   display: grid;
   grid-template-columns: repeat(2, auto);
   gap: var(--body-padding);
+}
+
+.blacklisted-user-container{
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: var(--body-padding);
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .mod-ban-list{
@@ -736,7 +754,8 @@ a{
   height: 50svh;
 }
 
-.mod-banner-li{
+.mod-banner-li,
+.blacklist-list-item{
   border-radius: var(--button-radius);
   border-color: var(--color-2);
   border-width: var(--border-width);
@@ -771,7 +790,6 @@ a{
   align-items: center;
 }
 
-.owner-banner-button,
 .mod-banner-button{
   display: flex;
   flex-direction: column;
