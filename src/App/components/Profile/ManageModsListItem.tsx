@@ -19,8 +19,6 @@ interface ErrorType{
 
 const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
 
-    console.log(Object.values(mod)[0])
-
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [showModal, setShowModal] = useState<boolean>(false)
