@@ -8,6 +8,7 @@ import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import Loading from "../Loading";
 import BlacklistList from "./BlacklistList";
+import ManageMods from "./ManageMods";
 
 interface ErrorType {
     reason: string
@@ -109,6 +110,7 @@ const OwnerBanner:React.FC<OwnerBannerProps> = ({txMessageOwner, setTxMessageOwn
                 error !== null &&
                     <p>{error}</p>
             }
+            <ManageMods/>
             <BlacklistList/>
         </div>
     )
