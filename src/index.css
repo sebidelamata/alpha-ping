@@ -748,14 +748,20 @@ a{
   align-items: center;
 }
 
-.mod-ban-list{
+.mod-ban-list,
+.manage-mods-list,
+.blacklist-list-list{
   display: grid;
   overflow-y: auto; 
-  height: 50svh;
+  max-height: 30%;
+}
+.mod-ban-list{
+  max-height: 50svh;
 }
 
 .mod-banner-li,
-.blacklist-list-item{
+.blacklist-list-item,
+.manage-mods-list-item-container{
   border-radius: var(--button-radius);
   border-color: var(--color-2);
   border-width: var(--border-width);
@@ -765,6 +771,11 @@ a{
   gap: var(--body-padding);
   display: grid;
   align-items: center;
+}
+
+.manage-mods-list-item-container{
+  display: flex;
+  flex-direction: row;
 }
 
 .ban-container{
@@ -800,7 +811,8 @@ a{
 .owner-banner-form,
 .mod-banner-form,
 .unban-form,
-.pardon-form{
+.pardon-form,
+.ban-mod-form{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -822,7 +834,8 @@ a{
 .mod-banner-form>input,
 .unban-form>input,
 .edit-profile-form-row-two>input,
-.pardon-form>input{
+.pardon-form>input,
+.ban-mod-form>input{
   padding: var(--med-button-padding);
   color: var(--color-2);
   background-color: var(--color-1);
@@ -841,6 +854,8 @@ a{
   border-radius: var(--button-radius);
   outline: none;
 }
+
+
 
 .edit-profile-image{
   display: grid;

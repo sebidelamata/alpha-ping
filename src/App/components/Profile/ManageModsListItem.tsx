@@ -93,11 +93,13 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                 }
             </div>
             <div className="ban-mod-username">
-                {
-                    (username !== null && username !== '') ?
-                    username :
-                    Object.keys(mod)[0].slice(0, 6) + '...' + Object.keys(mod)[0].slice(38, 42)
-                }
+                <a href={`https://arbiscan.io/address/${Object.keys(mod)[0]}`} target="_blank">
+                    {
+                        (username !== null && username !== '') ?
+                        username :
+                        Object.keys(mod)[0].slice(0, 6) + '...' + Object.keys(mod)[0].slice(38, 42)
+                    }
+                </a>
             </div>
             <div className="mod-for">
                 Mod For:
@@ -107,7 +109,7 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                     channelNames.map((name) => {
                         return(
                             <li key={name}>
-                                {name}
+                                <strong>{name}</strong>
                             </li>
                         )
                     })
