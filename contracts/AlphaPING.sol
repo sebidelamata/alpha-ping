@@ -338,16 +338,20 @@ contract AlphaPING is ERC721 {
     }
 
     // this function will remove mode role and add them to blacklist
-    function banMod(address _bannedMod, uint256 _channelId) public onlyOwner{
+    function banMod(address _bannedMod, uint256[] memory _channelIds) public onlyOwner{
         require(
             isBlackListed[_bannedMod] != true,
             "User Is Already Blacklisted!"
         );
-        require(
-            mods[_channelId] == _bannedMod,
-            "User Is Not A Mod For This Channel!"
-        );
-        mods[_channelId] = owner;
+        for (uint i = 0; i < _channelIds.length; i++) {
+            require(
+                mods[_channelIds[i]] == _bannedMod,
+                "User Is Not A Mod For A Channel!"
+            );   
+        }
+        for (uint i = 0; i < _channelIds.length; i++) {
+            mods[_channelIds[i]] = owner;   
+        }
         isBlackListed[_bannedMod] = true;
     }
     

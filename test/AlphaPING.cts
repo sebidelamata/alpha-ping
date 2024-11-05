@@ -240,7 +240,7 @@ describe("AlphaPING", function () {
     beforeEach(async () => {
       let tx = await alphaPING.transferMod(user, ID)
       isModBefore = await alphaPING.mods(ID)
-      tx = await alphaPING.connect(deployer).banMod(user, ID)
+      tx = await alphaPING.connect(deployer).banMod(user, [ID])
       await tx.wait()
     })
 
