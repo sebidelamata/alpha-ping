@@ -780,7 +780,8 @@ a{
 }
 
 .owner-banner-form,
-.mod-banner-form{
+.mod-banner-form,
+.unban-form{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -799,7 +800,8 @@ a{
 }
 
 .owner-banner-form>input,
-.mod-banner-form>input{
+.mod-banner-form>input,
+.unban-form>input{
   padding: var(--med-button-padding);
   color: var(--color-2);
   background-color: var(--color-1);
