@@ -801,7 +801,8 @@ a{
 
 .owner-banner-form>input,
 .mod-banner-form>input,
-.unban-form>input{
+.unban-form>input,
+.edit-profile-form-row-two>input{
   padding: var(--med-button-padding);
   color: var(--color-2);
   background-color: var(--color-1);
@@ -810,7 +811,11 @@ a{
   border-radius: var(--button-radius);
 }
 .owner-banner-form>input:focus,
-.mod-banner-form>input:active{
+.owner-banner-form>input:active,
+.mod-banner-form>input:focus,
+.mod-banner-form>input:active,
+.edit-profile-form-row-two>input:focus,
+.edit-profile-form-row-two>input:active{
   border-color: var(--color-3);
   border-style: solid;
   border-radius: var(--button-radius);
