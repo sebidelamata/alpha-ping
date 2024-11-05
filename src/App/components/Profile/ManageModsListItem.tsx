@@ -7,9 +7,10 @@ import React, {
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import monkey from '/monkey.svg'
 import Loading from "../Loading";
+import { AddressLike } from "ethers";
 
 interface ManageModsListItemProps{
-    mod: string | undefined
+    mod: { [mod: string]: number[] }
 }
 
 interface ErrorType{
@@ -18,7 +19,9 @@ interface ErrorType{
 
 const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
 
-    const { alphaPING } = useEtherProviderContext()
+    console.log(Object.values(mod)[0])
+
+    const { alphaPING, signer } = useEtherProviderContext()
 
     const [showModal, setShowModal] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -41,7 +44,7 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
         setLoading(true)
         try{
             if(mod && mod !== undefined){
-                const tx = await alphaPING?.connect(signer).banMod(mod)
+                const tx = await alphaPING?.connect(signer).banMod(mod?.key as unknown as AddressLike, mod.value)
                 await tx?.wait()
                 setTxMessageUnblacklist(tx?.hash)
             }
@@ -62,9 +65,9 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
             return
         }
         try{
-            const usernameResult = await alphaPING?.username(mod) || null
+            const usernameResult = await alphaPING?.username(Object.keys(mod)[0]) || null
             setUsername(usernameResult)
-            const pfpResult = await alphaPING?.profilePic(mod) || null
+            const pfpResult = await alphaPING?.profilePic(Object.keys(mod)[0]) || null
             setUserPFP(pfpResult)
         }catch(error){
             console.error(error)
@@ -87,7 +90,7 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                 {
                     (username !== null && username !== '') ?
                     username :
-                    mod?.slice(0, 6) + '...' + mod?.slice(38, 42)
+                    Object.keys(mod)[0].slice(0, 6) + '...' + Object.keys(mod)[0].slice(38, 42)
                 }
             </div>
             {

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/migueldelamata/alpha-ping/node_modules/hardhat/console.sol": {
-      "lastModificationDate": 1715019530824,
-      "contentHash": "896f68942c3a20e9ae3c3c5bfd3add54",
+      "lastModificationDate": 1730649694206,
+      "contentHash": "681c532e816169606d13a5fe8b475074",
       "sourceName": "hardhat/console.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -489,7 +489,7 @@
       ]
     },
     "/Users/migueldelamata/alpha-ping/contracts/ERC20Faucet.sol": {
-      "lastModificationDate": 1715208627366,
+      "lastModificationDate": 1715608915843,
       "contentHash": "3bf458ccc920d060ce9559aa56fad852",
       "sourceName": "contracts/ERC20Faucet.sol",
       "solcConfig": {
@@ -528,8 +528,8 @@
       ]
     },
     "/Users/migueldelamata/alpha-ping/contracts/AlphaPING.sol": {
-      "lastModificationDate": 1717678910419,
-      "contentHash": "198a94a389a7f4f26e7df100c3542f9c",
+      "lastModificationDate": 1730821022696,
+      "contentHash": "d1dd27e7556671efc8e0bdce9ce5d71f",
       "sourceName": "contracts/AlphaPING.sol",
       "solcConfig": {
         "version": "0.8.24",

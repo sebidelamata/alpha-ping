@@ -9,36 +9,49 @@ const ManageMods:React.FC = () => {
 
     const { alphaPING } = useEtherProviderContext()
 
-    const [allMods, setAllMods] = useState<(string | undefined)[]>([])
+    const [allMods, setAllMods] = useState<{ [mod: string]: number[] }>({})
     const fetchAllMods = async () => {
         try{
             const totalChannels = await alphaPING?.totalChannels() || 0
-            const mods = new Set<string | undefined>()
+            const modsMap: { [mod: string]: number[] } = {}
             for(let i=1; i<=(totalChannels || 0); i++){
                 const result = await alphaPING?.mods(i)
-                mods.add(result)
+                if(result){
+                    // first check if this address is already in the array
+                    if (!modsMap[result]) {
+                        modsMap[result] = []
+                    }
+                    modsMap[result].push(i)
+                }
             }
-            setAllMods([...mods])
+            setAllMods(modsMap)
         }catch(error){
             console.error(error)
         }
     }
     useEffect(() => {
         fetchAllMods()
+        console.log(allMods)
     },[])
 
     return(
         <div className="manage-mods">
             <h3>Manage Mods</h3>
             <ul className="manage-mods-list">
-                {
-                    allMods.map((mod, index) => {
+                {   Object.entries(allMods).length > 0 &&
+                    Object.entries(allMods).map(([mod, channels], index) => {
                         return(
                             <li key={index}>
-                                <ManageModsListItem mod={mod}/>
+                                <ManageModsListItem mod={{[mod]: channels}}/>
                             </li>
                         )
                     })
+                }
+                {
+                    Object.entries(allMods).length <= 0 &&
+                    <p>
+                        There are no mods
+                    </p>
                 }
             </ul>
         </div>

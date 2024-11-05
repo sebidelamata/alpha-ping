@@ -122,7 +122,7 @@ export interface AlphaPINGInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "banMod",
-    values: [AddressLike, BigNumberish]
+    values: [AddressLike, BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "blacklistUser",
@@ -605,7 +605,7 @@ export interface AlphaPING extends BaseContract {
   balanceOf: TypedContractMethod<[owner: AddressLike], [bigint], "view">;
 
   banMod: TypedContractMethod<
-    [_bannedMod: AddressLike, _channelId: BigNumberish],
+    [_bannedMod: AddressLike, _channelIds: BigNumberish[]],
     [void],
     "nonpayable"
   >;
@@ -867,7 +867,7 @@ export interface AlphaPING extends BaseContract {
   getFunction(
     nameOrSignature: "banMod"
   ): TypedContractMethod<
-    [_bannedMod: AddressLike, _channelId: BigNumberish],
+    [_bannedMod: AddressLike, _channelIds: BigNumberish[]],
     [void],
     "nonpayable"
   >;
