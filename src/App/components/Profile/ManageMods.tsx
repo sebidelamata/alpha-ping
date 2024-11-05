@@ -3,6 +3,7 @@ import React, {
     useEffect
 } from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
+import ManageModsListItem from "./ManageModsListItem";
 
 const ManageMods:React.FC = () => {
 
@@ -12,12 +13,12 @@ const ManageMods:React.FC = () => {
     const fetchAllMods = async () => {
         try{
             const totalChannels = await alphaPING?.totalChannels() || 0
-            const mods = []
+            const mods = new Set<string | undefined>()
             for(let i=1; i<=(totalChannels || 0); i++){
                 const result = await alphaPING?.mods(i)
-                mods.push(result)
+                mods.add(result)
             }
-            setAllMods(mods)
+            setAllMods([...mods])
         }catch(error){
             console.error(error)
         }
@@ -25,7 +26,6 @@ const ManageMods:React.FC = () => {
     useEffect(() => {
         fetchAllMods()
     },[])
-    console.log(allMods)
 
     return(
         <div className="manage-mods">
@@ -35,7 +35,7 @@ const ManageMods:React.FC = () => {
                     allMods.map((mod, index) => {
                         return(
                             <li key={index}>
-                                {mod}
+                                <ManageModsListItem mod={mod}/>
                             </li>
                         )
                     })
