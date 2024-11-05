@@ -79,27 +79,38 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
 
     return(
         <div className="manage-mods-list-item-container">
-             <div className="blacklisted-pfp">
+             <div className="ban-mod-pfp">
                 {
                     (userPFP !== null && userPFP !== '') ?
                     <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
                     <img src={monkey} alt="User Icon" className='monkey-icon'/>
                 }
             </div>
-            <div className="blacklisted-username">
+            <div className="ban-mod-username">
                 {
                     (username !== null && username !== '') ?
                     username :
                     Object.keys(mod)[0].slice(0, 6) + '...' + Object.keys(mod)[0].slice(38, 42)
                 }
             </div>
+            <ul className="ban-mod-channels-list">
+                {
+                    Object.values(mod)[0].map((channel) => {
+                        return(
+                            <li key={channel}>
+                                {channel}
+                            </li>
+                        )
+                    })
+                }
+            </ul>
             {
                 showModal === false &&
                     <button
                         onClick={(e) => handleClick(e)}
                         className="blacklist-pardon-button"
                     >
-                        Pardon User
+                        Ban Mod
                     </button>
             }
             {
@@ -107,7 +118,7 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                 <form 
                     action=""
                     onSubmit={(e) => handleSubmit(e)}
-                    className="pardon-form"
+                    className="ban-mod-form"
                 >
                     <input 
                         type="submit" 
