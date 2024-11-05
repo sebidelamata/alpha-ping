@@ -799,7 +799,8 @@ a{
 
 .owner-banner-form,
 .mod-banner-form,
-.unban-form{
+.unban-form,
+.pardon-form{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -820,7 +821,8 @@ a{
 .owner-banner-form>input,
 .mod-banner-form>input,
 .unban-form>input,
-.edit-profile-form-row-two>input{
+.edit-profile-form-row-two>input,
+.pardon-form>input{
   padding: var(--med-button-padding);
   color: var(--color-2);
   background-color: var(--color-1);
