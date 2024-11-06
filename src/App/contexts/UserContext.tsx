@@ -23,6 +23,8 @@ interface UserProviderType{
     blacklisted: boolean;
     txMessageBlacklist: string | null | undefined;
     setTxMessageBlacklist: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+    txMessageFollow: string | null | undefined;
+    setTxMessageFollow: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     author: number[];
     userUsername: string | null;
     setUserUsername: React.Dispatch<React.SetStateAction<string | null>>;
@@ -68,6 +70,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [blacklisted, setBlacklisted] = useState<boolean>(false)
     // state changes on user blacklist or unblacklist and tells the messages to update metadata
     const [txMessageBlacklist, setTxMessageBlacklist] = useState<string | null | undefined>(null)
+    // state changes on user blacklist or unblacklist and tells the messages to update metadata
+    const [txMessageFollow, setTxMessageFollow] = useState<string | null | undefined>(null)
     // what messages is the user the author of
     const [author, setAuthor] = useState<number[]>([])
     // grab username
@@ -182,6 +186,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             blacklisted,
             txMessageBlacklist, 
             setTxMessageBlacklist,
+            txMessageFollow,
+            setTxMessageFollow,
             author,
             userUsername,
             setUserUsername,

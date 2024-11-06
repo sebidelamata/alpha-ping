@@ -46,7 +46,7 @@ const Messages:React.FC = () => {
   const { signer, alphaPING } = useEtherProviderContext()
   const { currentChannel } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()
-  const { txMessageBan, txMessageBlacklist, account } = useUserProviderContext()
+  const { txMessageBan, txMessageBlacklist, account, txMessageFollow } = useUserProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -178,7 +178,7 @@ const Messages:React.FC = () => {
     if (currentChannel) {
       fetchMessagesMetadata();
     }
-  }, [currentChannel, txMessageBan, txMessageBlacklist])
+  }, [currentChannel, txMessageBan, txMessageBlacklist, txMessageFollow])
 
 
   // scroll to end

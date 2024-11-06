@@ -17,7 +17,7 @@ interface BlacklistUserProps{
 
 const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
 
-    const { owner, txMessageBlacklist, setTxMessageBlacklist } = useUserProviderContext()
+    const { owner, setTxMessageBlacklist } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [loading, setLoading] = useState<boolean>(false)
