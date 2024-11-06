@@ -32,6 +32,11 @@ interface Blacklists {
   [account: string]: boolean;
 }
 
+
+interface Follows {
+  [account: string]: boolean;
+}
+
 interface ErrorType{
   message: string;
 }
@@ -41,7 +46,7 @@ const Messages:React.FC = () => {
   const { signer, alphaPING } = useEtherProviderContext()
   const { currentChannel } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()
-  const { txMessageBan, txMessageBlacklist } = useUserProviderContext()
+  const { txMessageBan, txMessageBlacklist, account } = useUserProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -89,6 +94,8 @@ const Messages:React.FC = () => {
   const [bansArrayLoading, setBansArrayLoading] = useState<boolean>(false)
   const [blacklistArray, setBlacklistArray] = useState<Blacklists>({})
   const [blacklistArrayLoading, setBlacklistArrayLoading] = useState<boolean>(false)
+  const [followsArray, setFollowsArray] = useState<Follows>({})
+  const [followsArrayLoading, setFollowsArrayLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   const fetchMessagesMetadata = async () => {
@@ -145,6 +152,17 @@ const Messages:React.FC = () => {
             })
           )
         setBlacklistArray(blacklistData)
+
+        // grab all the users you are following
+        setFollowsArrayLoading(true)
+        const followsData: Follows = {}
+        await Promise.all(
+          Array.from(uniqueProfiles).map( async (profile) => {
+            const follow = await alphaPING?.personalFollowList(account, profile) || false
+            followsData[profile] = follow
+          })
+        )
+        setFollowsArray(followsData)
       }
     }catch(error){
       setError((error as ErrorType).message)
@@ -153,6 +171,7 @@ const Messages:React.FC = () => {
       setUsernameArrayLoading(false)
       setBansArrayLoading(false)
       setBlacklistArrayLoading(false)
+      setFollowsArrayLoading(false)
     }
   }
   useEffect(() => {
@@ -205,6 +224,7 @@ const Messages:React.FC = () => {
             bansArrayLoading={bansArrayLoading}
             userBlacklist={blacklistArray[message.account]}
             blacklistArrayLoading={blacklistArrayLoading}
+            following={followsArray[message.account]}
           />
         ))}
 

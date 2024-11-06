@@ -281,10 +281,10 @@ describe("AlphaPING", function () {
   })
 
   describe("Personal Follow List", function() {
-    let isFollowedBefore: Boolean
+    let isFollowedBefore: boolean
     beforeEach(async () => {
       isFollowedBefore = await alphaPING.personalFollowList(user, deployer)
-      let tx = await alphaPING.connect(user).addToPersonalFollowList(deployer)
+      const tx = await alphaPING.connect(user).addToPersonalFollowList(deployer)
       await tx.wait()
     })
 
