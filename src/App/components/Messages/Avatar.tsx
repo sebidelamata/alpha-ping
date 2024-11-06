@@ -8,13 +8,15 @@ interface AvatarProps{
     profilePicsLoading: boolean;
     following: boolean;
     account: string;
+    hoverOptions: boolean;
 }
 
 const Avatar:React.FC<AvatarProps> = ({ 
     profilePic, 
     profilePicsLoading, 
     following, 
-    account 
+    account,
+    hoverOptions
 }) => {
     return(
         <div className="avatar">
@@ -28,10 +30,12 @@ const Avatar:React.FC<AvatarProps> = ({
             <div className="follow-unfollow-container">
                 {
                     following === false &&
+                    hoverOptions === true &&
                     <FollowUser account={account}/>
                 }
                 {
                     following === true &&
+                    hoverOptions === true &&
                     <UnfollowUser account={account}/> 
                 }
             </div>
