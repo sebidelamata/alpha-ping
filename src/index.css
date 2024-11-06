@@ -896,6 +896,12 @@ a{
   justify-content: center;
 }
 
+.current-username-and-pic-container{
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+}
+
 .current-username-and-pic,
 .edit-profile-row-two{
   display: grid;
@@ -953,6 +959,27 @@ a{
   height: 50svh;
   left: 25vw;
   top: 25svh;
+}
+
+.following-block-container{
+  display: grid;
+  grid-template-columns: 45% 45%;
+  justify-content: space-evenly;
+}
+
+.following-list,
+.blocked-list{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--button-radius);
+  border-color: var(--color-2);
+  border-width: var(--border-width);
+  border-style: solid;
+  padding: var(--large-button-padding);
+  gap: 1em;
+  max-height: 30svh;
+  overflow-y: auto;
 }
 
 .edit-button{
