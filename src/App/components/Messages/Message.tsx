@@ -97,6 +97,7 @@ const Message: React.FC<MessageProps> = ({
           profilePic={profilePic}
           profilePicsLoading={profilePicsLoading}
           following={following}
+          account={message.account}
         />
         {
           bansArrayLoading === true &&

@@ -41,7 +41,6 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
             setError((error as ErrorType).reason)
         }finally{
             setLoading(false)
-            console.log(txMessageBlacklist)
         }
     }
 

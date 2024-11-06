@@ -292,11 +292,11 @@ describe("AlphaPING", function () {
       expect(isFollowedBefore).to.equal(false)
     })
     it("User can follow Deployer", async () => {
-      let isFollowed: boolean = await alphaPING.personalFollowList(user, deployer)
+      const isFollowed: boolean = await alphaPING.personalFollowList(user, deployer)
       expect(isFollowed).to.equal(true)
     })
     it("User can unblock Deployer", async () => {
-      let tx = await alphaPING.connect(user).removeFromPersonalFollowList(deployer)
+      const tx = await alphaPING.connect(user).removeFromPersonalFollowList(deployer)
       await tx.wait()
       let isFollowed: boolean = await alphaPING.personalFollowList(user, deployer)
       expect(isFollowed).to.equal(false)

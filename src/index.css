@@ -1322,7 +1322,8 @@ textarea:active{
   transform: scale(1.15);
 }
 
-.follow-user-icon{
+.follow-user-icon,
+.unfollow-user-icon{
   display: grid;
   object-fit: contain;
   justify-content: center;

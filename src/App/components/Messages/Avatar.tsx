@@ -1,15 +1,21 @@
 import React from "react";
 import monkey from '/monkey.svg'
-import follow from '/follow.svg'
-import unfollow from '/unfollow.svg'
+import UnfollowUser from "./UnfollowUser";
+import FollowUser from "./FollowUser";
 
 interface AvatarProps{
     profilePic: string | null;
     profilePicsLoading: boolean;
     following: boolean;
+    account: string;
 }
 
-const Avatar:React.FC<AvatarProps> = ({ profilePic, profilePicsLoading, following }) => {
+const Avatar:React.FC<AvatarProps> = ({ 
+    profilePic, 
+    profilePicsLoading, 
+    following, 
+    account 
+}) => {
     return(
         <div className="avatar">
             {
@@ -22,11 +28,11 @@ const Avatar:React.FC<AvatarProps> = ({ profilePic, profilePicsLoading, followin
             <div className="follow-unfollow-container">
                 {
                     following === false &&
-                    <img src={follow} alt="follow-user" className="follow-user-icon"/>   
+                    <FollowUser account={account}/>
                 }
                 {
                     following === true &&
-                    <img src={unfollow} alt="unfollow-user" className="unfollow-user-icon"/>   
+                    <UnfollowUser account={account}/> 
                 }
             </div>
         </div>
