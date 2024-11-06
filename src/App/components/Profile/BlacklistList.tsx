@@ -37,7 +37,6 @@ const BlacklistList:React.FC = () => {
 
     const [blacklistedUsers, setBlacklistedUsers] = useState<string[]>([])
     const fetchBlacklistedUsers = async () => {
-        console.log(allUsers)
         try{
             const blacklist = []
             for(let i=0; i<(allUsers?.length || 0); i++){
