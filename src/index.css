@@ -1396,15 +1396,19 @@ textarea:active{
   align-items: center;
   position: relative;
   bottom: 0.7em;
+  gap: var(--med-button-padding);
+}
+.follow-unfollow-container>div{
   transition: filter var(--transition-speed-1), transform var(--transition-speed-1);
 }
-.follow-unfollow-container:hover{
+.follow-unfollow-container>div:hover{
   filter: brightness(1.1);
   transform: scale(1.15);
 }
 
 .follow-user-icon,
-.unfollow-user-icon{
+.unfollow-user-icon,
+.block-user-icon{
   display: grid;
   object-fit: contain;
   justify-content: center;

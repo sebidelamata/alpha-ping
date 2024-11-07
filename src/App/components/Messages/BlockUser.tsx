@@ -6,6 +6,7 @@ import React,
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import Loading from "../Loading";
+import block from '/block.svg'
 
 interface ErrorType {
     reason: string
@@ -41,14 +42,13 @@ const BlockUser:React.FC<BlockUserProps> = ({user}) => {
     }
 
     return(
-        <>
-            <button 
-                className="block-button"
+        <div className="block-container">
+            <img 
+                src={block} 
+                alt="block-user" 
+                className="block-user-icon" 
                 onClick={(e) => handleClick(e)}
-            >
-                Block
-                
-            </button>
+            />
             {
                 loading &&
                     <Loading/>
@@ -57,7 +57,7 @@ const BlockUser:React.FC<BlockUserProps> = ({user}) => {
                 error &&
                 <p>{error}</p>
             }
-        </>
+        </div>
     )
 }
 
