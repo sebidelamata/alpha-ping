@@ -1,12 +1,12 @@
 import React, {
     useState,
     useEffect
-}  from "react";
+} from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
-import FollowingListItem from "./FollowingListItem";
+import UserFollowsListItem from "./UserFollowsListItem";
 
-const FollowingList:React.FC = () => {
+const UserFollowsList:React.FC = () => {
 
     const { alphaPING } = useEtherProviderContext()
     const { txMessageFollow, account } = useUserProviderContext()
@@ -32,43 +32,61 @@ const FollowingList:React.FC = () => {
         fetchAllUsers()
     }, [])
 
-    const [follows, setFollows] = useState<string[]>([])
-    const fetchFollows = async () => {
+    const [userFollows, setUserFollows] = useState<string[]>([])
+    const fetchUserFollows = async () => {
         try{
             const followList = []
             for(let i=0; i<(allUsers?.length || 0); i++){
-                const result = await alphaPING?.personalFollowList(account, allUsers[i]) || false
+                const result = await alphaPING?.personalFollowList(allUsers[i], account) || false
                 if(result === true){
                     followList.push(allUsers[i])
                 }
             }
-            setFollows(followList)
+            setUserFollows(followList)
         }catch(error){
             console.error(error)
         }
     }
     useEffect(() => {
-        fetchFollows()
+        fetchUserFollows()
     },[allUsers, txMessageFollow])
 
+    const [followingUserFollows, setFollowingUserFollows] = useState<boolean[]>([])
+    const fetchFollowingUserFollows = async () => {
+        try{
+            const followList = []
+            for(let i=0; i<(userFollows?.length || 0); i++){
+                const result = await alphaPING?.personalFollowList(account, userFollows[i]) || false
+                followList.push(result)
+            }
+            setFollowingUserFollows(followList)
+        }catch(error){
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        fetchFollowingUserFollows()
+    },[userFollows])
+
+
     return(
-        <div className="following-list-container">
+        <div className="user-follows-list-container">
             {
-                follows &&
-                follows.length === 0 &&
+                userFollows &&
+                userFollows.length === 0 &&
                 <p>
-                    You are not following anyone.
+                    No one is following you.
                 </p>
             }
             {
-                follows &&
-                follows.length > 0 &&
-                <ul className="following-list">
+                userFollows &&
+                userFollows.length > 0 &&
+                <ul className="user-follows-list">
                     {
-                        follows.map((follow) => {
+                        userFollows.map((userFollow, index) => {
                             return(
-                                <li key={follow}>
-                                    <FollowingListItem follow={follow}/>
+                                <li key={userFollow}>
+                                    <UserFollowsListItem userFollow={userFollow} followingUserFollow={followingUserFollows[index]}/>
                                 </li>
                             )
                         })
@@ -79,4 +97,4 @@ const FollowingList:React.FC = () => {
     )
 }
 
-export default FollowingList;
+export default UserFollowsList;

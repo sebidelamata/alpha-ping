@@ -4,6 +4,7 @@ import React, {
 } from "react";
 import FollowingList from "./FollowingList";
 import BlockedList from "./BlockedList";
+import UserFollowsList from "./UserFollowsList";
 
 const UserRelations:React.FC = () => {
 
@@ -43,7 +44,7 @@ const UserRelations:React.FC = () => {
                 selector === 'following' ?
                 <FollowingList/> :
                 selector === 'follows' ?
-                <div>Follows</div> :
+                <UserFollowsList/> :
                 <BlockedList/>
             }
         </div>

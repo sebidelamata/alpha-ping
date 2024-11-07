@@ -1,25 +1,21 @@
 import React, {
     useState,
-    useEffect,
     MouseEvent,
     FormEvent
 } from "react";
+import Loading from "../Loading";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
-import monkey from '/monkey.svg'
-import Loading from "../Loading";
-
-interface FollowingListItemProps{
-    follow: string;
-}
 
 interface ErrorType{
     message: string;
 }
 
-const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
+interface UserFollowsUnfollowProps{
+    userFollow: string;
+}
 
-
+const UserFollowsUnfollow:React.FC<UserFollowsUnfollowProps> = ({userFollow}) => {
     const { alphaPING, signer } = useEtherProviderContext()
     const { setTxMessageFollow } = useUserProviderContext()
 
@@ -43,8 +39,8 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
         setTxMessageFollow(null)
         setLoading(true)
         try{
-            if(follow && follow !== undefined){
-                const tx = await alphaPING?.connect(signer).removeFromPersonalFollowList(follow)
+            if(userFollow && userFollow !== undefined){
+                const tx = await alphaPING?.connect(signer).removeFromPersonalFollowList(userFollow)
                 await tx?.wait()
                 setTxMessageFollow(tx?.hash)
             }
@@ -57,53 +53,23 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
 
     }
 
-    const [username, setUsername] = useState<string | null>(null)
-    const [userPFP, setUserPFP] = useState<string | null>(null)
-    const fetchUserMetaData = async () => {
-        try{
-            const usernameResult = await alphaPING?.username(follow) || null
-            setUsername(usernameResult)
-            const pfpResult = await alphaPING?.profilePic(follow) || null
-            setUserPFP(pfpResult)
-        }catch(error){
-            console.error(error)
-        }
-    }
-    useEffect(() => {
-        fetchUserMetaData()
-    }, [follow])
-
     return(
-        <div className="follow-list-item-container">
-            <div className="follow-pfp">
-                {
-                    (userPFP !== null && userPFP !== '') ?
-                    <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src={monkey} alt="User Icon" className='monkey-icon'/>
-                }
-            </div>
-            <div className="follow-username">
-                {
-                    (username !== null && username !== '') ?
-                    username :
-                    follow.slice(0, 6) + '...' + follow.slice(38, 42)
-                }
-            </div>
+        <div className="user-follows-unfollow">
             {
                 showModal === false &&
-                    <button
-                        onClick={(e) => handleClick(e)}
-                        className="followlist-unfollow-button"
-                    >
-                        Unfollow
-                    </button>
+                <button
+                    onClick={(e) => handleClick(e)}
+                    className="user-followlist-unfollow-button"
+                >
+                    Unfollow
+                </button>
             }
             {
                 showModal === true &&
                 <form 
                     action=""
                     onSubmit={(e) => handleSubmit(e)}
-                    className="pardon-form"
+                    className="unfollow-form"
                 >
                     <input 
                         type="submit" 
@@ -127,4 +93,4 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
     )
 }
 
-export default FollowingListItem
+export default UserFollowsUnfollow;

@@ -812,7 +812,9 @@ a{
 .mod-banner-form,
 .unban-form,
 .pardon-form,
-.ban-mod-form{
+.ban-mod-form,
+.follow-back-form,
+.unfollow-form{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -835,7 +837,9 @@ a{
 .unban-form>input,
 .edit-profile-form-row-two>input,
 .pardon-form>input,
-.ban-mod-form>input{
+.ban-mod-form>input,
+.follow-back-form>input,
+.unfollow-form>input{
   padding: var(--med-button-padding);
   color: var(--color-2);
   background-color: var(--color-1);
@@ -970,6 +974,12 @@ a{
   align-items: center;
 }
 
+.user-relations-container{
+  display: grid;
+  grid-template-rows: repeat(2,auto);
+  gap: var(--gap);
+}
+
 .user-relations-selector{
   display: grid;
   grid-template-columns: repeat(3, 30%);
@@ -993,6 +1003,7 @@ a{
 }
 
 .following-list,
+.user-follows-list,
 .blocked-list{
   display: grid;
   justify-content: center;
@@ -1007,13 +1018,15 @@ a{
   overflow-y: auto;
 }
 
-.following-list>li{
+.following-list>li,
+.user-follows-list>li{
   display: grid;
   justify-content: center;
   align-items: center;
 }
 
-.follow-list-item-container{
+.follow-list-item-container,
+.user-follows-list-item-container{
   display: grid;
   grid-template-columns: 15% 35% 50%;
   justify-content: center;
