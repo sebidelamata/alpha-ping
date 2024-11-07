@@ -3,7 +3,7 @@ import React, {
     MouseEvent
 } from "react";
 import FollowingList from "./FollowingList";
-import BlacklistList from "./BlacklistList";
+import BlockedList from "./BlockedList";
 
 const UserRelations:React.FC = () => {
 
@@ -44,7 +44,7 @@ const UserRelations:React.FC = () => {
                 <FollowingList/> :
                 selector === 'follows' ?
                 <div>Follows</div> :
-                <BlacklistList/>
+                <BlockedList/>
             }
         </div>
     )

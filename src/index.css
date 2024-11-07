@@ -917,6 +917,7 @@ a{
   align-items: center;
   justify-content: center;
   padding: var(--large-button-padding);
+  max-width: 50%;
 }
 
 .current-profile-pic,
@@ -924,6 +925,7 @@ a{
   display: grid;
   align-items: center;
   justify-content: center;
+  max-width: 50%;
 }
 
 .edit-profile-form{
@@ -970,7 +972,7 @@ a{
 
 .user-relations-selector{
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(3, 30%);
   gap: var(--gap);
   justify-content: center;
   align-items: center;
@@ -1003,6 +1005,22 @@ a{
   gap: 1em;
   max-height: 30svh;
   overflow-y: auto;
+}
+
+.following-list>li{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.follow-list-item-container{
+  display: grid;
+  grid-template-columns: 15% 35% 50%;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: var(--gap);
+  padding: var(--large-button-padding);
 }
 
 .edit-button{
