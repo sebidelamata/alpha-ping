@@ -59,17 +59,17 @@ const BlockedList:React.FC = () => {
                 <p>You haven't blocked anybody.</p>
             }
             <ul className="blocked-list">
-                    {
-                        blocks &&
-                        blocks.length > 0 &&
-                        blocks.map((block) => {
-                            return(
-                                <li key={block}>
-                                    {block}
-                                </li>
-                            )
-                        })
-                    }
+                {
+                    blocks &&
+                    blocks.length > 0 &&
+                    blocks.map((block) => {
+                        return(
+                            <li key={block}>
+                                {block}
+                            </li>
+                        )
+                    })
+                }
             </ul>
         </div>
     )

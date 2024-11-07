@@ -28,6 +28,7 @@ interface MessageProps {
     userBlacklist: boolean;
     blacklistArrayLoading: boolean;
     following: boolean;
+    blocked: boolean;
 }
 
 const Message: React.FC<MessageProps> = ({
@@ -45,7 +46,8 @@ const Message: React.FC<MessageProps> = ({
   bansArrayLoading,
   userBlacklist,
   blacklistArrayLoading,
-  following
+  following,
+  blocked
 }) => {
 
     const { currentChannelMod, owner } = useUserProviderContext()
@@ -99,6 +101,7 @@ const Message: React.FC<MessageProps> = ({
           following={following}
           account={message.account}
           hoverOptions={hoverOptions}
+          blocked={blocked}
         />
         {
           bansArrayLoading === true &&

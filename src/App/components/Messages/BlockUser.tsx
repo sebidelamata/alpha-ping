@@ -11,13 +11,13 @@ interface ErrorType {
     reason: string
 }
 
-interface BlacklistUserProps{
+interface BlockUserProps{
     user: string;
 }
 
-const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
+const BlockUser:React.FC<BlockUserProps> = ({user}) => {
 
-    const { owner, setTxMessageBlacklist } = useUserProviderContext()
+    const { setTxMessageBlock } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [loading, setLoading] = useState<boolean>(false)
@@ -28,14 +28,10 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
         setError(null)
         setLoading(true)
         try{
-            if(
-                owner === true
-            ){
-                const tx = await alphaPING?.connect(signer).blacklistUser(user)
-                await tx?.wait()
-                console.log(tx?.hash)
-                setTxMessageBlacklist(tx?.hash)
-            }
+            const tx = await alphaPING?.connect(signer).addToPersonalBlockList(user)
+            await tx?.wait()
+            console.log(tx?.hash)
+            setTxMessageBlock(tx?.hash)
         }catch(error: unknown){
             if((error as ErrorType).reason)
             setError((error as ErrorType).reason)
@@ -47,10 +43,10 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
     return(
         <>
             <button 
-                className="blacklist-button"
+                className="block-button"
                 onClick={(e) => handleClick(e)}
             >
-                Blacklist
+                Block
                 
             </button>
             {
@@ -65,4 +61,4 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({user}) => {
     )
 }
 
-export default BlacklistUser;
+export default BlockUser;

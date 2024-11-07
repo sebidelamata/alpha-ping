@@ -2,6 +2,7 @@ import React from "react";
 import monkey from '/monkey.svg'
 import UnfollowUser from "./UnfollowUser";
 import FollowUser from "./FollowUser";
+import BlockUser from "./BlockUser";
 
 interface AvatarProps{
     profilePic: string | null;
@@ -9,6 +10,7 @@ interface AvatarProps{
     following: boolean;
     account: string;
     hoverOptions: boolean;
+    blocked: boolean;
 }
 
 const Avatar:React.FC<AvatarProps> = ({ 
@@ -16,7 +18,8 @@ const Avatar:React.FC<AvatarProps> = ({
     profilePicsLoading, 
     following, 
     account,
-    hoverOptions
+    hoverOptions,
+    blocked
 }) => {
     return(
         <div className="avatar">
@@ -37,6 +40,11 @@ const Avatar:React.FC<AvatarProps> = ({
                     following === true &&
                     hoverOptions === true &&
                     <UnfollowUser account={account}/> 
+                }
+                {
+                    blocked === false &&
+                    hoverOptions === true &&
+                    <BlockUser user={account}/> 
                 }
             </div>
         </div>

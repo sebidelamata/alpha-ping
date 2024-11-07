@@ -58,7 +58,7 @@ const UnbanUser:React.FC<UnbanUserProps> = ({user}) => {
                 className="ban-button"
                 onClick={(e) => handleClick(e)}
             >
-                Unban User
+                Unban
             </button>
             {
                 loading &&
