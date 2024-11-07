@@ -4,8 +4,7 @@ import React, {
 } from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
-import FollowingList from "./FollowingList";
-import BlockedList from "./BlockedList";
+import UserRelations from "./UserRelations";
 
 interface ErrorType {
     reason: string
@@ -161,8 +160,7 @@ const UsernameAndPFP:React.FC = () => {
                 }
             </form>
             <div className="following-block-container">
-                <FollowingList/>
-                <BlockedList/>
+                <UserRelations/>
             </div>
         </div>
     )

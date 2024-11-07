@@ -963,8 +963,31 @@ a{
 
 .following-block-container{
   display: grid;
-  grid-template-columns: 45% 45%;
-  justify-content: space-evenly;
+  grid-template-columns: 90%;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-relations-selector{
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--gap);
+  justify-content: center;
+  align-items: center;
+}
+
+.user-relations-selector-item{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: var(--large-button-padding);
+  border-radius: var(--button-radius);
+  border-color: var(--color-3);
+  border-width: var(--border-width);
+  border-style: solid;
+}
+.user-relations-selector-item.active{
+  background-color: var(--color-3);
 }
 
 .following-list,
