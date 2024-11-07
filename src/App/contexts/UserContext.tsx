@@ -25,6 +25,8 @@ interface UserProviderType{
     setTxMessageBlacklist: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     txMessageFollow: string | null | undefined;
     setTxMessageFollow: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+    txMessageBlock: string | null | undefined;
+    setTxMessageBlock: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     author: number[];
     userUsername: string | null;
     setUserUsername: React.Dispatch<React.SetStateAction<string | null>>;
@@ -72,6 +74,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [txMessageBlacklist, setTxMessageBlacklist] = useState<string | null | undefined>(null)
     // state changes on user blacklist or unblacklist and tells the messages to update metadata
     const [txMessageFollow, setTxMessageFollow] = useState<string | null | undefined>(null)
+    // state changes on user personal blocks or unblock and tells the messages to update metadata
+    const [txMessageBlock, setTxMessageBlock] = useState<string | null | undefined>(null)
     // what messages is the user the author of
     const [author, setAuthor] = useState<number[]>([])
     // grab username
@@ -188,6 +192,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             setTxMessageBlacklist,
             txMessageFollow,
             setTxMessageFollow,
+            txMessageBlock,
+            setTxMessageBlock,
             author,
             userUsername,
             setUserUsername,
