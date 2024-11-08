@@ -18,17 +18,38 @@ const Docs:React.FC = () => {
         setSection(value)
     }
 
+    const sectionNames = {
+        "overview": "Overview",
+        "litepaper": "Litepaper",
+        "roadmap": "Roadmap",
+        "governance": "Governance",
+        "tokenomics": "Tokenomics",
+        "airdrop": "Airdrops",
+        "contracts": "Contracts"
+    }
+
     return(
         <div className="docs-container">
             <div className="selector-container">
+                <div className='logo-container-docs'>
+                    <img src="../Apes.svg" alt="AlphaPING Logo" className='logo'/>
+                </div>
                 <ul className="selector">
-                    <li onClick={(e) => handleClick(e)} id="overview">Overview</li>
-                    <li onClick={(e) => handleClick(e)} id="litepaper">Litepaper</li>
-                    <li onClick={(e) => handleClick(e)} id="roadmap">Roadmap</li>
-                    <li onClick={(e) => handleClick(e)} id="governance">Governance</li>
-                    <li onClick={(e) => handleClick(e)} id="tokenomics">Tokenomics</li>
-                    <li onClick={(e) => handleClick(e)} id="airdrop">Airdrop</li>
-                    <li onClick={(e) => handleClick(e)} id="contracts">Contracts</li>
+                    {
+                        Object.keys(sectionNames).map((sectionName) => {
+                            const key = sectionName as keyof typeof sectionNames
+                            return(
+                                <li 
+                                    key={sectionName as unknown as string}
+                                    id={sectionName as unknown as string}
+                                    className={`selector-li ${section === (sectionName as unknown as string) ? 'active' : ''}`}
+                                    onClick={(e) => handleClick(e)}
+                                >
+                                    {sectionNames[key]}
+                                </li>
+                            )
+                        })
+                    }
                 </ul>
             </div>
             <div className="doc-body">

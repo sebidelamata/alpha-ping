@@ -164,9 +164,45 @@ a{
 
 .selector-container{
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: 15% auto;
   padding: var(--body-padding);
   padding-top: calc(var(--body-padding) * 2);
+  height: 100svh;
+  width: 20%;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.selector{
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.selector-li{
+  transition: filter var(--transition-speed-1), 
+    transform var(--transition-speed-1);
+}
+.selector-li:hover{
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}
+.selector-li{
+  filter: brightness(0.7);
+}
+.selector-li.active{
+  filter: brightness(1);
+  font-weight: 800;
+}
+
+.doc-body{
+  display: grid;
+  overflow-y: scroll;
+  position: absolute;
+  left: 16%;
+  width: 80%;
+  padding-right: 4%;
 }
 
 .app-container{
