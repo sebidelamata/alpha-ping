@@ -204,6 +204,10 @@ a{
   width: 80%;
   padding-right: 4%;
 }
+.doc-body ul{
+  padding-left: 40px;
+  list-style-position: inside;
+}
 
 .app-container{
   display: grid;
