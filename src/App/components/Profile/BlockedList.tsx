@@ -4,6 +4,7 @@ import React, {
 }  from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
+import BlockedListItem from "./BlockedListItem";
 
 const BlockedList:React.FC = () => {
 
@@ -65,7 +66,7 @@ const BlockedList:React.FC = () => {
                     blocks.map((block) => {
                         return(
                             <li key={block}>
-                                {block}
+                                <BlockedListItem block={block}/>
                             </li>
                         )
                     })
