@@ -6,6 +6,7 @@ import React,
 import Litepaper from "./components/Litepaper";
 import Contracts from "./components/Contracts";
 import Overview from "./components/Overview";
+import Roadmap from "./components/Roadmap";
 
 const Docs:React.FC = () => {
 
@@ -42,7 +43,7 @@ const Docs:React.FC = () => {
                 }
                 {
                     section === 'roadmap' &&
-                    <h2>Roadmap</h2>
+                    <Roadmap/>
                 }
                 {
                     section === 'governance' &&
