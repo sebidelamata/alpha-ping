@@ -1006,6 +1006,14 @@ a{
   background-color: var(--color-3);
 }
 
+.user-follows-list-container,
+.following-list-container,
+.blocked-list-container{
+  display: grid;
+  align-items: center;
+  width: 100%;
+}
+
 .following-list,
 .user-follows-list,
 .blocked-list{
@@ -1020,6 +1028,8 @@ a{
   gap: 1em;
   max-height: 30svh;
   overflow-y: auto;
+  width: 90%;
+  transform: translateX(5%);
 }
 
 
