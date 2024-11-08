@@ -678,26 +678,6 @@ a{
   gap: var(--gap);
 }
 
-.profile-tabs{
-  display: grid;
-  grid-template-columns: repeat(3, 25%);
-  gap: var(--large-button-padding-side);
-}
-.profile-tabs>li{
-  border-width: var(--border-width);
-  border-color: var(--color-3);
-  border-radius: var(--button-radius);
-  border-style: solid;
-  padding: var(--large-button-padding);
-  display: grid;
-  justify-content: center;
-  align-items: center;
-}
-.profile-tabs>li.active{
-  background-color: var(--color-3);
-  color: var(--color-2);
-}
-
 #profile{
   display: flex;
   flex-direction: row;
@@ -808,6 +788,7 @@ a{
   align-items: center;
 }
 
+.edit-profile-form,
 .owner-banner-form,
 .mod-banner-form,
 .unban-form,
@@ -833,6 +814,7 @@ a{
   font-weight: 700;
 }
 
+.edit-profile-form>input,
 .owner-banner-form>input,
 .mod-banner-form>input,
 .unban-form>input,
@@ -852,9 +834,7 @@ a{
 .owner-banner-form>input:focus,
 .owner-banner-form>input:active,
 .mod-banner-form>input:focus,
-.mod-banner-form>input:active,
-.edit-profile-form-row-two>input:focus,
-.edit-profile-form-row-two>input:active{
+.mod-banner-form>input:active{
   border-color: var(--color-3);
   border-style: solid;
   border-radius: var(--button-radius);
@@ -868,6 +848,8 @@ a{
   height: 2.5em;
   width: 2.5em;
   object-fit: contain;
+  justify-content: center;
+  align-items: center;
 }
 
 .edit-porfile-button-icon{
@@ -906,15 +888,29 @@ a{
   display: flex;
   flex-direction: column;
   min-width: 100%;
+  gap: var(--large-button-padding);
+  justify-content: center;
+  align-items: center;
+}
+
+.row-one{
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+  align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.row-one>div{
+  height: 100%;
 }
 
 .current-username-and-pic,
 .edit-profile-row-two{
   display: grid;
-  grid-template-columns: repeat(2, 50%);
+  grid-template-rows: repeat(2, 50%);
   justify-content: center;
   align-items: center;
-  gap: var(--gap);
+  gap: var(--gap-small);
 }
 
 .edit-username-container,
@@ -923,7 +919,7 @@ a{
   align-items: center;
   justify-content: center;
   padding: var(--large-button-padding);
-  max-width: 50%;
+  /* max-width: 50%; */
 }
 
 .current-profile-pic,
@@ -938,7 +934,7 @@ a{
   display: grid;
   align-items: center;
   justify-content: center;
-  gap: var(--gap);
+  gap: var(--gap-small);
   grid-template-rows: repeat(2, 50%);
 }
 
@@ -946,7 +942,7 @@ a{
   display: grid;
   justify-content: center;
   align-items: center;
-  grid-template-rows: repeat(2, 50%);
+  grid-template-columns: repeat(2, 50%);
   gap: var(--gap);
 }
 
@@ -971,26 +967,31 @@ a{
 
 .following-block-container{
   display: grid;
-  grid-template-columns: 90%;
+  grid-template-columns: 100%;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .user-relations-container{
   display: grid;
   grid-template-rows: repeat(2,auto);
   gap: var(--gap);
+  width: 100%;
 }
 
-.user-relations-selector{
+.user-relations-selector,
+.profile-tabs{
   display: grid;
   grid-template-columns: repeat(3, 30%);
   gap: var(--gap);
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
-.user-relations-selector-item{
+.user-relations-selector-item,
+.profile-tabs>li{
   display: grid;
   align-items: center;
   justify-content: center;
@@ -1000,7 +1001,8 @@ a{
   border-width: var(--border-width);
   border-style: solid;
 }
-.user-relations-selector-item.active{
+.user-relations-selector-item.active,
+.profile-tabs>li.active{
   background-color: var(--color-3);
 }
 

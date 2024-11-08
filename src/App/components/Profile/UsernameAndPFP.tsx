@@ -67,74 +67,74 @@ const UsernameAndPFP:React.FC = () => {
 
     return(
         <div className="current-username-and-pic-container">
+            <div className="row-one">
                 <div className="current-username-and-pic">
-                <div className="current-profile-pic">
-                    {
-                        (
-                            userProfilePic !== null &&
-                            userProfilePic !== undefined &&
-                            userProfilePic !== ''
-                        )
-                        ?
-                        <img 
-                            src={userProfilePic} 
-                            alt="default profile" 
-                            className="edit-profile-image"
-                        /> :
-                        <img 
-                            src="/monkey.svg" 
-                            alt="default profile" 
-                            className="edit-profile-image"
-                        />
-                    }
-                </div>
-                <div className="current-username">
-                    {
-                        userUsername ?
-                            <div className="current-username-value">
-                                {userUsername}
-                            </div> :
-                            account !== null &&
-                            <div className="current-username-value">
-                                {`${account?.slice(0,4)}...${account?.slice(28,32)}`}
-                            </div>
-                    }
-                </div>
-            </div>
-            <div className="edit-profile-row-two">
-                <div className="edit-profile-pic-container">
-                    <button
-                        type="button"
-                        className={
-                            editPicOrName !== 'picture'?
-                            "edit-button" :
-                            "edit-button edit-button-selected"
+                    <div className="current-profile-pic">
+                        {
+                            (
+                                userProfilePic !== null &&
+                                userProfilePic !== undefined &&
+                                userProfilePic !== ''
+                            )
+                            ?
+                            <img 
+                                src={userProfilePic} 
+                                alt="default profile" 
+                                className="edit-profile-image"
+                            /> :
+                            <img 
+                                src="/monkey.svg" 
+                                alt="default profile" 
+                                className="edit-profile-image"
+                            />
                         }
-                        onClick={() => setEditPicOrName("picture")}
-                    >
-                        Edit Profile Picture
-                    </button>
-                </div>
-                <div className="edit-username-container">
-                    <button
-                        type="button"
-                        className={
-                            editPicOrName !== 'username'?
-                            "edit-button" :
-                            "edit-button edit-button-selected"
+                    </div>
+                    <div className="current-username">
+                        {
+                            userUsername ?
+                                <div className="current-username-value">
+                                    {userUsername}
+                                </div> :
+                                account !== null &&
+                                <div className="current-username-value">
+                                    {`${account?.slice(0,4)}...${account?.slice(28,32)}`}
+                                </div>
                         }
-                        onClick={() => setEditPicOrName('username')}
-                    >
-                        Edit Username
-                    </button>
+                    </div>
                 </div>
-            </div>
-            <form 
-                action="" 
-                className="edit-profile-form"
-                onSubmit={(e) => handleEditProfileSubmit(e)}
-            >
-                <div className="edit-profile-form-row-two">
+                    <div className="edit-profile-row-two">
+                        <div className="edit-profile-pic-container">
+                            <button
+                                type="button"
+                                className={
+                                    editPicOrName !== 'picture'?
+                                    "edit-button" :
+                                    "edit-button edit-button-selected"
+                                }
+                                onClick={() => setEditPicOrName("picture")}
+                            >
+                                Edit Profile Picture
+                            </button>
+                        </div>
+                        <div className="edit-username-container">
+                            <button
+                                type="button"
+                                className={
+                                    editPicOrName !== 'username'?
+                                    "edit-button" :
+                                    "edit-button edit-button-selected"
+                                }
+                                onClick={() => setEditPicOrName('username')}
+                            >
+                                Edit Username
+                            </button>
+                        </div>
+                    </div>
+                    <form 
+                        action="" 
+                        className="edit-profile-form"
+                        onSubmit={(e) => handleEditProfileSubmit(e)}
+                    >
                     <input 
                         type="text" 
                         placeholder={
@@ -151,14 +151,14 @@ const UsernameAndPFP:React.FC = () => {
                     >
                         Submit
                     </button>
-                </div>
-                {
-                    error && 
-                    <div className="error-message">
-                        {error}
-                    </div>
-                }
-            </form>
+                    {
+                        error && 
+                        <div className="error-message">
+                            {error}
+                        </div>
+                    }
+                </form>
+            </div>
             <div className="following-block-container">
                 <UserRelations/>
             </div>
