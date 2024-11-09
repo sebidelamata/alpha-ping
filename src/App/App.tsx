@@ -11,12 +11,14 @@ import Profile from './components/Profile/Profile';
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
 import { useAppKitAccount } from "@reown/appkit/react";
-
+import { useUserProviderContext } from './contexts/UserContext';
 import { useEtherProviderContext } from './contexts/ProviderContext';
+import BlacklistedScreen from './components/BlacklistedScreen';
 
 const App:React.FC = () => {
 
   const { alphaPING, signer } = useEtherProviderContext()
+  const { blacklisted } = useUserProviderContext()
   const { isConnected } = useAppKitAccount()
 
   // selected channel's actions
@@ -74,6 +76,10 @@ const App:React.FC = () => {
           {renderChannelAction()}
         </div>
       </div>
+      {
+        blacklisted === true &&
+        <BlacklistedScreen/>
+      }
       {
         (
           isMember === false ||
