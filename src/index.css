@@ -1286,9 +1286,17 @@ a{
   display: grid;
   justify-content: left;
   align-items: center;
-  grid-template-columns: 10% 65% 10%;
+  grid-template-columns: 10% 65% 5% 5%;
   gap: var(--gap);
   width: 100%;
+}
+
+.follows-toggle{
+  display: grid;
+  grid-template-rows: repeat(2, 20%);
+  gap: var(--gap-small);
+  justify-content: center;
+  align-items: center;
 }
 
 .attachments-container{

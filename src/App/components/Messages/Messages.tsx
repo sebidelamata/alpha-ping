@@ -57,6 +57,8 @@ const Messages:React.FC = () => {
 
   // this holds the value (if there is one) of the reply id of a message
   const [replyId, setReplyId] = useState<number | null>(null)
+  // this is the follow filter state
+  const [followFilter, setFollowFilter] = useState(false);
 
   useEffect(() => {
     if(currentChannel?.tokenAddress !== undefined){
@@ -217,35 +219,68 @@ const Messages:React.FC = () => {
   return (
     <div className="messages">
       <div className="messages-feed">
-
         {
-        currentChannel && 
-        messages.filter(message => message.channel === currentChannel.id.toString()).map((message, index) => (
-          <Message
-            key={message.id}
-            message={message}
-            index={index}
-            tokenDecimals={tokenDecimals}
-            tokenAddress={currentChannel?.tokenAddress}
-            setReplyId={setReplyId}
-            reply={
-              message.replyId !== null && message.replyId ? 
-              messages.find((targetMessage) => { return targetMessage.id === message.replyId }) || null :
-              null
-            }
-            profilePic={profilePics[message.account]}
-            profilePicsLoading={profilePicsLoading}
-            username={usernameArray[message.account]}
-            usernameArrayLoading={usernameArrayLoading}
-            userBan={bansArray[message.account]}
-            bansArrayLoading={bansArrayLoading}
-            userBlacklist={blacklistArray[message.account]}
-            blacklistArrayLoading={blacklistArrayLoading}
-            following={followsArray[message.account]}
-            blocked={blocksArray[message.account]}
-          />
-        ))}
-
+          currentChannel && 
+          followFilter === false &&
+          messages
+            .filter(message => message.channel === currentChannel.id.toString())
+            .map((message, index) => (
+              <Message
+                key={message.id}
+                message={message}
+                index={index}
+                tokenDecimals={tokenDecimals}
+                tokenAddress={currentChannel?.tokenAddress}
+                setReplyId={setReplyId}
+                reply={
+                  message.replyId !== null && message.replyId ? 
+                  messages.find((targetMessage) => { return targetMessage.id === message.replyId }) || null :
+                  null
+                }
+                profilePic={profilePics[message.account]}
+                profilePicsLoading={profilePicsLoading}
+                username={usernameArray[message.account]}
+                usernameArrayLoading={usernameArrayLoading}
+                userBan={bansArray[message.account]}
+                bansArrayLoading={bansArrayLoading}
+                userBlacklist={blacklistArray[message.account]}
+                blacklistArrayLoading={blacklistArrayLoading}
+                following={followsArray[message.account]}
+                blocked={blocksArray[message.account]}
+              />
+          ))
+        }
+        {
+          currentChannel && 
+          followFilter === true &&
+          messages
+            .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+            .map((message, index) => (
+              <Message
+                key={message.id}
+                message={message}
+                index={index}
+                tokenDecimals={tokenDecimals}
+                tokenAddress={currentChannel?.tokenAddress}
+                setReplyId={setReplyId}
+                reply={
+                  message.replyId !== null && message.replyId ? 
+                  messages.find((targetMessage) => { return targetMessage.id === message.replyId }) || null :
+                  null
+                }
+                profilePic={profilePics[message.account]}
+                profilePicsLoading={profilePicsLoading}
+                username={usernameArray[message.account]}
+                usernameArrayLoading={usernameArrayLoading}
+                userBan={bansArray[message.account]}
+                bansArrayLoading={bansArrayLoading}
+                userBlacklist={blacklistArray[message.account]}
+                blacklistArrayLoading={blacklistArrayLoading}
+                following={followsArray[message.account]}
+                blocked={blocksArray[message.account]}
+              />
+          ))
+        }
         <div ref={messageEndRef} />
         { error !== null && <p>{error}</p>}
       </div>
@@ -255,6 +290,8 @@ const Messages:React.FC = () => {
         messagesLength={messages.length}
         replyId={replyId}
         setReplyId={setReplyId}
+        followFilter={followFilter}
+        setFollowFilter={setFollowFilter}
       />
     </div>
   );

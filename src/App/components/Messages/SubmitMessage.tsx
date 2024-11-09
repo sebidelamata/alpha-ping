@@ -8,6 +8,7 @@ import React, {
 import banana from '/Banana.svg'
 import { AlphaPING } from '../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import MessageAttachments from "./MessageAttachments"
+import ToggleFollowFilter from "./ToggleFollowFilter"
 import { useSocketProviderContext } from "../../contexts/SocketContext"
 import { useEtherProviderContext } from "../../contexts/ProviderContext"
 import { useUserProviderContext } from "../../contexts/UserContext"
@@ -19,9 +20,19 @@ interface SubmitMessageProps {
     messagesLength: number;
     replyId: number | null;
     setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
+    followFilter: boolean;
+    setFollowFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, userBalance, messagesLength, replyId, setReplyId }) => {
+const SubmitMessage: React.FC<SubmitMessageProps> = ({ 
+  currentChannel, 
+  userBalance, 
+  messagesLength, 
+  replyId, 
+  setReplyId,
+  followFilter,
+  setFollowFilter
+}) => {
 
 
     const { socket } = useSocketProviderContext()
@@ -195,6 +206,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, userBalan
             <img src={banana} alt="Send Message" className='banana-send-icon'/>
           </button>
         </div>
+        <ToggleFollowFilter followFilter={followFilter} setFollowFilter={setFollowFilter}/>
       </form>
     )
 }
