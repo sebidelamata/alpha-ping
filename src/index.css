@@ -482,6 +482,15 @@ a{
   height: calc(100svh - var(--navbar-height));
 }
 
+.analyze-title,
+.trade-title,
+.analyze-placeholder,
+.trade-placeholder{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
 .error-page{
   display: grid;
   justify-content: right;

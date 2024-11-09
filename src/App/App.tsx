@@ -47,13 +47,17 @@ const App:React.FC = () => {
         return <Messages/>
       case 'analyze':
         return <div>
-                <h2>Analyze</h2>
-                <p>This is being built in beta and will allow users to use sentiment analysis from each feed</p>
+                <h2 className='analyze-title'>Analyze</h2>
+                <p className='analyze-placeholder'>
+                  This is being built in beta and will allow users to use sentiment analysis from each feed
+                </p>
               </div>
       case 'trade':
         return  <div>
-                  <h2>Trade</h2>
-                  <p>This is being built in beta and will allow users to swap assets in-app using 1Inch router</p>
+                  <h2 className='trade-title'>Trade</h2>
+                  <p className='trade-placeholder'>
+                    This is being built in beta and will allow users to swap assets in-app using 1Inch router
+                  </p>
                 </div>
       case 'profile':
         return <Profile/>
