@@ -10,6 +10,7 @@ import { AlphaPING } from '../../../../typechain-types/contracts/AlphaPING.sol/A
 import MessageAttachments from "./MessageAttachments"
 import { useSocketProviderContext } from "../../contexts/SocketContext"
 import { useEtherProviderContext } from "../../contexts/ProviderContext"
+import { useUserProviderContext } from "../../contexts/UserContext"
 
 
 interface SubmitMessageProps {
@@ -25,6 +26,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, userBalan
 
     const { socket } = useSocketProviderContext()
     const { signer } = useEtherProviderContext()
+    const { banned, blacklisted } = useUserProviderContext()
 
     const [message, setMessage] = useState<string>("")
     const inputRef = useRef<HTMLInputElement>(null);
@@ -113,8 +115,14 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, userBalan
     return(
         <form onSubmit={sendMessageMouse} className='message-submit-form'>
         {
-          currentChannel && 
-          signer ? (
+          (
+            currentChannel && 
+            signer &&
+            (
+              banned === false &&
+              blacklisted === false
+            )
+          ) ? (
             <>
               <MessageAttachments
                 message={message}
@@ -168,7 +176,14 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({ currentChannel, userBalan
               <input 
                 type="text" 
                 value="" 
-                placeholder={`Please Connect Wallet / Join the Channel`} 
+                placeholder={
+                  (
+                    banned === true ||
+                    blacklisted === true
+                  ) ? 
+                  `You have been Banned from the ${currentChannel?.name} Channel` : 
+                  `Please Connect Wallet / Join the Channel`
+                } 
                 disabled 
                 className='message-form-input disabled'
               />
