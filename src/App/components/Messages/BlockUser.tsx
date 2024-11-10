@@ -5,7 +5,7 @@ import React,
     } from "react";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import block from '/block.svg'
 
 interface ErrorType {

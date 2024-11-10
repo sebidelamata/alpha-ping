@@ -3,7 +3,7 @@ import React, {
     MouseEvent,
     FormEvent
 } from "react";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 

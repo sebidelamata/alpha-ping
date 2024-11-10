@@ -6,7 +6,7 @@ import { AlphaPING } from '../../../../typechain-types/contracts/AlphaPING.sol/A
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from '../../contexts/ProviderContext';
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import LeaveChannel from "./LeaveChannel";
 
 interface ChannelProps{

@@ -1,5 +1,5 @@
 import React from "react";
-import { useEtherProviderContext } from '../contexts/ProviderContext';
+import { useEtherProviderContext } from '../App/contexts/ProviderContext';
 
 interface JoinAlphaPINGProps {
     setIsMember: React.Dispatch<React.SetStateAction<boolean>>;

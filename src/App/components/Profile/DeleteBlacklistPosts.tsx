@@ -3,7 +3,7 @@ import React, {
     MouseEvent,
     FormEvent
 } from "react";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import { useSocketProviderContext } from "../../contexts/SocketContext";
 
 interface DeleteBlacklistPostsProps{

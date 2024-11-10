@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { type Signer } from 'ethers'
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 
 interface ErrorType {
     reason: string

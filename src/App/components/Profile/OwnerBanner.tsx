@@ -6,7 +6,7 @@ import React,
 } from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import BlacklistList from "./BlacklistList";
 import ManageMods from "./ManageMods";
 

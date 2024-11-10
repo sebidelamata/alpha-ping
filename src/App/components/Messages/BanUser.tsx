@@ -6,7 +6,7 @@ import React,
 import { useChannelProviderContext } from "../../contexts/ChannelContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 
 interface ErrorType {
     reason: string

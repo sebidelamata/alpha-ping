@@ -6,7 +6,7 @@ import React, {
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import { AlphaPING } from "../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import ChannelBans from "./ChannelBans";
 
 interface ErrorType {

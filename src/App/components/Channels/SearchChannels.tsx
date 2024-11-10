@@ -9,7 +9,7 @@ import { useEtherProviderContext } from "../../contexts/ProviderContext"
 import { useChannelProviderContext } from "../../contexts/ChannelContext.tsx"
 import { type AlphaPING } from '../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
 import { ethers } from 'ethers'
-import Loading from "../Loading.tsx"
+import Loading from "../../../components/Loading.tsx"
 
 interface SearchChannelsProps {
     joinChannelLoading: boolean;

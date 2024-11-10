@@ -9,11 +9,11 @@ import Messages from './components/Messages/Messages'
 // profile
 import Profile from './components/Profile/Profile';
 // join alpha ping modal
-import JoinAlphaPING from './components/JoinAlphaPING'
+import JoinAlphaPING from '../components/JoinAlphaPING'
 import { useAppKitAccount } from "@reown/appkit/react";
 import { useUserProviderContext } from './contexts/UserContext';
 import { useEtherProviderContext } from './contexts/ProviderContext';
-import BlacklistedScreen from './components/BlacklistedScreen';
+import BlacklistedScreen from '../components/BlacklistedScreen';
 
 const App:React.FC = () => {
 

@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { AlphaPING } from "../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import monkey from '/monkey.svg'
 
 interface ErrorType {

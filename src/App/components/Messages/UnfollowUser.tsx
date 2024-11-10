@@ -5,7 +5,7 @@ import React, {
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../contexts/UserContext";
 import unfollow from '/unfollow.svg'
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 
 interface ErrorType{
     message: string;

@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { useEtherProviderContext } from "../../contexts/ProviderContext";
 import monkey from '/monkey.svg'
-import Loading from "../Loading";
+import Loading from "../../../components/Loading";
 import { AddressLike } from "ethers";
 
 interface ManageModsListItemProps{
