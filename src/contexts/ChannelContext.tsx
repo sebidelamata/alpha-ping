@@ -4,7 +4,7 @@ import React, {
     useContext,
     useState
 } from "react"
-import { AlphaPING } from "../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
+import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 
 interface ChannelProviderType{
     currentChannel: AlphaPING.ChannelStructOutput | null;

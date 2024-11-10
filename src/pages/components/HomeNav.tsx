@@ -5,7 +5,7 @@ import React,
     useRef,
     MouseEvent as ReactMouseEvent
 } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const HomeNav:React.FC = () => {
 
@@ -43,17 +43,17 @@ const HomeNav:React.FC = () => {
             </div>
             <ul className="homenav-links-list">
                 <li>
-                    <Link to={'/app'} target="_blank">
+                    <Link href={'/app'} target="_blank">
                         App
                     </Link>
                 </li>
                 <li>
-                    <Link to={'https://github.com/sebidelamata/alpha-ping'} target="_blank">
+                    <Link href={'https://github.com/sebidelamata/alpha-ping'} target="_blank">
                         Protocol
                     </Link>
                 </li>
                 <li>
-                    <Link to={'/docs'} target="_blank">
+                    <Link href={'/docs'} target="_blank">
                         Docs
                     </Link>
                 </li>
@@ -68,22 +68,22 @@ const HomeNav:React.FC = () => {
                         showSocials === true &&
                         <ul className="socials-list">
                             <li>
-                                <Link to={'https://www.x.com'} target="_blank">
+                                <Link href={'https://www.x.com'} target="_blank">
                                     X
                                 </Link>
                             </li>
                             <li>
-                                <Link to={'https://warpcast.com/'} target="_blank">
+                                <Link href={'https://warpcast.com/'} target="_blank">
                                     Warpcast
                                 </Link>
                             </li>
                             <li>
-                                <Link to={'https://www.discord.com'} target="_blank">
+                                <Link href={'https://www.discord.com'} target="_blank">
                                     Discord
                                 </Link>
                             </li>
                             <li>
-                                <Link to={'https://telegram.org/'} target="_blank">
+                                <Link href={'https://telegram.org/'} target="_blank">
                                     Telegram
                                 </Link>
                             </li>
