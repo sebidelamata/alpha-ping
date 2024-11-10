@@ -1,3 +1,5 @@
+'use client';
+
 import React, { 
     createContext,
     useContext,
@@ -10,9 +12,9 @@ import { defineChain } from '@reown/appkit/networks';
 
 
 // create context
-const Web3ConnectContext = createContext<any | undefined>(undefined)
+const Web3ConnectContext = createContext<unknown | undefined>(undefined)
 
-export const useWeb3ConnectProviderContext = (): any => {
+export const useWeb3ConnectProviderContext = (): unknown => {
     const context = useContext(Web3ConnectContext)
     if (context === null || context === undefined) {
         throw new Error('useWeb3ConnectProviderContext must be used within a ProviderProvider')
@@ -43,7 +45,7 @@ const Web3WalletConnectProvider: React.FC<{ children: ReactNode }> = ({children}
       })
 
     // 1. Get projectId
-    const projectId = process.env.WALLECTCONNECT_PROJECT_ID;
+    const projectId = process.env.WALLECTCONNECT_PROJECT_ID || '';
 
     // 2. Set the networks
     const networks = [customNetwork, arbitrum];
