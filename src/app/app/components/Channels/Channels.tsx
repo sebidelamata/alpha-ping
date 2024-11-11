@@ -86,7 +86,7 @@ const Channels:React.FC<ChannelsProps> = ({
             {
               userChannels.map((channel, index) => (
                 <Channel
-                  index={index}
+                  channel={channel}
                   key={index}
                 />
               ))

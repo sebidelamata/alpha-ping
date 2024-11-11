@@ -12,17 +12,16 @@ import Loading from "../Loading";
 import LeaveChannel from "./LeaveChannel";
 
 interface ChannelProps{
-    index: number;
+    channel: AlphaPING.ChannelStructOutput;
 }
 
 const Channel:React.FC<ChannelProps> = ({
-    index
+    channel
 }) => {
 
-    const { alphaPING, signer, channels} = useEtherProviderContext()
+    const { alphaPING, signer } = useEtherProviderContext()
     const { currentChannel, setCurrentChannel, setSelectedChannelMetadata } = useChannelProviderContext()
 
-    const channel = channels[index]
 
     // holds metadata fetched from coinmarketcap
     const defaultTokenMetadata:tokenMetadata = {
@@ -132,7 +131,7 @@ const Channel:React.FC<ChannelProps> = ({
         <>
              <li
                 onClick={() => channelHandler(channel)} 
-                key={index}
+                key={channel.tokenAddress}
                 className={
                     currentChannel && 
                     currentChannel.id.toString() === channel.id.toString() ? 
