@@ -37,7 +37,7 @@
     "**/*.tsx",
     "next-env.d.ts",
     ".next/types/**/*.ts"
-  ],
+, "hardhat.config.cts"  ],
   "exclude": [
     "node_modules"
   ]
