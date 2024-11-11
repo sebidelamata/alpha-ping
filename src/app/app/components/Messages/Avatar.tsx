@@ -32,7 +32,7 @@ const Avatar:React.FC<AvatarProps> = ({
                     className='monkey-icon'
                     loading="lazy"
                 /> :
-                    (profilePic !== null && profilePic !== '') ?
+                    (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
                     <img 
                         src={profilePic} 
                         alt="User Icon" 
