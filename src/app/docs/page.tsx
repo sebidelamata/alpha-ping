@@ -1,3 +1,5 @@
+'use client';
+
 import React, 
 { 
     useState,
@@ -14,7 +16,7 @@ const Docs:React.FC = () => {
 
     const handleClick = (e:MouseEvent) => {
         e.preventDefault()
-        const value = e.target.id
+        const value = (e.target as HTMLElement).id
         setSection(value)
     }
 

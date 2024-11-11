@@ -33,6 +33,13 @@
   display: grid;
 }
 
+nextjs-portal {
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: contents; /* Renders the portal without adding extra box */
+}
+
 a {
   color: var(--color-3);
   text-decoration: inherit;

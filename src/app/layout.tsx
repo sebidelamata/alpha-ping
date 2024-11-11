@@ -34,7 +34,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en">
-      <body>
+      <body id='root'>
         <ProviderProvider>
           <Web3WalletConnectProvider>
             <SocketProvider>

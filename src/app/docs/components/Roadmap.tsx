@@ -167,14 +167,6 @@ const Roadmap:React.FC = () => {
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <h4>Sentiment Index Perpetual Futures</h4>
-                    <ul>
-                        <li>
-                            Introduce Sentiment Index <strong>Perpetual Futures</strong>, a derivative product based on sentiment indices, providing users with a unique trading instrument.
-                        </li>
-                    </ul>
-                </li>
             </ul>
             <h4>
                 <strong>Target Completion:</strong> Q2 2026
