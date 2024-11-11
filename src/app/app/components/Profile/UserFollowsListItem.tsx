@@ -38,8 +38,18 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
             <div className="user-follows-pfp">
                 {
                     (userPFP !== null && userPFP !== '') ?
-                    <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
+                    <img 
+                        src={userPFP} 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    /> :
+                    <img 
+                        src='/monkey.svg' 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    />
                 }
             </div>
             <div className="user-follows-username">

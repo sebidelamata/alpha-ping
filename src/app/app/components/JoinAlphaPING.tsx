@@ -28,7 +28,12 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
                 Quit Monkeying Around!
             </h2>
             <div className="join-icon">
-                <img src="../Apes.svg" alt="AlphaPING Logo" className="join-logo"/>
+                <img 
+                    src="../Apes.svg" 
+                    alt="AlphaPING Logo" 
+                    className="join-logo"
+                    loading="lazy"
+                />
             </div>
             <h3 className="join-body">
                 Mint a Membership and Swing into the Chat!

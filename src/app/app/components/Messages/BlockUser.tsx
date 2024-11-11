@@ -49,6 +49,7 @@ const BlockUser:React.FC<BlockUserProps> = ({user}) => {
                 alt="block-user" 
                 className="block-user-icon" 
                 onClick={(e) => handleClick(e)}
+                loading="lazy"
             />
             {
                 loading &&

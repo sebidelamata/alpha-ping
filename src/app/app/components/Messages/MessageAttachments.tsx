@@ -141,6 +141,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                                             src={imagePreview} 
                                             alt="Image preview" 
                                             className="image-preview" 
+                                            loading="lazy"
                                         />
                                     }
                                     <button 
@@ -190,6 +191,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                                 src="/picture.svg" 
                                 alt="add picture" 
                                 className="picture-icon"
+                                loading="lazy"
                             />
                         </button>
                     </li>
@@ -202,6 +204,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                                 src="https://dune.com/assets/DuneLogoCircle.svg" 
                                 alt="Dune Analytics Icon" 
                                 className="dune-icon"
+                                loading="lazy"
                             />
                         </button>
                     </li>

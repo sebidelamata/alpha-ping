@@ -84,11 +84,13 @@ const ChannelActions: React.FC<ChannelActionsProps> = ({channelAction, setChanne
                         src={userProfilePic} 
                         alt="user profile picture" 
                         className="edit-profile-image"
+                        loading="lazy"
                     /> :
                     <img 
                         src="/monkey.svg" 
                         alt="default profile picture" 
                         className="edit-profile-image"
+                        loading="lazy"
                     />
                 }
               </div>

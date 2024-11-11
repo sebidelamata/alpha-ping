@@ -9,7 +9,12 @@ const BlacklistedScreen:React.FC= () => {
                 Access Denied
             </h2>
             <div className="join-icon">
-                <img src="../Apes.svg" alt="AlphaPING Logo" className="join-logo"/>
+                <img 
+                    src="../Apes.svg" 
+                    alt="AlphaPING Logo" 
+                    className="join-logo"
+                    loading="lazy"
+                />
             </div>
             <h3 className="join-body">
                 You have been Blacklisted from AlphaPING 

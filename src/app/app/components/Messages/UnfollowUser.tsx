@@ -49,6 +49,7 @@ const UnfollowUser:React.FC<UnfollowUserProps> = ({account}) => {
                 alt="unfollow-user" 
                 className="unfollow-user-icon" 
                 onClick={(e) => handleClick(e)}
+                loading="lazy"
             />
             {
                 followLoading &&

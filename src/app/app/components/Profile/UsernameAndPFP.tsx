@@ -83,11 +83,13 @@ const UsernameAndPFP:React.FC = () => {
                                 src={userProfilePic} 
                                 alt="default profile" 
                                 className="edit-profile-image"
+                                loading="lazy"
                             /> :
                             <img 
                                 src="/monkey.svg" 
                                 alt="default profile" 
                                 className="edit-profile-image"
+                                loading="lazy"
                             />
                         }
                     </div>

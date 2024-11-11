@@ -34,7 +34,7 @@ const Docs:React.FC = () => {
         <div className="docs-container">
             <div className="selector-container">
                 <div className='logo-container-docs'>
-                    <img src="../Apes.svg" alt="AlphaPING Logo" className='logo'/>
+                    <img src="../Apes.svg" alt="AlphaPING Logo" className='logo' loading="lazy"/>
                 </div>
                 <ul className="selector">
                     {

@@ -224,7 +224,12 @@ const Message: React.FC<MessageProps> = ({
             message.replyId !== null &&
               <div className="message-content-reply-container">
                 <div className="reply-icon-preview">
-                  <img src="/monkey.svg" alt="default icon" className="reply-preview-icon"/>
+                  <img 
+                    src="/monkey.svg" 
+                    alt="default icon" 
+                    className="reply-preview-icon"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="reply-author">
                   {`${reply.account.slice(0,4)}...${reply.account.slice(28,32)}`}
@@ -246,6 +251,7 @@ const Message: React.FC<MessageProps> = ({
                 src={url} 
                 alt={`Linked content ${idx}`} 
                 className='message-image' 
+                loading="lazy"
               />
             ))
           }

@@ -147,11 +147,13 @@ const EditProfile: React.FC = () => {
                         src={userProfilePic} 
                         alt="user profile picture" 
                         className="edit-profile-image"
+                        loading="lazy"
                     /> :
                     <img 
                         src="/monkey.svg" 
                         alt="default profile picture" 
                         className="edit-profile-image"
+                        loading="lazy"
                     />
                 }
             </div>
@@ -172,6 +174,7 @@ const EditProfile: React.FC = () => {
                         src="/edit.svg" 
                         alt="edit-profile-button" 
                         className="edit-porfile-button-icon"
+                        loading="lazy"
                     />
                 </div>
                 {
@@ -199,11 +202,13 @@ const EditProfile: React.FC = () => {
                                         src={userProfilePic} 
                                         alt="default profile" 
                                         className="edit-profile-image"
+                                        loading="lazy"
                                     /> :
                                     <img 
                                         src="/monkey.svg" 
                                         alt="default profile" 
                                         className="edit-profile-image"
+                                        loading="lazy"
                                     />
                                 }
                             </div>

@@ -14,7 +14,12 @@ const Navbar: React.FC<NavbarProps> = ({
     <nav className='nav-bar'>
       <div className='nav-brand'>
         <div className='logo-container'>
-          <img src="../Apes.svg" alt="AlphaPING Logo" className='logo'/>
+          <img 
+            src="../Apes.svg" 
+            alt="AlphaPING Logo" 
+            className='logo'
+            loading="lazy"
+          />
         </div>
         <h1 className='brand-header'>
           A<span className='header-mid-word-break'>lpha</span>PING {'{beta}'}

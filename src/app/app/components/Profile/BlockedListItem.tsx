@@ -79,8 +79,18 @@ const BlockedListItem:React.FC<BlockedListItemProps> = ({block}) => {
             <div className="block-pfp">
                 {
                     (userPFP !== null && userPFP !== '') ?
-                    <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
+                    <img 
+                        src={userPFP} 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    /> :
+                    <img 
+                        src='/monkey.svg' 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    />
                 }
             </div>
             <div className="block-username">

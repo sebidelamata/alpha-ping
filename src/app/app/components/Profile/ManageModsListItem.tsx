@@ -89,8 +89,18 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
              <div className="ban-mod-pfp">
                 {
                     (userPFP !== null && userPFP !== '') ?
-                    <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
+                    <img 
+                        src={userPFP} 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    /> :
+                    <img 
+                        src='/monkey.svg' 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    />
                 }
             </div>
             <div className="ban-mod-username">

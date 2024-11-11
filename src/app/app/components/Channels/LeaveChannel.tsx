@@ -30,6 +30,7 @@ const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channelID }) => {
                         src='leave-icon.svg'
                         alt="Leave Channel"
                         className='leave-channel-icon'
+                        loading="lazy"
                     /> :
                 ''
             }

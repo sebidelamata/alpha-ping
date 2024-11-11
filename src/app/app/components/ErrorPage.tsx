@@ -5,7 +5,12 @@ const ErrorPage:React.FC = () => {
     return(
         <div className="error-page">
             <div className="banana-container">
-                <img src="/bananaPeeled.svg" alt="Banana" className="error-banana"/>
+                <img 
+                    src="/bananaPeeled.svg" 
+                    alt="Banana" 
+                    className="error-banana"
+                    loading="lazy"
+                />
             </div>
             <div className="error-container">
                 <div className="left-placeholder"></div>

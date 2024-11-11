@@ -26,10 +26,25 @@ const Avatar:React.FC<AvatarProps> = ({
         <div className="avatar">
             {
                 profilePicsLoading === true ?
-                <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/> :
+                <img 
+                    src='/monkey.svg' 
+                    alt="User Icon" 
+                    className='monkey-icon'
+                    loading="lazy"
+                /> :
                     (profilePic !== null && profilePic !== '') ?
-                    <img src={profilePic} alt="User Icon" className='monkey-icon'/> :
-                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
+                    <img 
+                        src={profilePic} 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    /> :
+                    <img 
+                        src='/monkey.svg' 
+                        alt="User Icon" 
+                        className='monkey-icon'
+                        loading="lazy"
+                    />
             }
             <div className="follow-unfollow-container">
                 {

@@ -153,6 +153,7 @@ const Channel:React.FC<ChannelProps> = ({
                             tokenMetada.logo
                         } 
                         alt="Token Logo"
+                        loading="lazy"
                         className={
                             currentChannel && 
                             currentChannel.id.toString() === channel.id.toString() ? 

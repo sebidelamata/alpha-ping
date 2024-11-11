@@ -159,6 +159,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
                     src={url} 
                     alt={`Linked content ${idx}`} 
                     className='image-preview' 
+                    loading="lazy"
                   />
                 ))
               }
@@ -204,7 +205,12 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
         }
         <div className="submit-button-container">
           <button type="submit" className='message-form-submit-button'>
-            <img src='/Banana.svg' alt="Send Message" className='banana-send-icon'/>
+            <img 
+              src='/Banana.svg' 
+              alt="Send Message" 
+              className='banana-send-icon'
+              loading="lazy"
+            />
           </button>
         </div>
         <ToggleFollowFilter followFilter={followFilter} setFollowFilter={setFollowFilter}/>

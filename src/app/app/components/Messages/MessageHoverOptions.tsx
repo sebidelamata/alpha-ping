@@ -144,7 +144,12 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
                         className="text-reply"
                         onClick={() => handleReplyClick()}    
                     >
-                        <img src="/reply.svg" alt="text reply" className="text-reply"/>
+                        <img 
+                            src="/reply.svg" 
+                            alt="text reply" 
+                            className="text-reply"
+                            loading="lazy"
+                        />
                     </li>
                     {
                         (

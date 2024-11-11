@@ -49,6 +49,7 @@ const FollowUser:React.FC<FollowUserProps> = ({account}) => {
                 alt="follow-user" 
                 className="follow-user-icon" 
                 onClick={(e) => handleClick(e)}
+                loading="lazy"
             />
             {
                 followLoading &&
