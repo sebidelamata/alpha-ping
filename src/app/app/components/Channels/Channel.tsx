@@ -125,7 +125,7 @@ const Channel:React.FC<ChannelProps> = ({
         if(currentChannel && currentChannel.id.toString() === channel.id.toString()){
             setSelectedChannelMetadata(tokenMetada)
         }
-    },[currentChannel])
+    },[currentChannel, setSelectedChannelMetadata, tokenMetada, channel.id])
 
     return(
         <>

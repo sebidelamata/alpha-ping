@@ -176,6 +176,12 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
     useEffect(() => {
         loadUserAttributes()
+        if(userAttributesLoading){
+            console.log("User Attributes Loading...")
+        }
+        if(userAttributesError){
+            console.error(userAttributesError)
+        }
     }, [currentChannel, account, messages, signer])
     
     return (

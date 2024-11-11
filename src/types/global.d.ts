@@ -1,14 +1,14 @@
-/// <reference types="vite/client" />
+// src/types/global.d.ts
 
 interface Channel {
-    id: number; 
-    tokenAddress: string; 
+    id: number;
+    tokenAddress: string;
     name: string;
     tokenType: string;
 }
 
 interface Window {
-    ethereum?: any; 
+    ethereum?: typeof window.ethereum;
 }
 
 interface Message {
@@ -20,9 +20,9 @@ interface Message {
     messageTimestampTokenAmount: number;
     reactions: Record<string, string[]>;
     replyId: number | null;
-  }
+}
 
-  interface tokenMetadataContract_address{
+interface tokenMetadataContract_address {
     contract_address: string;
     platform: {
         coin: {
@@ -30,10 +30,10 @@ interface Message {
             name: string;
             slug: string;
             symbol: string;
-        }
+        };
         name: string;
-    }
-  }
+    };
+}
 
 interface tokenMetadata {
     id: number;
@@ -53,7 +53,7 @@ interface tokenMetadata {
             name: string;
             slug: string;
             symbol: string;
-        }
+        };
         name: string;
     };
     self_reported_market_circulating_supply: string;
@@ -77,5 +77,5 @@ interface tokenMetadata {
         technical_doc: string[];
         twitter: string[];
         website: string[];
-    }
+    };
 }

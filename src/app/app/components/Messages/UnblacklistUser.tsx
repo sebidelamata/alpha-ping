@@ -60,6 +60,10 @@ const UnblacklistUser:React.FC<UnblacklistUserProps> = ({user}) => {
                 loading &&
                     <Loading/>
             }
+            {
+                error &&
+                <p>{error}</p>
+            }
         </>
     )
 }
