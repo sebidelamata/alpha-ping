@@ -37,7 +37,12 @@ const HomeNav:React.FC = () => {
         <div className="home-navbar-container" ref={navRef}>
             <div className='nav-brand'>
                 <div className='logo-container'>
-                    <img src="../Apes.svg" alt="AlphaPING Logo" className='logo' loading="lazy"/>
+                    <img 
+                        src="../Apes.svg" 
+                        alt="AlphaPING Logo" 
+                        className='logo' 
+                        loading="lazy"
+                    />
                 </div>
                 <h1 className='brand-header'>
                     A<span className='header-mid-word-break'>lpha</span>PING {'{beta}'}
@@ -70,7 +75,7 @@ const HomeNav:React.FC = () => {
                         showSocials === true &&
                         <ul className="socials-list">
                             <li>
-                                <Link href={'https://www.x.com'} target="_blank">
+                                <Link href={'https://x.com/__AlphaPING__'} target="_blank">
                                     X
                                 </Link>
                             </li>
