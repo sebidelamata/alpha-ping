@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
-import monkey from '/monkey.svg'
 import Loading from "../Loading";
 
 interface FollowingListItemProps{
@@ -81,7 +80,7 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
                 {
                     (userPFP !== null && userPFP !== '') ?
                     <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src={monkey} alt="User Icon" className='monkey-icon'/>
+                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
                 }
             </div>
             <div className="follow-username">

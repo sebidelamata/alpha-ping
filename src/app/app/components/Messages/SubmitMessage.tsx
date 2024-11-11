@@ -7,7 +7,6 @@ import React, {
     useRef,
     useEffect
 } from "react"
-import banana from '/Banana.svg'
 import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import MessageAttachments from "./MessageAttachments"
 import ToggleFollowFilter from "./ToggleFollowFilter"
@@ -205,7 +204,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
         }
         <div className="submit-button-container">
           <button type="submit" className='message-form-submit-button'>
-            <img src={banana} alt="Send Message" className='banana-send-icon'/>
+            <img src='/Banana.svg' alt="Send Message" className='banana-send-icon'/>
           </button>
         </div>
         <ToggleFollowFilter followFilter={followFilter} setFollowFilter={setFollowFilter}/>

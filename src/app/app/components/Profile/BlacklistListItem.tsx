@@ -7,7 +7,6 @@ import React, {
     FormEvent
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import monkey from '/monkey.svg'
 import Loading from "../Loading";
 import DeleteBlacklistPosts from "./DeleteBlacklistPosts";
 
@@ -83,7 +82,7 @@ const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
                 {
                     (userPFP !== null && userPFP !== '') ?
                     <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src={monkey} alt="User Icon" className='monkey-icon'/>
+                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
                 }
             </div>
             <div className="blacklisted-username">

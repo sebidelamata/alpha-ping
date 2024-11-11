@@ -5,7 +5,6 @@ import React, {
     useEffect
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import monkey from '/monkey.svg'
 import UserFollowsFollowBack from "./UserFollowsFollowBack";
 import UserFollowsUnfollow from "./UserFollowsUnfollow";
 
@@ -40,7 +39,7 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
                 {
                     (userPFP !== null && userPFP !== '') ?
                     <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src={monkey} alt="User Icon" className='monkey-icon'/>
+                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
                 }
             </div>
             <div className="user-follows-username">

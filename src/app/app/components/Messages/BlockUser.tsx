@@ -8,7 +8,6 @@ import React,
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import Loading from "../Loading";
-import block from '/block.svg'
 
 interface ErrorType {
     reason: string
@@ -46,7 +45,7 @@ const BlockUser:React.FC<BlockUserProps> = ({user}) => {
     return(
         <div className="block-container">
             <img 
-                src={block} 
+                src='/block.svg' 
                 alt="block-user" 
                 className="block-user-icon" 
                 onClick={(e) => handleClick(e)}

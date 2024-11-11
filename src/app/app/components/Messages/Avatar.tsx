@@ -1,7 +1,6 @@
 'use client';
 
 import React from "react";
-import monkey from '/monkey.svg'
 import UnfollowUser from "./UnfollowUser";
 import FollowUser from "./FollowUser";
 import BlockUser from "./BlockUser";
@@ -27,10 +26,10 @@ const Avatar:React.FC<AvatarProps> = ({
         <div className="avatar">
             {
                 profilePicsLoading === true ?
-                <img src={monkey} alt="User Icon" className='monkey-icon'/> :
+                <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/> :
                     (profilePic !== null && profilePic !== '') ?
                     <img src={profilePic} alt="User Icon" className='monkey-icon'/> :
-                    <img src={monkey} alt="User Icon" className='monkey-icon'/>
+                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
             }
             <div className="follow-unfollow-container">
                 {

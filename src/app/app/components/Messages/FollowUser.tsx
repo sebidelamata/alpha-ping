@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
-import follow from '/follow.svg'
 import Loading from "../Loading";
 
 interface ErrorType{
@@ -46,7 +45,7 @@ const FollowUser:React.FC<FollowUserProps> = ({account}) => {
     return(
         <div className="following-container">
             <img 
-                src={follow} 
+                src='/follow.svg' 
                 alt="follow-user" 
                 className="follow-user-icon" 
                 onClick={(e) => handleClick(e)}

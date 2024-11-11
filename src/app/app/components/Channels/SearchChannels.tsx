@@ -7,7 +7,7 @@ import React,
     useRef,
     ChangeEvent
 } from "react"
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext.ts"
+import { useEtherProviderContext } from "../../../../contexts/ProviderContext.tsx"
 import { useChannelProviderContext } from "../../../../contexts/ChannelContext.tsx"
 import { type AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
 import { ethers } from 'ethers'

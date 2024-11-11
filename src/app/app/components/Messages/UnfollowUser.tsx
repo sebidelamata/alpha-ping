@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
-import unfollow from '/unfollow.svg'
 import Loading from "../Loading";
 
 interface ErrorType{
@@ -46,7 +45,7 @@ const UnfollowUser:React.FC<UnfollowUserProps> = ({account}) => {
     return(
         <div className="unfollowing-container">
             <img 
-                src={unfollow} 
+                src='/unfollow.svg'
                 alt="unfollow-user" 
                 className="unfollow-user-icon" 
                 onClick={(e) => handleClick(e)}

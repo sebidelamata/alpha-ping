@@ -9,7 +9,6 @@ import React, {
 import { AlphaPING } from "../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import Loading from "../Loading";
-import monkey from '/monkey.svg'
 
 interface ErrorType {
     reason: string
@@ -85,7 +84,7 @@ const BansListItem:React.FC<BansListItemProps> = ({
                 {
                     (userPFP !== null && userPFP !== '') ?
                     <img src={userPFP} alt="User Icon" className='monkey-icon'/> :
-                    <img src={monkey} alt="User Icon" className='monkey-icon'/>
+                    <img src='/monkey.svg' alt="User Icon" className='monkey-icon'/>
                 }
             </div>
             <a 

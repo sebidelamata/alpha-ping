@@ -45,7 +45,8 @@ const Web3WalletConnectProvider: React.FC<{ children: ReactNode }> = ({children}
       })
 
     // 1. Get projectId
-    const projectId = process.env.WALLECTCONNECT_PROJECT_ID || '';
+    const projectId = process.env.NEXT_PUBLIC_WALLECTCONNECT_PROJECT_ID || '';
+    console.log(projectId)
 
     // 2. Set the networks
     const networks = [customNetwork, arbitrum];
