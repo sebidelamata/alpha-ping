@@ -15,7 +15,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.INFURA_ARBITRUM_ENDPOINT || "",
+        url: process.env.NEXT_PUBLIC_INFURA_ARBITRUM_ENDPOINT || "",
         blockNumber: 208629482,
         enabled: true,
       },
