@@ -27,7 +27,6 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
     const [imageUrl, setImageUrl] = useState<string>('')
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [duneURL, setDuneURL] = useState<string>('')
-    const [dunePreview, setDunePreview] = useState<string | null>(null)
     const [duneSrc, setDuneSrc] = useState<string>('');
 
     const modalRef = useRef<HTMLDivElement>(null);
@@ -77,14 +76,12 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
 
     const handleDuneUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
         const url = event.target.value
-        console.log(url)
         setDuneURL(url)
         const srcIndex = url.indexOf("src=");
         if (srcIndex !== -1) {
             const src = url.slice(srcIndex + 5).replace(/"/g, ''); // Extract the src part and remove quotes
             setDuneSrc(src);
         }
-        setDunePreview(duneSrc)
     }
 
     const handleAddDuneUrl = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -92,7 +89,6 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
         if (duneURL) {
             setMessage(message + `${duneURL}`)
             setDuneURL('')
-            setDunePreview(null)
             setActive(false)
             setSelectedOption('emoji')
             inputRef.current?.focus();

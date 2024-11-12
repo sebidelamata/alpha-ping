@@ -248,7 +248,9 @@ const Messages:React.FC = () => {
                 userBlacklist={blacklistArray[message.account]}
                 blacklistArrayLoading={blacklistArrayLoading}
                 following={followsArray[message.account]}
+                followsArrayLoading={followsArrayLoading}
                 blocked={blocksArray[message.account]}
+                blocksArrayLoading={blocksArrayLoading}
               />
           ))
         }
@@ -279,7 +281,9 @@ const Messages:React.FC = () => {
                 userBlacklist={blacklistArray[message.account]}
                 blacklistArrayLoading={blacklistArrayLoading}
                 following={followsArray[message.account]}
+                followsArrayLoading={followsArrayLoading}
                 blocked={blocksArray[message.account]}
+                blocksArrayLoading={blocksArrayLoading}
               />
           ))
         }

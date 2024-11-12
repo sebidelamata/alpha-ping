@@ -30,7 +30,9 @@ interface MessageProps {
     userBlacklist: boolean;
     blacklistArrayLoading: boolean;
     following: boolean;
+    followsArrayLoading: boolean;
     blocked: boolean;
+    blocksArrayLoading: boolean;
 }
 
 const Message: React.FC<MessageProps> = ({
@@ -49,7 +51,9 @@ const Message: React.FC<MessageProps> = ({
   userBlacklist,
   blacklistArrayLoading,
   following,
-  blocked
+  followsArrayLoading,
+  blocked,
+  blocksArrayLoading
 }) => {
 
     const { currentChannelMod, owner } = useUserProviderContext()
@@ -144,7 +148,11 @@ const Message: React.FC<MessageProps> = ({
           </div>
         }
         {
-          blacklistArrayLoading === true &&
+          (
+            blacklistArrayLoading === true ||
+            followsArrayLoading === true ||
+            blocksArrayLoading == true
+          ) &&
           <div>...</div>
         }
         {
