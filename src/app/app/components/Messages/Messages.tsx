@@ -58,7 +58,7 @@ const Messages:React.FC = () => {
   const [userBalance, setUserBalance] = useState<string | null>(null)
 
   // this holds the value (if there is one) of the reply id of a message
-  const [replyId, setReplyId] = useState<number | null>(null)
+  const [replyId, setReplyId] = useState<string | null>(null)
   // this is the follow filter state
   const [followFilter, setFollowFilter] = useState(false);
 
@@ -221,6 +221,14 @@ const Messages:React.FC = () => {
   return (
     <div className="messages">
       <div className="messages-feed">
+        { 
+          (
+            messages === undefined || 
+            messages === null || 
+            messages.length === 0 
+          ) &&
+          <div>No messages to display.</div>
+        }
         {
           currentChannel && 
           followFilter === false &&
@@ -228,7 +236,7 @@ const Messages:React.FC = () => {
             .filter(message => message.channel === currentChannel.id.toString())
             .map((message, index) => (
               <Message
-                key={message.id}
+                key={message._id}
                 message={message}
                 index={index}
                 tokenDecimals={tokenDecimals}
@@ -236,7 +244,7 @@ const Messages:React.FC = () => {
                 setReplyId={setReplyId}
                 reply={
                   message.replyId !== null && message.replyId ? 
-                  messages.find((targetMessage) => { return targetMessage.id === message.replyId }) || null :
+                  messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
                   null
                 }
                 profilePic={profilePics[message.account]}
@@ -261,7 +269,7 @@ const Messages:React.FC = () => {
             .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
             .map((message, index) => (
               <Message
-                key={message.id}
+                key={message._id}
                 message={message}
                 index={index}
                 tokenDecimals={tokenDecimals}
@@ -269,7 +277,7 @@ const Messages:React.FC = () => {
                 setReplyId={setReplyId}
                 reply={
                   message.replyId !== null && message.replyId ? 
-                  messages.find((targetMessage) => { return targetMessage.id === message.replyId }) || null :
+                  messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
                   null
                 }
                 profilePic={profilePics[message.account]}
@@ -293,7 +301,6 @@ const Messages:React.FC = () => {
       <SubmitMessage
         currentChannel={currentChannel}
         userBalance={userBalance}
-        messagesLength={messages.length}
         replyId={replyId}
         setReplyId={setReplyId}
         followFilter={followFilter}

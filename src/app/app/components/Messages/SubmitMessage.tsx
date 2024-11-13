@@ -18,9 +18,8 @@ import { useUserProviderContext } from "../../../../contexts/UserContext"
 interface SubmitMessageProps {
     currentChannel: AlphaPING.ChannelStructOutput | null;
     userBalance: string | null;
-    messagesLength: number;
-    replyId: number | null;
-    setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
+    replyId: string | null;
+    setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
     followFilter: boolean;
     setFollowFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -28,7 +27,6 @@ interface SubmitMessageProps {
 const SubmitMessage: React.FC<SubmitMessageProps> = ({ 
   currentChannel, 
   userBalance, 
-  messagesLength, 
   replyId, 
   setReplyId,
   followFilter,
@@ -48,7 +46,6 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
         const now: Date = new Date
   
         const messageObj = {
-          id: messagesLength,
           channel: currentChannel?.id.toString(),
           account: await signer?.getAddress(),
           text: message,
@@ -153,11 +150,11 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
               />
               {
                 imageUrls.length > 0 &&
-                imageUrls.map((url, idx) => (
+                imageUrls.map((url, index) => (
                   <img 
-                    key={idx} 
+                    key={index} 
                     src={url} 
-                    alt={`Linked content ${idx}`} 
+                    alt={`Linked content ${index}`} 
                     className='image-preview' 
                     loading="lazy"
                   />
@@ -165,11 +162,11 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
               }
               {
                 iframeStrings.length > 0 &&
-                iframeStrings.map((iframeString, idx) => (
+                iframeStrings.map((iframeString, index) => (
                   <iframe
-                    key={idx}
+                    key={index}
                     src={iframeString}
-                    title={`Embedded content ${idx}`}
+                    title={`Embedded content ${index}`}
                     className="image-preview"
                   />
                 ))

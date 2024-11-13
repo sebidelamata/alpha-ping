@@ -19,7 +19,7 @@ interface Emoji {
 
 interface MessageHoverOptionsProps {
     message: Message;
-    setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
+    setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setReplyId}) => {
@@ -44,7 +44,7 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
     const [isAuthor, setIsAuthor] = useState<boolean>(false)
     const findIsAuthor = (): void => {
         const authored = author.some((a) => (
-            a.toString() === message.id.toString()
+            a.toString() === message._id.toString()
         ))
         setIsAuthor(authored)
     }
@@ -86,12 +86,12 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
         };
         
         if(socket !== null){
-            socket.emit('update reactions', { messageId: message.id, reactions: newReactions });
+            socket.emit('update reactions', { messageId: message._id, reactions: newReactions });
         }
     };
 
     const handleReplyClick = () => {
-        setReplyId(message.id)
+        setReplyId(message._id)
         const inputField = document.getElementById('message-form-input')
         inputField?.focus()
     }
@@ -161,7 +161,7 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
                         blacklisted === false &&
                         <li className="delete-message-container">
                             <DeleteMessage
-                                messageID={message.id as unknown as string}
+                                messageID={message._id as unknown as string}
                             />
                         </li>
                     }

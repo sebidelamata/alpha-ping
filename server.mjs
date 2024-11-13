@@ -14,14 +14,24 @@ mongoose.connect(process.env.NEXT_PUBLIC_MONGODB_CONNECTION_STRING, {
 .catch(error => console.error('Error connecting to MongoDB:', error));
 
 const messageSchema = new mongoose.Schema({
-  id: Number,
   channel: String,
   account: String,
   text: String,
-  timestamp: Date,
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
   messageTimestampTokenAmount: Number,
-  reactions: Object,
-  replyId: Number
+  reactions: {
+    type: Map, // Use Map for flexibility with key-value pairs
+    of: [String], // Each key (reaction type) maps to an array of accounts/usernames
+    default: {},
+  },
+  replyId: {
+    type: mongoose.Schema.Types.ObjectId, // Reference another message document if it's a reply
+    ref: 'Message',
+    default: null,
+  },
 });
 
 const Message = mongoose.model('Message', messageSchema);

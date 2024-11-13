@@ -29,7 +29,7 @@ interface UserProviderType{
     setTxMessageFollow: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     txMessageBlock: string | null | undefined;
     setTxMessageBlock: React.Dispatch<React.SetStateAction<string | null | undefined>>;
-    author: number[];
+    author: string[];
     userUsername: string | null;
     setUserUsername: React.Dispatch<React.SetStateAction<string | null>>;
     userProfilePic: string | null;
@@ -79,7 +79,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     // state changes on user personal blocks or unblock and tells the messages to update metadata
     const [txMessageBlock, setTxMessageBlock] = useState<string | null | undefined>(null)
     // what messages is the user the author of
-    const [author, setAuthor] = useState<number[]>([])
+    const [author, setAuthor] = useState<string[]>([])
     // grab username
     const [userUsername, setUserUsername] = useState<string | null>(null)
     // grab user profile pic
@@ -141,7 +141,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             const author = []
             for(let i=0; i<channelMessages.length; i++){
                 if(account === channelMessages[i].account){
-                    author.push(channelMessages[i].id)
+                    author.push(channelMessages[i]._id)
                 }
             }
             setAuthor(author)

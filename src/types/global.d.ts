@@ -12,15 +12,15 @@ interface Window {
 }
 
 interface Message {
-    id: number;
+    _id: string; // Use string to align with MongoDB ObjectId type
     channel: string;
     account: string;
     text: string;
     timestamp: Date;
     messageTimestampTokenAmount: number;
-    reactions: Record<string, string[]>;
-    replyId: number | null;
-}
+    reactions: Record<string, string[]>; // Map of reaction types to lists of accounts
+    replyId: string | null; // Use string to align with MongoDB ObjectId if necessary
+  }
 
 interface tokenMetadataContract_address {
     contract_address: string;

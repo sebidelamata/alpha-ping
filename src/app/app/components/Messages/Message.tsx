@@ -19,7 +19,7 @@ interface MessageProps {
     index: number;
     tokenDecimals: number | null;
     tokenAddress: string | null;
-    setReplyId: React.Dispatch<React.SetStateAction<number | null>>;
+    setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
     reply: Message | null;
     profilePic: string | null;
     profilePicsLoading: boolean;
@@ -60,6 +60,11 @@ const Message: React.FC<MessageProps> = ({
 
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
     const [hoverReactions, sethoverReactions] = useState<string | null>(null)
+
+    if (message === null || message === undefined || Object.keys(message).length === 0) {
+      // Render a placeholder or nothing if there is no message data
+      return <div>No messages available</div>;
+    }
 
     // Function to extract image URLs from message text
     const extractImageUrls = (text: string): string[] => {
@@ -276,6 +281,10 @@ const Message: React.FC<MessageProps> = ({
         </div>
         <ul className="message-content-row-three">
           {
+            message !== null && 
+            message !== undefined &&
+            message.reactions !== undefined &&
+            message.reactions !== null &&
             Object.keys(message.reactions).length > 0 &&
             Object.entries(message.reactions).map(([key, value]) => (
               (

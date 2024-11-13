@@ -51,7 +51,7 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         socket.on('message update', (updatedMessage) => {
           setMessages(prevMessages =>
             prevMessages.map(msg =>
-              msg.id === updatedMessage.id ? { ...msg, reactions: updatedMessage.reactions } : msg
+              msg._id === updatedMessage._id ? { ...msg, reactions: updatedMessage.reactions } : msg
             )
           )
         })
@@ -59,13 +59,13 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         socket.on("update reactions", ({ messageId, reactions }) => {
           setMessages(prevMessages =>
             prevMessages.map(msg =>
-              msg.id === messageId ? { ...msg, reactions: { ...reactions } } : msg
+              msg._id === messageId ? { ...msg, reactions: { ...reactions } } : msg
             )
           );
         });
 
         socket.on('delete message', ({ id }) => {
-          setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
+          setMessages(prevMessages => prevMessages.filter(msg => msg._id !== id));
       });
     
         return () => {
