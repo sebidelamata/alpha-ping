@@ -16,7 +16,7 @@ Run `npx hardhat node`.
 
 Open a new terminal after starting local Hardhat node (step 2) and run `npx hardhat test`.
 
-#### 4. Deploying Smart Contracts
+#### 4. Deploying Smart Contracts To Arbitrum Fork
 
 Open a new terminal after starting local Hardhat node (step 2) and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network localhost`
 
@@ -27,3 +27,11 @@ Open a new terminal after starting local Hardhat node (step 2) and deploying con
 #### 6. Starting Front-end Application (React)
 
 Open a new terminal after starting local Hardhat node (step 2), deploying contracts (step 4), and starting the Express server, run `npm run dev`.
+
+
+## Deploying to Arbitrum Testnet (Sepolia) and Verifying Contract
+Open a new terminal and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network arbitrumSepolia --verify`. You will need a private key to deploy (do not us, store, or save, any personal wallet key here).
+
+
+## Deploying to Arbitrum One and Verifying Contract
+Open a new terminal and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network arbitrum --verify`. You will need a private key to deploy (do not us, store, or save, any personal wallet key here).

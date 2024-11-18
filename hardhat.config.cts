@@ -26,8 +26,35 @@ const config: HardhatUserConfig = {
     },
     arbitrumSepolia: {
       url: process.env.NEXT_PUBLIC_INFURA_ARBIRTUM_SEPOLIA_ENDPOINT || "",
-      accounts: [process.env.DEPLOYER_PRIVATE_KEY || ""],
+      accounts: [process.env.NEXT_PUBLIC_DEPLOYER_PRIVATE_KEY || ""],
     },
+  },
+  etherscan: {
+    apiKey: {
+      arbitrumSepolia: process.env.NEXT_PUBLIC_ARBISCANAPI_KEY || "",
+      arbitrumOne: process.env.NEXT_PUBLIC_ARBISCANAPI_KEY || "",
+    },
+    customChains: [
+      {
+        network: "arbitrumSepolia",
+        chainId: 421614,
+        urls: {
+            apiURL: "https://api-sepolia.arbiscan.io/api",
+            browserURL: "https://sepolia.arbiscan.io/",
+        },
+      },
+      {
+        network: "arbitrum",
+        chainId: 42161,
+        urls: {
+            apiURL: "https://api.arbiscan.io/api",
+            browserURL: "https://arbiscan.io/",
+        },
+      },
+    ],
+  },
+  sourcify: {
+    enabled: true,
   },
 };
 

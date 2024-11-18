@@ -12,7 +12,7 @@ const Contracts:React.FC = () => {
                                 href="https://arbiscan.io/address/0x423D27d37993e8DA0fe5A7ab019EaBFcff15fde9"
                                 target="_blank"
                             >
-                                0x423D27d37993e8DA0fe5A7ab019EaBFcff15fde9
+                               {process.env.NEXT_PUBLIC_ALPHAPING_CONTRACT_ADDRESS}
                             </a>
                     </p>
                 </li>
