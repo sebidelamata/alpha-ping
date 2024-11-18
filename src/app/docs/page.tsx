@@ -28,7 +28,7 @@ const Docs:React.FC = () => {
         "techdocs": "Technical Docs",
         "governance": "Governance",
         "tokenomics": "Tokenomics",
-        "airdrop": "Airdrops",
+        "airdrop": "Airdrop",
         "contracts": "Contracts"
     }
 
