@@ -26,7 +26,7 @@ const Team:React.FC = () => {
                         href={'https://www.sebidelamata.com'}
                         target="_blank"
                     >
-                        Website
+                        Site
                     </Link>
                 </li>
             </ul>
