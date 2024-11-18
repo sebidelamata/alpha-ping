@@ -20,6 +20,14 @@ const config: HardhatUserConfig = {
         enabled: true,
       },
     },
+    arbitrum: {
+      url: process.env.ARBITRUM_MAINNET_RPC || "",
+      accounts: [process.env.DEPLOYER_PRIVATE_KEY || ""],
+    },
+    arbitrumSepolia: {
+      url: process.env.ARBITRUM_SEPOL_RPC || "",
+      accounts: [process.env.DEPLOYER_PRIVATE_KEY || ""],
+    },
   },
 };
 
