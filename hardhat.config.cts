@@ -21,11 +21,11 @@ const config: HardhatUserConfig = {
       },
     },
     arbitrum: {
-      url: process.env.ARBITRUM_MAINNET_RPC || "",
+      url: process.env.NEXT_PUBLIC_INFURA_ARBITRUM_ENDPOINT || "",
       accounts: [process.env.DEPLOYER_PRIVATE_KEY || ""],
     },
     arbitrumSepolia: {
-      url: process.env.ARBITRUM_SEPOL_RPC || "",
+      url: process.env.NEXT_PUBLIC_INFURA_ARBIRTUM_SEPOLIA_ENDPOINT || "",
       accounts: [process.env.DEPLOYER_PRIVATE_KEY || ""],
     },
   },
