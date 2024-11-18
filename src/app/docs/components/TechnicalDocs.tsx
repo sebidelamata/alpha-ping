@@ -128,7 +128,7 @@ const TechnicalDocs:React.FC = () => {
                     <code>onlyMember</code>: Restricts access to users who hold a membership NFT.
                 </li>
                 <li>
-                    <code>onlyGoodOnes</code>: Restricts access to non-blacklisted users..
+                    <code>onlyGoodOnes</code>: Restricts access to non-blacklisted users.
                 </li>
                 <li>
                     <code>onlyLegitChannels</code>: Ensures the channel ID is valid.
