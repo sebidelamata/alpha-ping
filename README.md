@@ -30,8 +30,8 @@ Open a new terminal after starting local Hardhat node (step 2), deploying contra
 
 
 ## Deploying to Arbitrum Testnet (Sepolia) and Verifying Contract
-Open a new terminal and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network arbitrumSepolia --verify`. You will need a private key to deploy (do not us, store, or save, any personal wallet key here).
+Open a new terminal and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network arbitrumSepolia --verify`. You will need an account private key to deploy (do not us, store, or save, any personal wallet key here) and an Arbiscan API key to verify your contract.
 
 
 ## Deploying to Arbitrum One and Verifying Contract
-Open a new terminal and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network arbitrum --verify`. You will need a private key to deploy (do not us, store, or save, any personal wallet key here).
+Open a new terminal and run `npx hardhat ignition deploy ignition/modules/AlphaPING.cts --network arbitrum --verify`. You will need an account private key to deploy (do not us, store, or save, any personal wallet key here) and an Arbiscan API key to verify your contract.
