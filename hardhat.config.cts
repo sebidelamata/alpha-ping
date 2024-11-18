@@ -22,7 +22,7 @@ const config: HardhatUserConfig = {
     },
     arbitrum: {
       url: process.env.NEXT_PUBLIC_INFURA_ARBITRUM_ENDPOINT || "",
-      accounts: [process.env.DEPLOYER_PRIVATE_KEY || ""],
+      accounts: [process.env.NEXT_PUBLIC_DEPLOYER_PRIVATE_KEY || ""],
     },
     arbitrumSepolia: {
       url: process.env.NEXT_PUBLIC_INFURA_ARBIRTUM_SEPOLIA_ENDPOINT || "",
