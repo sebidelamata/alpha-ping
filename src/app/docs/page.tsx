@@ -10,6 +10,7 @@ import Contracts from "./components/Contracts";
 import Overview from "./components/Overview";
 import Roadmap from "./components/Roadmap";
 import TechnicalDocs from "./components/TechnicalDocs";
+import Team from "./components/Team";
 
 const Docs:React.FC = () => {
 
@@ -29,7 +30,8 @@ const Docs:React.FC = () => {
         "contracts": "Contracts",
         "governance": "Governance",
         "tokenomics": "Tokenomics",
-        "airdrop": "Airdrop"
+        "airdrop": "Airdrop",
+        "team": "Team"
     }
 
     return(
@@ -89,6 +91,10 @@ const Docs:React.FC = () => {
                 {
                     section === 'contracts' &&
                     <Contracts/>
+                }
+                {
+                    section === 'team' &&
+                    <Team/>
                 }
             </div>
         </div>

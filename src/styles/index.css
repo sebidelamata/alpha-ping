@@ -231,6 +231,14 @@ a{
   list-style-position: inside;
 }
 
+.team-li{
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: left;
+  align-items: baseline;
+  gap: var(--body-padding);
+}
+
 .app-container{
   display: grid;
   grid-template-rows: 5svh 95svh;
