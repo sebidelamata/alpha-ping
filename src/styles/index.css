@@ -53,6 +53,21 @@ ul{
   gap: var(--gap-small);
 }
 
+code{
+  color: var(--color-3);
+}
+pre>code{
+  color: var(--color-1);
+}
+pre {
+  background-color: var(--color-4);
+  color: var(--color-1);
+  padding: var(--large-button-padding-side);
+  border-radius: var(--button-radius);
+  overflow: auto;
+  /* font-family: 'Courier New', Courier, monospace; */
+}
+
 body {
   margin: 0;
   display: grid;

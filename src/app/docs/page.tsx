@@ -9,6 +9,7 @@ import Litepaper from "./components/Litepaper";
 import Contracts from "./components/Contracts";
 import Overview from "./components/Overview";
 import Roadmap from "./components/Roadmap";
+import TechnicalDocs from "./components/TechnicalDocs";
 
 const Docs:React.FC = () => {
 
@@ -24,6 +25,7 @@ const Docs:React.FC = () => {
         "overview": "Overview",
         "litepaper": "Litepaper",
         "roadmap": "Roadmap",
+        "techdocs": "Technical Docs",
         "governance": "Governance",
         "tokenomics": "Tokenomics",
         "airdrop": "Airdrops",
@@ -67,6 +69,10 @@ const Docs:React.FC = () => {
                 {
                     section === 'roadmap' &&
                     <Roadmap/>
+                }
+                {
+                    section === 'techdocs' &&
+                    <TechnicalDocs/>
                 }
                 {
                     section === 'governance' &&
