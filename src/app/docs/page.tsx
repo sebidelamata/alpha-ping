@@ -26,10 +26,10 @@ const Docs:React.FC = () => {
         "litepaper": "Litepaper",
         "roadmap": "Roadmap",
         "techdocs": "Technical Docs",
+        "contracts": "Contracts",
         "governance": "Governance",
         "tokenomics": "Tokenomics",
-        "airdrop": "Airdrop",
-        "contracts": "Contracts"
+        "airdrop": "Airdrop"
     }
 
     return(
