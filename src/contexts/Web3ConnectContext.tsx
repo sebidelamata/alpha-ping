@@ -49,11 +49,11 @@ const Web3WalletConnectProvider: React.FC<{ children: ReactNode }> = ({children}
     console.log(projectId)
 
     // 2. Set the networks
-    const networks = [customNetwork, arbitrum];
+    const networks = [arbitrum, customNetwork];
 
     // 3. Create a metadata object - optional
     const metadata = {
-    name: 'alphaPing',
+    name: 'AlphaPing',
     description: 'Web3 message board',
     url: 'https://reown.com/appkit', // origin must match your domain & subdomain
     icons: ['https://assets.reown.com/reown-profile-pic.png']

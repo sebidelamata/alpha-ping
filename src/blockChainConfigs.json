@@ -3,5 +3,10 @@
         "AlphaPING": {
             "address": "0x423D27d37993e8DA0fe5A7ab019EaBFcff15fde9"
         }
+    },
+    "42161": {
+        "AlphaPING": {
+            "address": "0xfEd242E81bf90960109BF3175Ee27Cc207f28880"
+        }
     }
 }
