@@ -7,9 +7,9 @@ const Contracts:React.FC = () => {
             <ul className="contracts-list">
                 <li className="contracts-list-item">
                     <p>
-                        AlphaPING Contract - 
+                        AlphaPING Contract -  
                             <a 
-                                href="https://arbiscan.io/address/0x423D27d37993e8DA0fe5A7ab019EaBFcff15fde9"
+                                href={`https://arbiscan.io/address/${process.env.NEXT_PUBLIC_ALPHAPING_CONTRACT_ADDRESS}`}
                                 target="_blank"
                             >
                                {process.env.NEXT_PUBLIC_ALPHAPING_CONTRACT_ADDRESS}
