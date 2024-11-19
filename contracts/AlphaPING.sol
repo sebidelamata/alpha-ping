@@ -302,6 +302,16 @@ contract AlphaPING is ERC721 {
             channelBans[_channelId][_bannedAccount] != true,
             "This User Is Already Banned On This Channel!"
             );
+        // can not ban owner
+        require(
+            _bannedAccount != owner,
+            "Can not ban owner"
+        );
+        // can not ban yourself
+        require(
+            _bannedAccount != msg.sender,
+            "Can not ban yourself!"
+        );
         channelBans[_channelId][_bannedAccount] = true;
     }
 
@@ -324,6 +334,11 @@ contract AlphaPING is ERC721 {
         require(
             isBlackListed[_blacklistedUser] != true,
             "User Is Already Blacklisted!"
+        );
+        // can not blacklist owner/yourself
+        require(
+            _blacklistedUser != msg.sender,
+            "Can not blacklist yourself!"
         );
         isBlackListed[_blacklistedUser] = true;
     }
@@ -349,6 +364,11 @@ contract AlphaPING is ERC721 {
                 "User Is Not A Mod For A Channel!"
             );   
         }
+        // can not run ban mod on yourself/owner
+        require(
+            _bannedMod != msg.sender,
+            "Can not run banMod on yourself!"
+        );
         for (uint i = 0; i < _channelIds.length; i++) {
             mods[_channelIds[i]] = owner;   
         }
@@ -356,15 +376,25 @@ contract AlphaPING is ERC721 {
     }
     
     // these functions add and remover users from a personal blocklist
-    function addToPersonalBlockList(address _blacklistedAddress) public {
-        personalBlockList[msg.sender][_blacklistedAddress] = true;
+    function addToPersonalBlockList(address _blockedAddress) public {
+        // can not block yourself
+        require(
+            _blockedAddress != msg.sender,
+            "Can not blacklist yourself!"
+            );
+        personalBlockList[msg.sender][_blockedAddress] = true;
     }
-    function removeFromPersonalBlockList(address _blacklistedAddress) public {
-        personalBlockList[msg.sender][_blacklistedAddress] = false;
+    function removeFromPersonalBlockList(address _blockedAddress) public {
+        personalBlockList[msg.sender][_blockedAddress] = false;
     }
 
     // these functions add and remover users from a personal blocklist
     function addToPersonalFollowList(address _followedAddress) public {
+        // cannot follow yourself
+        require(
+            _followedAddress != msg.sender,
+            "Can not follow yourself!"
+        );
         personalFollowList[msg.sender][_followedAddress] = true;
     }
     function removeFromPersonalFollowList(address _followedAddress) public {

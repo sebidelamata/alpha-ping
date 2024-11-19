@@ -585,7 +585,7 @@ export interface AlphaPING extends BaseContract {
   ): Promise<this>;
 
   addToPersonalBlockList: TypedContractMethod<
-    [_blacklistedAddress: AddressLike],
+    [_blockedAddress: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -738,7 +738,7 @@ export interface AlphaPING extends BaseContract {
   purchaseMonthlySubscription: TypedContractMethod<[], [void], "nonpayable">;
 
   removeFromPersonalBlockList: TypedContractMethod<
-    [_blacklistedAddress: AddressLike],
+    [_blockedAddress: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -846,11 +846,7 @@ export interface AlphaPING extends BaseContract {
 
   getFunction(
     nameOrSignature: "addToPersonalBlockList"
-  ): TypedContractMethod<
-    [_blacklistedAddress: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+  ): TypedContractMethod<[_blockedAddress: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "addToPersonalFollowList"
   ): TypedContractMethod<[_followedAddress: AddressLike], [void], "nonpayable">;
@@ -1004,11 +1000,7 @@ export interface AlphaPING extends BaseContract {
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "removeFromPersonalBlockList"
-  ): TypedContractMethod<
-    [_blacklistedAddress: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+  ): TypedContractMethod<[_blockedAddress: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "removeFromPersonalFollowList"
   ): TypedContractMethod<[_followedAddress: AddressLike], [void], "nonpayable">;
