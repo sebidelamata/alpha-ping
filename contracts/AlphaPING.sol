@@ -129,7 +129,7 @@ contract AlphaPING is ERC721 {
     function mint() public{
         // limit one per user
         require(
-            isMember[msg.sender],
+            isMember[msg.sender] != true,
             "Limit one membership per wallet!"
             );
         // mint nft
