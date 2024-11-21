@@ -47,7 +47,7 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
-        const value = e.target.newMod.value
+        const value = ((e.target as HTMLFormElement).elements.namedItem("newMod") as HTMLInputElement).value;
         setError(null)
         setTxMessageMod(null)
         setLoading(true)
