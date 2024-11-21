@@ -14,7 +14,7 @@ const UserRelations:React.FC = () => {
 
     const handleClick = (e: MouseEvent) => {
         e.preventDefault()
-        setSelector(e.target.id)
+        setSelector((e.target as HTMLElement).id)
     }
 
     return(
