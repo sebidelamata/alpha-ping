@@ -34,7 +34,7 @@ const SocketProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [socket, setSocket] = useState<Socket<typeof DefaultEventsMap, typeof DefaultEventsMap> | null>(null)
     useEffect(() => {
          // Socket
-        const webSocket = io('ws://localhost:3030');
+        const webSocket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_ADDRESS || '');
         setSocket((webSocket))
     }, [])
 
