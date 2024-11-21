@@ -24,7 +24,7 @@ const ToggleFollowFilter:React.FC<ToggleFollowFilterProps> = ({followFilter, set
       );
     }
     
-    const styles = {
+    const styles: { [key: string]: React.CSSProperties } = {
       switch: {
         display: "flex",
         alignItems: "center",
@@ -49,17 +49,6 @@ const ToggleFollowFilter:React.FC<ToggleFollowFilterProps> = ({followFilter, set
         transition: "0.4s",
         borderRadius: "24px",
         cursor: "pointer",
-        before: {
-          content: '""',
-          position: "absolute",
-          width: "20px",
-          height: "20px",
-          left: "4px",
-          bottom: "2px",
-          backgroundColor: "#242424",
-          borderRadius: "50%",
-          transition: "0.4s",
-        },
       },
       sliderOn: {
         backgroundColor: "rgb(188, 146, 222, 0.8)",
