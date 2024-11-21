@@ -41,7 +41,7 @@ const server = app.listen(PORT, () => console.log(`Listening on ${PORT}\n`))
 
 const io = new Server(server, {
   cors: {
-    origin: "http://www.alphaping.xyz/*"
+    origin: "http://www.alphaping.xyz/app"
   }
 })
 
