@@ -64,7 +64,7 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
                             return alphaPING?.channelBans(channel?.id, author)
                         })
                     )
-                    const authors = channelAuthors.filter((author, index) => {
+                    const authors = channelAuthors.filter((_, index) => {
                         return result[index] === true
                     })
                     setChannelBans(authors)
