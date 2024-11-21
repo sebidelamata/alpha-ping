@@ -8,7 +8,7 @@ import React, {
 import { createAppKit } from '@reown/appkit/react'
 import { EthersAdapter } from '@reown/appkit-adapter-ethers'
 import { arbitrum } from '@reown/appkit/networks'
-import { defineChain } from '@reown/appkit/networks';
+import { defineChain, AppKitNetwork } from '@reown/appkit/networks';
 
 
 // create context
@@ -49,7 +49,7 @@ const Web3WalletConnectProvider: React.FC<{ children: ReactNode }> = ({children}
     console.log(projectId)
 
     // 2. Set the networks
-    const networks = [arbitrum, customNetwork];
+    const networks: [AppKitNetwork, ...AppKitNetwork[]] = [arbitrum, customNetwork as AppKitNetwork];
 
     // 3. Create a metadata object - optional
     const metadata = {
