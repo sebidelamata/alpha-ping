@@ -39,9 +39,21 @@ const Message = mongoose.model('Message', messageSchema);
 const PORT = process.env.NEXT_PUBLIC_PORT || 3030
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}\n`))
 
+const allowedOrigins = [
+  "https://www.alphaping.xyz/",
+  "https://www.alphaping.xyz/app"
+];
+
 const io = new Server(server, {
   cors: {
-    origin: "http://www.alphaping.xyz/app"
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ["GET", "POST"]
   }
 })
 
