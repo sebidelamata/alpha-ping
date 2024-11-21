@@ -38,10 +38,10 @@ const Profile: React.FC = () => {
     }, [owner, mod, signer])
 
     const [profileTabSelect, setProfileTabSelect] = useState<string>('edit')
-    const handleTabClick = (e:MouseEvent) => {
+    const handleTabClick = (e: MouseEvent<HTMLLIElement>) => {
         if(e !== null && e.target !== null){
             e.preventDefault()
-            const value = e.target.id
+            const value = (e.target as HTMLElement).id
             setProfileTabSelect(value)
             console.log(value)
         }
