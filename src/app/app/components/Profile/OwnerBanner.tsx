@@ -43,7 +43,7 @@ const OwnerBanner:React.FC<OwnerBannerProps> = ({txMessageOwner, setTxMessageOwn
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
-        const value = e.target.newOwner.value
+        const value = ((e.target as HTMLFormElement).elements.namedItem("newOwner") as HTMLInputElement).value;
         setError(null)
         setTxMessageOwner(null)
         setLoading(true)
@@ -52,7 +52,7 @@ const OwnerBanner:React.FC<OwnerBannerProps> = ({txMessageOwner, setTxMessageOwn
             await tx?.wait()
             console.log(tx?.hash)
             setTxMessageOwner(tx?.hash)
-            setOwner(value)
+            setOwner(false)
         }catch(error: unknown){
             if((error as ErrorType).reason)
             setError((error as ErrorType).reason)
