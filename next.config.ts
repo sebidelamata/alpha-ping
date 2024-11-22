@@ -5,7 +5,8 @@ module.exports = {
   async headers() {
     return [
       {
-        source: '/(.*)', // applies the headers to all routes
+        // Apply headers for all routes
+        source: '/(.*)', 
         headers: [
           {
             key: 'Content-Security-Policy',
