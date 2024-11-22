@@ -1,0 +1,14 @@
+{
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; script-src 'self' https://*.walletconnect.org; frame-src 'self' https://*.walletconnect.org https://secure.walletconnect.org; frame-ancestors 'self' https://*.vercel.app https://*.ngrok-free.app https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org https://secure.walletconnect.org"
+          }
+        ]
+      }
+    ]
+  }
+  
