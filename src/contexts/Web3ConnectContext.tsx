@@ -55,7 +55,7 @@ const Web3WalletConnectProvider: React.FC<{ children: ReactNode }> = ({children}
     const metadata = {
     name: 'AlphaPing',
     description: 'Web3 message board',
-    url: 'https://www.alphaping.xyz', // origin must match your domain & subdomain
+    url: 'https://www.alphaping.xyz/*', // origin must match your domain & subdomain
     icons: ['https://assets.reown.com/reown-profile-pic.png']
     }
 
