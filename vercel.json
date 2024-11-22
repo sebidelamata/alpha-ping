@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://*.walletconnect.org 'sha256-OBTN3RiyCV4Bq7dFqZ5a2pAXjnCcCYeTJMO2I/LYKeo='; frame-src 'self' https://*.walletconnect.org https://secure.walletconnect.org; frame-ancestors 'self' https://*.vercel.app https://*.ngrok-free.app https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org https://secure.walletconnect.org"
+          "value": "default-src 'self'; script-src 'self' https://*.walletconnect.org 'sha256-OBTN3RiyCV4Bq7dFqZ5a2pAXjnCcCYeTJMO2I/LYKeo=' 'sha256-29CO2hVvZVQ0ubIWZ3Tu9NTSvX4ksg/apOsYmhR53to='; frame-src 'self' https://*.walletconnect.org https://secure.walletconnect.org; frame-ancestors 'self' https://*.vercel.app https://*.ngrok-free.app https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org https://secure.walletconnect.org"
         }
       ]
     }
