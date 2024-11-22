@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://*.walletconnect.org; style-src 'self'; frame-ancestors 'self' https://*.walletconnect.org https://*.vercel.app https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org;"
+          "value": "default-src 'self'; script-src 'self' https://*.walletconnect.org 'sha256-OBTN3RiyCV4Bq7dFqZ5a2pAXjnCcCYeTJMO2I/LYKeo='; style-src 'self'; frame-ancestors 'self' https://*.walletconnect.org https://*.vercel.app https://secure-mobile.walletconnect.com https://secure-mobile.walletconnect.org;"
         }
       ]
     }
