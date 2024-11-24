@@ -85,7 +85,7 @@ const HomeNav:React.FC = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href={'https://www.discord.com'} target="_blank">
+                                <Link href={'https://discord.com/channels/1309709451397431346/1310010641259434156'} target="_blank">
                                     Discord
                                 </Link>
                             </li>
