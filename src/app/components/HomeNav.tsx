@@ -65,39 +65,52 @@ const HomeNav:React.FC = () => {
                     </Link>
                 </li>
                 <li>
-                    {
-                        showSocials === false &&
                         <p onClick={(e) => handleClick(e)}>
                             Socials
                         </p>
-                    }
-                    {
-                        showSocials === true &&
-                        <ul className="socials-list">
-                            <li>
-                                <Link href={'https://x.com/__AlphaPING__'} target="_blank">
-                                    X
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'https://warpcast.com/'} target="_blank">
-                                    Warpcast
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'https://discord.com/channels/1309709451397431346/1310010641259434156'} target="_blank">
-                                    Discord
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'https://t.me/+c-zi1QU486RiNDNh'} target="_blank">
-                                    Telegram
-                                </Link>
-                            </li>
-                        </ul>
-                    }
                 </li>
             </ul>
+            {
+                showSocials === true &&
+                <ul className="socials-list">
+                    <li>
+                        <Link href={'https://x.com/__AlphaPING__'} target="_blank">
+                            <img 
+                                src="/x.svg" 
+                                alt="X Link" 
+                                className="homenav-icon"
+                            />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={'https://warpcast.com/'} target="_blank">
+                            <img 
+                                src="/warpcast.svg" 
+                                alt="Warpcast Link" 
+                                className="homenav-icon"
+                            />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={'https://discord.com/channels/1309709451397431346/1310010641259434156'} target="_blank">
+                            <img 
+                                src="/discord.svg" 
+                                alt="Discord Link" 
+                                className="homenav-icon"
+                            />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={'https://t.me/+c-zi1QU486RiNDNh'} target="_blank">
+                            <img 
+                                src="/Telegram_logo.svg" 
+                                alt="Telegram Link" 
+                                className="homenav-icon"
+                            />
+                        </Link>
+                    </li>
+                </ul>
+            }
         </div>
     )
 }
