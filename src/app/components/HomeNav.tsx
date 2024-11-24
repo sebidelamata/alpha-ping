@@ -90,7 +90,7 @@ const HomeNav:React.FC = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href={'https://telegram.org/'} target="_blank">
+                                <Link href={'https://t.me/+c-zi1QU486RiNDNh'} target="_blank">
                                     Telegram
                                 </Link>
                             </li>
