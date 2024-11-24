@@ -676,7 +676,7 @@ a{
   height: 50svh;
   position: absolute;
   left: 50vw;
-  top: 50svh;
+  top: 70svh;
   border-radius: var(--button-radius);
   border: var(--border-width) solid var(--color-3);
   background-color: var(--color-1);
