@@ -902,7 +902,9 @@ a{
 .ban-mod-form>input,
 .follow-back-form>input,
 .unfollow-form>input,
-.unblock-form>input{
+.unblock-form>input,
+.add-channel-form>div>input,
+.add-channel-form>div>select{
   padding: var(--med-button-padding);
   color: var(--color-2);
   background-color: var(--color-1);
@@ -910,6 +912,10 @@ a{
   border-style: solid;
   border-radius: var(--button-radius);
 }
+.add-channel-form>div>input:focus,
+.add-channel-form>div>input:active,
+.add-channel-form>div>select:focus,
+.add-channel-form>div>select:active,
 .owner-banner-form>input:focus,
 .owner-banner-form>input:active,
 .mod-banner-form>input:focus,
