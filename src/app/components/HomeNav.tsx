@@ -82,7 +82,7 @@ const HomeNav:React.FC = () => {
                             />
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <Link href={'https://warpcast.com/'} target="_blank">
                             <img 
                                 src="/warpcast.svg" 
@@ -90,7 +90,7 @@ const HomeNav:React.FC = () => {
                                 className="homenav-icon"
                             />
                         </Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Link href={'https://discord.com/channels/1309709451397431346/1310010641259434156'} target="_blank">
                             <img 
