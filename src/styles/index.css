@@ -583,6 +583,7 @@ a{
   gap: var(--gap-small);
   max-height: 100%;
   overflow-y: scroll;
+  padding-top: 1em;
 }
 
 .channels-title{
@@ -635,7 +636,7 @@ a{
 .channel-logo-image{
   display: grid;
   object-fit: contain;
-  height: 2svh;
+  height: 1em;
   transition: transform var(--transition-speed-1);
   position: relative;
   bottom: 0.5svh;
