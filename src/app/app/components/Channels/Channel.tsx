@@ -148,9 +148,13 @@ const Channel:React.FC<ChannelProps> = ({
                 <div className="channel-logo">
                     <img 
                         src={
-                            tokenMetada.logo === '' ? 
-                            '/blank_nft.svg' : 
-                            tokenMetada.logo
+                            tokenMetada.logo !== '' ? 
+                            tokenMetada.logo : 
+                            (
+                                channel.tokenType === 'ERC20' ?
+                                '/erc20Icon.svg' :
+                                '/blank_nft.svg'
+                            )
                         } 
                         alt="Token Logo"
                         loading="lazy"
