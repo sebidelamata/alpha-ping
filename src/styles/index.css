@@ -1205,7 +1205,7 @@ a{
 
 .message-header{
   display: grid;
-  align-items:first baseline;
+  align-items: baseline;
 }
 
 .message-content{
