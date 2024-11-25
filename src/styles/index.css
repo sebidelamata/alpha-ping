@@ -1203,11 +1203,6 @@ a{
   filter: brightness(1.2);
 }
 
-.message-header{
-  position: relative;
-  top: 5%;
-}
-
 .message-content{
   display: grid;
   grid-template-rows: repeat(3, auto);
