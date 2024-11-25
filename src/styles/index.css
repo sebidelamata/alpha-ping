@@ -1203,6 +1203,11 @@ a{
   filter: brightness(1.2);
 }
 
+.message-header{
+  display: grid;
+  align-items:first baseline;
+}
+
 .message-content{
   display: grid;
   grid-template-rows: repeat(3, auto);
