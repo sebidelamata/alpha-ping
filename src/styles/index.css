@@ -1204,8 +1204,8 @@ a{
 }
 
 .message-header{
-  display: grid;
-  align-items: baseline;
+  position: relative;
+  top: 5%;
 }
 
 .message-content{
