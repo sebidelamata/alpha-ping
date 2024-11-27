@@ -8,6 +8,15 @@ import ChannelProvider from '../contexts/ChannelContext';
 import UserProvider from '../contexts/UserContext';
 import Web3WalletConnectProvider from '../contexts/Web3ConnectContext';
 import Head from 'next/head';
+import { Roboto } from 'next/font/google'
+
+// set font propertoes
+const roboto = Roboto({
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 // Define metadata for the entire app
 export const metadata: Metadata = {
@@ -35,7 +44,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <html lang="en">
+    <html lang="en" className={roboto.className}>
       <Head>
         <meta charSet="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/Apes.svg" />

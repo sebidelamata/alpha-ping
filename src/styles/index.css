@@ -1,5 +1,4 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -196,8 +195,8 @@ a{
   display: grid;
   object-fit: contain;
   position: absolute;
-  top: 30%;
-  left: 10%;
+  top: 20%;
+  left: 5%;
 }
 
 .docs-container{
