@@ -59,7 +59,7 @@ const Docs:React.FC = () => {
                 </ul>
             </div>
             <div className="doc-body">
-                <h1>AlphaPING Docs</h1>
+                <h1 className="page-title">AlphaPING Docs</h1>
                 {
                     section === 'overview' &&
                     <Overview/>

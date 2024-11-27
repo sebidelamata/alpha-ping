@@ -241,15 +241,45 @@ a{
 
 .doc-body{
   display: grid;
-  overflow-y: scroll;
   position: absolute;
   left: 16%;
   width: 80%;
   padding-right: 4%;
+  grid-template-rows: 16% 84%;
+  overflow: scroll;
+  height: 100svh;
 }
 .doc-body ul{
   padding-left: 40px;
   list-style-position: inside;
+}
+.page-title{
+  display: grid;
+  position: fixed;
+  top: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.overview-container,
+.litepaper-body,
+.roadmap-container,
+.tech-docs-container,
+.contracts-body,
+.team-container{
+  display: grid;
+  position: relative;
+  overflow-y: scroll;
+  margin-top: 10%;
+  height: 84svh;
+}
+
+.overview-container,
+.contracts-body,
+.team-container{
+  display: grid;
+  grid-template-rows: 10% 90%;
 }
 
 .team-li{
