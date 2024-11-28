@@ -28,7 +28,7 @@ const Litepaper:React.FC = () => {
                     <strong>Transparency is prioritized</strong> – user token balances are displayed at the time of each post.
                 </li>
                 <li>
-                    <strong>Spam and bots are minimized</strong> – only verified members with tokens can post and interact.
+                    <strong>Spam and bots are minimized</strong> – only verified members with NFT Memberships can post and interact.
                 </li>
                 <li>
                     <strong>Social insights drive trading</strong> – sentiment and token-weighted sentiment scores provide clarity on community sentiment around projects.
