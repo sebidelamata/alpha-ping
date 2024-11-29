@@ -284,6 +284,14 @@ const TechnicalDocs:React.FC = () => {
                 </code>
             </pre>
             <br />
+            <code>removeFromPersonalFollowList(address _followedAddress)</code>
+            <p>Removes a user from the caller’s personal follow list.</p>
+            <pre>
+                <code>
+                    function removeFromPersonalFollowList(address _followedAddress) public;
+                </code>
+            </pre>
+            <br />
             <br />
             <h4>Subscription and Premium Membership</h4>
             <h5>Set Subscription Details</h5>
