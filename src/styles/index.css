@@ -1467,7 +1467,8 @@ a{
 }
 
 .picture-icon,
-.dune-icon{
+.dune-icon,
+.website-icon{
   display: grid;
   justify-content: center;
   align-items: center;
@@ -1475,6 +1476,15 @@ a{
   height: 1em;
   object-fit: contain;
   padding: var(--med-button-padding);
+}
+
+.website-icon{
+  display: grid;
+  align-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  object-fit: contain;
+  justify-content: baseline;
 }
 
 .image-preview{
