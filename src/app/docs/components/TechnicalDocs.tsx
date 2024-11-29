@@ -9,7 +9,7 @@ const TechnicalDocs:React.FC = () => {
             <br />
             <h3>Overview</h3>
             <p>
-            The <code>AlphaPING</code> smart contract is a decentralized platform built on Arbitrum where users can mint NFT membershipss, join or create channels, manage memberships, interact with ERC20/ERC721 tokens, and handle user profiles and privacy settings. This contract supports features like premium subscriptions, user bans, personal blocking/following, and channel moderation.
+            The <code>AlphaPING</code> smart contract is a decentralized platform built on Arbitrum where users can mint NFT memberships, join or create channels, manage memberships, interact with ERC20/ERC721 tokens, and handle user profiles and privacy settings. This contract supports features like premium subscriptions, user bans, personal blocking/following, and channel moderation.
             </p>
             <br />
             <h4>Key Features</h4>
