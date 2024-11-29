@@ -39,7 +39,6 @@ const Channels:React.FC<ChannelsProps> = ({
   }
   useEffect(() => {
     loadUserChannels()
-    console.log(userChannels)
   }, [channels, joinChannelLoading, hasJoined, signer])
 
   // weve elevated this state from add channels to make the channels list rerender on add channel
