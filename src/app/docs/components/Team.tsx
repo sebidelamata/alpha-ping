@@ -26,7 +26,7 @@ const Team:React.FC = () => {
                         href={'https://www.sebidelamata.com'}
                         target="_blank"
                     >
-                        Site
+                        <img src="/siteIcon.svg" alt="Website" className="website-icon"/>
                     </Link>
                 </li>
             </ul>
