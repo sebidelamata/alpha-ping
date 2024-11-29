@@ -430,11 +430,11 @@ a{
 
 .nav-bar{
   height: var(--navbar-height);
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
+  display: flex;
   position: fixed;
   width: 100vw;
   z-index: 3;
+  justify-content: space-between;
 }
 
 .nav-brand{
