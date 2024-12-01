@@ -53,15 +53,19 @@ const Roadmap:React.FC = () => {
                         </li>
                         <li>
                             <strong>Weighted Sentiment Analysis:</strong> Develop metrics for:
+                            <br />
                             <ul>
                                 <li>
                                     <strong>Post Balance-Weighted Sentiment:</strong> Analyze sentiment based on token balance at posting.
+                                    <br />
                                 </li>
                                 <li>
                                     <strong>Current Balance-Weighted Sentiment:</strong> Track sentiment weighted by users’ real-time token holdings.
+                                    <br />
                                 </li>
                                 <li>
                                     <strong>Delta Sentiment:</strong> Compare post and current balances for a “delta” sentiment metric.
+                                    <br />
                                 </li>
                             </ul>
                         </li>
