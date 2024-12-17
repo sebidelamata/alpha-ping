@@ -199,6 +199,36 @@ a{
   left: 5%;
 }
 
+.footer{
+  background-color: var(--color-3);
+  padding: var(--med-button-padding);
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-right{
+  display: grid;
+  padding-right: var(--body-padding);
+}
+
+.footer-links{
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap-small);
+}
+
+.footer-link{
+  display: grid;
+  transition: filter var(--transition-speed-1), 
+    transform var(--transition-speed-1);
+}
+.footer-link:hover{
+  filter: brightness(1.2);
+  transform: scale(1.1);
+}
+
 .docs-container{
   display: grid;
   grid-template-columns: 20% 80%;
