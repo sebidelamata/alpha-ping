@@ -661,7 +661,8 @@ a{
   align-items: center;
 }
 
-.channels-toggle-button-image{
+.channels-toggle-button-image,
+.channels-toggle-button-image-small{
   display: grid;
   height: 2.5em;
   width: 2.5em;
@@ -670,6 +671,12 @@ a{
   align-items: center;
   padding-left: var(--large-button-padding-side);
   padding-right: var(--large-button-padding-side);
+}
+.channels-toggle-button-image-small{
+  height: 1.5em;
+  width: 1.5em;
+  padding-left: var(--gap-small);
+  padding-right: var(--gap-small);
 }
 
 .channels-menu{

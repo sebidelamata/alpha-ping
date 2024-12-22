@@ -91,7 +91,7 @@ const Channels:React.FC<ChannelsProps> = ({
             >
               <img 
                 src="/collapseIcon.svg" 
-                alt="Click to Expand" 
+                alt="Click to Collapse" 
                 className="channels-toggle-button-image"
               />
             </button> :
@@ -102,7 +102,7 @@ const Channels:React.FC<ChannelsProps> = ({
               <img 
                 src="/moreIcon.svg" 
                 alt="Click to Expand" 
-                className="channels-toggle-button-image"
+                className="channels-toggle-button-image-small"
               />
             </button>
 
