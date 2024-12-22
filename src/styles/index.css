@@ -1190,10 +1190,16 @@ a{
   border-color: var(--color-3);
   border-width: var(--border-width);
   border-style: solid;
+  transition: filter var(--transition-speed-1), transform var(--transition-speed-1);
 }
 .user-relations-selector-item.active,
 .profile-tabs>li.active{
   background-color: var(--color-3);
+}
+.user-relations-selector-item:hover,
+.profile-tabs>li:hover{
+  filter: brightness(1.1);
+  transform: scale(1.03);
 }
 
 .user-follows-list-container,
