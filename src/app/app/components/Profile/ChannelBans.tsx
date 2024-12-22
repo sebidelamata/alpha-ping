@@ -88,6 +88,10 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
                 className={`ban-container-header ${showBans === true ? 'active' : ''}`}
             >
                 Channel Bans
+                <img 
+                    src="/moreIcon.svg" 
+                    alt="Click to Expand" 
+                    className="edit-profile-image"/>
             </h5>
             {
                 showBans === true &&

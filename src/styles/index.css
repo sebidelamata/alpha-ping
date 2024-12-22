@@ -928,6 +928,28 @@ a{
   width: 96%;
 }
 
+.ban-container-header{
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: left;
+  align-items: center;
+  gap: var(--gap-small);
+  transition: filter 0.3s, transform 0.3s;
+}
+.ban-container-header:hover{
+  filter: brightness(1.1);
+  transform: scale(1.01);
+}
+
+.expand-icon{
+  display: grid;
+  height: 1em;
+  width: 1em;
+  object-fit: contain;
+  justify-content: center;
+  align-items: center;
+}
+
 .bans-list{
   display: grid;
   gap: var(--body-padding);
