@@ -84,6 +84,7 @@ button {
   background-color: var(--color-1);
   color: inherit;
   transition: filter var(--transition-speed-1), transform var(--transition-speed-1);
+  padding: var(--med-button-padding);
 }
 button:hover {
   border-color: var(--color-3);
