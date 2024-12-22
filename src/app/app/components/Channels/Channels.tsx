@@ -74,29 +74,66 @@ const Channels:React.FC<ChannelsProps> = ({
   useEffect(() => {
     reloadChannels()
   }, [currentChannel, joinChannelLoading, signer])
+
+  const [showChannels, setShowChannels] = useState<boolean>(false)
+  const toggleChannels = (): void => {
+    setShowChannels(!showChannels)
+  }
   
     return (
       <div className="channels">
-        <div className="channels-menu">
-          <h2 className="channels-title">
-            Channels
-          </h2>
-          <ul className="channels-list">
-            {
-              userChannels.map((channel, index) => (
-                <Channel
-                  channel={channel}
-                  key={index}
-                />
-              ))
-            }
-          </ul>
+        <div className="channels-toggle-container">
+          {
+            showChannels === true ?
+            <button 
+              className="channels-toggle-button"
+              onClick={() => toggleChannels()}
+            >
+              <img 
+                src="/collapseIcon.svg" 
+                alt="Click to Expand" 
+                className="channels-toggle-button-image"
+              />
+            </button> :
+            <button 
+              className="channels-toggle-button"
+              onClick={() => toggleChannels()}
+            >
+              <img 
+                src="/moreIcon.svg" 
+                alt="Click to Expand" 
+                className="channels-toggle-button-image"
+              />
+            </button>
+
+          }
         </div>
-        <AddChannel
-          addChannelLoading={addChannelLoading}
-          setAddChannelLoadingLoading={setAddChannelLoadingLoading}
-        />
-        <ChannelActions channelAction={channelAction} setChannelAction={setChannelAction}/>
+        {
+          showChannels === false ?
+          <div></div> :
+          <div>
+            <div className="channels-menu">
+            <h2 className="channels-title">
+              Channels
+            </h2>
+            <ul className="channels-list">
+              {
+                userChannels.map((channel, index) => (
+                  <Channel
+                    channel={channel}
+                    key={index}
+                  />
+                ))
+              }
+            </ul>
+          </div>
+          <AddChannel
+            addChannelLoading={addChannelLoading}
+            setAddChannelLoadingLoading={setAddChannelLoadingLoading}
+          />
+          <ChannelActions channelAction={channelAction} setChannelAction={setChannelAction}/>
+        </div>
+        }
       </div>
     );
   }

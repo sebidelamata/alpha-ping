@@ -587,11 +587,13 @@ a{
 }
 
 .app-body{
-  display: grid;
-  grid-template-columns: 20% 80%;
+  display: flex;
+  flex-direction: row;
   position: relative;
   top: var(--navbar-height);
   height: calc(100svh - var(--navbar-height));
+  width: 100vw;
+  gap: var(--gap);
 }
 
 .analyze-title,
@@ -651,6 +653,23 @@ a{
   height: calc(100svh - var(--navbar-height));
   gap: var(--gap);
   padding-left: var(--body-padding);
+}
+
+.channels-toggle-container{
+  display: grid;
+  justify-content: left;
+  align-items: center;
+}
+
+.channels-toggle-button-image{
+  display: grid;
+  height: 2.5em;
+  width: 2.5em;
+  object-fit: contain;
+  justify-content: center;
+  align-items: center;
+  padding-left: var(--large-button-padding-side);
+  padding-right: var(--large-button-padding-side);
 }
 
 .channels-menu{
@@ -1276,6 +1295,7 @@ a{
 .messages-feed{
   overflow-y: scroll;
   display: grid;
+  width: 100vw;
 }
 
 .message{
