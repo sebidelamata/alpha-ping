@@ -75,7 +75,7 @@ const Channels:React.FC<ChannelsProps> = ({
     reloadChannels()
   }, [currentChannel, joinChannelLoading, signer])
 
-  const [showChannels, setShowChannels] = useState<boolean>(false)
+  const [showChannels, setShowChannels] = useState<boolean>(true)
   const toggleChannels = (): void => {
     setShowChannels(!showChannels)
   }
