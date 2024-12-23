@@ -653,6 +653,7 @@ a{
   height: calc(100svh - var(--navbar-height));
   gap: var(--gap);
   padding-left: var(--body-padding);
+  max-width: 30%;
 }
 
 .channels-toggle-container{
@@ -1297,12 +1298,13 @@ a{
   grid-template-rows: 80% 20%;
   height: 100%;
   overflow: hidden;
+  width: 100%;
 }
 
 .messages-feed{
   overflow-y: scroll;
   display: grid;
-  /* width: 100vw; */
+  width: 100%;
 }
 
 .message{
