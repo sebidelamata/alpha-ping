@@ -48,10 +48,10 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
               {
                 tokenDecimals !== null &&
                 userBalance !== null &&
-                  ethers.formatUnits(
-                      userBalance.toString(), 
-                    tokenDecimals
-                  )
+                    ethers.formatUnits(
+                        userBalance.toString(), 
+                        tokenDecimals
+                    )
               }
             </div>
         </div>

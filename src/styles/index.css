@@ -589,6 +589,7 @@ a{
 .app-body{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   position: relative;
   top: var(--navbar-height);
   height: calc(100svh - var(--navbar-height));
