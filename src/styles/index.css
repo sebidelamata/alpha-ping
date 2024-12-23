@@ -589,7 +589,6 @@ a{
 .app-body{
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   position: relative;
   top: var(--navbar-height);
   height: calc(100svh - var(--navbar-height));
@@ -1303,7 +1302,7 @@ a{
 .messages-feed{
   overflow-y: scroll;
   display: grid;
-  width: 100vw;
+  /* width: 100vw; */
 }
 
 .message{
