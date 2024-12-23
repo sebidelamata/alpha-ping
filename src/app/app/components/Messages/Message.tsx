@@ -207,7 +207,7 @@ const Message: React.FC<MessageProps> = ({
             </a>
           <div className='post-timestamp-token-amount'>
             <div className='post-timestamp-token-amount-title'>
-              Post Balance:
+              <strong>Post Balance:</strong>
             </div>
             <div className='post-timestamp-token-amount-value'>
               {

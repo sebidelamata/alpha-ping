@@ -42,7 +42,7 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
     return(
         <div className='current-token-amount'>
             <div className='current-token-amount-title'>
-              Current Balance:
+              <strong>Current Balance:</strong>
             </div>
             <div className='current-token-amount-value'>
               {
