@@ -865,6 +865,7 @@ a{
   justify-content:flex-start;
   align-items: center;
   gap: var(--gap);
+  width: 100%;
 }
 
 #profile{
@@ -1102,20 +1103,23 @@ a{
 }
 
 .current-username-and-pic-container{
-  display: flex;
-  flex-direction: column;
-  min-width: 100%;
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+  grid-template-columns: 100%;
+  width: 100%;
   gap: var(--large-button-padding);
-  justify-content: center;
+  justify-content: left;
   align-items: center;
+  padding-left: var(--body-padding);
 }
 
 .row-one{
   display: grid;
-  grid-template-columns: repeat(3, 33%);
+  grid-template-columns: repeat(3, auto);
   align-items: center;
-  align-items: center;
+  justify-content: space-evenly;
   width: 100%;
+  gap: var(--gap-small);
 }
 .row-one>div{
   height: 100%;
@@ -1124,8 +1128,8 @@ a{
 .current-username-and-pic,
 .edit-profile-row-two{
   display: grid;
-  grid-template-rows: repeat(2, 50%);
-  justify-content: center;
+  grid-template-rows: repeat(2, auto);
+  justify-content: space-evenly;
   align-items: center;
   gap: var(--gap-small);
 }
@@ -1144,7 +1148,7 @@ a{
   display: grid;
   align-items: center;
   justify-content: center;
-  max-width: 50%;
+  /* max-width: 50%; */
 }
 
 .edit-profile-form{
@@ -1201,8 +1205,8 @@ a{
 .profile-tabs{
   display: grid;
   grid-template-columns: repeat(3, 30%);
-  gap: var(--gap);
-  justify-content: center;
+  gap: var(--gap-small);
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
 }
