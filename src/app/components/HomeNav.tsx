@@ -47,7 +47,7 @@ const HomeNav:React.FC = () => {
                             legacyBehavior 
                             passHref
                         >
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} target="_blank">
                                 App
                             </NavigationMenuLink>
                         </Link>
@@ -59,7 +59,7 @@ const HomeNav:React.FC = () => {
                             legacyBehavior 
                             passHref
                         >
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} target="_blank">
                                 Protocol
                             </NavigationMenuLink>
                         </Link>
@@ -71,7 +71,7 @@ const HomeNav:React.FC = () => {
                             legacyBehavior 
                             passHref
                         >
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} target="_blank">
                                 Docs
                             </NavigationMenuLink>
                         </Link>
@@ -89,11 +89,12 @@ const HomeNav:React.FC = () => {
                                         legacyBehavior 
                                         passHref
                                     >
-                                        <NavigationMenuLink>
+                                        <NavigationMenuLink target="_blank" className="flex items-center justify-center w-12 h-12">
                                             <img 
                                                 src="/x.svg" 
                                                 alt="X Link" 
                                                 className="homenav-icon"
+                                                loading="lazy"
                                             />
                                         </NavigationMenuLink>
                                     </Link>
@@ -114,11 +115,12 @@ const HomeNav:React.FC = () => {
                                         legacyBehavior 
                                         passHref
                                     >
-                                        <NavigationMenuLink>
+                                        <NavigationMenuLink target="_blank" className="flex items-center justify-center w-12 h-12">
                                             <img 
                                                 src="/discord.svg" 
                                                 alt="Discord Link" 
                                                 className="homenav-icon"
+                                                loading="lazy"
                                             />
                                         </NavigationMenuLink>
                                     </Link>
@@ -130,11 +132,12 @@ const HomeNav:React.FC = () => {
                                         legacyBehavior 
                                         passHref
                                     >
-                                        <NavigationMenuLink>
+                                        <NavigationMenuLink target="_blank" className="flex items-center justify-center w-12 h-12">
                                             <img 
                                                 src="/Telegram_logo.svg" 
                                                 alt="Telegram Link" 
                                                 className="homenav-icon"
+                                                loading="lazy"
                                             />
                                         </NavigationMenuLink>
                                     </Link>
