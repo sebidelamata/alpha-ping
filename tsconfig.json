@@ -2,6 +2,12 @@
   "compilerOptions": {
     "target": "es5",
     "useDefineForClassFields": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/utils/*": ["utils/*"],
+      "@/styles/*": ["styles/*"]
+    },
     "lib": [
       "dom",
       "dom.iterable",
@@ -37,8 +43,9 @@
     "**/*.ts",
     "**/*.tsx",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
-, "hardhat.config.cts"  ],
+    ".next/types/**/*.ts", 
+    "hardhat.config.cts"  
+  ],
   "exclude": [
     "node_modules"
   ]

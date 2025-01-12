@@ -41,7 +41,8 @@ const server = app.listen(PORT, () => console.log(`Listening on ${PORT}\n`))
 
 const allowedOrigins = [
   "https://www.alphaping.xyz",
-  "https://www.alphaping.xyz/app"
+  "https://www.alphaping.xyz/app",
+  "http://localhost:3000/" //change this before merge
 ];
 
 const io = new Server(server, {

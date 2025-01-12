@@ -8,6 +8,18 @@ import React,
     MouseEvent as ReactMouseEvent
 } from "react";
 import Link from "next/link";
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuIndicator,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+    NavigationMenuViewport,
+    navigationMenuTriggerStyle
+  } from "@/components/components/ui/navigation-menu"
+  
 
 const HomeNav:React.FC = () => {
 
@@ -48,6 +60,46 @@ const HomeNav:React.FC = () => {
                     A<span className='header-mid-word-break'>lpha</span>PING {'{beta}'}
                 </h1>
             </div>
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <Link 
+                            href={'/app'} 
+                            target="_blank" 
+                            legacyBehavior 
+                            passHref
+                        >
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                App
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link 
+                            href={'https://github.com/sebidelamata/alpha-ping'} 
+                            target="_blank" 
+                            legacyBehavior 
+                            passHref
+                        >
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                Protocol
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link 
+                            href={'/docs'} 
+                            target="_blank" 
+                            legacyBehavior 
+                            passHref
+                        >
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                Docs
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
             <ul className="homenav-links-list">
                 <li>
                     <Link href={'/app'} target="_blank">
