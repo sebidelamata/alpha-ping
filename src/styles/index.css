@@ -115,7 +115,6 @@ a{
   flex-direction: row;
   /* width: 100vw; */
   z-index: 3;
-  gap: var(--gap);
   justify-content:space-between;
   align-items: center;
   padding: var(--large-button-padding);

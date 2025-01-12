@@ -81,7 +81,7 @@ const HomeNav:React.FC = () => {
                             Socials
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <ul>
+                            <ul className="grid gap-1 p-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[25%_25%_25%]">
                                 <li>
                                     <Link 
                                         href={'https://x.com/__AlphaPING__'} 
@@ -99,15 +99,6 @@ const HomeNav:React.FC = () => {
                                         </NavigationMenuLink>
                                     </Link>
                                 </li>
-                                {/* <li>
-                                    <Link href={'https://warpcast.com/'} target="_blank">
-                                        <img 
-                                            src="/warpcast.svg" 
-                                            alt="Warpcast Link" 
-                                            className="homenav-icon"
-                                        />
-                                    </Link>
-                                </li> */}
                                 <li>
                                     <Link 
                                         href={'https://discord.com/channels/1309709451397431346/1310010641259434156'} 
