@@ -17,7 +17,7 @@ const HomeNav:React.FC = () => {
 
     return(
         <div className="flex flex-row justify-between align-middle p-4">
-            <div className='gap-4 grid grid-cols-[auto_auto] justify-normal align-middle'>
+            <div className='gap-4 grid grid-cols-[auto_auto] justify-normal align-middle relative left-4'>
                 <div className='grid size-10 align-middle'>
                     <img 
                         src="../Apes.svg" 
@@ -26,11 +26,11 @@ const HomeNav:React.FC = () => {
                         loading="lazy"
                     />
                 </div>
-                <h1 className='flex gap-0 text-5xl font-bold'>
+                <h1 className='flex gap-0 text-3xl font-bold'>
                     A<span className='font-light italic text-base align-bottom'>lpha</span>PING {'{beta}'}
                 </h1>
             </div>
-            <NavigationMenu className="relative right-10">
+            <NavigationMenu className="relative right-4">
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <Link 
