@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 const Home:React.FC = () => {
     return(
-        <div className="home-container">
+        <div>
             <HomeNav/>
             <h1 className="hero">AlphaPING</h1>
             <h2 className="hero-two">Chat | Trade</h2>

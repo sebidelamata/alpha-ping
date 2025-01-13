@@ -1,22 +1,14 @@
 'use client';
 
-import React, 
-{ 
-    useState,
-    useEffect,
-    useRef,
-    MouseEvent as ReactMouseEvent
-} from "react";
+import React from "react";
 import Link from "next/link";
 import {
     NavigationMenu,
     NavigationMenuContent,
-    NavigationMenuIndicator,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-    NavigationMenuViewport,
     navigationMenuTriggerStyle
   } from "@/components/components/ui/navigation-menu"
   
@@ -24,9 +16,9 @@ import {
 const HomeNav:React.FC = () => {
 
     return(
-        <div className="home-navbar-container">
-            <div className='nav-brand'>
-                <div className='logo-container'>
+        <div className="flex flex-row justify-between align-middle p-4">
+            <div className='gap-4 grid grid-cols-[auto_auto] justify-normal align-middle'>
+                <div className='grid size-10 align-middle'>
                     <img 
                         src="../Apes.svg" 
                         alt="AlphaPING Logo" 
@@ -34,11 +26,11 @@ const HomeNav:React.FC = () => {
                         loading="lazy"
                     />
                 </div>
-                <h1 className='brand-header'>
-                    A<span className='header-mid-word-break'>lpha</span>PING {'{beta}'}
+                <h1 className='flex gap-0 text-5xl font-bold'>
+                    A<span className='font-light italic text-base align-bottom'>lpha</span>PING {'{beta}'}
                 </h1>
             </div>
-            <NavigationMenu>
+            <NavigationMenu className="relative right-10">
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <Link 
@@ -81,8 +73,8 @@ const HomeNav:React.FC = () => {
                             Socials
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <ul className="grid gap-1 p-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[25%_25%_25%]">
-                                <li>
+                            <ul className="grid gap-1 p-2 md:w-[200px] lg:w-[300px] lg:grid-cols-[33%_33%_33%] justify-center align-middle">
+                                <li className="grid align-middle justify-center">
                                     <Link 
                                         href={'https://x.com/__AlphaPING__'} 
                                         target="_blank"
@@ -99,7 +91,7 @@ const HomeNav:React.FC = () => {
                                         </NavigationMenuLink>
                                     </Link>
                                 </li>
-                                <li>
+                                <li className="grid align-middle justify-center">
                                     <Link 
                                         href={'https://discord.com/channels/1309709451397431346/1310010641259434156'} 
                                         target="_blank"
@@ -116,7 +108,7 @@ const HomeNav:React.FC = () => {
                                         </NavigationMenuLink>
                                     </Link>
                                 </li>
-                                <li>
+                                <li className="grid align-middle justify-center">
                                     <Link 
                                         href={'https://t.me/+c-zi1QU486RiNDNh'} 
                                         target="_blank"
