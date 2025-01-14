@@ -2,40 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-/* :root {
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  --color-1: #242424;
-  --color-2:  rgba(255, 255, 255, 0.87);
-  --color-3: rgb(188, 146, 222, 0.8);
-  --color-4: rgb(167, 165, 168, 0.8);
-  --button-radius: 8px;
-  --transition-speed-1: 0.6s;
-  --border-width: 1px;
-  --border-width-thick: 4px;
-  --icon-width-small: 2vw;
-  --icon-height-small: 2svh; 
-  --icon-width-med: 4vw;
-  --icon-height-med: 4svh; 
-  --icon-width-large: 8vw;
-  --icon-height-large: 8svh; 
-  --icon-width-x-large: 16vw;
-  --icon-height-x-large: 16svh; 
-  --navbar-height: 12svh;
-  --large-button-padding: 1em;
-  --large-button-padding-side: 2em;
-  --med-button-padding: 0.5em;
-  --med-button-padding-side: 1em;
-  --body-padding: 1em;
-  --gap: 2em;
-  --gap-small: 0.5em;
-  color: var(--color-2);
-  background-color: var(--color-1);
-  display: grid;
-} */
 @layer base {
   :root {
     --background: 0, 0, 14;
@@ -101,13 +67,48 @@
   }
 }
 
+
+/* :root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --color-1: #242424;
+  --color-2:  rgba(255, 255, 255, 0.87);
+  --color-3: rgb(188, 146, 222, 0.8);
+  --color-4: rgb(167, 165, 168, 0.8);
+  --button-radius: 8px;
+  --transition-speed-1: 0.6s;
+  --border-width: 1px;
+  --border-width-thick: 4px;
+  --icon-width-small: 2vw;
+  --icon-height-small: 2svh; 
+  --icon-width-med: 4vw;
+  --icon-height-med: 4svh; 
+  --icon-width-large: 8vw;
+  --icon-height-large: 8svh; 
+  --icon-width-x-large: 16vw;
+  --icon-height-x-large: 16svh; 
+  --navbar-height: 12svh;
+  --large-button-padding: 1em;
+  --large-button-padding-side: 2em;
+  --med-button-padding: 0.5em;
+  --med-button-padding-side: 1em;
+  --body-padding: 1em;
+  --gap: 2em;
+  --gap-small: 0.5em;
+  color: var(--color-2);
+  background-color: var(--color-1);
+  display: grid;
+} */
+
 nextjs-portal {
   background-color: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
   display: contents; /* Renders the portal without adding extra box */
 }
-
+/* 
 .homenav-icon{
   display: grid;
   justify-content: center;
@@ -1094,7 +1095,6 @@ nextjs-portal {
   align-items: center;
   justify-content: center;
   padding: var(--large-button-padding);
-  /* max-width: 50%; */
 }
 
 .current-profile-pic,
@@ -1102,7 +1102,6 @@ nextjs-portal {
   display: grid;
   align-items: center;
   justify-content: center;
-  /* max-width: 50%; */
 }
 
 .edit-profile-form{
@@ -1642,4 +1641,4 @@ textarea:active{
   to {
       transform: rotateY(360deg);
   }
-}
+} */

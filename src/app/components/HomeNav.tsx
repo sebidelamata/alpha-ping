@@ -22,7 +22,7 @@ const HomeNav:React.FC = () => {
                     <img 
                         src="../Apes.svg" 
                         alt="AlphaPING Logo" 
-                        className='logo' 
+                        className='grid h-2 w-2 object-contain justify-center align-middle' 
                         loading="lazy"
                     />
                 </div>
@@ -85,7 +85,7 @@ const HomeNav:React.FC = () => {
                                             <img 
                                                 src="/x.svg" 
                                                 alt="X Link" 
-                                                className="homenav-icon"
+                                                className="size-2"
                                                 loading="lazy"
                                             />
                                         </NavigationMenuLink>
@@ -102,7 +102,7 @@ const HomeNav:React.FC = () => {
                                             <img 
                                                 src="/discord.svg" 
                                                 alt="Discord Link" 
-                                                className="homenav-icon"
+                                                className="size-2"
                                                 loading="lazy"
                                             />
                                         </NavigationMenuLink>
@@ -119,7 +119,7 @@ const HomeNav:React.FC = () => {
                                             <img 
                                                 src="/Telegram_logo.svg" 
                                                 alt="Telegram Link" 
-                                                className="homenav-icon"
+                                                className="size-2"
                                                 loading="lazy"
                                             />
                                         </NavigationMenuLink>
