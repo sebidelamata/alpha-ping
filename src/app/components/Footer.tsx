@@ -34,7 +34,7 @@ const Footer:React.FC = () => {
                                         src="/xAlt.svg" 
                                         alt="X Icon" 
                                         loading="lazy" 
-                                        className="size-6"
+                                        className="object-contain sm:size-1 md:size-2 lg:size-4"
                                     />
                                 </NavigationMenuLink>
                             </Link>

@@ -12,7 +12,7 @@ const Home:React.FC = () => {
             <h2 className="flex h-[10vh] justify-center align-middle text-xl">
                 Chat | Trade
             </h2>
-            <p className="flex  w-screen grow justify-end pr-36 pt-96 text-right text-lg">
+            <p className="z-30 flex  w-screen grow justify-end pr-36 pt-96 text-right text-lg">
                 Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place.
             </p>
             <img 
