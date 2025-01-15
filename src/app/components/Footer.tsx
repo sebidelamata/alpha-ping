@@ -10,7 +10,7 @@ import {
 
 const Footer:React.FC = () => {
     return(
-        <div className="grid grid-cols-[auto_auto] justify-between bg-color-3 p-4 align-middle">
+        <div className="grid grid-cols-[auto_auto] justify-between bg-accent p-4 align-middle">
             <div className="grid pr-4">
                 <img 
                     src="/ApesAlt.svg" 
@@ -34,7 +34,7 @@ const Footer:React.FC = () => {
                                         src="/xAlt.svg" 
                                         alt="X Icon" 
                                         loading="lazy" 
-                                        className="size-12"
+                                        className="size-6"
                                     />
                                 </NavigationMenuLink>
                             </Link>
@@ -51,7 +51,8 @@ const Footer:React.FC = () => {
                                     <img 
                                         src="/discordAlt.svg" 
                                         alt="Discord Link" 
-                                        className="size-12"
+                                        className="size-6"
+                                        loading="lazy"
                                     />
                                 </NavigationMenuLink>
                             </Link>
@@ -68,7 +69,8 @@ const Footer:React.FC = () => {
                                     <img 
                                         src="/Telegram_logoAlt.svg" 
                                         alt="Telegram Link" 
-                                        className="size-12"
+                                        className="size-6"
+                                        loading="lazy"
                                     />
                                 </NavigationMenuLink>
                             </Link>

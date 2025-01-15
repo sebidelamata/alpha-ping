@@ -71,7 +71,7 @@ const HomeNav:React.FC = () => {
                             Socials
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <ul className="grid justify-center gap-1 p-2 align-middle md:w-[200px] lg:w-[300px] lg:grid-cols-[33%_33%_33%]">
+                            <ul className="grid justify-center gap-1 bg-primary p-2 align-middle md:w-[200px] lg:w-[300px] lg:grid-cols-[33%_33%_33%]">
                                 <li className="grid justify-center align-middle">
                                     <Link 
                                         href={'https://x.com/__AlphaPING__'} 
