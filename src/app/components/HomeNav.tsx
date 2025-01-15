@@ -56,7 +56,7 @@ const HomeNav:React.FC = () => {
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <Link 
-                            href={'/docs'} 
+                            href={'/docs/overview'} 
                             target="_blank" 
                             legacyBehavior 
                             passHref
