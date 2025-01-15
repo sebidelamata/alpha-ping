@@ -16,18 +16,18 @@ import {
 const HomeNav:React.FC = () => {
 
     return(
-        <div className="flex flex-row justify-between align-middle p-4">
-            <div className='gap-4 grid grid-cols-[auto_auto] justify-normal align-middle relative left-4'>
+        <div className="flex flex-row justify-between align-middle p-4 gap-2">
+            <div className='gap-4 grid grid-cols-[auto_auto] justify-normal align-middle'>
                 <div className='grid size-10 align-middle'>
                     <img 
                         src="../Apes.svg" 
                         alt="AlphaPING Logo" 
-                        className='grid h-2 w-2 object-contain justify-center align-middle' 
+                        className='grid h-12 w-12 object-contain justify-center align-middle' 
                         loading="lazy"
                     />
                 </div>
                 <h1 className='flex gap-0 text-3xl font-bold'>
-                    A<span className='font-light italic text-base align-bottom'>lpha</span>PING {'{beta}'}
+                    A<span className='font-light italic text-base align-bottom'>lpha</span>PING
                 </h1>
             </div>
             <NavigationMenu className="relative right-4">
@@ -85,7 +85,7 @@ const HomeNav:React.FC = () => {
                                             <img 
                                                 src="/x.svg" 
                                                 alt="X Link" 
-                                                className="size-2"
+                                                className="size-6"
                                                 loading="lazy"
                                             />
                                         </NavigationMenuLink>
@@ -102,7 +102,7 @@ const HomeNav:React.FC = () => {
                                             <img 
                                                 src="/discord.svg" 
                                                 alt="Discord Link" 
-                                                className="size-2"
+                                                className="size-6"
                                                 loading="lazy"
                                             />
                                         </NavigationMenuLink>
@@ -119,7 +119,7 @@ const HomeNav:React.FC = () => {
                                             <img 
                                                 src="/Telegram_logo.svg" 
                                                 alt="Telegram Link" 
-                                                className="size-2"
+                                                className="size-6"
                                                 loading="lazy"
                                             />
                                         </NavigationMenuLink>

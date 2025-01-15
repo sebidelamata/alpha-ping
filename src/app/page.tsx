@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 const Home:React.FC = () => {
     return(
-        <div>
+        <div className="flex h-screen flex-col">
             <HomeNav/>
             <h1 className="flex h-[16vh] justify-center align-middle text-2xl">
                 AlphaPING
@@ -12,13 +12,13 @@ const Home:React.FC = () => {
             <h2 className="flex h-[10vh] justify-center align-middle text-xl">
                 Chat | Trade
             </h2>
-            <p className="relative right-40 flex h-[24vh] justify-end pt-[30%] text-right text-lg">
+            <p className="flex  w-screen grow justify-end pr-36 pt-96 text-right text-lg">
                 Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place.
             </p>
             <img 
                 src="/bananaPeeled.svg" 
                 alt="banana" 
-                className="absolute left-5 top-20 flex h-[70vh] object-contain " 
+                className="absolute left-[5%] top-[15%] flex h-[70vh] object-contain " 
                 loading="lazy"
             />
             <Footer/>

@@ -155,15 +155,6 @@ nextjs-portal {
   left: 5%;
 }
 
-.footer{
-  background-color: var(--color-3);
-  padding: var(--med-button-padding);
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  justify-content: space-between;
-  align-items: center;
-}
-
 .footer-right{
   display: grid;
   padding-right: var(--body-padding);
