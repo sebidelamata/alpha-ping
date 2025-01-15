@@ -8,6 +8,9 @@ import Roadmap from "../components/Roadmap";
 import TechnicalDocs from "../components/TechnicalDocs";
 import Contracts from "../components/Contracts";
 import Team from "../components/Team";
+import Governance from "../components/Governance";
+import Tokenomics from "../components/Tokenomics";
+import Airdrop from "../components/Airdrop";
 
 export default function SectionPage() {
   const { section } = useParams();
@@ -26,11 +29,11 @@ export default function SectionPage() {
     case "team":
       return <Team />;
     case "governance":
-      return <h2>Governance</h2>;
+      return <Governance/>;
     case "tokenomics":
-      return <h2>Tokenomics</h2>;
+      return <Tokenomics/>;
     case "airdrop":
-      return <h2>Airdrop</h2>;
+      return <Airdrop/>;
     default:
       return <h2>Section not found</h2>;
   }
