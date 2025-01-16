@@ -73,7 +73,7 @@ import {
 
   export function DocsSidebar() {
     return (
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <SidebarContent className="bg-primary text-secondary">
           <SidebarGroup className="gap-14 pt-4">
             <SidebarGroupLabel>
