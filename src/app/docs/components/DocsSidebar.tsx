@@ -75,7 +75,7 @@ import {
     return (
       <Sidebar>
         <SidebarContent className="bg-primary text-secondary">
-          <SidebarGroup className="gap-14">
+          <SidebarGroup className="gap-14 pt-4">
             <SidebarGroupLabel>
                 <h1 className="text-xl text-secondary">AlphaPING Docs</h1>
                 <Link 
