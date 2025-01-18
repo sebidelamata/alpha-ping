@@ -15,7 +15,7 @@ const Litepaper:React.FC = () => {
                 1. Introduction
             </h3>
             <p className="px-4">
-                AlphaPING is an innovative DeFi chat protocol that integrates social trading, sentiment analysis, real-time project research, and decentralized trading—all in one place. By blending these elements, AlphaPING fosters a collaborative environment for decentralized finance (DeFi) enthusiasts, traders, and developers, while filtering out bots and spam through a unique membership model.
+                AlphaPING is an innovative DeFi chat protocol that integrates social trading, sentiment analysis, real-time project research, and decentralized trading—all in one place. By blending these elements, AlphaPING fosters a collaborative environment for DeFi enthusiasts, traders, and developers, while filtering out bots and spam through a unique membership model.
             </p>
             <br />
             <p className="px-4">
