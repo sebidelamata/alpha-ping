@@ -3,7 +3,7 @@ import Footer from "src/app/components/Footer";
 
 const Litepaper:React.FC = () => {
     return(
-        <div className="relative flex flex-col h-screen gap-4">
+        <div className="relative flex h-screen flex-col gap-4">
             <h2 className="p-4 text-4xl font-bold">
                 AlphaPING Litepaper
             </h2>
@@ -78,7 +78,7 @@ const Litepaper:React.FC = () => {
             <p className="px-4">
                 AlphaPING represents a new direction in social DeFi platforms, one that combines trust, transparency, and a seamless trading experience. As we work towards a community-driven protocol, AlphaPING will continue to evolve with user feedback and governance to ensure it remains relevant and valuable to DeFi users. Join us as we build a platform where community insight and on-chain data meet for an optimized trading experience.
             </p>
-            <Footer></Footer>
+            <Footer/>
         </div>
     )
 } 
