@@ -1,5 +1,6 @@
 import React from "react";
 import Footer from "src/app/components/Footer";
+import { Separator } from "@radix-ui/react-separator";
 
 const TechnicalDocs:React.FC = () => {
     return(
@@ -39,6 +40,7 @@ const TechnicalDocs:React.FC = () => {
                     Blacklist functionality for malicious behavior.
                 </li>
             </ul>
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h3 className="p-4 text-xl font-bold">
                 Contract Structure
             </h3>
@@ -107,6 +109,7 @@ const TechnicalDocs:React.FC = () => {
                     <code className="text-accent">personalFollowList</code>: Mapping of user addresses to addresses they are following.
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 pl-6 text-lg">
                 Structs
             </h4>
@@ -145,6 +148,7 @@ const TechnicalDocs:React.FC = () => {
                     </ul>
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 pl-6 text-lg">
                 Modifiers
             </h4>
@@ -165,6 +169,7 @@ const TechnicalDocs:React.FC = () => {
                     <code className="text-accent">onlyLegitChannels</code>: Ensures the channel ID is valid.
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 pl-6 text-lg">
                 Functions
             </h4>
@@ -191,6 +196,7 @@ const TechnicalDocs:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-accent/25"/>
                 <li className="p-2">
                     <h5 className="p-4 pl-6">
                         Profile Management
@@ -228,6 +234,7 @@ const TechnicalDocs:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-accent/25"/>
                 <li className="p-2">
                     <h5 className="p-4 pl-6">
                         Channel Management
@@ -295,6 +302,7 @@ const TechnicalDocs:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-accent/25"/>
                 <li className="p-2">
                     <h5 className="p-4 pl-6">
                         Ownership and Moderation
@@ -362,6 +370,7 @@ const TechnicalDocs:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-accent/25"/>
                 <li className="p-2">
                     <h5 className="p-4 pl-6">
                         User Blacklist and Ban Management
@@ -414,6 +423,7 @@ const TechnicalDocs:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-accent/25"/>
                 <li className="p-2">
                     <h5 className="p-4 pl-6">
                         Personal Blocklist and Follow List
@@ -481,6 +491,7 @@ const TechnicalDocs:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-accent/25"/>
                 <li className="p-2">
                     <h5 className="p-4 pl-6">
                         Subscription and Premium Membership
@@ -519,10 +530,11 @@ const TechnicalDocs:React.FC = () => {
                     </ul>
                 </li>
             </ul>
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h4 className="p-4 pl-6 text-lg">
                 Example Use Cases
             </h4>
-            <ol className="px-4">
+            <ol className="mb-8 px-4">
                 <li>
                     <h5 className="px-4">
                         Minting a Membership:
@@ -559,7 +571,6 @@ const TechnicalDocs:React.FC = () => {
                     </p>
                 </li>
             </ol>
-            <br />
             <Footer/>
         </div>
     )

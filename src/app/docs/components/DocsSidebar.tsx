@@ -50,11 +50,6 @@ import {
       icon: ReceiptText,
     },
     {
-        title: "Team",
-        url: "./team",
-        icon: Shield,
-    },
-    {
         title: "Governance",
         url: "./governance",
         icon: Landmark,
@@ -68,6 +63,11 @@ import {
         title: "Airdrop",
         url: "./airdrop",
         icon: HandCoins,
+    },
+    {
+      title: "Team",
+      url: "./team",
+      icon: Shield,
     },
   ]
 

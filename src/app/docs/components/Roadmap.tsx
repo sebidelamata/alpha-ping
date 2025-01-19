@@ -1,5 +1,6 @@
 import React from "react";
 import Footer from "src/app/components/Footer";
+import { Separator } from "@radix-ui/react-separator";
 
 const Roadmap:React.FC = () => {
     return(
@@ -10,7 +11,7 @@ const Roadmap:React.FC = () => {
             <p className="px-4">
                 Our development roadmap for AlphaPING is structured into progressive phases, each building on the previous one to deliver a seamless and powerful social trading experience.
             </p>
-            <br />
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h3 className="p-4 text-xl font-bold">
                 Phase 0.5: Core Chat Platform Development
             </h3>
@@ -31,6 +32,7 @@ const Roadmap:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-secondary/50"/>
                 <li className="p-2">
                     <h4 className="p-4 text-lg">
                         Core Chat Features
@@ -44,11 +46,12 @@ const Roadmap:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-secondary/50"/>
             </ul>
             <h4 className="p-4 text-lg">
                 <strong>Target Completion:</strong> Q1 2025
             </h4>
-            <br />
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h3 className="p-4 text-xl font-bold">
                 Phase 1: Sentiment Analysis and Trading Infrastructure
             </h3>
@@ -84,6 +87,7 @@ const Roadmap:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-secondary/50"/>
                 <li className="p-2">
                     <h4 className="p-4 text-lg">
                         Market Data Integration
@@ -94,6 +98,7 @@ const Roadmap:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-secondary/50"/>
                 <li className="p-2">
                     <h4 className="p-4 text-lg">
                         Trading Infrastructure
@@ -105,10 +110,11 @@ const Roadmap:React.FC = () => {
                     </ul>
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 text-lg">
                 <strong>Target Completion:</strong> Q2 2025
             </h4>
-            <br />
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h3 className="p-4 text-xl font-bold">Phase 2: Multichain Support and Enhanced Community Engagement</h3>
             <p className="px-4">
                 <strong>Goal:</strong> Broaden AlphaPING’s reach across chains and introduce dynamic engagement features to foster community interaction.
@@ -124,6 +130,7 @@ const Roadmap:React.FC = () => {
                         </li>
                     </ul>
                 </li>
+                <Separator className="m-6 mx-96 border border-secondary/50"/>
                 <li className="p-2">
                     <h4 className="p-4 text-lg">
                         Enhanced Engagement Tools
@@ -141,10 +148,11 @@ const Roadmap:React.FC = () => {
                     </ul>
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 text-lg">
                 <strong>Target Completion:</strong> Q3 2025
             </h4>
-            <br />
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h3 className="p-4 text-xl font-bold">Phase 3: Governance and Decentralized Voting</h3>
             <p className="px-4">
                 <strong>Goal:</strong> Implement community-led governance, allowing users to participate in AlphaPING’s direction.
@@ -159,10 +167,11 @@ const Roadmap:React.FC = () => {
                     </ul>
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 text-lg">
                 <strong>Target Completion:</strong> Q4 2025
             </h4>
-            <br />
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h3 className="p-4 text-xl font-bold">Phase 4: Mobile Accessibility</h3>
             <p className="px-4">
                 <strong>Goal:</strong> Increase accessibility with a mobile app, making AlphaPING available on mobile devices.
@@ -177,10 +186,11 @@ const Roadmap:React.FC = () => {
                     </ul>
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 text-lg">
                 <strong>Target Completion:</strong> Q1 2026
             </h4>
-            <br />
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h3 className="p-4 text-xl font-bold">
                 Phase 5: Advanced Financial Products and Community Incentives
             </h3>
@@ -197,14 +207,15 @@ const Roadmap:React.FC = () => {
                     </ul>
                 </li>
             </ul>
+            <Separator className="m-6 mx-96 border border-secondary/50"/>
             <h4 className="p-4 text-lg">
                 <strong>Target Completion:</strong> Q2 2026
             </h4>
-            <br />
+            <Separator className="m-8 mx-64 border border-accent"/>
             <h2 className="p-4 text-4xl font-bold">
                 Future Vision
             </h2>
-            <p className="px-4">
+            <p className="mb-8 px-4">
                 AlphaPING will continuously evolve with community feedback, offering new tools and innovative features tailored to the needs of decentralized social traders. Each phase builds on the last to create a rich, user-focused ecosystem.
             </p>
             <Footer/>
