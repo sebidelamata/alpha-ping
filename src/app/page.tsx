@@ -12,13 +12,13 @@ const Home:React.FC = () => {
             <h2 className="flex h-[10vh] justify-center align-middle text-xl">
                 Chat | Trade
             </h2>
-            <p className="z-30 flex  w-screen grow justify-end pr-36 pt-96 text-right text-lg">
+            <p className="relative left-10 z-30 flex w-[90%] grow justify-end pt-96 text-right md:text-sm lg:text-lg">
                 Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place.
             </p>
             <img 
                 src="/bananaPeeled.svg" 
                 alt="banana" 
-                className="absolute left-[5%] top-[15%] flex h-[70vh] object-contain " 
+                className="absolute top-[27%] flex h-96 object-contain sm:left-[20%] sm:ml-12 md:left-[10%] md:ml-24 lg:left-[10%] lg:ml-32" 
                 loading="lazy"
             />
             <Footer/>

@@ -14,21 +14,21 @@ import {
 const HomeNav:React.FC = () => {
 
     return(
-        <div className="flex flex-row justify-between gap-2 p-4 align-middle">
-            <div className='grid grid-cols-[auto_auto] justify-normal gap-4 align-middle'>
-                <div className='grid size-10 align-middle'>
+        <div className="med:p-3 flex w-screen flex-row justify-between gap-2 align-middle sm:p-2 lg:p-4">
+            <div className='grid grid-cols-[auto_auto] justify-normal align-middle sm:gap-1 md:gap-3 lg:gap-4'>
+                <div className='grid size-9 align-middle'>
                     <img 
                         src="../Apes.svg" 
                         alt="AlphaPING Logo" 
-                        className='grid size-12 justify-center object-contain align-middle' 
+                        className='grid size-9 justify-center object-contain align-middle' 
                         loading="lazy"
                     />
                 </div>
-                <h1 className='flex gap-0 text-3xl font-bold'>
+                <h1 className='flex gap-0 font-bold sm:text-lg md:text-2xl lg:text-3xl'>
                     A<span className='align-bottom text-base font-light italic'>lpha</span>PING
                 </h1>
             </div>
-            <NavigationMenu className="relative right-4">
+            <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <Link 
