@@ -11,25 +11,25 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
 
   return (
-    <nav className='nav-bar'>
-      <div className='nav-brand'>
-        <div className='logo-container'>
+    <nav className='flex h-32 fixed w-screen z-3 justify-between p-4'>
+      <div className='grid grid-cols-2 justify-start align-middle'>
+        <div>
           <img 
             src="../Apes.svg" 
             alt="AlphaPING Logo" 
-            className='logo'
+            className='grid justify-center align-middle size-16 object-contain'
             loading="lazy"
           />
         </div>
-        <h1 className='brand-header'>
-          A<span className='header-mid-word-break'>lpha</span>PING {'{beta}'}
+        <h1 className='text-2xl font-bold'>
+          A<span className='text-sm font-light italic'>lpha</span>PING
         </h1>
       </div>
       <SearchChannels
         joinChannelLoading={joinChannelLoading}
         setJoinChannelLoading={setJoinChannelLoading}
       />
-      <div className='connect-container'>
+      <div className='grid justify-end align-middle'>
         <w3m-button size='sm' balance='hide'/>
       </div>
     </nav>
