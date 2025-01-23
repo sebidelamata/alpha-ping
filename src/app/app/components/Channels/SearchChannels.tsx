@@ -74,22 +74,22 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
                     <Command>
-                    <CommandInput placeholder="Search Token or NFT..." className="h-9" />
-                    <CommandList>
-                        <CommandEmpty>No token found.</CommandEmpty>
-                        {channels.map((channel) => (
-                            <CommandItem
-                            key={channel.tokenAddress}
-                            value={channel.name}
-                            onSelect={() => {
-                                handleChannelClick(channel)
-                                setOpenSearch(false)
-                            }}
-                            >
-                            <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
-                            </CommandItem>
-                        ))}
-                    </CommandList>
+                        <CommandInput placeholder="Search Token or NFT..." className="h-9" />
+                        <CommandList>
+                            <CommandEmpty>No token found.</CommandEmpty>
+                            {channels.map((channel) => (
+                                <CommandItem
+                                key={channel.tokenAddress}
+                                value={channel.name}
+                                onSelect={() => {
+                                    handleChannelClick(channel)
+                                    setOpenSearch(false)
+                                }}
+                                >
+                                <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
+                                </CommandItem>
+                            ))}
+                        </CommandList>
                     </Command>
                 </PopoverContent>
             </Popover>
