@@ -66,17 +66,17 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({
                     variant="outline"
                     role="combobox"
                     aria-expanded={openSearch === true ? "true" : "false"}
-                    className="w-[270px] justify-between"
+                    className="w-[200px] justify-between"
                     >
-                    Search Tokens or NFT by Name...
+                    Search Token or NFT...
                     <ChevronsUpDown className="opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[270px] p-0">
+                <PopoverContent className="w-[200px] p-0">
                     <Command>
-                    <CommandInput placeholder="Search Tokens or NFT by Name..." className="h-9" />
+                    <CommandInput placeholder="Search Token or NFT..." className="h-9" />
                     <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandEmpty>No token found.</CommandEmpty>
                         {channels.map((channel) => (
                             <CommandItem
                             key={channel.tokenAddress}
@@ -86,7 +86,7 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({
                                 setOpenSearch(false)
                             }}
                             >
-                            <span>{channel.name} - {channel.tokenAddress}</span>
+                            <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
                             </CommandItem>
                         ))}
                     </CommandList>
