@@ -93,30 +93,6 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({
                     </Command>
                 </PopoverContent>
             </Popover>
-            {/* <Command 
-                className="rounded-lg border bg-primary text-secondary shadow-md md:min-w-[450px]"
-            >
-                <CommandInput 
-                    placeholder="Search Tokens or NFTs (name or address)..." 
-                    onFocus={() => setOpenSearch(true)}
-                    onBlur={() => setOpenSearch(false)} 
-                    // value={searchTerm}
-                    // onChangeCapture={(e) => handleChange(e)}
-                />
-                {
-                    openSearch === true &&
-                    <CommandList>
-                        <CommandEmpty>No results found.</CommandEmpty>
-                        {
-                            channels.map((channel) => (
-                                <CommandItem onMouseDown={() => handleChannelClick(channel)}>
-                                    <span>{channel.name} - {channel.tokenAddress}</span>
-                                </CommandItem>
-                            ))
-                        }
-                    </CommandList>
-                }
-            </Command> */}
             {
                 joinChannelLoading === true &&
                 <div className="join-channel-loading-container">
