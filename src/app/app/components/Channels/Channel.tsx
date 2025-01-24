@@ -10,6 +10,12 @@ import { useEtherProviderContext } from '../../../../contexts/ProviderContext';
 import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
 import Loading from "../Loading";
 import LeaveChannel from "./LeaveChannel";
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@/components/components/ui/avatar";
+import { SidebarMenuButton } from "@/components/components/ui/sidebar"
 
 interface ChannelProps{
     channel: AlphaPING.ChannelStructOutput;
@@ -128,13 +134,9 @@ const Channel:React.FC<ChannelProps> = ({
     },[currentChannel, setSelectedChannelMetadata, tokenMetada, channel.id])
 
     return(
-        <>
-            <div className="channel-name">
-                {channel.name}
-            </div>
-            <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
-            <div className="channel-logo">
-                <img 
+        <SidebarMenuButton>
+            <Avatar className="size-6">
+                <AvatarImage 
                     src={
                         tokenMetada.logo !== '' ? 
                         tokenMetada.logo : 
@@ -146,14 +148,15 @@ const Channel:React.FC<ChannelProps> = ({
                     } 
                     alt="Token Logo"
                     loading="lazy"
-                    className={
-                        currentChannel && 
-                        currentChannel.id.toString() === channel.id.toString() ? 
-                        "channel-logo-image channel-logo-image-active" : 
-                        "channel-logo-image"
-                        }
                 />
+                <AvatarFallback>
+                    {channel.name.slice(0,2)}
+                </AvatarFallback>
+            </Avatar>
+            <div className="channel-name">
+                {channel.name}
             </div>
+            <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
             {
                 joinChannelLoading === true &&
                 <div className="join-channel-loading-container">
@@ -162,7 +165,7 @@ const Channel:React.FC<ChannelProps> = ({
                     </div>
                 </div>
             }
-        </>
+        </SidebarMenuButton>
     )
 }
 
