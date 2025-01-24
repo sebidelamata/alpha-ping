@@ -10,7 +10,7 @@ const Home:React.FC = () => {
                 AlphaPING
             </h1>
             <h2 className="flex h-[10vh] justify-center align-middle text-xl">
-                Chat | Trade
+                Chat | Analyze | Trade
             </h2>
             <p className="relative left-10 z-30 flex w-[90%] grow justify-end pt-96 text-right md:text-sm lg:text-lg">
                 Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place.
