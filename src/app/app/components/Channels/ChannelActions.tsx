@@ -13,8 +13,7 @@ import {
 } from "@/components/components/ui/sidebar"
 import { 
   Avatar,
-  AvatarImage,
-  AvatarFallback
+  AvatarImage
  } from "@/components/components/ui/avatar";
 
 const ChannelActions: React.FC = () => {
