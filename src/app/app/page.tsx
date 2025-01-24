@@ -88,7 +88,7 @@ const App:React.FC = () => {
       }
       {
         (
-          isMember === true ||
+          isMember === false ||
           isConnected === false
         ) &&
         <JoinAlphaPING

@@ -2,6 +2,15 @@
 
 import React from "react";
 import { useEtherProviderContext } from '../../../contexts/ProviderContext';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/components/ui/dialog"
+import { Button } from "@/components/components/ui/button";
+import { Separator } from "@radix-ui/react-separator";
 
 interface JoinAlphaPINGProps {
     setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,40 +31,47 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
     }
 
     return(
-        <div className='join-alpha-ping'>
-          <div className='join-container'>
-            <h2 className="join-header">
-                Quit Monkeying Around!
-            </h2>
-            <div className="join-icon">
-                <img 
-                    src="../Apes.svg" 
-                    alt="AlphaPING Logo" 
-                    className="join-logo"
-                    loading="lazy"
-                />
-            </div>
-            <h3 className="join-body">
-                Mint a Membership and Swing into the Chat!
-            </h3>
-            <div className="join-button-container">
-                {
-                    signer ? (
-                        <button className="join-button" onClick={() => joinAlphaPING()}>
-                            Join
-                        </button>
-                    ) : (
-                        <w3m-button 
-                            size='xxl' 
-                            balance='hide'
-                            label="Connect to Join"
-                        />
-                    )
+        <Dialog open={true}>
+            <DialogContent className="items-center justify-center align-middle">
+                <DialogHeader className="items-center justify-center align-middle">
+                    <DialogTitle className="items-center justify-center align-middle text-3xl">
+                        Quit Monkeying Around!
+                    </DialogTitle>
+                    <Separator className="h-2"/>
+                    <DialogDescription className="flex flex-col items-center justify-center space-y-4">
+                        <div className="object-contain">
+                            <img 
+                                src="../Apes.svg" 
+                                alt="AlphaPING Logo" 
+                                className="size-80"
+                                loading="lazy"
+                            />
+                        </div>
+                        <Separator className="w-64 border border-secondary"/>
+                        <h3 className="text-lg">
+                            Mint a Membership and Swing into the Chat!
+                        </h3>
+                        <Separator className="h-2"/>
+                        {
+                            signer ? (
+                                <Button 
+                                    onClick={() => joinAlphaPING()}
+                                >
+                                    Join
+                                </Button>
+                            ) : (
+                                <w3m-button 
+                                    size='xxl' 
+                                    balance='hide'
+                                    label="Connect to Join"
+                                />
+                            )
 
-                }
-            </div>
-          </div>
-        </div>
+                        }
+                    </DialogDescription>
+                </DialogHeader>
+            </DialogContent>
+        </Dialog>
     )
 }
 
