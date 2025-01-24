@@ -1,14 +1,6 @@
 import SearchChannels from '../Channels/SearchChannels';
 
-interface NavbarProps {
-  joinChannelLoading: boolean;
-  setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ 
-  joinChannelLoading, 
-  setJoinChannelLoading 
-}) => {
+const Navbar: React.FC = () => {
 
   return (
     <nav className='fixed z-50 flex h-24 w-full justify-between bg-primary p-4'>
@@ -25,10 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({
           A<span className='text-sm font-light italic'>lpha</span>PING
         </h1>
       </div>
-      <SearchChannels
-        joinChannelLoading={joinChannelLoading}
-        setJoinChannelLoading={setJoinChannelLoading}
-      />
+      <SearchChannels/>
       <div className='grid justify-end align-middle'>
         <w3m-button size='sm' balance='hide'/>
       </div>

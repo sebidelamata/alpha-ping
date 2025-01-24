@@ -1,3 +1,15 @@
+'use client';
+
+import React, { 
+  useState, 
+  useEffect 
+} from "react";
+import { AlphaPING } from '../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+import AddChannel from "./Channels/AddChannel";
+import { useEtherProviderContext } from "../../../contexts/ProviderContext";
+import { useChannelProviderContext } from "../../../contexts/ChannelContext";
+import ChannelActions from "./Channels/ChannelActions";
+import { ethers } from 'ethers';
 import {
     Sidebar,
     SidebarContent,
@@ -8,7 +20,6 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
   } from "@/components/components/ui/sidebar"
-  import React from "react"
 
 const AppSidebar = () => {
     return(
@@ -17,7 +28,7 @@ const AppSidebar = () => {
                 <SidebarGroup className="gap-14 pt-4">
                     <SidebarGroupLabel>
                         <h1 className="text-xl text-secondary">
-                            AlphaPING Docs
+                            Channels
                         </h1>
                     </SidebarGroupLabel>
                     <SidebarGroupContent>

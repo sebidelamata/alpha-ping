@@ -12,20 +12,22 @@ import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
 import ChannelActions from "./ChannelActions";
 import { ethers } from 'ethers'
 
-interface ChannelsProps {
-  channelAction: string;
-  setChannelAction: React.Dispatch<React.SetStateAction<string>>;
-  joinChannelLoading: boolean;
-}
+const Channels:React.FC = () => {
 
-const Channels:React.FC<ChannelsProps> = ({ 
-  channelAction,
-  setChannelAction,
-  joinChannelLoading
-}) => {
-
-  const { alphaPING, channels, setChannels, hasJoined, signer, setHasJoined } = useEtherProviderContext()
-  const { currentChannel } = useChannelProviderContext()
+  const { 
+    alphaPING, 
+    channels, 
+    setChannels, 
+    hasJoined, 
+    signer, 
+    setHasJoined 
+  } = useEtherProviderContext()
+  const { 
+    currentChannel, 
+    joinChannelLoading, 
+    channelAction, 
+    setChannelAction  
+  } = useChannelProviderContext()
 
   const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
   const loadUserChannels = ():void => {

@@ -24,18 +24,18 @@ import {
   import { Button } from "@/components/components/ui/button.tsx";
   import { ChevronsUpDown } from "lucide-react";
 
-interface SearchChannelsProps {
-    joinChannelLoading: boolean;
-    setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const SearchChannels: React.FC = () => {
 
-const SearchChannels: React.FC<SearchChannelsProps> = ({ 
-    joinChannelLoading,
-    setJoinChannelLoading
-}) => {
-
-    const { channels, alphaPING, signer } = useEtherProviderContext()
-    const { setCurrentChannel } = useChannelProviderContext()
+    const { 
+        channels, 
+        alphaPING, 
+        signer 
+    } = useEtherProviderContext()
+    const { 
+        setCurrentChannel,
+        joinChannelLoading, 
+        setJoinChannelLoading 
+    } = useChannelProviderContext()
 
     const [openSearch, setOpenSearch] = useState(false)
 

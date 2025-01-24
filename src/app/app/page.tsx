@@ -21,10 +21,8 @@ const App:React.FC = () => {
   const { alphaPING, signer } = useEtherProviderContext()
   const { blacklisted } = useUserProviderContext()
   const { isConnected } = useAppKitAccount()
-  const { joinChannelLoading } = useChannelProviderContext()
+  const { channelAction } = useChannelProviderContext()
 
-  // selected channel's actions
-  const [channelAction, setChannelAction] = useState<string>("chat")
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
 
@@ -39,7 +37,6 @@ const App:React.FC = () => {
 
   useEffect(() => {
     findIsMember()
-    console.log(isMember)
   }, [signer, isConnected])
 
   const renderChannelAction = () => {
@@ -69,11 +66,7 @@ const App:React.FC = () => {
     <>
       <div className='app-container'>
         <div className='app-body'>
-          <Channels
-            channelAction={channelAction}
-            setChannelAction={setChannelAction}
-            joinChannelLoading={joinChannelLoading}
-          />
+          <Channels/>
           {renderChannelAction()}
         </div>
       </div>
