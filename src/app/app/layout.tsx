@@ -23,7 +23,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <div className="top-24 flex">
                 <AppSidebar/>
                 <main>
-                    <SidebarTrigger className="fixed top-32"/>
+                    <SidebarTrigger className="fixed top-24"/>
                     {children}
                 </main>
             </div>
