@@ -77,7 +77,9 @@ import {
         <SidebarContent className="bg-primary text-secondary">
           <SidebarGroup className="gap-14 pt-4">
             <SidebarGroupLabel>
-                <h1 className="text-xl text-secondary">AlphaPING Docs</h1>
+                <h1 className="text-xl text-secondary">
+                  AlphaPING Docs
+                </h1>
                 <Link 
                     href={'https://alphaping.xyz'} 
                     target="_blank"

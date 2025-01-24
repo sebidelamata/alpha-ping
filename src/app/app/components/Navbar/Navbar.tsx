@@ -11,13 +11,13 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
 
   return (
-    <nav className='flex h-32 fixed w-screen z-3 justify-between p-4'>
+    <nav className='fixed z-50 flex h-24 w-full justify-between bg-primary p-4'>
       <div className='grid grid-cols-2 justify-start align-middle'>
         <div>
           <img 
             src="../Apes.svg" 
             alt="AlphaPING Logo" 
-            className='grid justify-center align-middle size-16 object-contain'
+            className='grid size-16 justify-center object-contain align-middle'
             loading="lazy"
           />
         </div>

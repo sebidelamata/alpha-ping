@@ -20,7 +20,7 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
     setIsMember
 }) => {
 
-    const { alphaPING, signer, provider} = useEtherProviderContext()
+    const { alphaPING, signer, provider } = useEtherProviderContext()
 
     const joinAlphaPING = async() => {
         if(provider){
@@ -38,7 +38,6 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
                         Quit Monkeying Around!
                     </DialogTitle>
                     <Separator className="h-2"/>
-                    <DialogDescription className="flex flex-col items-center justify-center space-y-4">
                         <div className="object-contain">
                             <img 
                                 src="../Apes.svg" 
@@ -48,9 +47,9 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
                             />
                         </div>
                         <Separator className="w-64 border border-secondary"/>
-                        <h3 className="text-lg">
+                        <DialogDescription>
                             Mint a Membership and Swing into the Chat!
-                        </h3>
+                        </DialogDescription>
                         <Separator className="h-2"/>
                         {
                             signer ? (
@@ -61,14 +60,12 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
                                 </Button>
                             ) : (
                                 <w3m-button 
-                                    size='xxl' 
                                     balance='hide'
                                     label="Connect to Join"
                                 />
                             )
 
                         }
-                    </DialogDescription>
                 </DialogHeader>
             </DialogContent>
         </Dialog>

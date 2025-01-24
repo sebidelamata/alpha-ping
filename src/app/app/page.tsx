@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 
-// navbar
-import Navbar from './components/Navbar/Navbar'
 //channels
 import Channels from './components/Channels/Channels'
 // messages
@@ -41,7 +39,8 @@ const App:React.FC = () => {
 
   useEffect(() => {
     findIsMember()
-  }, [signer])
+    console.log(isMember)
+  }, [signer, isConnected])
 
   const renderChannelAction = () => {
     switch(channelAction){
@@ -69,10 +68,6 @@ const App:React.FC = () => {
   return (
     <>
       <div className='app-container'>
-        <Navbar
-          joinChannelLoading={joinChannelLoading}
-          setJoinChannelLoading={setJoinChannelLoading}
-          />
         <div className='app-body'>
           <Channels
             channelAction={channelAction}
