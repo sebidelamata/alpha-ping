@@ -94,7 +94,7 @@ const SearchChannels: React.FC<SearchChannelsProps> = ({
                 </PopoverContent>
             </Popover>
             {
-                joinChannelLoading === false &&
+                joinChannelLoading === true &&
                     <Loading/>
             }
         </div>
