@@ -13,6 +13,7 @@ import JoinAlphaPING from './components/JoinAlphaPING'
 import { useAppKitAccount } from "@reown/appkit/react";
 import { useUserProviderContext } from '../../contexts/UserContext';
 import { useEtherProviderContext } from '../../contexts/ProviderContext';
+import { useChannelProviderContext } from '../../contexts/ChannelContext';
 import BlacklistedScreen from './components/BlacklistedScreen';
 
 const App:React.FC = () => {
@@ -20,13 +21,12 @@ const App:React.FC = () => {
   const { alphaPING, signer } = useEtherProviderContext()
   const { blacklisted } = useUserProviderContext()
   const { isConnected } = useAppKitAccount()
+  const { joinChannelLoading } = useChannelProviderContext()
 
   // selected channel's actions
   const [channelAction, setChannelAction] = useState<string>("chat")
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
-  // elevate joinchannel loading
-  const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
 
   const findIsMember = async () => {
     if(signer){

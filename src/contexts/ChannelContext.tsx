@@ -13,6 +13,8 @@ interface ChannelProviderType{
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
     selectedChannelMetadata: tokenMetadata | null;
     setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
+    joinChannelLoading: boolean;
+    setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // create context
@@ -31,13 +33,17 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
   const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
   // token metadata fetched from coinmarketcap
   const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
+  // join channel loading state
+  const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
 
   return (
     <ChannelContext.Provider value={{ 
         currentChannel,
         setCurrentChannel,
         selectedChannelMetadata,
-        setSelectedChannelMetadata
+        setSelectedChannelMetadata,
+        joinChannelLoading,
+        setJoinChannelLoading
     }}>
         {children}
     </ChannelContext.Provider>

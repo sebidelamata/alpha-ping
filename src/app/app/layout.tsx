@@ -2,17 +2,16 @@
 
 import React, 
 {
-    useState,
     ReactNode
 } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import { SidebarProvider, SidebarTrigger } from "@/components/components/ui/sidebar"
 import AppSidebar from "./components/AppSidebar";
+import { useChannelProviderContext } from "../../contexts/ChannelContext";
 
 const Layout = ({ children }: { children: ReactNode }) => {
 
-    // elevate joinchannel loading
-    const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
+    const { joinChannelLoading, setJoinChannelLoading } = useChannelProviderContext()
 
     return(
         <SidebarProvider>
