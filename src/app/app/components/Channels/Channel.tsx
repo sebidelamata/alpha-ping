@@ -129,44 +129,31 @@ const Channel:React.FC<ChannelProps> = ({
 
     return(
         <>
-             <li
-                onClick={() => channelHandler(channel)} 
-                key={channel.tokenAddress}
-                className={
-                    currentChannel && 
-                    currentChannel.id.toString() === channel.id.toString() ? 
-                    "channel channel-active" : 
-                    "channel"
-                }
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
-                <div className="channel-name">
-                    {channel.name}
-                </div>
-                <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
-                <div className="channel-logo">
-                    <img 
-                        src={
-                            tokenMetada.logo !== '' ? 
-                            tokenMetada.logo : 
-                            (
-                                channel.tokenType === 'ERC20' ?
-                                '/erc20Icon.svg' :
-                                '/blank_nft.svg'
-                            )
-                        } 
-                        alt="Token Logo"
-                        loading="lazy"
-                        className={
-                            currentChannel && 
-                            currentChannel.id.toString() === channel.id.toString() ? 
-                            "channel-logo-image channel-logo-image-active" : 
-                            "channel-logo-image"
-                            }
-                    />
-                </div>
-            </li>
+            <div className="channel-name">
+                {channel.name}
+            </div>
+            <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
+            <div className="channel-logo">
+                <img 
+                    src={
+                        tokenMetada.logo !== '' ? 
+                        tokenMetada.logo : 
+                        (
+                            channel.tokenType === 'ERC20' ?
+                            '/erc20Icon.svg' :
+                            '/blank_nft.svg'
+                        )
+                    } 
+                    alt="Token Logo"
+                    loading="lazy"
+                    className={
+                        currentChannel && 
+                        currentChannel.id.toString() === channel.id.toString() ? 
+                        "channel-logo-image channel-logo-image-active" : 
+                        "channel-logo-image"
+                        }
+                />
+            </div>
             {
                 joinChannelLoading === true &&
                 <div className="join-channel-loading-container">

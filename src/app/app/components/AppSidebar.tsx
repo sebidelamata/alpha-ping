@@ -20,6 +20,8 @@ import {
     SidebarMenu,
     SidebarMenuItem,
   } from "@/components/components/ui/sidebar"
+import { ScrollArea } from "@/components/components/ui/scroll-area"
+
 
 const AppSidebar = () => {
 
@@ -51,39 +53,36 @@ const AppSidebar = () => {
     }, [channels, joinChannelLoading, hasJoined, signer])
 
     // reload our channels if we get a new one
-      const reloadChannels = async () => {
-        const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
-        const channels = []
-    
-        for (let i = 1; i <= Number(totalChannels); i++) {
-          const channel = await alphaPING?.getChannel(i)
-          if(channel){
-            channels.push(channel)
-          }
+    const reloadChannels = async () => {
+    const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
+    const channels = []
+
+    for (let i = 1; i <= Number(totalChannels); i++) {
+        const channel = await alphaPING?.getChannel(i)
+        if(channel){
+        channels.push(channel)
         }
-        setChannels(channels)
-    
-        const hasJoinedChannel = []
-    
-          if(alphaPING !== null && signer !== null){
-            for (let i = 1; i <= Number(totalChannels); i++) {
-              const hasJoined = await alphaPING.hasJoinedChannel(
-                (i as ethers.BigNumberish), 
-                await signer.getAddress()
-              )
-              hasJoinedChannel.push(hasJoined)
-            }
-      
-            setHasJoined(hasJoinedChannel as boolean[])
-          }
-      }
-      useEffect(() => {
-        reloadChannels()
-      }, [currentChannel, joinChannelLoading, signer])
-    
+    }
+    setChannels(channels)
 
+    const hasJoinedChannel = []
 
-
+        if(alphaPING !== null && signer !== null){
+        for (let i = 1; i <= Number(totalChannels); i++) {
+            const hasJoined = await alphaPING.hasJoinedChannel(
+            (i as ethers.BigNumberish), 
+            await signer.getAddress()
+            )
+            hasJoinedChannel.push(hasJoined)
+        }
+    
+        setHasJoined(hasJoinedChannel as boolean[])
+        }
+    }
+    useEffect(() => {
+    reloadChannels()
+    }, [currentChannel, joinChannelLoading, signer])
+    
     return(
         <Sidebar collapsible="icon" className="mt-24">
             <SidebarContent className="bg-primary text-secondary">
@@ -94,18 +93,20 @@ const AppSidebar = () => {
                         </h1>
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenu>
-                            {
-                                userChannels.map((channel, index) => (
-                                    <SidebarMenuItem key={channel.tokenAddress}>
-                                        <Channel
-                                            channel={channel}
-                                            key={index}
-                                        />
-                                    </SidebarMenuItem>
-                                ))
-                            }
-                        </SidebarMenu>
+                        <ScrollArea className="h-[45svh]">
+                            <SidebarMenu>
+                                {
+                                    userChannels.map((channel, index) => (
+                                        <SidebarMenuItem key={channel.tokenAddress}>
+                                            <Channel
+                                                channel={channel}
+                                                key={index}
+                                            />
+                                        </SidebarMenuItem>
+                                    ))
+                                }
+                            </SidebarMenu>
+                        </ScrollArea>
                     </SidebarGroupContent>
                 </SidebarGroup>
                 <AddChannel/>
