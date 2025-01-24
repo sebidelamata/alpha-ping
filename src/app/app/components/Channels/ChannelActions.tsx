@@ -15,10 +15,7 @@ import {
 const ChannelActions: React.FC = () => {
 
   const { userProfilePic } = useUserProviderContext()
-  const { 
-          channelAction, 
-          setChannelAction  
-        } = useChannelProviderContext()
+  const { setChannelAction } = useChannelProviderContext()
 
   const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
     const action = (e.target as HTMLElement).id
@@ -28,7 +25,8 @@ const ChannelActions: React.FC = () => {
   const actions = [
     'Chat',
     'Analyze',
-    'Trade'
+    'Trade',
+    'Profile'
   ]
 
     return(
@@ -41,8 +39,12 @@ const ChannelActions: React.FC = () => {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {
-                              actions.map((action, index) => (
-                                  <SidebarMenuItem key={action}>
+                              actions.map((action) => (
+                                  <SidebarMenuItem 
+                                    key={action}
+                                    onClick={(e) => channelActionHandler(e)}
+                                    id={action}
+                                  >
                                       {action}
                                   </SidebarMenuItem>
                               ))

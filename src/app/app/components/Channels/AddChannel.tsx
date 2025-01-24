@@ -21,11 +21,15 @@ interface ErrorType {
 
 const AddChannel:React.FC = () => {
 
-    const { alphaPING, signer, setChannels } = useEtherProviderContext()
+    const { 
+        alphaPING, 
+        signer, 
+        setChannels 
+    } = useEtherProviderContext()
     const { 
             addChannelLoading, 
             setAddChannelLoading, 
-          } = useChannelProviderContext()
+    } = useChannelProviderContext()
 
     const [showAddChannelModal, setShowAddChannelModal] = useState<boolean>(false)
     const [tokenAddress, setTokenAddress] = useState<string>("")
