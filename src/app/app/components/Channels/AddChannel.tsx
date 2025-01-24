@@ -8,19 +8,24 @@ import React, {
 } from "react";
 import Loading from "../Loading";
 import { useEtherProviderContext } from '../../../../contexts/ProviderContext';
-
-interface AddChannelProps{
-    addChannelLoading: boolean;
-    setAddChannelLoadingLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
+import {
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarMenuButton,
+  } from "@/components/components/ui/sidebar"
 
 interface ErrorType {
     reason: string
 }
 
-const AddChannel:React.FC<AddChannelProps> = ({addChannelLoading, setAddChannelLoadingLoading}) => {
+const AddChannel:React.FC = () => {
 
     const { alphaPING, signer, setChannels } = useEtherProviderContext()
+    const { 
+            addChannelLoading, 
+            setAddChannelLoading, 
+          } = useChannelProviderContext()
 
     const [showAddChannelModal, setShowAddChannelModal] = useState<boolean>(false)
     const [tokenAddress, setTokenAddress] = useState<string>("")
@@ -37,7 +42,7 @@ const AddChannel:React.FC<AddChannelProps> = ({addChannelLoading, setAddChannelL
         if(tokenAddress === ""){return}
         if(tokenAddress.length !== 42){return}
 
-        setAddChannelLoadingLoading(true)
+        setAddChannelLoading(true)
 
         try{
             const transaction = await alphaPING?.connect(signer).createChannel(tokenAddress,tokenType)
@@ -71,7 +76,7 @@ const AddChannel:React.FC<AddChannelProps> = ({addChannelLoading, setAddChannelL
             setTokenAddress("")
             setTokenType("ERC20")
             setError(null)
-            setAddChannelLoadingLoading(false)
+            setAddChannelLoading(false)
         }
 
     }
@@ -94,12 +99,13 @@ const AddChannel:React.FC<AddChannelProps> = ({addChannelLoading, setAddChannelL
 
     return(
         <>
-            <div className="add-channel">
-                <button 
-                    className="add-channel-button"
-                    onClick={() => addChannelModal()}>+ Channel
-                </button>
-            </div>
+            <SidebarGroup className="gap-14 pt-4">
+                <SidebarGroupContent>
+                    <SidebarMenuButton onClick={() => addChannelModal()}>
+                        + Channel
+                    </SidebarMenuButton>
+                </SidebarGroupContent>
+            </SidebarGroup>
             {
                 showAddChannelModal === true &&
                 <div className="add-channel-greyout">

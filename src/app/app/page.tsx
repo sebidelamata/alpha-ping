@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 
-//channels
-import Channels from './components/Channels/Channels'
 // messages
 import Messages from './components/Messages/Messages'
 // profile
@@ -66,7 +64,6 @@ const App:React.FC = () => {
     <>
       <div className='app-container'>
         <div className='app-body'>
-          <Channels/>
           {renderChannelAction()}
         </div>
       </div>

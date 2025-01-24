@@ -15,6 +15,8 @@ interface ChannelProviderType{
     setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
     joinChannelLoading: boolean;
     setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    addChannelLoading: boolean;
+    setAddChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
     channelAction: string;
     setChannelAction: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -37,6 +39,8 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
   const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
   // join channel loading state
   const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
+  // add channel loading state
+  const [addChannelLoading, setAddChannelLoading] = useState<boolean>(false)
   // selected channel's actions ("chat", "analyze", "trade")
   const [channelAction, setChannelAction] = useState<string>("chat")
 
@@ -48,6 +52,8 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         setSelectedChannelMetadata,
         joinChannelLoading,
         setJoinChannelLoading,
+        addChannelLoading,
+        setAddChannelLoading,
         channelAction,
         setChannelAction
     }}>

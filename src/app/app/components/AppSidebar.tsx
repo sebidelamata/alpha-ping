@@ -18,7 +18,6 @@ import {
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarMenu,
-    SidebarMenuButton,
     SidebarMenuItem,
   } from "@/components/components/ui/sidebar"
 
@@ -35,8 +34,6 @@ const AppSidebar = () => {
       const { 
         currentChannel, 
         joinChannelLoading, 
-        channelAction, 
-        setChannelAction  
       } = useChannelProviderContext()
 
     const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
@@ -52,9 +49,6 @@ const AppSidebar = () => {
     useEffect(() => {
         loadUserChannels()
     }, [channels, joinChannelLoading, hasJoined, signer])
-
-    // weve elevated this state from add channels to make the channels list rerender on add channel
-    const [addChannelLoading, setAddChannelLoadingLoading] = useState<boolean>(false)
 
     // reload our channels if we get a new one
       const reloadChannels = async () => {
@@ -114,6 +108,8 @@ const AppSidebar = () => {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+                <AddChannel/>
+                <ChannelActions/>
             </SidebarContent>
         </Sidebar>
     )
