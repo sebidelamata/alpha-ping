@@ -39,49 +39,57 @@ const AppSidebar = () => {
       } = useChannelProviderContext()
 
     const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
-    const loadUserChannels = ():void => {
-        const userChannels: AlphaPING.ChannelStructOutput[] = []
-        hasJoined.map((joined, index) => {
-        if(joined === true){
-            userChannels.push(channels[index])
-        }
-        })
-        setUserChannels(userChannels)
-    }
     useEffect(() => {
+        const loadUserChannels = ():void => {
+            const userChannels: AlphaPING.ChannelStructOutput[] = []
+            hasJoined.map((joined, index) => {
+            if(joined === true){
+                userChannels.push(channels[index])
+            }
+            })
+            setUserChannels(userChannels)
+        }
         loadUserChannels()
     }, [channels, joinChannelLoading, hasJoined, signer])
 
-    // reload our channels if we get a new one
-    const reloadChannels = async () => {
-    const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
-    const channels = []
-
-    for (let i = 1; i <= Number(totalChannels); i++) {
-        const channel = await alphaPING?.getChannel(i)
-        if(channel){
-        channels.push(channel)
-        }
-    }
-    setChannels(channels)
-
-    const hasJoinedChannel = []
-
-        if(alphaPING !== null && signer !== null){
-        for (let i = 1; i <= Number(totalChannels); i++) {
-            const hasJoined = await alphaPING.hasJoinedChannel(
-            (i as ethers.BigNumberish), 
-            await signer.getAddress()
-            )
-            hasJoinedChannel.push(hasJoined)
-        }
-    
-        setHasJoined(hasJoinedChannel as boolean[])
-        }
-    }
     useEffect(() => {
-    reloadChannels()
-    }, [currentChannel, joinChannelLoading, signer])
+        // reload our channels if we get a new one
+        const reloadChannels = async () => {
+            const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
+            const channels = []
+        
+            for (let i = 1; i <= Number(totalChannels); i++) {
+                const channel = await alphaPING?.getChannel(i)
+                if(channel){
+                channels.push(channel)
+                }
+            }
+            setChannels(channels)
+        
+            const hasJoinedChannel = []
+        
+            if(alphaPING !== null && signer !== null){
+            for (let i = 1; i <= Number(totalChannels); i++) {
+                const hasJoined = await alphaPING.hasJoinedChannel(
+                (i as ethers.BigNumberish), 
+                await signer.getAddress()
+                )
+                hasJoinedChannel.push(hasJoined)
+            }
+        
+            setHasJoined(hasJoinedChannel as boolean[])
+            }
+        }
+        reloadChannels()
+    }, [
+            currentChannel, 
+            joinChannelLoading, 
+            signer, 
+            alphaPING, 
+            setChannels, 
+            setHasJoined
+        ]
+    )
     
     return(
         <Sidebar collapsible="icon" className="mt-24">

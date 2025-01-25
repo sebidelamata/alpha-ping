@@ -25,8 +25,15 @@ const Channel:React.FC<ChannelProps> = ({
     channel
 }) => {
 
-    const { alphaPING, signer } = useEtherProviderContext()
-    const { currentChannel, setCurrentChannel, setSelectedChannelMetadata } = useChannelProviderContext()
+    const { 
+        alphaPING, 
+        signer 
+    } = useEtherProviderContext()
+    const { 
+        currentChannel, 
+        setCurrentChannel, 
+        setSelectedChannelMetadata 
+    } = useChannelProviderContext()
 
 
     // holds metadata fetched from coinmarketcap
@@ -134,8 +141,13 @@ const Channel:React.FC<ChannelProps> = ({
     },[currentChannel, setSelectedChannelMetadata, tokenMetada, channel.id])
 
     return(
-        <SidebarMenuButton>
-            <Avatar className="size-6">
+        <SidebarMenuButton
+            className="flex items-center justify-start"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => channelHandler(channel)}
+        >
+            <Avatar className="size-4">
                 <AvatarImage 
                     src={
                         tokenMetada.logo !== '' ? 
@@ -153,17 +165,13 @@ const Channel:React.FC<ChannelProps> = ({
                     {channel.name.slice(0,2)}
                 </AvatarFallback>
             </Avatar>
-            <div className="channel-name">
+            <p>
                 {channel.name}
-            </div>
+            </p>
             <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
             {
                 joinChannelLoading === true &&
-                <div className="join-channel-loading-container">
-                    <div className="join-channel-loading">
-                        <Loading/>
-                    </div>
-                </div>
+                    <Loading/>
             }
         </SidebarMenuButton>
     )
