@@ -10,6 +10,16 @@ import {
     Dialog, 
     DialogTrigger 
 } from "@/components/components/ui/dialog";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+  } from "@/components/components/ui/hover-card"
+import {
+    Avatar,
+    AvatarImage,
+    AvatarFallback
+} from "@/components/components/ui/avatar"
 import { Plus } from "lucide-react";
 import AddChannelModal from "./AddChannelModal";
 
@@ -19,15 +29,36 @@ const AddChannel:React.FC = () => {
         <>
             <SidebarGroup className="gap-14 pt-4">
                 <SidebarGroupContent>
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <SidebarMenuButton>
-                                    <Plus/> 
-                                    <p>Channel</p>
-                                </SidebarMenuButton>
-                            </DialogTrigger>
-                            <AddChannelModal/>
-                        </Dialog>
+                    <HoverCard>
+                        <HoverCardTrigger>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <SidebarMenuButton>
+                                        <Plus/> 
+                                        <p>Channel</p>
+                                    </SidebarMenuButton>
+                                </DialogTrigger>
+                                <AddChannelModal/>
+                            </Dialog>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="bg-primary text-secondary">
+                            <div
+                                className="flex justify-between space-x-4"
+                            >
+                                <Avatar>
+                                    <AvatarImage
+                                        src="/Apes.svg"
+                                        loading="lazy"
+                                        alt="AlphaPING Logo"
+                                    />
+                                    <AvatarFallback>AP</AvatarFallback>
+                                </Avatar>
+                                <h4>
+                                    Create a new <span className="text-accent">Channel</span> for any <span className="text-accent">Token</span> or <span className="text-accent">NFT</span> on Arbitrum.
+                                </h4>
+                            </div>
+                        </HoverCardContent>
+                    </HoverCard>
                 </SidebarGroupContent>
             </SidebarGroup>
         </>
