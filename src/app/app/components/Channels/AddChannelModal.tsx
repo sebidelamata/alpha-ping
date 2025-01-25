@@ -33,6 +33,7 @@ import { useForm } from "react-hook-form"
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
 import Loading from "../Loading";
+import Link from "next/link";
 
 const formSchema = z.object({
     tokenAddress: z.string().min(42).max(42),
@@ -113,7 +114,7 @@ const AddChannelModal:React.FC = () => {
                         Add Channel
                     </DialogTitle>
                     <DialogDescription>
-                        Enter the address of any token (ERC-20) or NFT (ERC-721).
+                        Enter the address of any Token (ERC-20) or NFT (ERC-721).
                         <Form {...form}>
                             <form 
                                 onSubmit={form.handleSubmit(onSubmit)} 
@@ -131,6 +132,30 @@ const AddChannelModal:React.FC = () => {
                                                     {...field}
                                                 />
                                             </FormControl>
+                                            <FormDescription>
+                                                You can grab this from the project website,{' '} 
+                                                <Link 
+                                                    href={"https://coinmarketcap.com/"}
+                                                    target="_blank"
+                                                    className="text-accent"
+                                                >
+                                                    CoinmarketCap
+                                                </Link>,{' '}
+                                                <Link 
+                                                    href={"https://arbiscan.io/"}
+                                                    target="_blank"
+                                                    className="text-accent"
+                                                >
+                                                    Arbiscan
+                                                </Link>, or{' '} 
+                                                <Link 
+                                                    href={"https://opensea.io/"}
+                                                    target="_blank"
+                                                    className="text-accent"
+                                                >
+                                                    OpenSea
+                                                </Link>.
+                                            </FormDescription>
                                         </FormItem>
                                     )}
                                 />
@@ -159,11 +184,14 @@ const AddChannelModal:React.FC = () => {
                                                     </SelectTrigger>
                                                 </Select>
                                             </FormControl>
+                                            <FormDescription>
+                                                Is this a Token (ERC-20) or NFT (ERC-721)?
+                                            </FormDescription>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit">
+                                <Button type="submit" variant="secondary">
                                     Submit
                                 </Button>
                             </form>
