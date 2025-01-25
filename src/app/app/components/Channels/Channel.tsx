@@ -15,7 +15,21 @@ import {
     AvatarImage, 
     AvatarFallback 
 } from "@/components/components/ui/avatar";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+  } from "@/components/components/ui/hover-card"
+import { Badge } from "@/components/components/ui/badge"
 import { SidebarMenuButton } from "@/components/components/ui/sidebar"
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/components/ui/accordion"
+import { ScrollArea } from "@/components/components/ui/scroll-area";
+  
 
 interface ChannelProps{
     channel: AlphaPING.ChannelStructOutput;
@@ -143,52 +157,119 @@ const Channel:React.FC<ChannelProps> = ({
     },[currentChannel, setSelectedChannelMetadata, tokenMetada, channel.id])
 
     return(
-        <SidebarMenuButton
-            className={`flex items-center justify-start ${
-                currentChannel && 
-                currentChannel.id.toString() === channel.id.toString() && 
-                "bg-accent" }`
-            }
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={() => channelHandler(channel)}
-        >
-            <Avatar className="size-4">
-                <AvatarImage 
-                    src={
-                            isHovered === true ?
-                                tokenMetada.logo !== '' ? 
-                                tokenMetada.logo : 
-                                (
-                                    channel.tokenType === 'ERC20' ?
-                                    '/erc20IconAlt.svg' :
-                                    '/blank_nft.svg'
-                                )
-                            :
-                                tokenMetada.logo !== '' ? 
-                                tokenMetada.logo : 
-                                (
-                                    channel.tokenType === 'ERC20' ?
-                                    '/erc20Icon.svg' :
-                                    '/blank_nft.svg'
-                                )
-                    } 
-                    alt="Token Logo"
-                    loading="lazy"
-                />
-                <AvatarFallback>
-                    {channel.name.slice(0,2)}
-                </AvatarFallback>
-            </Avatar>
-            <p>
-                {channel.name}
-            </p>
-            <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
-            {
-                joinChannelLoading === true &&
-                    <Loading/>
-            }
-        </SidebarMenuButton>
+        <HoverCard>
+            <HoverCardTrigger>
+                <SidebarMenuButton
+                    className={`flex items-center justify-start ${
+                        currentChannel && 
+                        currentChannel.id.toString() === channel.id.toString() && 
+                        "bg-accent" }`
+                    }
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onClick={() => channelHandler(channel)}
+                >
+                    <Avatar className="size-4">
+                        <AvatarImage 
+                            src={
+                                    isHovered === true ?
+                                        tokenMetada.logo !== '' ? 
+                                        tokenMetada.logo : 
+                                        (
+                                            channel.tokenType === 'ERC20' ?
+                                            '/erc20IconAlt.svg' :
+                                            '/blank_nft.svg'
+                                        )
+                                    :
+                                        tokenMetada.logo !== '' ? 
+                                        tokenMetada.logo : 
+                                        (
+                                            channel.tokenType === 'ERC20' ?
+                                            '/erc20Icon.svg' :
+                                            '/blank_nft.svg'
+                                        )
+                            } 
+                            alt="Token Logo"
+                            loading="lazy"
+                        />
+                        <AvatarFallback>
+                            {channel.name.slice(0,2)}
+                        </AvatarFallback>
+                    </Avatar>
+                    <p>
+                        {channel.name}
+                    </p>
+                    <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
+                    {
+                        joinChannelLoading === true &&
+                            <Loading/>
+                    }
+                </SidebarMenuButton>
+            </HoverCardTrigger>
+            <HoverCardContent className="bg-primary text-secondary">
+                <div
+                    className="flex justify-between space-x-4"
+                >
+                    <div className="flex flex-row gap-2">
+                        <Avatar>
+                            <AvatarImage
+                                src={
+                                    tokenMetada.logo !== '' ? 
+                                    tokenMetada.logo : 
+                                    (
+                                        channel.tokenType === 'ERC20' ?
+                                        '/erc20Icon.svg' :
+                                        '/blank_nft.svg'
+                                    )
+                                }
+                                loading="lazy"
+                                alt="AlphaPING Logo"
+                            />
+                            <AvatarFallback>AP</AvatarFallback>
+                        </Avatar>
+                        <h5>{channel.name}</h5>
+                        <Accordion type="single" collapsible>
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger>
+                                    <Badge
+                                        variant="secondary"
+                                    >
+                                        {channel.tokenType}
+                                    </Badge>
+                                </AccordionTrigger>
+                                <AccordionContent className="max-h-[10svh] overflow-scroll">
+                                    {
+                                        tokenMetada.tags.length > 0 &&
+                                        <ScrollArea>
+                                            <ul>
+                                                {
+                                                    tokenMetada.tags.map((tag, index) => {
+                                                        return(
+                                                            <li key={index}>
+                                                                <Badge variant="outline" className="m-1 border-accent">
+                                                                    {
+                                                                        tag.length > 10 ?
+                                                                        `${tag.slice(0,10)}...` :
+                                                                        tag
+                                                                    }
+                                                                </Badge>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
+                                            </ul>
+                                        </ScrollArea>
+                                    }
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                    <div className="flex flex-col">
+                        
+                    </div>
+                </div>
+            </HoverCardContent>
+        </HoverCard>
     )
 }
 

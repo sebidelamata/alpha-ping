@@ -1,16 +1,24 @@
 'use client';
 
-import React, { 
-  useState, 
-  useEffect 
+import React,
+{
+  useState,
+  useEffect
 } from "react";
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem
+} from "@/components/components/ui/sidebar"
+import { ScrollArea } from "@/components/components/ui/scroll-area"
+import Channel from "../Channels/Channel";
+import { useEtherProviderContext } from "src/contexts/ProviderContext";
+import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
-import Channel from "./Channel";
-import AddChannel from "./AddChannel";
-import { useEtherProviderContext } from '../../../../contexts/ProviderContext';
-import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
-import ChannelActions from "./ChannelActions";
-import { ethers } from 'ethers'
+import { ethers } from 'ethers';
+
 
 const Channels:React.FC = () => {
 
@@ -25,118 +33,85 @@ const Channels:React.FC = () => {
   const { 
     currentChannel, 
     joinChannelLoading, 
-    channelAction, 
-    setChannelAction  
   } = useChannelProviderContext()
 
-  const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
+const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
+useEffect(() => {
   const loadUserChannels = ():void => {
-    const userChannels: AlphaPING.ChannelStructOutput[] = []
-    hasJoined.map((joined, index) => {
+      const userChannels: AlphaPING.ChannelStructOutput[] = []
+      hasJoined.map((joined, index) => {
       if(joined === true){
-        userChannels.push(channels[index])
+          userChannels.push(channels[index])
       }
-    })
-    setUserChannels(userChannels)
+      })
+      setUserChannels(userChannels)
   }
-  useEffect(() => {
-    loadUserChannels()
-  }, [channels, joinChannelLoading, hasJoined, signer])
+  loadUserChannels()
+}, [channels, joinChannelLoading, hasJoined, signer])
 
-  // weve elevated this state from add channels to make the channels list rerender on add channel
-  const [addChannelLoading, setAddChannelLoadingLoading] = useState<boolean>(false)
-
+useEffect(() => {
   // reload our channels if we get a new one
   const reloadChannels = async () => {
     const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
     const channels = []
 
     for (let i = 1; i <= Number(totalChannels); i++) {
-      const channel = await alphaPING?.getChannel(i)
-      if(channel){
+        const channel = await alphaPING?.getChannel(i)
+        if(channel){
         channels.push(channel)
-      }
+        }
     }
     setChannels(channels)
 
     const hasJoinedChannel = []
 
-      if(alphaPING !== null && signer !== null){
-        for (let i = 1; i <= Number(totalChannels); i++) {
-          const hasJoined = await alphaPING.hasJoinedChannel(
-            (i as ethers.BigNumberish), 
-            await signer.getAddress()
-          )
-          hasJoinedChannel.push(hasJoined)
-        }
-  
-        setHasJoined(hasJoinedChannel as boolean[])
-      }
-  }
-  useEffect(() => {
-    reloadChannels()
-  }, [currentChannel, joinChannelLoading, signer])
+    if(alphaPING !== null && signer !== null){
+    for (let i = 1; i <= Number(totalChannels); i++) {
+        const hasJoined = await alphaPING.hasJoinedChannel(
+        (i as ethers.BigNumberish), 
+        await signer.getAddress()
+        )
+        hasJoinedChannel.push(hasJoined)
+    }
 
-  const [showChannels, setShowChannels] = useState<boolean>(true)
-  const toggleChannels = (): void => {
-    setShowChannels(!showChannels)
+    setHasJoined(hasJoinedChannel as boolean[])
+    }
   }
+  reloadChannels()
+  }, [
+      currentChannel, 
+      joinChannelLoading, 
+      signer, 
+      alphaPING, 
+      setChannels, 
+      setHasJoined
+  ]
+)
   
     return (
-      <div className="channels">
-        <div className="channels-toggle-container">
-          {
-            showChannels === true ?
-            <button 
-              className="channels-toggle-button"
-              onClick={() => toggleChannels()}
-            >
-              <img 
-                src="/collapseIcon.svg" 
-                alt="Click to Collapse" 
-                className="channels-toggle-button-image"
-              />
-            </button> :
-            <button 
-              className="channels-toggle-button"
-              onClick={() => toggleChannels()}
-            >
-              <img 
-                src="/moreIcon.svg" 
-                alt="Click to Expand" 
-                className="channels-toggle-button-image-small"
-              />
-            </button>
-
-          }
-        </div>
-        {
-          showChannels === false ?
-          <div></div> :
-          <div>
-            <div className="channels-menu">
-            <h2 className="channels-title">
-              Channels
-            </h2>
-            <ul className="channels-list">
-              {
-                userChannels.map((channel, index) => (
-                  <Channel
-                    channel={channel}
-                    key={index}
-                  />
-                ))
-              }
-            </ul>
-          </div>
-          <AddChannel
-            addChannelLoading={addChannelLoading}
-            setAddChannelLoadingLoading={setAddChannelLoadingLoading}
-          />
-          <ChannelActions channelAction={channelAction} setChannelAction={setChannelAction}/>
-        </div>
-        }
-      </div>
+      <SidebarGroup className="gap-14 pt-4">
+        <SidebarGroupLabel>
+            <h1 className="text-xl text-secondary">
+                Channels
+            </h1>
+        </SidebarGroupLabel>
+        <SidebarGroupContent>
+            <ScrollArea className="max-h-[45svh]">
+                <SidebarMenu>
+                    {
+                        userChannels.map((channel, index) => (
+                            <SidebarMenuItem key={channel.tokenAddress}>
+                              <Channel
+                                  channel={channel}
+                                  key={index}
+                              />
+                            </SidebarMenuItem>
+                        ))
+                    }
+                </SidebarMenu>
+            </ScrollArea>
+        </SidebarGroupContent>
+      </SidebarGroup>   
     );
   }
   
