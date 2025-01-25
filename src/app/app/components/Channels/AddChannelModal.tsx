@@ -107,113 +107,111 @@ const AddChannelModal:React.FC = () => {
     }
 
     return(
-        <Dialog open={true}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>
-                        Add Channel
-                    </DialogTitle>
-                    <DialogDescription>
-                        Enter the address of any Token (ERC-20) or NFT (ERC-721).
-                        <Form {...form}>
-                            <form 
-                                onSubmit={form.handleSubmit(onSubmit)} 
-                                className="space-y-8"
-                            >
-                                <FormField
-                                    control={form.control}
-                                    name="tokenAddress"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Address</FormLabel>
-                                            <FormControl>
-                                                <Input 
-                                                    placeholder="0x0000000000000000000000000000000000000000"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormDescription>
-                                                You can grab this from the project website,{' '} 
-                                                <Link 
-                                                    href={"https://coinmarketcap.com/"}
-                                                    target="_blank"
-                                                    className="text-accent"
-                                                >
-                                                    CoinmarketCap
-                                                </Link>,{' '}
-                                                <Link 
-                                                    href={"https://arbiscan.io/"}
-                                                    target="_blank"
-                                                    className="text-accent"
-                                                >
-                                                    Arbiscan
-                                                </Link>, or{' '} 
-                                                <Link 
-                                                    href={"https://opensea.io/"}
-                                                    target="_blank"
-                                                    className="text-accent"
-                                                >
-                                                    OpenSea
-                                                </Link>.
-                                            </FormDescription>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="tokenType"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Token Type</FormLabel>
-                                            <FormControl>
-                                                <Select>
-                                                    <SelectTrigger className="w-[180px]">
-                                                        <SelectValue placeholder="ERC-20" />
-                                                        <SelectContent>
-                                                            <SelectItem 
-                                                                value="ERC20"
-                                                            >
-                                                                ERC-20
-                                                            </SelectItem>
-                                                            <SelectItem 
-                                                                value="ERC721"
-                                                            >
-                                                                ERC-721
-                                                            </SelectItem>
-                                                        </SelectContent>
-                                                    </SelectTrigger>
-                                                </Select>
-                                            </FormControl>
-                                            <FormDescription>
-                                                Is this a Token (ERC-20) or NFT (ERC-721)?
-                                            </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button type="submit" variant="secondary">
-                                    Submit
-                                </Button>
-                            </form>
-                        </Form>
-                        {
-                            error !== null &&
-                            <DialogFooter className="text-accent">
-                                {
-                                    error.length > 140 ?
-                                    `${error.slice(0,140)}...` :
-                                    error
-                                }
-                            </DialogFooter>
-                        }
-                    </DialogDescription>
-                </DialogHeader>
-            </DialogContent>
-            {
-                addChannelLoading === true &&
-                <Loading/>
-            }
-        </Dialog>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>
+                    Add Channel
+                </DialogTitle>
+                <DialogDescription>
+                    Enter the address of any Token (ERC-20) or NFT (ERC-721).
+                    <Form {...form}>
+                        <form 
+                            onSubmit={form.handleSubmit(onSubmit)} 
+                            className="space-y-8"
+                        >
+                            <FormField
+                                control={form.control}
+                                name="tokenAddress"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Address</FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                placeholder="0x0000000000000000000000000000000000000000"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            You can grab this from the project website,{' '} 
+                                            <Link 
+                                                href={"https://coinmarketcap.com/"}
+                                                target="_blank"
+                                                className="text-accent"
+                                            >
+                                                CoinmarketCap
+                                            </Link>,{' '}
+                                            <Link 
+                                                href={"https://arbiscan.io/"}
+                                                target="_blank"
+                                                className="text-accent"
+                                            >
+                                                Arbiscan
+                                            </Link>, or{' '} 
+                                            <Link 
+                                                href={"https://opensea.io/"}
+                                                target="_blank"
+                                                className="text-accent"
+                                            >
+                                                OpenSea
+                                            </Link>.
+                                        </FormDescription>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="tokenType"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Token Type</FormLabel>
+                                        <FormControl>
+                                            <Select>
+                                                <SelectTrigger className="w-[180px]">
+                                                    <SelectValue placeholder="ERC-20" />
+                                                    <SelectContent>
+                                                        <SelectItem 
+                                                            value="ERC20"
+                                                        >
+                                                            ERC-20
+                                                        </SelectItem>
+                                                        <SelectItem 
+                                                            value="ERC721"
+                                                        >
+                                                            ERC-721
+                                                        </SelectItem>
+                                                    </SelectContent>
+                                                </SelectTrigger>
+                                            </Select>
+                                        </FormControl>
+                                        <FormDescription>
+                                            Is this a Token (ERC-20) or NFT (ERC-721)?
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" variant="secondary">
+                                Submit
+                            </Button>
+                        </form>
+                    </Form>
+                    {
+                        error !== null &&
+                        <DialogFooter className="text-accent">
+                            {
+                                error.length > 140 ?
+                                `${error.slice(0,140)}...` :
+                                error
+                            }
+                        </DialogFooter>
+                    }
+                    {
+                        addChannelLoading === true &&
+                        <Loading/>
+                    }
+                </DialogDescription>
+            </DialogHeader>
+        </DialogContent>
     )
 }
 

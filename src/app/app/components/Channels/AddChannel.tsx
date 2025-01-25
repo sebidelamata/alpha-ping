@@ -8,31 +8,30 @@ import {
     SidebarGroupContent,
     SidebarMenuButton,
   } from "@/components/components/ui/sidebar"
-  import { Plus } from "lucide-react";
+import { 
+    Dialog, 
+    DialogTrigger 
+} from "@/components/components/ui/dialog";
+import { Plus } from "lucide-react";
 import AddChannelModal from "./AddChannelModal";
 
 const AddChannel:React.FC = () => {
-
-    const [showAddChannelModal, setShowAddChannelModal] = useState<boolean>(false)
-
-    const addChannelModal = () => {
-        setShowAddChannelModal(true)
-    }
 
     return(
         <>
             <SidebarGroup className="gap-14 pt-4">
                 <SidebarGroupContent>
-                    <SidebarMenuButton onClick={() => addChannelModal()}>
-                        <Plus/> 
-                        <p>Channel</p>
-                    </SidebarMenuButton>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <SidebarMenuButton>
+                                    <Plus/> 
+                                    <p>Channel</p>
+                                </SidebarMenuButton>
+                            </DialogTrigger>
+                            <AddChannelModal/>
+                        </Dialog>
                 </SidebarGroupContent>
             </SidebarGroup>
-            {
-                showAddChannelModal === true &&
-                <AddChannelModal/>
-            }
         </>
     )
 }
