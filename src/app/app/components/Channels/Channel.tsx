@@ -160,7 +160,7 @@ const Channel:React.FC<ChannelProps> = ({
         <HoverCard>
             <HoverCardTrigger>
                 <SidebarMenuButton
-                    className={`flex items-center justify-start ${
+                    className={`flex items-center justify-between ${
                         currentChannel && 
                         currentChannel.id.toString() === channel.id.toString() && 
                         "bg-accent" }`
@@ -169,36 +169,38 @@ const Channel:React.FC<ChannelProps> = ({
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={() => channelHandler(channel)}
                 >
-                    <Avatar className="size-4">
-                        <AvatarImage 
-                            src={
-                                    isHovered === true ?
-                                        tokenMetada.logo !== '' ? 
-                                        tokenMetada.logo : 
-                                        (
-                                            channel.tokenType === 'ERC20' ?
-                                            '/erc20IconAlt.svg' :
-                                            '/blank_nft.svg'
-                                        )
-                                    :
-                                        tokenMetada.logo !== '' ? 
-                                        tokenMetada.logo : 
-                                        (
-                                            channel.tokenType === 'ERC20' ?
-                                            '/erc20Icon.svg' :
-                                            '/blank_nft.svg'
-                                        )
-                            } 
-                            alt="Token Logo"
-                            loading="lazy"
-                        />
-                        <AvatarFallback>
-                            {channel.name.slice(0,2)}
-                        </AvatarFallback>
-                    </Avatar>
-                    <p>
-                        {channel.name}
-                    </p>
+                    <div className="flex items-center justify-start gap-4">
+                        <Avatar className="size-4">
+                            <AvatarImage 
+                                src={
+                                        isHovered === true ?
+                                            tokenMetada.logo !== '' ? 
+                                            tokenMetada.logo : 
+                                            (
+                                                channel.tokenType === 'ERC20' ?
+                                                '/erc20IconAlt.svg' :
+                                                '/blank_nft.svg'
+                                            )
+                                        :
+                                            tokenMetada.logo !== '' ? 
+                                            tokenMetada.logo : 
+                                            (
+                                                channel.tokenType === 'ERC20' ?
+                                                '/erc20Icon.svg' :
+                                                '/blank_nft.svg'
+                                            )
+                                } 
+                                alt="Token Logo"
+                                loading="lazy"
+                            />
+                            <AvatarFallback>
+                                {channel.name.slice(0,2)}
+                            </AvatarFallback>
+                        </Avatar>
+                        <p>
+                            {channel.name}
+                        </p>
+                    </div>
                     <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
                     {
                         joinChannelLoading === true &&
@@ -228,41 +230,49 @@ const Channel:React.FC<ChannelProps> = ({
                             <AvatarFallback>AP</AvatarFallback>
                         </Avatar>
                         <h5>{channel.name}</h5>
-                        <Accordion type="single" collapsible>
-                            <AccordionItem value="item-1">
-                                <AccordionTrigger>
-                                    <Badge
-                                        variant="secondary"
-                                    >
-                                        {channel.tokenType}
-                                    </Badge>
-                                </AccordionTrigger>
-                                <AccordionContent className="max-h-[10svh] overflow-scroll">
-                                    {
-                                        tokenMetada.tags.length > 0 &&
-                                        <ScrollArea>
-                                            <ul>
-                                                {
-                                                    tokenMetada.tags.map((tag, index) => {
-                                                        return(
-                                                            <li key={index}>
-                                                                <Badge variant="outline" className="m-1 border-accent">
-                                                                    {
-                                                                        tag.length > 10 ?
-                                                                        `${tag.slice(0,10)}...` :
-                                                                        tag
-                                                                    }
-                                                                </Badge>
-                                                            </li>
-                                                        )
-                                                    })
-                                                }
-                                            </ul>
-                                        </ScrollArea>
-                                    }
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Accordion>
+                        {
+                            tokenMetada.tags.length > 0 ?
+                            <Accordion type="single" collapsible>
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>
+                                        <Badge
+                                            variant="secondary"
+                                        >
+                                            {channel.tokenType}
+                                        </Badge>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="max-h-[10svh] overflow-scroll">
+                                        {
+                                            tokenMetada.tags.length > 0 &&
+                                            <ScrollArea>
+                                                <ul>
+                                                    {
+                                                        tokenMetada.tags.map((tag, index) => {
+                                                            return(
+                                                                <li key={index}>
+                                                                    <Badge variant="outline" className="m-1 border-accent">
+                                                                        {
+                                                                            tag.length > 10 ?
+                                                                            `${tag.slice(0,10)}...` :
+                                                                            tag
+                                                                        }
+                                                                    </Badge>
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+                                                </ul>
+                                            </ScrollArea>
+                                        }
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion> :
+                            <Badge
+                                variant="secondary"
+                            >
+                                {channel.tokenType}
+                            </Badge>
+                        }
                     </div>
                     <div className="flex flex-col">
                         
