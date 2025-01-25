@@ -33,7 +33,7 @@ const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channelID }) => {
                     variant="secondary"
                     size="icon"
                     onClick={(e) => handleClick(e)}
-                    className="hover:bg-accent"
+                    className="bg-secondary hover:bg-accent"
                     aria-label="Leave Channel"
                 >
                     <LogOut/>
