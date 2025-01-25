@@ -142,7 +142,11 @@ const Channel:React.FC<ChannelProps> = ({
 
     return(
         <SidebarMenuButton
-            className="flex items-center justify-start"
+            className={`flex items-center justify-start ${
+                currentChannel && 
+                currentChannel.id.toString() === channel.id.toString() && 
+                "bg-accent" }`
+            }
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => channelHandler(channel)}
@@ -150,13 +154,22 @@ const Channel:React.FC<ChannelProps> = ({
             <Avatar className="size-4">
                 <AvatarImage 
                     src={
-                        tokenMetada.logo !== '' ? 
-                        tokenMetada.logo : 
-                        (
-                            channel.tokenType === 'ERC20' ?
-                            '/erc20Icon.svg' :
-                            '/blank_nft.svg'
-                        )
+                            isHovered === true ?
+                                tokenMetada.logo !== '' ? 
+                                tokenMetada.logo : 
+                                (
+                                    channel.tokenType === 'ERC20' ?
+                                    '/erc20IconAlt.svg' :
+                                    '/blank_nft.svg'
+                                )
+                            :
+                                tokenMetada.logo !== '' ? 
+                                tokenMetada.logo : 
+                                (
+                                    channel.tokenType === 'ERC20' ?
+                                    '/erc20Icon.svg' :
+                                    '/blank_nft.svg'
+                                )
                     } 
                     alt="Token Logo"
                     loading="lazy"
