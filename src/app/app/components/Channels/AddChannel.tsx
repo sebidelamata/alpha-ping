@@ -15,6 +15,7 @@ import {
     SidebarMenuButton,
   } from "@/components/components/ui/sidebar"
   import { Plus } from "lucide-react";
+import AddChannelModal from "./AddChannelModal";
 
 interface ErrorType {
     reason: string
@@ -114,54 +115,55 @@ const AddChannel:React.FC = () => {
             </SidebarGroup>
             {
                 showAddChannelModal === true &&
-                <div className="add-channel-greyout">
-                    <div className="add-channel-modal" ref={modalRef}>
-                        <h2 className="add-channel-title">
-                            Add Channel
-                        </h2>
-                        <h4 className="add-channel-text">
-                            Enter the address of any token (ERC-20) or NFT (ERC-721).
-                            {
-                                error !== null &&
-                                <h2>{error}</h2>
-                            }
-                        </h4>
-                        <form action="" className="add-channel-form" onSubmit={(e) => createChannel(e)}>
-                            <div className="form-line-one">
-                                <label htmlFor="address">Address</label>
-                                <input 
-                                    type="text" 
-                                    name="address" 
-                                    placeholder="0x..." 
-                                    value={tokenAddress} 
-                                    onChange={(e) => setTokenAddress(e.target.value)} 
-                                />
-                                <label htmlFor="type">Token Type</label>
-                                <select 
-                                    className="token-type-selector" 
-                                    name="type"
-                                    onChange={(e) => setTokenType(e.target.value)}
-                                    value={tokenType}
-                                >
-                                    <option value="ERC20">ERC-20</option>
-                                    <option value="ERC721">ERC-721</option>
-                                </select>
-                            </div>
-                            <div className="add-channel-button-container">
-                                <button 
-                                    className="add-channel-button"
-                                    type="submit"
-                                >
-                                    <h3>Create</h3>
-                                </button>
-                            </div>
-                        </form>
-                        {
-                            addChannelLoading &&
-                            <Loading/>
-                        }
-                    </div>
-                </div>
+                <AddChannelModal/>
+                // <div className="add-channel-greyout">
+                //     <div className="add-channel-modal" ref={modalRef}>
+                //         <h2 className="add-channel-title">
+                //             Add Channel
+                //         </h2>
+                //         <h4 className="add-channel-text">
+                //             Enter the address of any token (ERC-20) or NFT (ERC-721).
+                //             {
+                //                 error !== null &&
+                //                 <h2>{error}</h2>
+                //             }
+                //         </h4>
+                //         <form action="" className="add-channel-form" onSubmit={(e) => createChannel(e)}>
+                //             <div className="form-line-one">
+                //                 <label htmlFor="address">Address</label>
+                //                 <input 
+                //                     type="text" 
+                //                     name="address" 
+                //                     placeholder="0x..." 
+                //                     value={tokenAddress} 
+                //                     onChange={(e) => setTokenAddress(e.target.value)} 
+                //                 />
+                //                 <label htmlFor="type">Token Type</label>
+                //                 <select 
+                //                     className="token-type-selector" 
+                //                     name="type"
+                //                     onChange={(e) => setTokenType(e.target.value)}
+                //                     value={tokenType}
+                //                 >
+                //                     <option value="ERC20">ERC-20</option>
+                //                     <option value="ERC721">ERC-721</option>
+                //                 </select>
+                //             </div>
+                //             <div className="add-channel-button-container">
+                //                 <button 
+                //                     className="add-channel-button"
+                //                     type="submit"
+                //                 >
+                //                     <h3>Create</h3>
+                //                 </button>
+                //             </div>
+                //         </form>
+                //         {
+                //             addChannelLoading &&
+                //             <Loading/>
+                //         }
+                //     </div>
+                // </div>
 
             }
         </>
