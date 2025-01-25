@@ -124,7 +124,9 @@ const Channel:React.FC<ChannelProps> = ({
             
         }catch(error: unknown){
             response = null;
-            console.error("Error: " + (error as Error).toString())
+            if(error !== undefined || error !== null){
+                console.error("Error: " + (error as Error).toString())
+            }
         }
     }
 

@@ -19,6 +19,7 @@ import {
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuItem,
+    SidebarTrigger
   } from "@/components/components/ui/sidebar"
 import { ScrollArea } from "@/components/components/ui/scroll-area"
 
@@ -94,6 +95,7 @@ const AppSidebar = () => {
     return(
         <Sidebar collapsible="icon" className="mt-24">
             <SidebarContent className="bg-primary text-secondary">
+                <SidebarTrigger className="m-2"/>
                 <SidebarGroup className="gap-14 pt-4">
                     <SidebarGroupLabel>
                         <h1 className="text-xl text-secondary">
