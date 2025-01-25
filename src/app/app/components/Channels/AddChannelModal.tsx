@@ -5,6 +5,7 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
   } from "@/components/components/ui/dialog"
@@ -31,6 +32,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
+import Loading from "../Loading";
 
 const formSchema = z.object({
     tokenAddress: z.string().min(42).max(42),
@@ -42,7 +44,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 interface ErrorType {
-    reason: string
+    reason: string;
+    message: string;
 }
 
 
@@ -59,14 +62,12 @@ const AddChannelModal:React.FC = () => {
             setAddChannelLoading, 
     } = useChannelProviderContext()
 
-    const [tokenAddress, setTokenAddress] = useState<string>("")
-    const [tokenType, setTokenType] = useState<string>("ERC20")
     const[error, setError] = useState<string | null>(null)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            tokenAddress: "0x0000000000000000000000000000000000000000",
+            tokenAddress: "",
             tokenType: "ERC20"
         },
     })
@@ -95,6 +96,13 @@ const AddChannelModal:React.FC = () => {
             setChannels(channels);
           }
         }
+        catch(e:unknown){
+            const result = (e as ErrorType).reason || (e as ErrorType).message;
+            setError(result)
+        }
+        finally{
+            setAddChannelLoading(false)
+        }
     }
 
     return(
@@ -105,11 +113,7 @@ const AddChannelModal:React.FC = () => {
                         Add Channel
                     </DialogTitle>
                     <DialogDescription>
-                        <p>Enter the address of any token (ERC-20) or NFT (ERC-721).</p>
-                        {
-                            error !== null &&
-                            <h2>{error}</h2>
-                        }
+                        Enter the address of any token (ERC-20) or NFT (ERC-721).
                         <Form {...form}>
                             <form 
                                 onSubmit={form.handleSubmit(onSubmit)} 
@@ -155,12 +159,25 @@ const AddChannelModal:React.FC = () => {
                                                     </SelectTrigger>
                                                 </Select>
                                             </FormControl>
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit">Submit</Button>
+                                <Button type="submit">
+                                    Submit
+                                </Button>
                             </form>
                         </Form>
+                        {
+                            error !== null &&
+                            <DialogFooter className="text-accent">
+                                {
+                                    error.length > 140 ?
+                                    `${error.slice(0,140)}...` :
+                                    error
+                                }
+                            </DialogFooter>
+                        }
                     </DialogDescription>
                 </DialogHeader>
             </DialogContent>
