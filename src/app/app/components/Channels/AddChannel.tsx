@@ -14,6 +14,7 @@ import {
     SidebarGroupContent,
     SidebarMenuButton,
   } from "@/components/components/ui/sidebar"
+  import { Plus } from "lucide-react";
 
 interface ErrorType {
     reason: string
@@ -106,7 +107,8 @@ const AddChannel:React.FC = () => {
             <SidebarGroup className="gap-14 pt-4">
                 <SidebarGroupContent>
                     <SidebarMenuButton onClick={() => addChannelModal()}>
-                        + Channel
+                        <Plus/> 
+                        <p>Channel</p>
                     </SidebarMenuButton>
                 </SidebarGroupContent>
             </SidebarGroup>
