@@ -19,10 +19,14 @@ import {
 
 const ChannelActions: React.FC = () => {
 
-  const { setChannelAction } = useChannelProviderContext()
+  const { 
+    channelAction, 
+    setChannelAction 
+  } = useChannelProviderContext()
 
   const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
     const action = (e.target as HTMLElement).id
+    console.log(action)
     setChannelAction(action)
   }
 
@@ -53,12 +57,19 @@ const ChannelActions: React.FC = () => {
                 {
                   actions.map((action) => (
                       <SidebarMenuItem 
-                        key={action.action}
+                        key={action.action.toLowerCase()}
                         onClick={(e) => channelActionHandler(e)}
-                        id={action.action}
+                        id={action.action.toLowerCase()}
                         className="flex flex-row"
                       >
-                        <SidebarMenuButton>
+                        <SidebarMenuButton
+                          className={`flex items-center ${
+                            channelAction && 
+                            channelAction === action.action.toLowerCase() && 
+                            "bg-accent" }`
+                          }
+                          id={action.action.toLowerCase()}
+                        >
                           {action.icon}
                           {action.action}
                         </SidebarMenuButton>

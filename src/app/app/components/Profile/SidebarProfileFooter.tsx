@@ -41,7 +41,7 @@ const SidebarProfileFooter:React.FC = () => {
                                 loading="lazy"
                                 />
                             </Avatar> :
-                            <Avatar>
+                            <Avatar className="relative right-1 size-6 justify-center object-contain">
                                 <AvatarImage 
                                 src="/monkey.svg" 
                                 alt="default profile picture" 

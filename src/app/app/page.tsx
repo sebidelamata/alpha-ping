@@ -39,23 +39,23 @@ const App:React.FC = () => {
 
   const renderChannelAction = () => {
     switch(channelAction){
-      case 'Chat':
+      case 'chat':
         return <Messages/>
-      case 'Analyze':
+      case 'analyze':
         return <div>
                 <h2 className='analyze-title'>Analyze</h2>
                 <p className='analyze-placeholder'>
                   This is being built in beta and will allow users to use sentiment analysis from each feed
                 </p>
               </div>
-      case 'Trade':
+      case 'trade':
         return  <div>
                   <h2 className='trade-title'>Trade</h2>
                   <p className='trade-placeholder'>
                     This is being built in beta and will allow users to swap assets in-app using 1Inch router
                   </p>
                 </div>
-      case 'Profile':
+      case 'profile':
         return <Profile/>
     }
   }

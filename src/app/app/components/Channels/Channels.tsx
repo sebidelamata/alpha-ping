@@ -32,87 +32,91 @@ const Channels:React.FC = () => {
   } = useEtherProviderContext()
   const { 
     currentChannel, 
+    setCurrentChannel,
     joinChannelLoading, 
   } = useChannelProviderContext()
 
-const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
-useEffect(() => {
-  const loadUserChannels = ():void => {
-      const userChannels: AlphaPING.ChannelStructOutput[] = []
-      hasJoined.map((joined, index) => {
-      if(joined === true){
-          userChannels.push(channels[index])
-      }
-      })
-      setUserChannels(userChannels)
-  }
-  loadUserChannels()
-}, [channels, joinChannelLoading, hasJoined, signer])
-
-useEffect(() => {
-  // reload our channels if we get a new one
-  const reloadChannels = async () => {
-    const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
-    const channels = []
-
-    for (let i = 1; i <= Number(totalChannels); i++) {
-        const channel = await alphaPING?.getChannel(i)
-        if(channel){
-        channels.push(channel)
+  const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([])
+  useEffect(() => {
+    const loadUserChannels = ():void => {
+        const userChannels: AlphaPING.ChannelStructOutput[] = []
+        hasJoined.map((joined, index) => {
+        if(joined === true){
+            userChannels.push(channels[index])
+        }
+        })
+        setUserChannels(userChannels)
+        if(userChannels && userChannels.length > 0){
+          setCurrentChannel(userChannels[0])
         }
     }
-    setChannels(channels)
+    loadUserChannels()
+  }, [channels, joinChannelLoading, hasJoined, signer, setCurrentChannel])
 
-    const hasJoinedChannel = []
+  useEffect(() => {
+    // reload our channels if we get a new one
+    const reloadChannels = async () => {
+      const totalChannels:bigint | undefined = await alphaPING?.totalChannels()
+      const channels = []
 
-    if(alphaPING !== null && signer !== null){
-    for (let i = 1; i <= Number(totalChannels); i++) {
-        const hasJoined = await alphaPING.hasJoinedChannel(
-        (i as ethers.BigNumberish), 
-        await signer.getAddress()
-        )
-        hasJoinedChannel.push(hasJoined)
+      for (let i = 1; i <= Number(totalChannels); i++) {
+          const channel = await alphaPING?.getChannel(i)
+          if(channel){
+          channels.push(channel)
+          }
+      }
+      setChannels(channels)
+
+      const hasJoinedChannel = []
+
+      if(alphaPING !== null && signer !== null){
+      for (let i = 1; i <= Number(totalChannels); i++) {
+          const hasJoined = await alphaPING.hasJoinedChannel(
+          (i as ethers.BigNumberish), 
+          await signer.getAddress()
+          )
+          hasJoinedChannel.push(hasJoined)
+      }
+
+      setHasJoined(hasJoinedChannel as boolean[])
+      }
     }
+    reloadChannels()
+    }, [
+        currentChannel, 
+        joinChannelLoading, 
+        signer, 
+        alphaPING, 
+        setChannels, 
+        setHasJoined
+    ]
+  )
+  
+  return (
+    <SidebarGroup className="gap-14 pt-4">
+      <SidebarGroupLabel>
+          <h1 className="text-xl text-secondary">
+              Channels
+          </h1>
+      </SidebarGroupLabel>
+      <SidebarGroupContent>
+          <ScrollArea className="max-h-[45svh]">
+              <SidebarMenu>
+                  {
+                      userChannels.map((channel, index) => (
+                          <SidebarMenuItem key={channel.tokenAddress}>
+                            <Channel
+                                channel={channel}
+                                key={index}
+                            />
+                          </SidebarMenuItem>
+                      ))
+                  }
+              </SidebarMenu>
+          </ScrollArea>
+      </SidebarGroupContent>
+    </SidebarGroup>   
+  );
+}
 
-    setHasJoined(hasJoinedChannel as boolean[])
-    }
-  }
-  reloadChannels()
-  }, [
-      currentChannel, 
-      joinChannelLoading, 
-      signer, 
-      alphaPING, 
-      setChannels, 
-      setHasJoined
-  ]
-)
-  
-    return (
-      <SidebarGroup className="gap-14 pt-4">
-        <SidebarGroupLabel>
-            <h1 className="text-xl text-secondary">
-                Channels
-            </h1>
-        </SidebarGroupLabel>
-        <SidebarGroupContent>
-            <ScrollArea className="max-h-[45svh]">
-                <SidebarMenu>
-                    {
-                        userChannels.map((channel, index) => (
-                            <SidebarMenuItem key={channel.tokenAddress}>
-                              <Channel
-                                  channel={channel}
-                                  key={index}
-                              />
-                            </SidebarMenuItem>
-                        ))
-                    }
-                </SidebarMenu>
-            </ScrollArea>
-        </SidebarGroupContent>
-      </SidebarGroup>   
-    );
-  }
-  
-  export default Channels;
+export default Channels;
