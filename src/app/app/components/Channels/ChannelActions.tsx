@@ -11,6 +11,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/components/ui/sidebar"
+import { 
+  MessagesSquare,
+  ChartNoAxesCombined,
+  Landmark 
+} from "lucide-react";
 
 const ChannelActions: React.FC = () => {
 
@@ -22,9 +27,18 @@ const ChannelActions: React.FC = () => {
   }
 
   const actions = [
-    'Chat',
-    'Analyze',
-    'Trade'
+    {
+      'action': 'Chat',
+      'icon': <MessagesSquare/>
+    },
+    {
+      'action': 'Analyze', 
+      'icon': <ChartNoAxesCombined/>
+    },
+    {
+      'action': 'Trade',
+      'icon': <Landmark/>
+    }
   ]
 
     return(
@@ -39,13 +53,14 @@ const ChannelActions: React.FC = () => {
                 {
                   actions.map((action) => (
                       <SidebarMenuItem 
-                        key={action}
+                        key={action.action}
                         onClick={(e) => channelActionHandler(e)}
-                        id={action}
+                        id={action.action}
                         className="flex flex-row"
                       >
                         <SidebarMenuButton>
-                          {action}
+                          {action.icon}
+                          {action.action}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                   ))
