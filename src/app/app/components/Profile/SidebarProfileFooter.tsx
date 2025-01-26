@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import { 
     SidebarFooter,
@@ -67,7 +68,7 @@ const SidebarProfileFooter:React.FC = () => {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </DrawerTrigger>
-                <DrawerContent>
+                <DrawerContent style={{ zIndex: 10 }}>
                     <Profile/>
                 </DrawerContent>
             </Drawer>

@@ -26,7 +26,7 @@ const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channelID }) => {
     }
 
     return(
-        <>
+        <div>
             {
                 isHovered === true ?
                 <Button
@@ -40,7 +40,7 @@ const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channelID }) => {
                 </Button> :
                 ''
             }
-        </>
+        </div>
     )
 }
 
