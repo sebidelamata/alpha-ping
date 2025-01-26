@@ -26,7 +26,7 @@ const SidebarProfileFooter:React.FC = () => {
                 <SidebarMenuItem
                 >
                     <SidebarMenuButton
-                        className="flex flex-row items-center justify-start overflow-hidden"
+                        className="flex h-10 flex-row items-center justify-between overflow-hidden hover:bg-accent hover:text-secondary"
                     >
                         {
                             (
@@ -34,11 +34,11 @@ const SidebarProfileFooter:React.FC = () => {
                                 userProfilePic !== "" &&
                                 userProfilePic !== undefined
                             ) ?
-                            <Avatar className="relative right-4">
+                            <Avatar className="relative right-1 size-6 justify-center object-contain">
                                 <AvatarImage 
                                 src={userProfilePic} 
                                 alt="user profile picture" 
-                                loading="lazy" 
+                                loading="lazy"
                                 />
                             </Avatar> :
                             <Avatar>
