@@ -25,8 +25,7 @@ const ChannelActions: React.FC = () => {
   } = useChannelProviderContext()
 
   const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
-    const action = (e.target as HTMLElement).id
-    console.log(action)
+    const action = (e.currentTarget as HTMLElement).id
     setChannelAction(action)
   }
 
