@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 
 // messages
 import Messages from './components/Messages/Messages'
-// profile
-import Profile from './components/Profile/Profile';
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
 import { useAppKitAccount } from "@reown/appkit/react";
@@ -55,8 +53,6 @@ const App:React.FC = () => {
                     This is being built in beta and will allow users to swap assets in-app using 1Inch router
                   </p>
                 </div>
-      case 'profile':
-        return <Profile/>
     }
   }
 

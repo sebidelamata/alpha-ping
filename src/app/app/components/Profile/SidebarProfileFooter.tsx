@@ -10,6 +10,8 @@ import {
     AvatarImage
 } from "@/components/components/ui/avatar";
 import { useUserProviderContext } from "src/contexts/UserContext";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/components/ui/drawer";
+import Profile from "./Profile";
 
 const SidebarProfileFooter:React.FC = () => {
 
@@ -22,41 +24,48 @@ const SidebarProfileFooter:React.FC = () => {
         <SidebarFooter
             className="bg-primary text-accent"
         >
-            <SidebarMenu>
-                <SidebarMenuItem
-                >
-                    <SidebarMenuButton
-                        className="flex h-10 flex-row items-center justify-between overflow-hidden hover:bg-accent hover:text-secondary"
-                    >
-                        {
-                            (
-                                userProfilePic !== null &&
-                                userProfilePic !== "" &&
-                                userProfilePic !== undefined
-                            ) ?
-                            <Avatar className="relative right-1 size-6 justify-center object-contain">
-                                <AvatarImage 
-                                src={userProfilePic} 
-                                alt="user profile picture" 
-                                loading="lazy"
-                                />
-                            </Avatar> :
-                            <Avatar className="relative right-1 size-6 justify-center object-contain">
-                                <AvatarImage 
-                                src="/monkey.svg" 
-                                alt="default profile picture" 
-                                loading="lazy"
-                                />
-                            </Avatar>
-                        }
-                        <h2
-                            className="text-lg"
+            <Drawer>
+                <DrawerTrigger>
+                    <SidebarMenu>
+                        <SidebarMenuItem
                         >
-                            {userUsername}
-                        </h2>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
+                            <SidebarMenuButton
+                                className="flex h-10 flex-row items-center justify-between overflow-hidden hover:bg-accent hover:text-secondary"
+                            >
+                                {
+                                    (
+                                        userProfilePic !== null &&
+                                        userProfilePic !== "" &&
+                                        userProfilePic !== undefined
+                                    ) ?
+                                    <Avatar className="relative right-1 size-6 justify-center object-contain">
+                                        <AvatarImage 
+                                        src={userProfilePic} 
+                                        alt="user profile picture" 
+                                        loading="lazy"
+                                        />
+                                    </Avatar> :
+                                    <Avatar className="relative right-1 size-6 justify-center object-contain">
+                                        <AvatarImage 
+                                        src="/monkey.svg" 
+                                        alt="default profile picture" 
+                                        loading="lazy"
+                                        />
+                                    </Avatar>
+                                }
+                                <h2
+                                    className="text-lg"
+                                >
+                                    {userUsername}
+                                </h2>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </DrawerTrigger>
+                <DrawerContent>
+                    <Profile/>
+                </DrawerContent>
+            </Drawer>
         </SidebarFooter>
     )
 }

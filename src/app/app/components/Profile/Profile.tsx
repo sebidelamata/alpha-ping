@@ -52,7 +52,7 @@ const Profile: React.FC = () => {
             <h2 className="edit-profile-header">
                 Profile
             </h2>
-            <ul className="profile-tabs">
+            {/* <ul className="profile-tabs">
                 {
                     availableProfileTabs.map((tab) => {
                         return (
@@ -125,7 +125,7 @@ const Profile: React.FC = () => {
                         <strong>Transaction Link</strong>
                     </a>
                 </p>
-            }
+            } */}
             {/* {
                 banned === true &&
                 <div>
@@ -142,10 +142,10 @@ const Profile: React.FC = () => {
                     }
                 </div>
             } */}
-            {
+            {/* {
                 profileTabSelect === 'edit' &&
                 <UsernameAndPFP/>
-            }
+            } */}
         </div>   
     )
 }
