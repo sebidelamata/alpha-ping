@@ -71,7 +71,7 @@ const Web3WalletConnectProvider: React.FC<{ children: ReactNode }> = ({children}
       '--w3m-color-mix': 'rgb(188, 146, 222, 0.8)',
       '--w3m-color-mix-strength': 30,
       '--w3m-accent': 'rgb(188, 146, 222, 0.8)',
-      '--w3m-z-index': 1000
+      '--w3m-z-index': 2000
     }
 })
   

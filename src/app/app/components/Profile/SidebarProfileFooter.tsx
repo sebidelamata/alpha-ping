@@ -17,7 +17,8 @@ const SidebarProfileFooter:React.FC = () => {
 
     const { 
         userProfilePic, 
-        userUsername 
+        userUsername ,
+        account
     } = useUserProviderContext()
 
     return(
@@ -56,7 +57,11 @@ const SidebarProfileFooter:React.FC = () => {
                                 <h2
                                     className="text-lg"
                                 >
-                                    {userUsername}
+                                    {
+                                        userUsername ?
+                                        userUsername :
+                                        `${account.slice(0,4)}...${account.slice(37,41)}`
+                                    }
                                 </h2>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

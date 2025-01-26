@@ -5,6 +5,7 @@ import React, {
     useEffect,
     MouseEvent
 } from "react";
+import Link from "next/link";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import OwnerBanner from "./OwnerBanner";
@@ -30,7 +31,8 @@ const Profile: React.FC = () => {
         owner, 
         mod,
         userProfilePic, 
-        userUsername  
+        userUsername,
+        account  
     } = useUserProviderContext()
 
     // pass tx message state to transferOwner
@@ -58,33 +60,43 @@ const Profile: React.FC = () => {
         <div className="mx-auto w-full max-w-sm">
             <DrawerContent className="">
                 <DrawerHeader>
-                    <DrawerTitle className="flex flex-row gap-4">
-                        {
-                            (
-                                userProfilePic !== null &&
-                                userProfilePic !== "" &&
-                                userProfilePic !== undefined
-                            ) ?
-                            <Avatar className=" justify-center object-contain">
-                                <AvatarImage 
-                                src={userProfilePic} 
-                                alt="user profile picture" 
-                                loading="lazy"
-                                />
-                            </Avatar> :
-                            <Avatar className="justify-center object-contain">
-                                <AvatarImage 
-                                src="/monkey.svg" 
-                                alt="default profile picture" 
-                                loading="lazy"
-                                />
-                            </Avatar>
-                        }
-                        <h2
-                            className="text-4xl"
+                    <DrawerTitle>
+                        <Link
+                            href={`https://arbiscan.io/address/${account}`}
+                            target="_blank"
+                            className="flex flex-row gap-4"
                         >
-                            {userUsername}
-                        </h2>
+                            {
+                                (
+                                    userProfilePic !== null &&
+                                    userProfilePic !== "" &&
+                                    userProfilePic !== undefined
+                                ) ?
+                                <Avatar className=" justify-center object-contain">
+                                    <AvatarImage 
+                                    src={userProfilePic} 
+                                    alt="user profile picture" 
+                                    loading="lazy"
+                                    />
+                                </Avatar> :
+                                <Avatar className="justify-center object-contain">
+                                    <AvatarImage 
+                                    src="/monkey.svg" 
+                                    alt="default profile picture" 
+                                    loading="lazy"
+                                    />
+                                </Avatar>
+                            }
+                            <h2
+                                className="text-4xl"
+                            >
+                                {
+                                    userUsername ?
+                                    userUsername :
+                                    `${account.slice(0,4)}...${account.slice(37,41)}`
+                                }
+                            </h2>
+                        </Link>
                     </DrawerTitle>
                 </DrawerHeader>
                 <Tabs 
