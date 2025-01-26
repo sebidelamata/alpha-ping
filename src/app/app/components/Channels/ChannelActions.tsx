@@ -2,23 +2,18 @@
 
 import React,
   { MouseEventHandler } from "react";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
 import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/components/ui/sidebar"
-import { 
-  Avatar,
-  AvatarImage
- } from "@/components/components/ui/avatar";
 
 const ChannelActions: React.FC = () => {
 
-  const { userProfilePic } = useUserProviderContext()
   const { setChannelAction } = useChannelProviderContext()
 
   const channelActionHandler:MouseEventHandler<HTMLElement> = async (e) => {
@@ -29,8 +24,7 @@ const ChannelActions: React.FC = () => {
   const actions = [
     'Chat',
     'Analyze',
-    'Trade',
-    'Profile'
+    'Trade'
   ]
 
     return(
@@ -50,30 +44,9 @@ const ChannelActions: React.FC = () => {
                         id={action}
                         className="flex flex-row"
                       >
+                        <SidebarMenuButton>
                           {action}
-                          {
-                            action === "Profile" &&
-                            userProfilePic !== null &&
-                            userProfilePic !== "" &&
-                            userProfilePic !== undefined &&
-                            <Avatar>
-                              <AvatarImage 
-                                src={userProfilePic} 
-                                alt="user profile picture" 
-                                loading="lazy" 
-                              />
-                            </Avatar>
-                          }
-                          {
-                            action === "Profile" &&
-                            <Avatar>
-                              <AvatarImage 
-                                src="/monkey.svg" 
-                                alt="default profile picture" 
-                                loading="lazy"
-                              />
-                            </Avatar>
-                          }
+                        </SidebarMenuButton>
                       </SidebarMenuItem>
                   ))
                 }

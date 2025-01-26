@@ -10,13 +10,14 @@ import {
     SidebarTrigger
   } from "@/components/components/ui/sidebar"
 import { Separator } from "@/components/components/ui/separator";
+import SidebarProfileFooter from "./Profile/SidebarProfileFooter";
 
 
 const AppSidebar = () => {
     return(
         <Sidebar 
             collapsible="icon" 
-            className="mt-24"
+            className="mt-24 pb-24"
         >
             <SidebarContent 
                 className="bg-primary text-secondary"
@@ -34,6 +35,10 @@ const AppSidebar = () => {
                 />
                 <ChannelActions/>
             </SidebarContent>
+            <Separator 
+                    className="border border-accent"
+            />
+            <SidebarProfileFooter/>
         </Sidebar>
     )
 }

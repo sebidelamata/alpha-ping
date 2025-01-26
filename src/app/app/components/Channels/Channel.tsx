@@ -252,8 +252,8 @@ const Channel:React.FC<ChannelProps> = ({
                                                                 <li key={index}>
                                                                     <Badge variant="outline" className="m-1 border-accent">
                                                                         {
-                                                                            tag.length > 10 ?
-                                                                            `${tag.slice(0,10)}...` :
+                                                                            tag.length > 20 ?
+                                                                            `${tag.slice(0,20)}...` :
                                                                             tag
                                                                         }
                                                                     </Badge>
@@ -273,9 +273,6 @@ const Channel:React.FC<ChannelProps> = ({
                                 {channel.tokenType}
                             </Badge>
                         }
-                    </div>
-                    <div className="flex flex-col">
-                        
                     </div>
                 </div>
             </HoverCardContent>
