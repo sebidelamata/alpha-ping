@@ -51,7 +51,13 @@ const Channels:React.FC = () => {
         }
     }
     loadUserChannels()
-  }, [channels, joinChannelLoading, hasJoined, signer, setCurrentChannel])
+  }, [
+    channels, 
+    joinChannelLoading, 
+    hasJoined, 
+    signer, 
+    setCurrentChannel
+  ])
 
   useEffect(() => {
     // reload our channels if we get a new one

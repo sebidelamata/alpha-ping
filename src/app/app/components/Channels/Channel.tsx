@@ -123,32 +123,44 @@ const Channel:React.FC<ChannelProps> = ({
     // pass hover info to leaveChannel component to make icon appear
     const [isHovered, setIsHovered] = useState(false);
 
-    const fetchChannelIcons = async (tokenAddress:string) => {
-        let response
-        const url=`https://alpha-ping-proxy-server-670fa5485762.herokuapp.com/token-metadata/${tokenAddress}`
-        try{
-            response = await fetch(url)
-
-            if (!response.ok) {
-            throw new Error('Failed to fetch');
-            }
-            response = await response.json();
-            const dynamicKey = Object.keys(response.data)[0];
-            setTokenMetaData(response.data[dynamicKey])
-            
-        }catch(error: unknown){
-            response = null;
-            if(error !== undefined || error !== null){
-                console.error("Error: " + (error as Error).toString())
+    useEffect(() => {
+        const fetchChannelIcons = async (tokenAddress:string) => {
+            let response
+            const url=`https://alpha-ping-proxy-server-670fa5485762.herokuapp.com/token-metadata/${tokenAddress}`
+            try{
+                response = await fetch(url)
+    
+                if (!response.ok) {
+                    throw new Error('Failed to fetch');
+                }
+                const json = await response.json();
+                if(json?.data && Object.keys(json.data).length > 0){
+                    const dynamicKey = Object.keys(json.data)[0];
+                    const tokenData = json.data[dynamicKey];
+                    if (tokenData) {
+                        setTokenMetaData(tokenData);
+                    } else {
+                        console.warn('No token metadata found for dynamicKey:', dynamicKey);
+                    }
+                } else {
+                    console.warn('No data received for token metadata:', json);
+                }
+            } catch(error: unknown){
+                if(error !== undefined || error !== null){
+                    console.error("Error: " + (error as Error).toString())
+                    setTokenMetaData(defaultTokenMetadata);
+                }
             }
         }
-    }
-
-    useEffect(() => {
-        if((channel !== undefined) && (channel !== null)){
+        if(
+            (channel !== undefined) && 
+            (channel !== null) && 
+            (channel.tokenAddress !== undefined) && 
+            (channel.tokenAddress !== null)
+        ){
             fetchChannelIcons(channel.tokenAddress)
         }     
-    }, [signer, channel])
+    }, [channel?.tokenAddress])
 
     useEffect(() => {
         if(currentChannel && currentChannel.id.toString() === channel.id.toString()){

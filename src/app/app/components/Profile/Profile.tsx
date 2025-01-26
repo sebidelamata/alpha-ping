@@ -109,6 +109,12 @@ const Profile: React.FC = () => {
                     <TabsContent value="edit">
                         Edit
                     </TabsContent>
+                    <TabsContent value="mod">
+                        Mod
+                    </TabsContent>
+                    <TabsContent value="owner">
+                        Owner
+                    </TabsContent>
                 </Tabs>
             </DrawerContent>
             {/* <ul className="profile-tabs">

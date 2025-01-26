@@ -19,7 +19,10 @@ const Navbar: React.FC = () => {
       </div>
       <SearchChannels/>
       <div className='grid justify-end align-middle'>
-        <w3m-button size='sm' balance='hide'/>
+        <w3m-button 
+          size='sm' 
+          balance='hide'
+        />
       </div>
     </nav>
   );
