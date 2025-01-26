@@ -10,11 +10,28 @@ import { useUserProviderContext } from "../../../../contexts/UserContext";
 import OwnerBanner from "./OwnerBanner";
 import ModBanner from "./ModBanner";
 import UsernameAndPFP from "./UsernameAndPFP";
+import { DrawerContent, DrawerHeader, DrawerTitle } from "@/components/components/ui/drawer";
+import {
+    Avatar,
+    AvatarImage
+} from "@/components/components/ui/avatar"
+import { 
+    Tabs, 
+    TabsContent, 
+    TabsList, 
+    TabsTrigger 
+} from "@/components/components/ui/tabs"
+
 
 const Profile: React.FC = () => {
 
     const { signer } = useEtherProviderContext()
-    const { owner, mod } = useUserProviderContext()
+    const { 
+        owner, 
+        mod,
+        userProfilePic, 
+        userUsername  
+    } = useUserProviderContext()
 
     // pass tx message state to transferOwner
     const [txMessageOwner, setTxMessageOwner] = useState<string | null | undefined>(null)
@@ -23,35 +40,77 @@ const Profile: React.FC = () => {
     // our options for tab in the profile section
     const [availableProfileTabs, setAvailableProfileTabs] = useState<string[]>([])
     // tabs only appear based on user role
-    const setProfileTabs = () => {
-        const tabsArray = ['edit']
-        if(mod && mod.length > 0){
-            tabsArray.push('mod')
-        }
-        if(owner === true){
-            tabsArray.push('owner')
-        }
-        setAvailableProfileTabs(tabsArray)
-    }
     useEffect(() => {
+        const setProfileTabs = () => {
+            const tabsArray = ['edit']
+            if(mod && mod.length > 0){
+                tabsArray.push('mod')
+            }
+            if(owner === true){
+                tabsArray.push('owner')
+            }
+            setAvailableProfileTabs(tabsArray)
+        }
         setProfileTabs()
     }, [owner, mod, signer])
 
-    const [profileTabSelect, setProfileTabSelect] = useState<string>('edit')
-    const handleTabClick = (e: MouseEvent<HTMLLIElement>) => {
-        if(e !== null && e.target !== null){
-            e.preventDefault()
-            const value = (e.target as HTMLElement).id
-            setProfileTabSelect(value)
-            console.log(value)
-        }
-    }
-
     return(
-        <div className="edit-profile-container">
-            <h2 className="edit-profile-header">
-                Profile
-            </h2>
+        <div className="mx-auto w-full max-w-sm">
+            <DrawerContent className="">
+                <DrawerHeader>
+                    <DrawerTitle className="flex flex-row gap-4">
+                        {
+                            (
+                                userProfilePic !== null &&
+                                userProfilePic !== "" &&
+                                userProfilePic !== undefined
+                            ) ?
+                            <Avatar className=" justify-center object-contain">
+                                <AvatarImage 
+                                src={userProfilePic} 
+                                alt="user profile picture" 
+                                loading="lazy"
+                                />
+                            </Avatar> :
+                            <Avatar className="justify-center object-contain">
+                                <AvatarImage 
+                                src="/monkey.svg" 
+                                alt="default profile picture" 
+                                loading="lazy"
+                                />
+                            </Avatar>
+                        }
+                        <h2
+                            className="text-4xl"
+                        >
+                            {userUsername}
+                        </h2>
+                    </DrawerTitle>
+                </DrawerHeader>
+                <Tabs 
+                    defaultValue="edit"
+                >
+                    <TabsList
+                        className={`grid w-full grid-cols-3`}
+                    >
+                        {
+                            availableProfileTabs &&
+                            availableProfileTabs.length > 0 &&
+                            availableProfileTabs.map((tab) => (
+                                <TabsTrigger
+                                    key={tab.toLowerCase()}
+                                    value={tab.toLowerCase()}
+                                >
+                                    {tab}
+                                </TabsTrigger>
+                            ))
+                        }
+                    </TabsList>
+                    <TabsContent value="edit">
+                        Edit
+                    </TabsContent>
+                </Tabs>
+            </DrawerContent>
             {/* <ul className="profile-tabs">
                 {
                     availableProfileTabs.map((tab) => {
