@@ -112,7 +112,7 @@ const Profile: React.FC = () => {
                         className="w-[400px]"
                     >
                         <TabsList
-                            className={`grid w-full grid-cols-3`}
+                            className="grid w-full grid-cols-3 bg-primary text-accent"
                         >
                             {
                                 availableProfileTabs &&
