@@ -11,7 +11,12 @@ import { useUserProviderContext } from "../../../../contexts/UserContext";
 import OwnerBanner from "./OwnerBanner";
 import ModBanner from "./ModBanner";
 import UsernameAndPFP from "./UsernameAndPFP";
-import { DrawerContent, DrawerHeader, DrawerTitle } from "@/components/components/ui/drawer";
+import UserRelations from "./UserRelations";
+import { 
+    DrawerContent, 
+    DrawerHeader, 
+    DrawerTitle 
+} from "@/components/components/ui/drawer";
 import {
     Avatar,
     AvatarImage
@@ -120,6 +125,7 @@ const Profile: React.FC = () => {
                     </TabsList>
                     <TabsContent value="edit">
                         <UsernameAndPFP/>
+                        <UserRelations/>
                     </TabsContent>
                     <TabsContent value="mod">
                         Mod

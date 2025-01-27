@@ -2,19 +2,17 @@
 
 import React, {
     useState,
-    FormEvent
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
-import UserRelations from "./UserRelations";
 import {
     Form,
     FormField,
     FormItem,
     FormLabel,
     FormControl,
-    FormDescription,
-    FormMessage
+    FormMessage,
+    FormDescription
 } from '@/components/components/ui/form'
 import { 
     RadioGroup, 
@@ -25,6 +23,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Input } from "@/components/components/ui/input";
 import { Button } from "@/components/components/ui/button";
+import { Separator } from "@/components/components/ui/separator";
+import Loading from "../Loading"
 
 
 interface ErrorType {
@@ -39,44 +39,42 @@ const formSchema = z.object({
         message: "Text input must be longer than 0 letters." 
     }),
   })  
+type FormValues = z.infer<typeof formSchema>;
 
 const UsernameAndPFP:React.FC = () => {
 
     const { signer, alphaPING } = useEtherProviderContext()
-    const { 
-        account,
-        userUsername,
+    const {
         setUserUsername,
-        userProfilePic,
         setUserProfilePic 
     } = useUserProviderContext()
 
-    const [editPicOrName, setEditPicOrName] = useState<string>('picture')
-    const [editProfileFormString, setEditProfileFormString] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const onSubmit = async (values: FormValues) => {
         const { usernamepic, textInput } = values;
         setError(null);
+        setLoading(true)
         try{
             if(signer !== null){
                 if(usernamepic === 'picture'){
                     // Validate image URL
-                    const isValidImageURL = /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(editProfileFormString)
+                    const isValidImageURL = /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(textInput)
                     if (!isValidImageURL) {
                         setError(
                             "Invalid image URL. Please enter a URL ending with .jpg, .jpeg, .png, .gif., or .webp"
                         )
                         return
                     }
-                    const tx = await alphaPING?.connect(signer).setProfilePic(editProfileFormString)
+                    const tx = await alphaPING?.connect(signer).setProfilePic(textInput)
                     await tx?.wait()
-                    setUserProfilePic(editProfileFormString)
+                    setUserProfilePic(textInput)
                 }
-                if(editPicOrName === 'username'){
-                    const tx = await alphaPING?.connect(signer).setUsername(editProfileFormString)
+                if(usernamepic === 'username'){
+                    const tx = await alphaPING?.connect(signer).setUsername(textInput)
                     await tx?.wait()
-                    setUserUsername(editProfileFormString)
+                    setUserUsername(textInput)
                 }
             }
         }catch(error: unknown){
@@ -86,6 +84,8 @@ const UsernameAndPFP:React.FC = () => {
             if(error){
                 console.log(error)
             }
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -94,17 +94,19 @@ const UsernameAndPFP:React.FC = () => {
         defaultValues: {
             usernamepic: "username",
         },
-      })
+    })
+    // Use the watch method to observe the current value of "usernamepic"
+    const selectedOption = form.watch("usernamepic");
 
     return(
         <div>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full p-4 space-y-6 items-center">
                     <FormField
                         control={form.control}
                         name="usernamepic"
                         render={({ field }) => (
-                            <FormItem className="flex items-center space-y-3">
+                            <FormItem className="flex items-center space-y-3 gap-4">
                                 <FormLabel>I want to change my...</FormLabel>
                                 <FormControl>
                                     <RadioGroup
@@ -138,90 +140,52 @@ const UsernameAndPFP:React.FC = () => {
                                         </FormItem>
                                     </RadioGroup>
                                 </FormControl>
-                            <FormMessage />
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
+                    <Separator/>
                     <FormField
                         control={form.control}
                         name="textInput"
                         render={({ field }) => (
-                            <FormItem className="flex items-center space-y-3">
+                            <FormItem className="flex flex-row items-center space-y-3 gap-4">
                                 <FormControl>
                                     <Input  
                                         placeholder="rustyShackleford..."
                                         {...field}
                                     />
                                 </FormControl>
+                                <FormLabel>
+                                   {
+                                    selectedOption === 'username' ?
+                                    "Enter Username" :
+                                    "Paste Image URL (ends in .jpg, .jpeg, .png, .gif., or .webp)"
+                                   }
+                                </FormLabel>
                             <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">
+                    <Button 
+                        type="submit" 
+                        variant={"secondary"}
+                    >
                         Submit
                     </Button>
+                    {
+                        error !== null &&
+                        <FormDescription className="text-xl">
+                            {error}
+                        </FormDescription>
+                    }
                 </form>
             </Form>
+            {
+                loading === true &&
+                <Loading/>
+            }
         </div>
-        // <div className="current-username-and-pic-container">
-        //     <div className="row-one">
-        //             <div className="edit-profile-row-two">
-        //                 <div className="edit-profile-pic-container">
-        //                     <button
-        //                         type="button"
-        //                         className={
-        //                             editPicOrName !== 'picture'?
-        //                             "edit-button" :
-        //                             "edit-button edit-button-selected"
-        //                         }
-        //                         onClick={() => setEditPicOrName("picture")}
-        //                     >
-        //                         Edit Profile Picture
-        //                     </button>
-        //                 </div>
-        //                 <div className="edit-username-container">
-        //                     <button
-        //                         type="button"
-        //                         className={
-        //                             editPicOrName !== 'username'?
-        //                             "edit-button" :
-        //                             "edit-button edit-button-selected"
-        //                         }
-        //                         onClick={() => setEditPicOrName('username')}
-        //                     >
-        //                         Edit Username
-        //                     </button>
-        //                 </div>
-        //             </div>
-        //             <form 
-        //                 action="" 
-        //                 className="edit-profile-form"
-        //                 onSubmit={(e) => handleEditProfileSubmit(e)}
-        //             >
-        //             <input 
-        //                 type="text" 
-        //                 placeholder={
-        //                     editPicOrName === "picture" ?
-        //                     "Enter Image URL..." :
-        //                     "Enter New Username"
-        //                 }
-        //                 value={editProfileFormString}
-        //                 onChange={(e) => handleProfileEditFormChange(e)}
-        //             />
-        //             <button 
-        //                 className="edit-profile-form-submit-button"
-        //                 type="submit"
-        //             >
-        //                 Submit
-        //             </button>
-        //             {
-        //                 error && 
-        //                 <div className="error-message">
-        //                     {error}
-        //                 </div>
-        //             }
-        //         </form>
-        //     </div>
         //     <div className="following-block-container">
         //         <UserRelations/>
         //     </div>
