@@ -119,7 +119,7 @@ const Profile: React.FC = () => {
                         }
                     </TabsList>
                     <TabsContent value="edit">
-                        Edit
+                        <UsernameAndPFP/>
                     </TabsContent>
                     <TabsContent value="mod">
                         Mod
