@@ -65,75 +65,80 @@ const Profile: React.FC = () => {
         <div className="mx-auto w-full max-w-sm">
             <DrawerContent className="">
                 <DrawerHeader>
-                    <DrawerTitle>
-                        <Link
-                            href={`https://arbiscan.io/address/${account}`}
-                            target="_blank"
-                            className="flex flex-row gap-4"
-                        >
-                            {
-                                (
-                                    userProfilePic !== null &&
-                                    userProfilePic !== "" &&
-                                    userProfilePic !== undefined
-                                ) ?
-                                <Avatar className=" justify-center object-contain">
-                                    <AvatarImage 
-                                    src={userProfilePic} 
-                                    alt="user profile picture" 
-                                    loading="lazy"
-                                    />
-                                </Avatar> :
-                                <Avatar className="justify-center object-contain">
-                                    <AvatarImage 
-                                    src="/monkey.svg" 
-                                    alt="default profile picture" 
-                                    loading="lazy"
-                                    />
-                                </Avatar>
-                            }
-                            <h2
-                                className="text-4xl"
+                    <div className="flex items-center justify-center space-x-2">
+                        <DrawerTitle>
+                            <Link
+                                href={`https://arbiscan.io/address/${account}`}
+                                target="_blank"
+                                className="flex flex-row gap-4"
                             >
                                 {
-                                    userUsername ?
-                                    userUsername :
-                                    `${account.slice(0,4)}...${account.slice(37,41)}`
+                                    (
+                                        userProfilePic !== null &&
+                                        userProfilePic !== "" &&
+                                        userProfilePic !== undefined
+                                    ) ?
+                                    <Avatar className=" justify-center object-contain">
+                                        <AvatarImage 
+                                        src={userProfilePic} 
+                                        alt="user profile picture" 
+                                        loading="lazy"
+                                        />
+                                    </Avatar> :
+                                    <Avatar className="justify-center object-contain">
+                                        <AvatarImage 
+                                        src="/monkey.svg" 
+                                        alt="default profile picture" 
+                                        loading="lazy"
+                                        />
+                                    </Avatar>
                                 }
-                            </h2>
-                        </Link>
-                    </DrawerTitle>
-                </DrawerHeader>
-                <Tabs 
-                    defaultValue="edit"
-                >
-                    <TabsList
-                        className={`grid w-full grid-cols-3`}
-                    >
-                        {
-                            availableProfileTabs &&
-                            availableProfileTabs.length > 0 &&
-                            availableProfileTabs.map((tab) => (
-                                <TabsTrigger
-                                    key={tab.toLowerCase()}
-                                    value={tab.toLowerCase()}
+                                <h2
+                                    className="text-4xl"
                                 >
-                                    {tab}
-                                </TabsTrigger>
-                            ))
-                        }
-                    </TabsList>
-                    <TabsContent value="edit">
-                        <UsernameAndPFP/>
-                        <UserRelations/>
-                    </TabsContent>
-                    <TabsContent value="mod">
-                        Mod
-                    </TabsContent>
-                    <TabsContent value="owner">
-                        Owner
-                    </TabsContent>
-                </Tabs>
+                                    {
+                                        userUsername ?
+                                        userUsername :
+                                        `${account.slice(0,4)}...${account.slice(37,41)}`
+                                    }
+                                </h2>
+                            </Link>
+                        </DrawerTitle>
+                    </div>
+                </DrawerHeader>
+                <div className="flex items-center justify-center space-x-2">
+                    <Tabs 
+                        defaultValue="edit"
+                        className="w-[400px]"
+                    >
+                        <TabsList
+                            className={`grid w-full grid-cols-3`}
+                        >
+                            {
+                                availableProfileTabs &&
+                                availableProfileTabs.length > 0 &&
+                                availableProfileTabs.map((tab) => (
+                                    <TabsTrigger
+                                        key={tab.toLowerCase()}
+                                        value={tab.toLowerCase()}
+                                    >
+                                        {tab}
+                                    </TabsTrigger>
+                                ))
+                            }
+                        </TabsList>
+                        <TabsContent value="edit">
+                            <UsernameAndPFP/>
+                            <UserRelations/>
+                        </TabsContent>
+                        <TabsContent value="mod">
+                            Mod
+                        </TabsContent>
+                        <TabsContent value="owner">
+                            Owner
+                        </TabsContent>
+                    </Tabs>
+                </div>
             </DrawerContent>
             {/* <ul className="profile-tabs">
                 {

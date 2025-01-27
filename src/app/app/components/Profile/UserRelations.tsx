@@ -17,7 +17,7 @@ const UserRelations:React.FC = () => {
         <Accordion 
             type="single" 
             collapsible 
-            className="w-1/2 p-4 items-center" 
+            className="w-full p-4" 
             defaultValue="following"
         >
             <AccordionItem value="following">

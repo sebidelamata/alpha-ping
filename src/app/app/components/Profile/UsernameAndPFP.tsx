@@ -186,10 +186,6 @@ const UsernameAndPFP:React.FC = () => {
                 <Loading/>
             }
         </div>
-        //     <div className="following-block-container">
-        //         <UserRelations/>
-        //     </div>
-        // </div>
     )
 }
 

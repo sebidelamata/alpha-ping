@@ -7,6 +7,16 @@ import React, {
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import UserFollowsListItem from "./UserFollowsListItem";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "@/components/components/ui/card"
+import { ScrollArea } from "@/components/components/ui/scroll-area";
+  
 
 const UserFollowsList:React.FC = () => {
 
@@ -72,30 +82,32 @@ const UserFollowsList:React.FC = () => {
 
 
     return(
-        <div className="user-follows-list-container">
+        <Card className="bg-primary text-secondary">
             {
                 userFollows &&
                 userFollows.length === 0 &&
-                <p>
+                <CardHeader>
                     No one is following you.
-                </p>
+                </CardHeader>
             }
             {
                 userFollows &&
                 userFollows.length > 0 &&
-                <ul className="user-follows-list">
-                    {
-                        userFollows.map((userFollow, index) => {
-                            return(
-                                <li key={userFollow}>
-                                    <UserFollowsListItem userFollow={userFollow} followingUserFollow={followingUserFollows[index]}/>
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
+                <ScrollArea>
+                    <ul className="user-follows-list">
+                        {
+                            userFollows.map((userFollow, index) => {
+                                return(
+                                    <li key={userFollow}>
+                                        <UserFollowsListItem userFollow={userFollow} followingUserFollow={followingUserFollows[index]}/>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                </ScrollArea>
             }
-        </div>
+        </Card>
     )
 }
 
