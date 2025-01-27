@@ -2,22 +2,12 @@
 
 import React, {
     useState,
-    MouseEvent,
     FormEvent
 } from "react";
 import Loading from "../Loading";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import { Button } from "@/components/components/ui/button";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/components/ui/form"
 import {
     Dialog,
     DialogContent,
@@ -33,6 +23,7 @@ import {
     AvatarImage
 } from "@/components/components/ui/avatar"
 import Link from "next/link";
+import { Separator } from "@radix-ui/react-separator";
 
 interface ErrorType{
     message: string;
@@ -40,8 +31,8 @@ interface ErrorType{
 
 interface UserFollowsFollowBackProps{
     userFollow: string;
-    userPFP: string;
-    username: string;
+    userPFP: string | null;
+    username: string | null;
 }
 
 const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
@@ -53,19 +44,9 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
     const { alphaPING, signer } = useEtherProviderContext()
     const { setTxMessageFollow } = useUserProviderContext()
 
-    const [showModal, setShowModal] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-
-    const handleClick = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(true)
-    }
-
-    const handleCancel = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(false)
-    }
+    const [open, setOpen] = useState<boolean>(false); 
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
@@ -87,8 +68,16 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
 
     }
 
+    const handleCancel = (e:MouseEvent) => {
+        e.preventDefault()
+        setOpen(false)
+    }
+
     return(
-        <Dialog>
+        <Dialog 
+            open={open} 
+            onOpenChange={setOpen}
+        >
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
@@ -99,9 +88,9 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        <div className="flex flex-row justify-center items-center gap-4 text-3xl">
+                        <div className="flex flex-row items-center justify-center gap-4 text-3xl">
                             <Link 
-                                className="flex flex row gap-1"
+                                className="row flex gap-1"
                                 href={`https://arbiscan.io/address/${userFollow}`}
                                 target="_blank"
                             >
@@ -145,10 +134,13 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
                             }
                         </div>
                     </DialogTitle>
-                    <form 
-                        action=""
+                    <DialogDescription className="flex flex-col items-center justify-center gap-4">
+                        Their messages will show up when your Chat is in Follow Mode. 
+                    </DialogDescription>
+                    <Separator/>
+                    <form
                         onSubmit={(e) => handleSubmit(e)}
-                        className="flex flex-col justify-center items-center gap-4"
+                        className="flex flex-col items-center justify-center gap-4"
                     >
                         <Button 
                             type="submit"
@@ -160,6 +152,7 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
                         <Button
                             variant="outline"
                             className="w-[200px]"
+                            onClick={(e) => handleCancel(e)} 
                         >
                             Cancel
                         </Button>
@@ -171,7 +164,13 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
                 }
                 {
                     error !== null &&
-                        <p>{error}</p>
+                    <DialogFooter className="relative right-3 pr-16 flex w-full flex-row items-center justify-center text-accent text-sm">
+                        {
+                            error.length > 50 ?
+                            `${error.slice(0,50)}...` :
+                            error
+                        }
+                    </DialogFooter>
                 }
             </DialogContent>
         </Dialog>

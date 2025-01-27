@@ -121,6 +121,7 @@ const Profile: React.FC = () => {
                                     <TabsTrigger
                                         key={tab.toLowerCase()}
                                         value={tab.toLowerCase()}
+                                        className="text-lg"
                                     >
                                         {String(tab).charAt(0).toUpperCase() + String(tab).slice(1)}
                                     </TabsTrigger>
