@@ -122,7 +122,7 @@ const Profile: React.FC = () => {
                                         key={tab.toLowerCase()}
                                         value={tab.toLowerCase()}
                                     >
-                                        {tab}
+                                        {String(tab).charAt(0).toUpperCase() + String(tab).slice(1)}
                                     </TabsTrigger>
                                 ))
                             }

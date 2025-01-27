@@ -8,16 +8,47 @@ import React, {
 import Loading from "../Loading";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
+import { Button } from "@/components/components/ui/button";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/components/ui/form"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/components/ui/dialog"
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage
+} from "@/components/components/ui/avatar"
+import Link from "next/link";
 
 interface ErrorType{
     message: string;
-}
+} 
 
 interface UserFollowsFollowBackProps{
     userFollow: string;
+    userPFP: string;
+    username: string;
 }
 
-const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({userFollow}) => {
+const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
+    userFollow, 
+    userPFP, 
+    username
+}) => {
 
     const { alphaPING, signer } = useEtherProviderContext()
     const { setTxMessageFollow } = useUserProviderContext()
@@ -57,42 +88,93 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({userFollow}
     }
 
     return(
-        <div className="user-follows-follow-back">
-            {
-                showModal === false &&
-                <button
-                    onClick={(e) => handleClick(e)}
-                    className="user-followlist-follow-back-button"
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button
+                    variant="outline"
                 >
                     Follow Back
-                </button>
-            }
-            {
-                showModal === true &&
-                <form 
-                    action=""
-                    onSubmit={(e) => handleSubmit(e)}
-                    className="follow-back-form"
-                >
-                    <input 
-                        type="submit" 
-                    />
-                    <button 
-                        onClick={(e) => handleCancel(e)}
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <div className="flex flex-row justify-center items-center gap-4 text-3xl">
+                            <Link 
+                                className="flex flex row gap-1"
+                                href={`https://arbiscan.io/address/${userFollow}`}
+                                target="_blank"
+                            >
+                                    { "Follow" } 
+                                    {
+                                        username !== null ? 
+                                        <span 
+                                            className="text-accent">
+                                                {username}
+                                        </span> : 
+                                        <span 
+                                            className="text-accent">
+                                                {userFollow.slice(0,4)}...${userFollow.slice(37,41)}
+                                        </span>
+                                    }
+                                    {"back?"}
+                            </Link>
+                            {
+                                (userPFP !== null && userPFP !== '') ?
+                                <Avatar>
+                                    <AvatarImage
+                                        src={userPFP} 
+                                        alt="User Icon" 
+                                        loading="lazy"
+                                    />
+                                    <AvatarFallback>
+                                        {
+                                            (username !== null && username !== '') ?
+                                            username.slice(0,2) :
+                                            userFollow.slice(0, 2)
+                                        }
+                                    </AvatarFallback>
+                                </Avatar> :
+                                <Avatar>
+                                    <AvatarImage
+                                        src='/monkey.svg' 
+                                        alt="Default User Icon" 
+                                        loading="lazy"
+                                    />
+                                </Avatar>
+                            }
+                        </div>
+                    </DialogTitle>
+                    <form 
+                        action=""
+                        onSubmit={(e) => handleSubmit(e)}
+                        className="flex flex-col justify-center items-center gap-4"
                     >
-                        Cancel
-                    </button>
-                </form>
-            }
-            {
-                loading === true &&
-                    <Loading/>
-            }
-            {
-                error !== null &&
-                    <p>{error}</p>
-            }
-        </div>
+                        <Button 
+                            type="submit"
+                            variant="secondary" 
+                            className="w-[200px]"
+                        >
+                            Follow Back
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="w-[200px]"
+                        >
+                            Cancel
+                        </Button>
+                    </form>
+                </DialogHeader>
+                {
+                    loading === true &&
+                        <Loading/>
+                }
+                {
+                    error !== null &&
+                        <p>{error}</p>
+                }
+            </DialogContent>
+        </Dialog>
     )
 
 }

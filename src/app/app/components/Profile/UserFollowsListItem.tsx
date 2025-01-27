@@ -7,6 +7,21 @@ import React, {
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import UserFollowsFollowBack from "./UserFollowsFollowBack";
 import UserFollowsUnfollow from "./UserFollowsUnfollow";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "@/components/components/ui/card"
+  import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage
+} from "@/components/components/ui/avatar"
+import { Skeleton } from "@/components/components/ui/skeleton";
+import Link from "next/link";
 
 interface UserFollowsListItemProps{
     userFollow: string;
@@ -17,16 +32,20 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
 
     const { alphaPING } = useEtherProviderContext()
 
+    const [loading, setLoading] = useState<boolean>(false)
     const [username, setUsername] = useState<string | null>(null)
     const [userPFP, setUserPFP] = useState<string | null>(null)
     const fetchUserMetaData = async () => {
         try{
+            setLoading(true)
             const usernameResult = await alphaPING?.username(userFollow) || null
             setUsername(usernameResult)
             const pfpResult = await alphaPING?.profilePic(userFollow) || null
             setUserPFP(pfpResult)
         }catch(error){
             console.error(error)
+        }finally{
+            setLoading(false)
         }
     }
     useEffect(() => {
@@ -34,42 +53,64 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
     }, [userFollow])
 
     return(
-        <div className="user-follows-list-item-container">
-            <div className="user-follows-pfp">
-                {
-                    (userPFP !== null && userPFP !== '') ?
-                    <img 
-                        src={userPFP} 
-                        alt="User Icon" 
-                        className='monkey-icon'
-                        loading="lazy"
-                    /> :
-                    <img 
-                        src='/monkey.svg' 
-                        alt="User Icon" 
-                        className='monkey-icon'
-                        loading="lazy"
-                    />
-                }
-            </div>
-            <div className="user-follows-username">
-                <a href={`https://arbiscan.io/address/${userFollow}`} target="_blank">
+        <Card className="bg-primary text-secondary">
+            <CardHeader>
+                <CardTitle className="flex flex-row items-center gap-4">
                     {
-                        (username !== null && username !== '') ?
-                        username :
-                        userFollow.slice(0, 6) + '...' + userFollow.slice(38, 42)
+                        loading === true ?
+                        <Skeleton className=" rounded-full"/> :
+                        (
+                            (userPFP !== null && userPFP !== '') ?
+                            <Avatar>
+                                <AvatarImage
+                                    src={userPFP} 
+                                    alt="User Icon" 
+                                    loading="lazy"
+                                />
+                                <AvatarFallback>
+                                    {
+                                        (username !== null && username !== '') ?
+                                        username.slice(0,2) :
+                                        userFollow.slice(0, 2)
+                                    }
+                                </AvatarFallback>
+                            </Avatar> :
+                            <Avatar>
+                                <AvatarImage
+                                    src='/monkey.svg' 
+                                    alt="Default User Icon" 
+                                    loading="lazy"
+                                />
+                            </Avatar>
+                        )
                     }
-                </a>
-            </div>
-            {
-                followingUserFollow === false &&
-                <UserFollowsFollowBack userFollow={userFollow}/>
-            }
-            {
-                followingUserFollow === true &&
-                <UserFollowsUnfollow userFollow={userFollow}/>
-            }
-        </div>
+                    <div className="">
+                        <Link 
+                            href={`https://arbiscan.io/address/${userFollow}`} 
+                            target="_blank"
+                        >
+                            {
+                                (username !== null && username !== '') ?
+                                username :
+                                userFollow.slice(0, 6) + '...' + userFollow.slice(38, 42)
+                            }
+                        </Link>
+                    </div>
+                    {
+                        followingUserFollow === false &&
+                        <UserFollowsFollowBack 
+                            userFollow={userFollow} 
+                            userPFP={userPFP}
+                            username={username}
+                        />
+                    }
+                    {
+                        followingUserFollow === true &&
+                        <UserFollowsUnfollow userFollow={userFollow}/>
+                    }
+                </CardTitle>
+            </CardHeader>
+        </Card>
     )
 }
 

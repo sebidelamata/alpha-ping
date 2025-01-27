@@ -67,8 +67,8 @@ const UserFollowsList:React.FC = () => {
     const fetchFollowingUserFollows = async () => {
         try{
             const followList = []
-            for(let i=0; i<(userFollows?.length || 0); i++){
-                const result = await alphaPING?.personalFollowList(account, userFollows[i]) || false
+            for(let i=0; i<(mockUserFollows?.length || 0); i++){
+                const result = await alphaPING?.personalFollowList(account,  mockUserFollows[i]) || false
                 followList.push(result)
             }
             setFollowingUserFollows(followList)
@@ -80,25 +80,27 @@ const UserFollowsList:React.FC = () => {
         fetchFollowingUserFollows()
     },[userFollows])
 
+    const mockUserFollows = ['0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54', '0x366bF4C8A1517E2eA6cB5085679742fF92F14B54']
+
 
     return(
         <Card className="bg-primary text-secondary">
             {
-                userFollows &&
-                userFollows.length === 0 &&
+                mockUserFollows &&
+                mockUserFollows.length === 0 &&
                 <CardHeader>
                     No one is following you.
                 </CardHeader>
             }
             {
-                userFollows &&
-                userFollows.length > 0 &&
-                <ScrollArea>
-                    <ul className="user-follows-list">
+                mockUserFollows &&
+                mockUserFollows.length > 0 &&
+                <ScrollArea className="h-64 rounded-md border">
+                    <ul>
                         {
-                            userFollows.map((userFollow, index) => {
+                            mockUserFollows.map((userFollow, index) => {
                                 return(
-                                    <li key={userFollow}>
+                                    <li key={index}>
                                         <UserFollowsListItem userFollow={userFollow} followingUserFollow={followingUserFollows[index]}/>
                                     </li>
                                 )
