@@ -90,7 +90,7 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
                     <DialogTitle>
                         <div className="flex flex-row items-center justify-center gap-4 text-3xl">
                             <Link 
-                                className="row flex gap-1"
+                                className="flex flex-row gap-1"
                                 href={`https://arbiscan.io/address/${userFollow}`}
                                 target="_blank"
                             >
@@ -164,7 +164,7 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
                 }
                 {
                     error !== null &&
-                    <DialogFooter className="relative right-3 pr-16 flex w-full flex-row items-center justify-center text-accent text-sm">
+                    <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
                         {
                             error.length > 50 ?
                             `${error.slice(0,50)}...` :
