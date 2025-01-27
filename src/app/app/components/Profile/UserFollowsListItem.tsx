@@ -9,9 +9,6 @@ import UserFollowsFollowBack from "./UserFollowsFollowBack";
 import UserFollowsUnfollow from "./UserFollowsUnfollow";
 import {
     Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/components/ui/card"
@@ -35,22 +32,22 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
     const [loading, setLoading] = useState<boolean>(false)
     const [username, setUsername] = useState<string | null>(null)
     const [userPFP, setUserPFP] = useState<string | null>(null)
-    const fetchUserMetaData = async () => {
-        try{
-            setLoading(true)
-            const usernameResult = await alphaPING?.username(userFollow) || null
-            setUsername(usernameResult)
-            const pfpResult = await alphaPING?.profilePic(userFollow) || null
-            setUserPFP(pfpResult)
-        }catch(error){
-            console.error(error)
-        }finally{
-            setLoading(false)
-        }
-    }
     useEffect(() => {
+        const fetchUserMetaData = async () => {
+            try{
+                setLoading(true)
+                const usernameResult = await alphaPING?.username(userFollow) || null
+                setUsername(usernameResult)
+                const pfpResult = await alphaPING?.profilePic(userFollow) || null
+                setUserPFP(pfpResult)
+            }catch(error){
+                console.error(error)
+            }finally{
+                setLoading(false)
+            }
+        }
         fetchUserMetaData()
-    }, [userFollow])
+    }, [userFollow, alphaPING])
 
     return(
         <Card className="bg-primary text-secondary">
