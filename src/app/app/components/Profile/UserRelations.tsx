@@ -14,7 +14,12 @@ import {
 const UserRelations:React.FC = () => {
 
     return(
-        <Accordion type="single" collapsible className="w-1/2 p-4 items-center">
+        <Accordion 
+            type="single" 
+            collapsible 
+            className="w-1/2 p-4 items-center" 
+            defaultValue="following"
+        >
             <AccordionItem value="following">
                 <AccordionTrigger>
                     Following
