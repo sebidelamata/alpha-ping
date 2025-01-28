@@ -81,9 +81,6 @@ const UsernameAndPFP:React.FC = () => {
             if((error as ErrorType).reason){
                 setError((error as ErrorType).reason)
             }
-            if(error){
-                console.log(error)
-            }
         }finally{
             setLoading(false)
         }
