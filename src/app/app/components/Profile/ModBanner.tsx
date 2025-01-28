@@ -1,8 +1,6 @@
 'use client';
 
-import React, {
-    useState
-} from "react";
+import React from "react";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import ModBannerListItem from "./ModBannerListItem";
 import {
@@ -16,8 +14,6 @@ import { ScrollArea } from "@/components/components/ui/scroll-area";
 const ModBanner:React.FC = () => {
 
     const { mod } = useUserProviderContext()
-
-    const [txMessageMod, setTxMessageMod] = useState<string | null | undefined>(null)
 
     return(
         <Card className="bg-primary text-secondary">
@@ -40,8 +36,6 @@ const ModBanner:React.FC = () => {
                                         <li key={channel.id}> 
                                             <ModBannerListItem 
                                                 channel={channel}
-                                                txMessageMod={txMessageMod}
-                                                setTxMessageMod={setTxMessageMod}
                                             />
                                         </li>
                                     )

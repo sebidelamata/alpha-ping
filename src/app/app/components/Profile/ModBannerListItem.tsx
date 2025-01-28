@@ -17,19 +17,14 @@ interface ErrorType {
 
 interface ModBannerListItemProps{
     channel: AlphaPING.ChannelStructOutput;
-    txMessageMod: string | null | undefined; 
-    setTxMessageMod: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
-const ModBannerListItem:React.FC<ModBannerListItemProps> = ({
-    channel, 
-    txMessageMod, 
-    setTxMessageMod
-}) => {
+const ModBannerListItem:React.FC<ModBannerListItemProps> = ({ channel }) => {
 
     const { alphaPING, signer } = useEtherProviderContext()
     const { mod, setMod } = useUserProviderContext()
 
+    const [txMessageMod, setTxMessageMod] = useState<string | null | undefined>(null)
     const [showModal, setShowModal] = useState<boolean>(false)
 
     const handleClick = (e:MouseEvent) => {
