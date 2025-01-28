@@ -136,184 +136,108 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
                         </Link>
                     </div>
                     <Dialog 
-            open={open} 
-            onOpenChange={setOpen}
-        >
-            <DialogTrigger asChild>
-                <Button
-                    variant="destructive"
-                >
-                    Unfollow
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>
-                        <div className="flex flex-row items-center justify-center gap-4 text-3xl">
-                            <Link 
-                                className="flex flex-row gap-1"
-                                href={`https://arbiscan.io/address/${follow}`}
-                                target="_blank"
+                        open={open} 
+                        onOpenChange={setOpen}
+                    >
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="destructive"
                             >
-                                    { "Unfollow" } 
-                                    {
-                                        username !== null ? 
-                                        <span 
-                                            className="text-accent">
-                                                {username}
-                                        </span> : 
-                                        <span 
-                                            className="text-accent">
-                                                {follow.slice(0,4)}...${follow.slice(37,41)}
-                                        </span>
-                                    }
-                                    {"?"}
-                            </Link>
-                            {
-                                (userPFP !== null && userPFP !== '') ?
-                                <Avatar>
-                                    <AvatarImage
-                                        src={userPFP} 
-                                        alt="User Icon" 
-                                        loading="lazy"
-                                    />
-                                    <AvatarFallback>
+                                Unfollow
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>
+                                    <div className="flex flex-row items-center justify-center gap-4 text-3xl">
+                                        <Link 
+                                            className="flex flex-row gap-1"
+                                            href={`https://arbiscan.io/address/${follow}`}
+                                            target="_blank"
+                                        >
+                                                { "Unfollow" } 
+                                                {
+                                                    username !== null ? 
+                                                    <span 
+                                                        className="text-accent">
+                                                            {username}
+                                                    </span> : 
+                                                    <span 
+                                                        className="text-accent">
+                                                            {follow.slice(0,4)}...${follow.slice(37,41)}
+                                                    </span>
+                                                }
+                                                {"?"}
+                                        </Link>
                                         {
-                                            (username !== null && username !== '') ?
-                                            username.slice(0,2) :
-                                            follow.slice(0, 2)
+                                            (userPFP !== null && userPFP !== '') ?
+                                            <Avatar>
+                                                <AvatarImage
+                                                    src={userPFP} 
+                                                    alt="User Icon" 
+                                                    loading="lazy"
+                                                />
+                                                <AvatarFallback>
+                                                    {
+                                                        (username !== null && username !== '') ?
+                                                        username.slice(0,2) :
+                                                        follow.slice(0, 2)
+                                                    }
+                                                </AvatarFallback>
+                                            </Avatar> :
+                                            <Avatar>
+                                                <AvatarImage
+                                                    src='/monkey.svg' 
+                                                    alt="Default User Icon" 
+                                                    loading="lazy"
+                                                />
+                                            </Avatar>
                                         }
-                                    </AvatarFallback>
-                                </Avatar> :
-                                <Avatar>
-                                    <AvatarImage
-                                        src='/monkey.svg' 
-                                        alt="Default User Icon" 
-                                        loading="lazy"
-                                    />
-                                </Avatar>
-                            }
-                        </div>
-                        </DialogTitle>
-                            <DialogDescription className="flex flex-col items-center justify-center gap-4">
-                                Their messages will no longer show up when your Chat is in Follow Mode. 
-                            </DialogDescription>
-                            <Separator/>
-                            <form
-                                onSubmit={(e) => handleSubmit(e)}
-                                className="flex flex-col items-center justify-center gap-4"
-                            >
-                                <Button 
-                                    type="submit"
-                                    variant="destructive" 
-                                    className="w-[200px]"
-                                >
-                                    Unfollow
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    className="w-[200px]"
-                                    onClick={(e) => handleCancel(e)} 
-                                >
-                                    Cancel
-                                </Button>
-                            </form>
-                        </DialogHeader>
-                        {
-                            loading === true &&
-                                <Loading/>
-                        }
-                        {
-                            error !== null &&
-                            <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
-                                {
-                                    error.length > 50 ?
-                                    `${error.slice(0,50)}...` :
-                                    error
-                                }
-                            </DialogFooter>
-                        }
-                    </DialogContent>
-            </Dialog>
-                    {/* {
-                        followingUserFollow === false &&
-                        <UserFollowsFollowBack 
-                            userFollow={userFollow} 
-                            userPFP={userPFP}
-                            username={username}
-                        />
-                    }
-                    {
-                        followingUserFollow === true &&
-                        <UserFollowsUnfollow 
-                            userFollow={userFollow}
-                            userPFP={userPFP}
-                            username={username}
-                        />
-                    } */}
+                                    </div>
+                                    </DialogTitle>
+                                        <DialogDescription className="flex flex-col items-center justify-center gap-4">
+                                            Their messages will no longer show up when your Chat is in Follow Mode. 
+                                        </DialogDescription>
+                                        <Separator/>
+                                        <form
+                                            onSubmit={(e) => handleSubmit(e)}
+                                            className="flex flex-col items-center justify-center gap-4"
+                                        >
+                                            <Button 
+                                                type="submit"
+                                                variant="destructive" 
+                                                className="w-[200px]"
+                                            >
+                                                Unfollow
+                                            </Button>
+                                            <Button
+                                                variant="outline"
+                                                className="w-[200px]"
+                                                onClick={(e) => handleCancel(e)} 
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </form>
+                                    </DialogHeader>
+                                    {
+                                        loading === true &&
+                                            <Loading/>
+                                    }
+                                    {
+                                        error !== null &&
+                                        <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
+                                            {
+                                                error.length > 50 ?
+                                                `${error.slice(0,50)}...` :
+                                                error
+                                            }
+                                        </DialogFooter>
+                                    }
+                                </DialogContent>
+                        </Dialog>
                 </CardTitle>
             </CardHeader>
         </Card>
-        // <Card className="bg-primary text-secondary">
-        //     { <div className="follow-pfp">
-        //         {
-        //             (userPFP !== null && userPFP !== '') ?
-        //             <img 
-        //                 src={userPFP} 
-        //                 alt="User Icon" 
-        //                 className='monkey-icon'
-        //                 loading="lazy"
-        //             /> :
-        //             <img 
-        //                 src='/monkey.svg' 
-        //                 alt="User Icon" 
-        //                 className='monkey-icon'
-        //                 loading="lazy"
-        //             />
-        //         }
-        //     </div>
-        //     <div className="follow-username">
-        //         {
-        //             (username !== null && username !== '') ?
-        //             username :
-        //             follow.slice(0, 6) + '...' + follow.slice(38, 42)
-        //         }
-        //     </div>
-        //     {
-        //         showModal === false &&
-        //             <button
-        //                 onClick={(e) => handleClick(e)}
-        //                 className="followlist-unfollow-button"
-        //             >
-        //                 Unfollow
-        //             </button>
-        //     }
-        //     {
-        //         showModal === true &&
-        //         <form 
-        //             action=""
-        //             onSubmit={(e) => handleSubmit(e)}
-        //             className="pardon-form"
-        //         >
-        //             <input 
-        //                 type="submit" 
-        //             />
-        //             <button 
-        //                 onClick={(e) => handleCancel(e)}
-        //             >
-        //                 Cancel
-        //             </button>
-        //         </form>
-        //     }
-        //     {
-        //         loading === true &&
-        //             <Loading/>
-        //     }
-        //     {
-        //         error !== null &&
-        //             <p>{error}</p>
-        //     }
-        // </Card> */}
     )
 }
 

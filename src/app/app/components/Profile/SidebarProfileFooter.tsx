@@ -68,7 +68,7 @@ const SidebarProfileFooter:React.FC = () => {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </DrawerTrigger>
-                <DrawerContent style={{ zIndex: 10 }}>
+                <DrawerContent style={{ zIndex: 3 }}>
                     <Profile/>
                 </DrawerContent>
             </Drawer>

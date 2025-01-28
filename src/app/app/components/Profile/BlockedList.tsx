@@ -7,10 +7,13 @@ import React, {
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import BlockedListItem from "./BlockedListItem";
+import {
+    Card,
+    CardHeader
+  } from "@/components/components/ui/card"
+import { ScrollArea } from "@/components/components/ui/scroll-area";
 
 const BlockedList:React.FC = () => {
-
-    const mockUsers = ['0x366bF4C8A1517E2eA6cB5085679742fF92F14B54']
 
     const { alphaPING } = useEtherProviderContext()
     const { txMessageBlock, account } = useUserProviderContext()
@@ -57,26 +60,32 @@ const BlockedList:React.FC = () => {
 
 
     return(
-        <div className="blocked-list-container">
+        <Card className="bg-primary text-secondary">
             {
                 blocks &&
                 blocks.length === 0 &&
-                <p>You haven't blocked anybody.</p>
+                <CardHeader>
+                    You have not blocked anyone.
+                </CardHeader>
             }
-            <ul className="blocked-list">
-                {
-                    blocks &&
-                    blocks.length > 0 &&
-                    blocks.map((block) => {
-                        return(
-                            <li key={block}>
-                                <BlockedListItem block={block}/>
-                            </li>
-                        )
-                    })
-                }
-            </ul>
-        </div>
+            {
+                <ScrollArea className="h-64 rounded-md border">
+                    <ul className="blocked-list">
+                        {
+                            blocks &&
+                            blocks.length > 0 &&
+                            blocks.map((block) => {
+                                return(
+                                    <li key={block}>
+                                        <BlockedListItem block={block}/>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                </ScrollArea>
+            }
+        </Card>
     )
 }
 
