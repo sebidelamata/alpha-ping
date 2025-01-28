@@ -103,7 +103,11 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
                     }
                     {
                         followingUserFollow === true &&
-                        <UserFollowsUnfollow userFollow={userFollow}/>
+                        <UserFollowsUnfollow 
+                            userFollow={userFollow}
+                            userPFP={userPFP}
+                            username={username}
+                        />
                     }
                 </CardTitle>
             </CardHeader>

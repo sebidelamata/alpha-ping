@@ -8,6 +8,23 @@ import React, {
 import Loading from "../Loading";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
+import { Button } from "@/components/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/components/ui/dialog"
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage
+} from "@/components/components/ui/avatar"
+import Link from "next/link";
+import { Separator } from "@radix-ui/react-separator";
 
 interface ErrorType{
     message: string;
@@ -15,25 +32,21 @@ interface ErrorType{
 
 interface UserFollowsUnfollowProps{
     userFollow: string;
+    userPFP: string | null;
+    username: string | null;
 }
 
-const UserFollowsUnfollow:React.FC<UserFollowsUnfollowProps> = ({userFollow}) => {
+const UserFollowsUnfollow:React.FC<UserFollowsUnfollowProps> = ({
+    userFollow,
+    userPFP,
+    username
+}) => {
     const { alphaPING, signer } = useEtherProviderContext()
     const { setTxMessageFollow } = useUserProviderContext()
 
-    const [showModal, setShowModal] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-
-    const handleClick = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(true)
-    }
-
-    const handleCancel = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(false)
-    }
+    const [open, setOpen] = useState<boolean>(false); 
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
@@ -55,43 +68,112 @@ const UserFollowsUnfollow:React.FC<UserFollowsUnfollowProps> = ({userFollow}) =>
 
     }
 
+    const handleCancel = (e:MouseEvent) => {
+        e.preventDefault()
+        setOpen(false)
+    }
+
     return(
-        <div className="user-follows-unfollow">
-            {
-                showModal === false &&
-                <button
-                    onClick={(e) => handleClick(e)}
-                    className="user-followlist-unfollow-button"
+        <Dialog 
+            open={open} 
+            onOpenChange={setOpen}
+        >
+            <DialogTrigger asChild>
+                <Button
+                    variant="destructive"
                 >
                     Unfollow
-                </button>
-            }
-            {
-                showModal === true &&
-                <form 
-                    action=""
-                    onSubmit={(e) => handleSubmit(e)}
-                    className="unfollow-form"
-                >
-                    <input 
-                        type="submit" 
-                    />
-                    <button 
-                        onClick={(e) => handleCancel(e)}
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <div className="flex flex-row items-center justify-center gap-4 text-3xl">
+                            <Link 
+                                className="flex flex-row gap-1"
+                                href={`https://arbiscan.io/address/${userFollow}`}
+                                target="_blank"
+                            >
+                                    { "Unfollow" } 
+                                    {
+                                        username !== null ? 
+                                        <span 
+                                            className="text-accent">
+                                                {username}
+                                        </span> : 
+                                        <span 
+                                            className="text-accent">
+                                                {userFollow.slice(0,4)}...${userFollow.slice(37,41)}
+                                        </span>
+                                    }
+                                    {"?"}
+                            </Link>
+                            {
+                                (userPFP !== null && userPFP !== '') ?
+                                <Avatar>
+                                    <AvatarImage
+                                        src={userPFP} 
+                                        alt="User Icon" 
+                                        loading="lazy"
+                                    />
+                                    <AvatarFallback>
+                                        {
+                                            (username !== null && username !== '') ?
+                                            username.slice(0,2) :
+                                            userFollow.slice(0, 2)
+                                        }
+                                    </AvatarFallback>
+                                </Avatar> :
+                                <Avatar>
+                                    <AvatarImage
+                                        src='/monkey.svg' 
+                                        alt="Default User Icon" 
+                                        loading="lazy"
+                                    />
+                                </Avatar>
+                            }
+                        </div>
+                    </DialogTitle>
+                    <DialogDescription className="flex flex-col items-center justify-center gap-4">
+                        Their messages will no longer show up when your Chat is in Follow Mode. 
+                    </DialogDescription>
+                    <Separator/>
+                    <form
+                        onSubmit={(e) => handleSubmit(e)}
+                        className="flex flex-col items-center justify-center gap-4"
                     >
-                        Cancel
-                    </button>
-                </form>
-            }
-            {
-                loading === true &&
-                    <Loading/>
-            }
-            {
-                error !== null &&
-                    <p>{error}</p>
-            }
-        </div>
+                        <Button 
+                            type="submit"
+                            variant="destructive" 
+                            className="w-[200px]"
+                        >
+                            Unfollow
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="w-[200px]"
+                            onClick={(e) => handleCancel(e)} 
+                        >
+                            Cancel
+                        </Button>
+                    </form>
+                </DialogHeader>
+                {
+                    loading === true &&
+                        <Loading/>
+                }
+                {
+                    error !== null &&
+                    <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
+                        {
+                            error.length > 50 ?
+                            `${error.slice(0,50)}...` :
+                            error
+                        }
+                    </DialogFooter>
+                }
+            </DialogContent>
+        </Dialog>
     )
 }
 
