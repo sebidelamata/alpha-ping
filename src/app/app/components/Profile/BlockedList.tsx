@@ -10,6 +10,8 @@ import BlockedListItem from "./BlockedListItem";
 
 const BlockedList:React.FC = () => {
 
+    const mockUsers = ['0x366bF4C8A1517E2eA6cB5085679742fF92F14B54']
+
     const { alphaPING } = useEtherProviderContext()
     const { txMessageBlock, account } = useUserProviderContext()
 
