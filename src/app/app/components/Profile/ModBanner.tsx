@@ -32,7 +32,7 @@ const ModBanner:React.FC = () => {
                     <ScrollArea className="h-64 rounded-md border">
                         <ul>
                             {
-                                mod.map((channel, index) => {
+                                mod.map((channel) => {
                                     return(
                                         <li key={channel.id}> 
                                             <ModBannerListItem 
