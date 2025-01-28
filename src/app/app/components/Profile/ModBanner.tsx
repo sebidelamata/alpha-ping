@@ -7,7 +7,8 @@ import { useUserProviderContext } from "../../../../contexts/UserContext";
 import ModBannerListItem from "./ModBannerListItem";
 import {
     Card,
-    CardHeader
+    CardHeader,
+    CardTitle
   } from "@/components/components/ui/card"
 import { ScrollArea } from "@/components/components/ui/scroll-area";
 
@@ -24,7 +25,9 @@ const ModBanner:React.FC = () => {
                 {
                     mod &&
                     mod.length === 0 &&
-                    "You currently have Moderator admin role for:"
+                    <CardTitle>
+                        "You currently have Moderator admin role for:"
+                    </CardTitle>
                 }
                 {
                     mod &&
