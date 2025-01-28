@@ -42,7 +42,6 @@ const Profile: React.FC = () => {
 
     // pass tx message state to transferOwner
     const [txMessageOwner, setTxMessageOwner] = useState<string | null | undefined>(null)
-    const [txMessageMod, setTxMessageMod] = useState<string | null | undefined>(null)
 
     // our options for tab in the profile section
     const [availableProfileTabs, setAvailableProfileTabs] = useState<string[]>([])
@@ -133,7 +132,7 @@ const Profile: React.FC = () => {
                             <UserRelations/>
                         </TabsContent>
                         <TabsContent value="mod">
-                            Mod
+                            <ModBanner/>
                         </TabsContent>
                         <TabsContent value="owner">
                             Owner

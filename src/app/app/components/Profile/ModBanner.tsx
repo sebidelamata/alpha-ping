@@ -1,49 +1,54 @@
 'use client';
 
-import React from "react";
+import React, {
+    useState
+} from "react";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import ModBannerListItem from "./ModBannerListItem";
+import {
+    Card,
+    CardHeader
+  } from "@/components/components/ui/card"
+import { ScrollArea } from "@/components/components/ui/scroll-area";
 
-interface ModBannerProps{
-    txMessageMod: string | null | undefined; 
-    setTxMessageMod: React.Dispatch<React.SetStateAction<string | null | undefined>>;
-}
 
-const ModBanner:React.FC<ModBannerProps> = ({txMessageMod, setTxMessageMod}) => {
+const ModBanner:React.FC = () => {
 
     const { mod } = useUserProviderContext()
 
+    const [txMessageMod, setTxMessageMod] = useState<string | null | undefined>(null)
+
     return(
-        <div className="mod-banner">
-            {
-                mod &&
-                mod.length > 0 &&
-                <h3 className="mod-banner-header">
-                    {
-                        `You currently have Moderator admin role for:`
-                    }
-                </h3>
-            }
-            {
-                mod &&
-                mod.length > 0 &&
-                <ul className="mod-ban-list">
-                    {
-                        mod.map((channel) => {
-                            return(
-                                <li key={channel.id}>
-                                    <ModBannerListItem 
-                                        channel={channel}
-                                        txMessageMod={txMessageMod}
-                                        setTxMessageMod={setTxMessageMod}
-                                    />
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
-            }
-        </div>
+        <Card className="bg-primary text-secondary">
+            <CardHeader>
+                {
+                    mod &&
+                    mod.length === 0 &&
+                    "You currently have Moderator admin role for:"
+                }
+                {
+                    mod &&
+                    mod.length > 0 &&
+                    <ScrollArea className="h-64 rounded-md border">
+                        <ul>
+                            {
+                                mod.map((channel, index) => {
+                                    return(
+                                        <li key={channel.id}> 
+                                            <ModBannerListItem 
+                                                channel={channel}
+                                                txMessageMod={txMessageMod}
+                                                setTxMessageMod={setTxMessageMod}
+                                            />
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </ScrollArea>
+                }
+            </CardHeader>
+        </Card>
     )
 }
 
