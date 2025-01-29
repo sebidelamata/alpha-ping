@@ -9,6 +9,12 @@ import {
     CardTitle
   } from "@/components/components/ui/card"
 import { ScrollArea } from "@/components/components/ui/scroll-area";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+  } from "@/components/components/ui/accordion"
 
 
 const ModBanner:React.FC = () => {
@@ -36,19 +42,29 @@ const ModBanner:React.FC = () => {
                     mod &&
                     mod.length > 0 &&
                     <ScrollArea className="h-64 rounded-md border">
-                        <ul>
+                        <Accordion type="single" collapsible>
                             {
                                 mod.map((channel) => {
                                     return(
-                                        <li key={channel.id}> 
-                                            <ModBannerListItem 
-                                                channel={channel}
-                                            />
-                                        </li>
+                                        <AccordionItem 
+                                            key={channel.tokenAddress} 
+                                            value={channel.tokenAddress}
+                                        > 
+                                            <AccordionTrigger>
+                                                {channel.name}
+                                            </AccordionTrigger>
+                                            <AccordionContent 
+                                                className="flex flex-row items-center justify-between gap-4"
+                                            >
+                                                <ModBannerListItem 
+                                                    channel={channel}
+                                                />
+                                            </AccordionContent>
+                                        </AccordionItem>
                                     )
                                 })
                             }
-                        </ul>
+                        </Accordion>
                     </ScrollArea>
                 }
             </CardHeader>

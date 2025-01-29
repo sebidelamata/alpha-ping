@@ -9,6 +9,12 @@ import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useMessagesProviderContext } from "../../../../contexts/MessagesContext";
 import Loading from "../Loading";
 import BansListItem from "./BansListItem";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@/components/components/ui/card"
 
 interface ErrorType {
     reason: string
@@ -82,52 +88,60 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
     }, [showBans, messages, txMessageUnban, channelAuthors])
 
     return(
-        <div className="ban-container">
-            <h5
-                onClick={() => handleClick()}
-                className={`ban-container-header ${showBans === true ? 'active' : ''}`}
-            >
-                Channel Bans
-                <img 
-                    src="/moreIcon.svg" 
-                    alt="Click to Expand" 
-                    className="edit-profile-image"/>
-            </h5>
-            {
-                showBans === true &&
-                channelBans.length > 0 &&
-                <ul className="bans-list">
-                    {
-                        channelBans.map((ban) => {
-                            return(
-                                <li key={ban}>
-                                    <BansListItem 
-                                        ban={ban}
-                                        channel={channel}
-                                        setTxMessageUnban={setTxMessageUnban}
-                                    />
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
-            }
-            {
-                showBans === true &&
-                channelBans.length === 0 &&
-                <div className="no-bans-div">
-                    The are currently no banned users for this channel.
-                </div>
-            }
-            {
-                loading === true &&
-                    <Loading/>
-            }
-            {
-                error !== null &&
-                    <p>{error}</p>
-            }
-        </div>
+        <Card className="bg-primary text-secondary">
+            <CardHeader>
+                <CardTitle>
+                    test bans list
+                </CardTitle>
+                
+            </CardHeader>
+        </Card>
+        // <div className="ban-container">
+        //     <h5
+        //         onClick={() => handleClick()}
+        //         className={`ban-container-header ${showBans === true ? 'active' : ''}`}
+        //     >
+        //         Channel Bans
+        //         <img 
+        //             src="/moreIcon.svg" 
+        //             alt="Click to Expand" 
+        //             className="edit-profile-image"/>
+        //     </h5>
+        //     {
+        //         showBans === true &&
+        //         channelBans.length > 0 &&
+        //         <ul className="bans-list">
+        //             {
+        //                 channelBans.map((ban) => {
+        //                     return(
+        //                         <li key={ban}>
+        //                             <BansListItem 
+        //                                 ban={ban}
+        //                                 channel={channel}
+        //                                 setTxMessageUnban={setTxMessageUnban}
+        //                             />
+        //                         </li>
+        //                     )
+        //                 })
+        //             }
+        //         </ul>
+        //     }
+        //     {
+        //         showBans === true &&
+        //         channelBans.length === 0 &&
+        //         <div className="no-bans-div">
+        //             The are currently no banned users for this channel.
+        //         </div>
+        //     }
+        //     {
+        //         loading === true &&
+        //             <Loading/>
+        //     }
+        //     {
+        //         error !== null &&
+        //             <p>{error}</p>
+        //     }
+        // </div>
     )
 }
 

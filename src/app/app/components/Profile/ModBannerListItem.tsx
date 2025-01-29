@@ -20,6 +20,11 @@ import {
     DialogTrigger,
 } from "@/components/components/ui/dialog"
 import { Button } from "@/components/components/ui/button";
+import {
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/components/ui/accordion"
 
 interface ModBannerListItemProps{
     channel: AlphaPING.ChannelStructOutput;
@@ -30,20 +35,14 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({ channel }) => {
     const [open, setOpen] = useState<boolean>(false)
 
     return(
-        <Card className="bg-primary text-secondary">
-            <CardHeader className="flex flex-row items-center justify-between gap-4">
-                <CardTitle className="flex flex-row items-center gap-4">
-                    {
-                        channel &&
-                        channel?.name
-                    }
-                </CardTitle>
+        <Card className="bg-primary text-secondary w-[100%]">
+            <CardHeader className="flex flex-row items-center justify-center gap-4 w-[100%]">
                 <Dialog
                     open={open} 
                     onOpenChange={setOpen}
                 >
-                    <DialogTrigger asChild>
-                        <Button variant="outline">
+                    <DialogTrigger asChild className="flex flex-row items-center justify-between gap-4">
+                        <Button variant="secondary">
                             Transfer Mod Role
                         </Button>
                     </DialogTrigger>
