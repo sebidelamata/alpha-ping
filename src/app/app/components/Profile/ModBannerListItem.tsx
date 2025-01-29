@@ -7,6 +7,7 @@ import React, {
 import TransferMod from "./TransferMod";
 import {
     Card,
+    CardContent,
     CardHeader,
     CardTitle,
   } from "@/components/components/ui/card"
@@ -41,7 +42,7 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({ channel }) => {
                     onOpenChange={setOpen}
                 >
                     <DialogTrigger asChild>
-                        <Button variant={"outline"}>
+                        <Button variant="outline">
                             Transfer Mod Role
                         </Button>
                     </DialogTrigger>
@@ -57,6 +58,9 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({ channel }) => {
                     </DialogContent>
                 </Dialog>
             </CardHeader>
+            <CardContent>
+                
+            </CardContent>
         </Card>
         // <div className="mod-banner-li">
         //     <ChannelBans channel={channel}/>

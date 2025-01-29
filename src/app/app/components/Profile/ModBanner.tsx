@@ -21,8 +21,15 @@ const ModBanner:React.FC = () => {
                 {
                     mod &&
                     mod.length === 0 &&
-                    <CardTitle>
-                        "You currently have Moderator admin role for:"
+                    <CardTitle className="flex flex-row items-center justify-center gap-4">
+                        You do not have any Moderator roles
+                    </CardTitle>
+                }
+                {
+                    mod &&
+                    mod.length !== 0 &&
+                    <CardTitle className="flex flex-row items-center justify-center gap-4">
+                        You have Moderator role for:
                     </CardTitle>
                 }
                 {
