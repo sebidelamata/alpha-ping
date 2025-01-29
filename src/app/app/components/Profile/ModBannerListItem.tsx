@@ -1,10 +1,11 @@
 'use client';
 
 import React, {
-    useState,
-    MouseEvent
+    useState
 } from "react";
 import TransferMod from "./TransferMod";
+import ChannelBans from "./ChannelBans";
+import { AlphaPING } from "typechain-types";
 import {
     Card,
     CardContent,
@@ -59,12 +60,9 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({ channel }) => {
                 </Dialog>
             </CardHeader>
             <CardContent>
-                
+                <ChannelBans channel={channel}/>
             </CardContent>
         </Card>
-        // <div className="mod-banner-li">
-        //     <ChannelBans channel={channel}/>
-        // </div>
     )
 }
 
