@@ -9,8 +9,7 @@ import { AlphaPING } from "typechain-types";
 import {
     Card,
     CardContent,
-    CardHeader,
-    CardTitle,
+    CardHeader
   } from "@/components/components/ui/card"
 import {
     Dialog,
@@ -20,11 +19,6 @@ import {
     DialogTrigger,
 } from "@/components/components/ui/dialog"
 import { Button } from "@/components/components/ui/button";
-import {
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/components/ui/accordion"
 
 interface ModBannerListItemProps{
     channel: AlphaPING.ChannelStructOutput;
