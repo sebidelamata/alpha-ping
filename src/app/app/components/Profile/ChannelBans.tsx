@@ -7,7 +7,6 @@ import React, {
 import { AlphaPING } from "../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useMessagesProviderContext } from "../../../../contexts/MessagesContext";
-import Loading from "../Loading";
 import BansListItem from "./BansListItem";
 import {
     Card,
@@ -15,6 +14,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/components/ui/card"
+import { mockUserArray } from "mocks/mockUsers";
 
 interface ErrorType {
     reason: string
@@ -90,10 +90,32 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
     return(
         <Card className="bg-primary text-secondary">
             <CardHeader>
-                <CardTitle>
-                    test bans list
-                </CardTitle>
-                
+                {
+                    mockUserArray.length === 0 &&
+                    <CardTitle className="text-lg">
+                        The are currently no banned users for this channel.
+                    </CardTitle>
+                }
+                <CardContent>
+                    {
+                        mockUserArray.length > 0 &&
+                        <ul>
+                            {
+                                mockUserArray.map((ban, index) => {
+                                    return(
+                                        <li key={index}>
+                                            <BansListItem 
+                                                ban={ban}
+                                                channel={channel}
+                                                setTxMessageUnban={setTxMessageUnban}
+                                            />
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    }
+                </CardContent>
             </CardHeader>
         </Card>
         // <div className="ban-container">

@@ -53,9 +53,7 @@ const ModBanner:React.FC = () => {
                                             <AccordionTrigger>
                                                 {channel.name}
                                             </AccordionTrigger>
-                                            <AccordionContent 
-                                                className="flex flex-row items-center justify-between gap-4"
-                                            >
+                                            <AccordionContent>
                                                 <ModBannerListItem 
                                                     channel={channel}
                                                 />

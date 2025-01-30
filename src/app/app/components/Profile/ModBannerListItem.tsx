@@ -35,7 +35,7 @@ const ModBannerListItem:React.FC<ModBannerListItemProps> = ({ channel }) => {
                     open={open} 
                     onOpenChange={setOpen}
                 >
-                    <DialogTrigger asChild className="flex flex-row items-center justify-between gap-4">
+                    <DialogTrigger asChild className="flex flex-row">
                         <Button variant="secondary">
                             Transfer Mod Role
                         </Button>

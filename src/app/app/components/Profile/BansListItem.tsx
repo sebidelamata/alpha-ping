@@ -9,6 +9,25 @@ import React, {
 import { AlphaPING } from "../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import Loading from "../Loading";
+import {
+    Card,
+    CardContent,
+    CardHeader
+  } from "@/components/components/ui/card"
+  import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage
+} from "@/components/components/ui/avatar"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/components/ui/dialog"
+import { Button } from "@/components/components/ui/button";
+import Link from "next/link";
 
 interface ErrorType {
     reason: string
@@ -79,8 +98,52 @@ const BansListItem:React.FC<BansListItemProps> = ({
     }, [ban])
 
     return(
-        <div className="bans-list-item">
-            <div className="blacklisted-pfp">
+        <Card className="bg-primary text-secondary">
+            <CardHeader className="flex flex-row justify-center items-center gap-4">
+                <Avatar>
+                    {
+                        (userPFP !== null && userPFP !== '') ?
+                        <>
+                            <AvatarImage
+                                src={userPFP} 
+                                alt="User Icon" 
+                                loading="lazy"
+                            />
+                            <AvatarFallback>
+                                {ban.slice(0,2)}
+                            </AvatarFallback>
+                        </> :
+                        <AvatarImage
+                            src='/monkey.svg' 
+                            alt="User Icon" 
+                            loading="lazy"
+                        />
+                    }
+                </Avatar>
+                <Link
+                    href={`https://arbiscan.io/address/${ban}`}
+                    target='_blank'
+                >
+                    {
+                        (username !== null && username !== '') ?
+                        username :
+                        ban.slice(0, 6) + '...' + ban.slice(38, 42)
+                    }
+                </Link>
+            </CardHeader>
+            <CardContent className="flex justify-center items-center">
+<Dialog>
+    <DialogTrigger className="flex justify-center items-center">
+        <Button
+            variant={"outline"}
+            className="flex justify-center items-center w-[200px]"
+        >
+            Unban
+        </Button>
+    </DialogTrigger>
+</Dialog>
+            </CardContent>
+            {/* <div className="blacklisted-pfp">
                 {
                     (userPFP !== null && userPFP !== '') ?
                     <img 
@@ -143,8 +206,8 @@ const BansListItem:React.FC<BansListItemProps> = ({
             {
                 error !== null &&
                     <p>{error}</p>
-            }
-        </div>
+            } */}
+        </Card>
     )
 }
 
