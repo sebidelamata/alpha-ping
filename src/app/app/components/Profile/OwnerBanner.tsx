@@ -199,8 +199,10 @@ const OwnerBanner:React.FC = () => {
                         </DialogContent>
                 </Dialog>
                 <ScrollArea className="h-64 rounded-md border">
-                    <ManageMods/>
-                    <BlacklistList/>
+                    <Accordion type="single" collapsible>
+                        <ManageMods/>
+                        <BlacklistList/>
+                    </Accordion>
                 </ScrollArea>
                 {/* {
                     mod &&

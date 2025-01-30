@@ -43,7 +43,6 @@ const ManageMods:React.FC = () => {
     },[])
 
     return(
-        <Accordion type="single" collapsible>
             <AccordionItem 
                 value={"mod"}
             > 
@@ -70,7 +69,6 @@ const ManageMods:React.FC = () => {
                     </ul>
                 </AccordionContent>
             </AccordionItem>
-        </Accordion>
     )
 }
 

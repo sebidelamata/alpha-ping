@@ -7,6 +7,12 @@ import React, {
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import BlacklistListItem from "./BlacklistListItem";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+  } from "@/components/components/ui/accordion"
 
 const BlacklistList:React.FC = () => {
 
@@ -57,42 +63,46 @@ const BlacklistList:React.FC = () => {
     },[allUsers, txMessageUnblacklist, txMessageBlacklist])
 
     return(
-        <div className="blacklist-list">
-            <h3 className="blacklist-list-header">
+        <AccordionItem 
+            value={"blacklist"}
+        >
+            <AccordionTrigger>
                 Blacklisted Users
-            </h3>
-            {
-                blacklistedUsers &&
-                blacklistedUsers.length === 0 &&
-                <div>
-                    There are currently no Blacklisted Users on AlphaPING
-                </div>
-            }
-            <ul className="blacklist-list-list">
+            </AccordionTrigger>
+            <AccordionContent>
                 {
                     blacklistedUsers &&
-                    blacklistedUsers.length > 0 &&
-                    blacklistedUsers.map((user) => (
-                        <li key={user} className="blacklist-list-item">
-                            <BlacklistListItem 
-                                user={user}
-                                setTxMessageUnblacklist={setTxMessageUnblacklist}
-                            />
-                        </li>
-                    ))
+                    blacklistedUsers.length === 0 &&
+                    <div>
+                        There are currently no Blacklisted Users on AlphaPING
+                    </div>
                 }
-            </ul>
-            {
-                txMessageUnblacklist !== null &&
-                <a 
-                    href={`https://arbiscan.io/tx/${txMessageUnblacklist}`}
-                    target="_blank"
-                    className="unblacklist-tx-msg"
-                >
-                    Pardon Succesful. View tx.
-                </a>
-            }
-        </div>
+                <ul className="blacklist-list-list">
+                    {
+                        blacklistedUsers &&
+                        blacklistedUsers.length > 0 &&
+                        blacklistedUsers.map((user) => (
+                            <li key={user} className="blacklist-list-item">
+                                <BlacklistListItem 
+                                    user={user}
+                                    setTxMessageUnblacklist={setTxMessageUnblacklist}
+                                />
+                            </li>
+                        ))
+                    }
+                </ul>
+                {
+                    txMessageUnblacklist !== null &&
+                    <a 
+                        href={`https://arbiscan.io/tx/${txMessageUnblacklist}`}
+                        target="_blank"
+                        className="unblacklist-tx-msg"
+                    >
+                        Pardon Succesful. View tx.
+                    </a>
+                }
+            </AccordionContent>
+        </AccordionItem>
     )
 }
 
