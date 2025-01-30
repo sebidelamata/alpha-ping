@@ -40,9 +40,6 @@ const Profile: React.FC = () => {
         account  
     } = useUserProviderContext()
 
-    // pass tx message state to transferOwner
-    const [txMessageOwner, setTxMessageOwner] = useState<string | null | undefined>(null)
-
     // our options for tab in the profile section
     const [availableProfileTabs, setAvailableProfileTabs] = useState<string[]>([])
     // tabs only appear based on user role
@@ -135,7 +132,7 @@ const Profile: React.FC = () => {
                             <ModBanner/>
                         </TabsContent>
                         <TabsContent value="owner">
-                            Owner
+                            <OwnerBanner/>
                         </TabsContent>
                     </Tabs>
                 </div>
