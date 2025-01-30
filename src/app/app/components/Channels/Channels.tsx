@@ -46,7 +46,11 @@ const Channels:React.FC = () => {
         }
         })
         setUserChannels(userChannels)
-        if(userChannels && userChannels.length > 0){
+        if(
+          userChannels && 
+          userChannels.length > 0 &&
+          currentChannel === null
+        ){
           setCurrentChannel(userChannels[0])
         }
     }
@@ -56,7 +60,8 @@ const Channels:React.FC = () => {
     joinChannelLoading, 
     hasJoined, 
     signer, 
-    setCurrentChannel
+    setCurrentChannel,
+    currentChannel
   ])
 
   useEffect(() => {

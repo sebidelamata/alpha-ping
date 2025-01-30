@@ -6,6 +6,12 @@ import React, {
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import ManageModsListItem from "./ManageModsListItem";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/components/ui/accordion"
 
 const ManageMods:React.FC = () => {
 
@@ -37,26 +43,34 @@ const ManageMods:React.FC = () => {
     },[])
 
     return(
-        <div className="manage-mods">
-            <h3>Manage Mods</h3>
-            <ul className="manage-mods-list">
-                {   Object.entries(allMods).length > 0 &&
-                    Object.entries(allMods).map(([mod, channels], index) => {
-                        return(
-                            <li key={index}>
-                                <ManageModsListItem mod={{[mod]: channels}}/>
-                            </li>
-                        )
-                    })
-                }
-                {
-                    Object.entries(allMods).length <= 0 &&
-                    <p>
-                        There are no mods
-                    </p>
-                }
-            </ul>
-        </div>
+        <Accordion type="single" collapsible>
+            <AccordionItem 
+                value={"mod"}
+            > 
+                <AccordionTrigger>
+                    Manage Mods
+                </AccordionTrigger>
+                <AccordionContent>
+                    <ul className="manage-mods-list">
+                        {   Object.entries(allMods).length > 0 &&
+                            Object.entries(allMods).map(([mod, channels], index) => {
+                                return(
+                                    <li key={index}>
+                                        <ManageModsListItem mod={{[mod]: channels}}/>
+                                    </li>
+                                )
+                            })
+                        }
+                        {
+                            Object.entries(allMods).length <= 0 &&
+                            <p>
+                                There are no mods
+                            </p>
+                        }
+                    </ul>
+                </AccordionContent>
+            </AccordionItem>
+        </Accordion>
     )
 }
 
