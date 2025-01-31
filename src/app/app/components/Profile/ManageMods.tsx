@@ -12,6 +12,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/components/ui/accordion"
+import { ScrollArea } from "@/components/components/ui/scroll-area";
 
 const ManageMods:React.FC = () => {
 
@@ -43,13 +44,14 @@ const ManageMods:React.FC = () => {
     },[])
 
     return(
-            <AccordionItem 
+<AccordionItem 
                 value={"mod"}
             > 
                 <AccordionTrigger>
                     Manage Mods
                 </AccordionTrigger>
                 <AccordionContent>
+                <ScrollArea className="h-64 rounded-md border">
                     <ul className="manage-mods-list">
                         {   Object.entries(allMods).length > 0 &&
                             Object.entries(allMods).map(([mod, channels], index) => {
@@ -67,6 +69,7 @@ const ManageMods:React.FC = () => {
                             </p>
                         }
                     </ul>
+                    </ScrollArea>
                 </AccordionContent>
             </AccordionItem>
     )

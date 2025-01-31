@@ -17,7 +17,6 @@ import {
     CardHeader,
     CardTitle
   } from "@/components/components/ui/card"
-import { ScrollArea } from "@/components/components/ui/scroll-area";
 import {
     Accordion,
     AccordionContent,
@@ -198,12 +197,10 @@ const OwnerBanner:React.FC = () => {
                             }
                         </DialogContent>
                 </Dialog>
-                <ScrollArea className="h-64 rounded-md border">
                     <Accordion type="single" collapsible>
                         <ManageMods/>
                         <BlacklistList/>
                     </Accordion>
-                </ScrollArea>
                 {/* {
                     mod &&
                     mod.length > 0 &&

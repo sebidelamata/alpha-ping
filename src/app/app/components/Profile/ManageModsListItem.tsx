@@ -9,6 +9,29 @@ import React, {
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import Loading from "../Loading";
 import { AddressLike } from "ethers";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+  } from "@/components/components/ui/card"
+  import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage
+} from "@/components/components/ui/avatar"
+import { Skeleton } from "@/components/components/ui/skeleton";
+import Link from "next/link";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/components/ui/dialog"
+import { Button } from "@/components/components/ui/button";
+import { Separator } from "@radix-ui/react-separator";
 
 interface ManageModsListItemProps{
     mod: { [mod: string]: number[] }
@@ -85,37 +108,46 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
     }, [mod])
 
     return(
-        <div className="manage-mods-list-item-container">
-             <div className="ban-mod-pfp">
-                {
-                    (userPFP !== null && userPFP !== '') ?
-                    <img 
-                        src={userPFP} 
-                        alt="User Icon" 
-                        className='monkey-icon'
-                        loading="lazy"
-                    /> :
-                    <img 
-                        src='/monkey.svg' 
-                        alt="User Icon" 
-                        className='monkey-icon'
-                        loading="lazy"
-                    />
-                }
-            </div>
-            <div className="ban-mod-username">
-                <a href={`https://arbiscan.io/address/${Object.keys(mod)[0]}`} target="_blank">
-                    {
-                        (username !== null && username !== '') ?
-                        username :
-                        Object.keys(mod)[0].slice(0, 6) + '...' + Object.keys(mod)[0].slice(38, 42)
-                    }
-                </a>
-            </div>
-            <div className="mod-for">
-                Mod For:
-            </div>
-            <ul className="ban-mod-channels-list">
+        <Card className="bg-primary text-secondary">
+            <CardHeader>
+                <CardTitle className="flex flex-col">
+                    <div className="flex flex-row">
+                        {
+                            (userPFP !== null && userPFP !== '') ?
+                            <Avatar>
+                                <AvatarImage
+                                    src={userPFP} 
+                                    alt="User Icon" 
+                                    loading="lazy"
+                                />
+                                <AvatarFallback>
+                                    {Object.keys(mod)[0].slice(0,2)}
+                                </AvatarFallback>
+                            </Avatar> :
+                            <Avatar>
+                                <AvatarImage
+                                    src='/monkey.svg' 
+                                    alt="User Icon" 
+                                    loading="lazy"
+                                />
+                            </Avatar>
+                        }
+                        <Link
+                            href={`https://arbiscan.io/address/${Object.keys(mod)[0]}`} 
+                            target="_blank"
+                        >
+                            {
+                                (username !== null && username !== '') ?
+                                username :
+                                Object.keys(mod)[0].slice(0, 6) + '...' + Object.keys(mod)[0].slice(38, 42)
+                            }
+                        </Link>
+                    </div>
+                    <div>
+                        Mod For:
+                    </div>
+                </CardTitle>
+                <ul className="ban-mod-channels-list">
                 {
                     channelNames.map((name) => {
                         return(
@@ -160,7 +192,8 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                 error !== null &&
                     <p>{error}</p>
             }
-        </div>
+            </CardHeader>
+        </Card>
     )
 }
 

@@ -13,6 +13,7 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/components/ui/accordion"
+  import { ScrollArea } from "@/components/components/ui/scroll-area";
 
 const BlacklistList:React.FC = () => {
 
@@ -63,13 +64,14 @@ const BlacklistList:React.FC = () => {
     },[allUsers, txMessageUnblacklist, txMessageBlacklist])
 
     return(
-        <AccordionItem 
+<AccordionItem 
             value={"blacklist"}
         >
             <AccordionTrigger>
                 Blacklisted Users
             </AccordionTrigger>
             <AccordionContent>
+            <ScrollArea className="h-64 rounded-md border">
                 {
                     blacklistedUsers &&
                     blacklistedUsers.length === 0 &&
@@ -101,6 +103,7 @@ const BlacklistList:React.FC = () => {
                         Pardon Succesful. View tx.
                     </a>
                 }
+                </ScrollArea>
             </AccordionContent>
         </AccordionItem>
     )
