@@ -58,7 +58,6 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
         setError(null)
-        //setTxMessageUnblacklist(null)
         setLoading(true)
         try{
             if(mod && mod !== undefined){
