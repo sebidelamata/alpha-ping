@@ -158,6 +158,7 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                     })
                 }
             </ul>
+            <Separator/>
             <Dialog
                 open={open} 
                 onOpenChange={setOpen}
@@ -165,6 +166,7 @@ const ManageModsListItem:React.FC<ManageModsListItemProps> = ({mod}) => {
                 <DialogTrigger>
                     <Button
                         variant={"destructive"}
+                        className="w-[200px]"
                     >
                         Ban Mod
                     </Button>
