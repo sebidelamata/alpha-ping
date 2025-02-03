@@ -59,7 +59,7 @@ const Profile: React.FC = () => {
 
     return(
         <div className="mx-auto w-full max-w-sm">
-            <DrawerContent className="">
+            <DrawerContent>
                 <DrawerHeader>
                     <div className="flex items-center justify-center space-x-2">
                         <DrawerTitle>

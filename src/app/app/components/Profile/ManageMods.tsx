@@ -12,7 +12,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/components/ui/accordion"
-import { ScrollArea } from "@/components/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/components/ui/scroll-area";
 
 const ManageMods:React.FC = () => {
 
@@ -46,30 +46,38 @@ const ManageMods:React.FC = () => {
     return(
 <AccordionItem 
                 value={"mod"}
+                // className="max-h-64 rounded-md border overflow-scroll"
             > 
                 <AccordionTrigger>
                     Manage Mods
                 </AccordionTrigger>
-                <AccordionContent>
-                <ScrollArea className="h-64 rounded-md border">
-                    <ul className="manage-mods-list">
-                        {   Object.entries(allMods).length > 0 &&
-                            Object.entries(allMods).map(([mod, channels], index) => {
-                                return(
-                                    <li key={index}>
-                                        <ManageModsListItem mod={{[mod]: channels}}/>
-                                    </li>
-                                )
-                            })
-                        }
-                        {
-                            Object.entries(allMods).length <= 0 &&
-                            <p>
-                                There are no mods
-                            </p>
-                        }
-                    </ul>
-                    </ScrollArea>
+                <AccordionContent 
+                    className='h-64 overflow-y-auto' 
+                    onWheel={(e) => {
+                        e.stopPropagation(); 
+                    }}>
+                    <div className='h-64 overflow-y-auto'>
+                        <ScrollArea className="h-64">
+                            <ScrollBar orientation="vertical" className="sm:hidden"/>
+                            <ul>
+                                {   Object.entries(allMods).length > 0 &&
+                                    Object.entries(allMods).map(([mod, channels], index) => {
+                                        return(
+                                            <li key={index}>
+                                                <ManageModsListItem mod={{[mod]: channels}}/>
+                                            </li>
+                                        )
+                                    })
+                                }
+                                {
+                                    Object.entries(allMods).length <= 0 &&
+                                    <p>
+                                        There are no mods
+                                    </p>
+                                }
+                            </ul>
+                        </ScrollArea>
+                    </div>
                 </AccordionContent>
             </AccordionItem>
     )
