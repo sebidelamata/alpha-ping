@@ -24,7 +24,12 @@ const UserRelations:React.FC = () => {
                 <AccordionTrigger>
                     Following
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent
+                    className='max-h-64 overflow-y-auto' 
+                    onWheel={(e) => {
+                        e.stopPropagation(); 
+                    }}
+                >
                     <FollowingList/>
                 </AccordionContent>
             </AccordionItem>
@@ -32,7 +37,12 @@ const UserRelations:React.FC = () => {
                 <AccordionTrigger>
                     Follows
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent
+                    className='max-h-64 overflow-y-auto' 
+                    onWheel={(e) => {
+                        e.stopPropagation(); 
+                    }}
+                >
                     <UserFollowsList/>
                 </AccordionContent>
             </AccordionItem>
@@ -40,7 +50,12 @@ const UserRelations:React.FC = () => {
                 <AccordionTrigger>
                     Blocked
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent
+                    className='max-h-64 overflow-y-auto' 
+                    onWheel={(e) => {
+                        e.stopPropagation(); 
+                    }}
+                >
                     <BlockedList/>
                 </AccordionContent>
             </AccordionItem>

@@ -43,7 +43,10 @@ type FormValues = z.infer<typeof formSchema>;
 
 const UsernameAndPFP:React.FC = () => {
 
-    const { signer, alphaPING } = useEtherProviderContext()
+    const { 
+        signer, 
+        alphaPING 
+    } = useEtherProviderContext()
     const {
         setUserUsername,
         setUserProfilePic 
