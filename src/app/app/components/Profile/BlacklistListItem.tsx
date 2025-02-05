@@ -22,12 +22,10 @@ import { Separator } from "@/components/components/ui/separator";
 
 interface BlacklistListItemProps{
     user: string;
-    setTxMessageUnblacklist: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
 const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
-    user,
-    setTxMessageUnblacklist
+    user
 }) => {
 
     const { alphaPING } = useEtherProviderContext()
@@ -93,7 +91,11 @@ const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
                 username={username}
             />
             <Separator/>
-            <DeleteBlacklistPosts user={user}/>
+            <DeleteBlacklistPosts
+                user={user}
+                userPFP={userPFP}
+                username={username}
+            />
             </CardHeader>
         </Card>
     )

@@ -7,27 +7,46 @@ import React, {
 } from "react";
 import Loading from "../Loading";
 import { useSocketProviderContext } from "../../../../contexts/SocketContext";
+import { 
+    Dialog, 
+    DialogTrigger, 
+    DialogContent, 
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter 
+} from '@/components/components/ui/dialog'
+import { 
+    Button 
+} from '@/components/components/ui/button'
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from '@/components/components/ui/avatar'
+import Link from 'next/link'
 
 interface DeleteBlacklistPostsProps{
     user: string;
+    userPFP: string | null;
+    username: string | null;
 }
 
-const DeleteBlacklistPosts:React.FC<DeleteBlacklistPostsProps> = ({ user }) => {
+const DeleteBlacklistPosts:React.FC<DeleteBlacklistPostsProps> = ({ 
+    user,
+    userPFP,
+    username
+}) => {
 
     const { socket } = useSocketProviderContext()
 
-    const [showModal, setShowModal] = useState<boolean>(false)
+    const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
-    const handleClick = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(true)
-    }
-
     const handleCancel = (e:MouseEvent) => {
         e.preventDefault()
-        setShowModal(false)
+        setOpen(false)
     }
 
     const handleSubmit = async (e:FormEvent) => {
@@ -51,42 +70,100 @@ const DeleteBlacklistPosts:React.FC<DeleteBlacklistPostsProps> = ({ user }) => {
     }
 
     return(
-        <div className="delete-all-messages-container">
-            {
-                showModal === false &&
-                <button
-                    onClick={(e) => handleClick(e)}
-                    className="blacklist-delete-posts-button"
+        <Dialog
+            open={open} 
+            onOpenChange={setOpen}
+        >
+            <DialogTrigger>
+                <Button
+                    variant={"destructive"}
+                    className="w-[200px]"
                 >
-                    Delete All User Posts
-                </button>
-            }
-            {
-                showModal === true &&
-                <form 
-                    action=""
-                    onSubmit={(e) => handleSubmit(e)}
-                    className="pardon-form"
-                >
-                    <input 
-                        type="submit" 
-                    />
-                    <button 
-                        onClick={(e) => handleCancel(e)}
+                    Delete User Posts
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <span className="flex flex-row gap-1 items-center justify-center">
+                            <span className="text-2xl">
+                                Delete Posts for
+                            </span>
+                            {
+                                (userPFP !== null && userPFP !== '') ?
+                                <Avatar>
+                                    <AvatarImage
+                                        src={userPFP} 
+                                        alt="User Icon" 
+                                        loading="lazy"
+                                    />
+                                    <AvatarFallback>
+                                        {user.slice(0,2)}
+                                    </AvatarFallback>
+                                </Avatar> :
+                                <Avatar>
+                                    <AvatarImage
+                                        src='/monkey.svg' 
+                                        alt="User Icon" 
+                                        loading="lazy"
+                                    />
+                                </Avatar>
+                            }
+                            <Link
+                                href={`https://arbiscan.io/address/${user}`} 
+                                target="_blank"
+                                className="text-accent text-3xl"
+                            >
+                                {
+                                    (username !== null && username !== '') ?
+                                    username :
+                                    user.slice(0, 6) + '...' + user.slice(38, 42)
+                                }
+                            </Link>
+                            <span className="text-2xl">
+                                ?
+                            </span>
+                        </span>
+                    </DialogTitle>
+                    <DialogDescription className="flex flex-row items-center justify-center">
+                        This will delete all of this blacklisted user's posts.
+                    </DialogDescription>
+                    <form
+                        onSubmit={(e) => handleSubmit(e)}
+                        className="flex flex-col items-center justify-center gap-4"
                     >
-                        Cancel
-                    </button>
-                </form>
-            }
-            {
-                loading === true &&
-                    <Loading/>
-            }
-            {
-                error !== null &&
-                    <p>{error}</p>
-            }
-        </div>
+                        <Button 
+                            type="submit"
+                            variant="destructive" 
+                            className="w-[200px]"
+                        >
+                            Delete User's Posts
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="w-[200px]"
+                            onClick={(e) => handleCancel(e)} 
+                        >
+                            Cancel
+                        </Button>
+                    </form>
+                </DialogHeader>
+                {
+                    loading === true &&
+                        <Loading/>
+                }
+                {
+                    error !== null &&
+                    <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
+                        {
+                            error.length > 50 ?
+                            `${error.slice(0,50)}...` :
+                            error
+                        }
+                    </DialogFooter>
+                }
+            </DialogContent>
+        </Dialog>
     )
 }
 
