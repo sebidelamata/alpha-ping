@@ -3,20 +3,26 @@
 import React, {
     useState,
     useEffect,
-    MouseEvent,
-    FormEvent
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import Loading from "../Loading";
 import DeleteBlacklistPosts from "./DeleteBlacklistPosts";
+import BlacklistPardonUser from "./BlacklistPardonUser";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+  } from "@/components/components/ui/card"
+  import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage
+} from "@/components/components/ui/avatar"
+import Link from "next/link";
+import { Separator } from "@/components/components/ui/separator";
 
 interface BlacklistListItemProps{
     user: string;
     setTxMessageUnblacklist: React.Dispatch<React.SetStateAction<string | null | undefined>>;
-}
-
-interface ErrorType{
-    message: string;
 }
 
 const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
@@ -24,41 +30,7 @@ const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
     setTxMessageUnblacklist
 }) => {
 
-    const { alphaPING, signer } = useEtherProviderContext()
-
-    const [showModal, setShowModal] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<string | null>(null)
-
-    const handleClick = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(true)
-    }
-
-    const handleCancel = (e:MouseEvent) => {
-        e.preventDefault()
-        setShowModal(false)
-    }
-
-    const handleSubmit = async (e:FormEvent) => {
-        e.preventDefault()
-        setError(null)
-        setTxMessageUnblacklist(null)
-        setLoading(true)
-        try{
-            if(user && user !== undefined){
-                const tx = await alphaPING?.connect(signer).unBlacklistUser(user)
-                await tx?.wait()
-                setTxMessageUnblacklist(tx?.hash)
-            }
-        }catch(error: unknown){
-            if((error as ErrorType).message)
-            setError((error as ErrorType).message)
-        }finally{
-            setLoading(false)
-        }
-
-    }
+    const { alphaPING } = useEtherProviderContext()
 
     const [username, setUsername] = useState<string | null>(null)
     const [userPFP, setUserPFP] = useState<string | null>(null)
@@ -77,67 +49,53 @@ const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
     }, [user])
 
     return(
-        <div className="blacklisted-user-container">
-            <div className="blacklisted-pfp">
-                {
-                    (userPFP !== null && userPFP !== '') ?
-                    <img 
-                        src={userPFP} 
-                        alt="User Icon" 
-                        className='monkey-icon'
-                        loading="lazy"
-                    /> :
-                    <img 
-                        src='/monkey.svg' 
-                        alt="User Icon" 
-                        className='monkey-icon'
-                        loading="lazy"
-                    />
-                }
-            </div>
-            <div className="blacklisted-username">
-                {
-                    (username !== null && username !== '') ?
-                    username :
-                    user.slice(0, 6) + '...' + user.slice(38, 42)
-                }
-            </div>
-            {
-                showModal === false &&
-                    <button
-                        onClick={(e) => handleClick(e)}
-                        className="blacklist-pardon-button"
-                    >
-                        Pardon User
-                    </button>
-            }
-            {
-                showModal === true &&
-                <form 
-                    action=""
-                    onSubmit={(e) => handleSubmit(e)}
-                    className="pardon-form"
-                >
-                    <input 
-                        type="submit" 
-                    />
-                    <button 
-                        onClick={(e) => handleCancel(e)}
-                    >
-                        Cancel
-                    </button>
-                </form>
-            }
-            {
-                loading === true &&
-                    <Loading/>
-            }
-            {
-                error !== null &&
-                    <p>{error}</p>
-            }
+        <Card className="bg-primary text-secondary">
+            <CardHeader>
+                <CardTitle className="flex flex-col">
+                    <div className="flex flex-row">
+                        {
+                            (userPFP !== null && userPFP !== '') ?
+                            <Avatar>
+                                <AvatarImage
+                                    src={userPFP} 
+                                    alt="User Icon" 
+                                    loading="lazy"
+                                />
+                                <AvatarFallback>
+                                    {user.slice(0,2)}
+                                </AvatarFallback>
+                            </Avatar> :
+                            <Avatar>
+                                <AvatarImage
+                                    src='/monkey.svg' 
+                                    alt="User Icon" 
+                                    loading="lazy"
+                                />
+                            </Avatar>
+                        }
+                        <Link
+                            href={`https://arbiscan.io/address/${user}`} 
+                            target="_blank"
+                            className="text-accent text-3xl"
+                        >
+                            {
+                                (username !== null && username !== '') ?
+                                username :
+                                user.slice(0, 6) + '...' + user.slice(38, 42)
+                            }
+                        </Link>
+                    </div>
+                </CardTitle>
+                <Separator/>
+            <BlacklistPardonUser
+                user={user}
+                userPFP={userPFP}
+                username={username}
+            />
+            <Separator/>
             <DeleteBlacklistPosts user={user}/>
-        </div>
+            </CardHeader>
+        </Card>
     )
 }
 

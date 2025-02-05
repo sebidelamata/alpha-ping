@@ -7,12 +7,11 @@ import React, {
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import ManageModsListItem from "./ManageModsListItem";
 import {
-    Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/components/ui/accordion"
-import { ScrollArea, ScrollBar } from "@/components/components/ui/scroll-area";
+import { ScrollArea } from "@/components/components/ui/scroll-area";
 
 const ManageMods:React.FC = () => {
 
@@ -58,7 +57,6 @@ const ManageMods:React.FC = () => {
                     }}>
                     <div className='h-64 overflow-y-auto'>
                         <ScrollArea className="h-64">
-                            <ScrollBar orientation="vertical" className="sm:hidden"/>
                             <ul>
                                 {   Object.entries(allMods).length > 0 &&
                                     Object.entries(allMods).map(([mod, channels], index) => {

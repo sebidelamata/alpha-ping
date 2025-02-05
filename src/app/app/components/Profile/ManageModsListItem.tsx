@@ -19,7 +19,6 @@ import {
     AvatarFallback,
     AvatarImage
 } from "@/components/components/ui/avatar"
-import { Skeleton } from "@/components/components/ui/skeleton";
 import Link from "next/link";
 import {
     Dialog,
