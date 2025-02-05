@@ -70,12 +70,12 @@ const BlacklistList:React.FC = () => {
                 Blacklisted Users
             </AccordionTrigger>
             <AccordionContent
-                className='h-64 overflow-y-auto' 
+                className='max-h-64 overflow-y-auto' 
                 onWheel={(e) => {
                     e.stopPropagation(); 
                 }}
             >
-            <ScrollArea className="h-64 rounded-md border">
+            <ScrollArea className="max-h-64 rounded-md border">
                 {
                     blacklistedUsers &&
                     blacklistedUsers.length === 0 &&

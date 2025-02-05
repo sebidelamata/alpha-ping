@@ -41,8 +41,7 @@ const ModBanner:React.FC = () => {
                 {
                     mod &&
                     mod.length > 0 &&
-                    <ScrollArea className="h-64 rounded-md border">
-                        <Accordion type="single" collapsible>
+                    <Accordion type="single" collapsible>
                             {
                                 mod.map((channel) => {
                                     return(
@@ -53,17 +52,23 @@ const ModBanner:React.FC = () => {
                                             <AccordionTrigger>
                                                 {channel.name}
                                             </AccordionTrigger>
-                                            <AccordionContent>
-                                                <ModBannerListItem 
-                                                    channel={channel}
-                                                />
+                                            <AccordionContent
+                                                className='max-h-64 overflow-y-auto' 
+                                                onWheel={(e) => {
+                                                    e.stopPropagation(); 
+                                                }}
+                                            >
+                                                <ScrollArea className="max-h-64 rounded-md border">
+                                                    <ModBannerListItem 
+                                                        channel={channel}
+                                                    />
+                                                </ScrollArea>
                                             </AccordionContent>
                                         </AccordionItem>
                                     )
                                 })
                             }
-                        </Accordion>
-                    </ScrollArea>
+                    </Accordion>
                 }
             </CardHeader>
         </Card>
