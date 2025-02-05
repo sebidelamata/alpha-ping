@@ -10,6 +10,7 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/components/ui/accordion"
+  import { ScrollArea } from "@/components/components/ui/scroll-area";
 
 const UserRelations:React.FC = () => {
 
@@ -30,7 +31,9 @@ const UserRelations:React.FC = () => {
                         e.stopPropagation(); 
                     }}
                 >
-                    <FollowingList/>
+                    <ScrollArea className="max-h-64 rounded-md border">
+                        <FollowingList/>
+                    </ScrollArea>
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem value="follows">
@@ -43,7 +46,9 @@ const UserRelations:React.FC = () => {
                         e.stopPropagation(); 
                     }}
                 >
-                    <UserFollowsList/>
+                    <ScrollArea className="max-h-64 rounded-md border">
+                        <UserFollowsList/>
+                    </ScrollArea>
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem value="blocked">
@@ -56,7 +61,9 @@ const UserRelations:React.FC = () => {
                         e.stopPropagation(); 
                     }}
                 >
-                    <BlockedList/>
+                    <ScrollArea className="max-h-64 rounded-md border">
+                        <BlockedList/>
+                    </ScrollArea>
                 </AccordionContent>
             </AccordionItem>
         </Accordion>
