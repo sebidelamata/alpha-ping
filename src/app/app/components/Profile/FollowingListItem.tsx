@@ -132,19 +132,19 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
 
     const [username, setUsername] = useState<string | null>(null)
     const [userPFP, setUserPFP] = useState<string | null>(null)
-    const fetchUserMetaData = async () => {
-        try{
-            const usernameResult = await alphaPING?.username(follow) || null
-            setUsername(usernameResult)
-            const pfpResult = await alphaPING?.profilePic(follow) || null
-            setUserPFP(pfpResult)
-        }catch(error){
-            console.error(error)
-        }
-    }
     useEffect(() => {
+        const fetchUserMetaData = async () => {
+            try{
+                const usernameResult = await alphaPING?.username(follow) || null
+                setUsername(usernameResult)
+                const pfpResult = await alphaPING?.profilePic(follow) || null
+                setUserPFP(pfpResult)
+            }catch(error){
+                console.error(error)
+            }
+        }
         fetchUserMetaData()
-    }, [follow])
+    }, [follow, alphaPING])
 
     return(
         <Card className="bg-primary text-secondary">
