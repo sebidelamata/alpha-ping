@@ -19,44 +19,44 @@ const FollowingList:React.FC = () => {
     const { txMessageFollow, account } = useUserProviderContext()
 
     const [allUsers, setAllUsers] = useState<string[]>([])
-    const fetchAllUsers = async() => {
-        try{
-            const totalUsers = await alphaPING?.totalSupply() || 0
-            const allUsers = []
-            for(let i=1; i<=totalUsers; i++){
-                const address = await alphaPING?.ownerOf(i)
-                if(address !== undefined){
-                    allUsers.push(address)
-                }
-            }
-            setAllUsers(allUsers)
-        }catch(error){
-            console.error(error)
-        }
-        
-    }
     useEffect(() => {
+        const fetchAllUsers = async() => {
+            try{
+                const totalUsers = await alphaPING?.totalSupply() || 0
+                const allUsers = []
+                for(let i=1; i<=totalUsers; i++){
+                    const address = await alphaPING?.ownerOf(i)
+                    if(address !== undefined){
+                        allUsers.push(address)
+                    }
+                }
+                setAllUsers(allUsers)
+            }catch(error){
+                console.error(error)
+            }
+            
+        }
         fetchAllUsers()
-    }, [])
+    }, [alphaPING])
 
     const [follows, setFollows] = useState<string[]>([])
-    const fetchFollows = async () => {
-        try{
-            const followList = []
-            for(let i=0; i<(allUsers?.length || 0); i++){
-                const result = await alphaPING?.personalFollowList(account, allUsers[i]) || false
-                if(result === true){
-                    followList.push(allUsers[i])
-                }
-            }
-            setFollows(followList)
-        }catch(error){
-            console.error(error)
-        }
-    }
     useEffect(() => {
+        const fetchFollows = async () => {
+            try{
+                const followList = []
+                for(let i=0; i<(allUsers?.length || 0); i++){
+                    const result = await alphaPING?.personalFollowList(account, allUsers[i]) || false
+                    if(result === true){
+                        followList.push(allUsers[i])
+                    }
+                }
+                setFollows(followList)
+            }catch(error){
+                console.error(error)
+            }
+        }
         fetchFollows()
-    },[allUsers, txMessageFollow])
+    },[allUsers, txMessageFollow, account, alphaPING])
 
     return(
         <Card
