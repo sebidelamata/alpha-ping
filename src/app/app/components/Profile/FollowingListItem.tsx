@@ -7,7 +7,6 @@ import React, {
     FormEvent
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
 import Loading from "../Loading";
 import {
     Card,
@@ -59,10 +58,10 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
-        setError(null)
-        setTxMessage(null)
-        setLoading(true)
         try{
+            setLoading(true)
+            setError(null);
+            setTxMessage(null)
             if(follow && follow !== undefined){
                 const tx = await alphaPING?.connect(signer).removeFromPersonalFollowList(follow)
                 await tx?.wait()
@@ -73,8 +72,56 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
         }catch(error: unknown){
             if((error as ErrorType).message)
             setError((error as ErrorType).message)
+            // display error
+            if(error !== null && (error as ErrorType).message !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: (username !== null && username !== '') ?
+                        `Unfollow ${username} Not Completed!` :
+                        `Unfollow ${follow.slice(0, 4)}...${follow.slice(38,42)} Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).message.length > 100 ?
+                                `${(error as ErrorType).message.slice(0,100)}...` :
+                                (error as ErrorType).message
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
         }finally{
             setLoading(false)
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: (username !== null && username !== '') ?
+                        `Unfollow ${username} Completed!` :
+                        `Unfollow ${follow.slice(0, 4)}...${follow.slice(38,42)} Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
 
     }
