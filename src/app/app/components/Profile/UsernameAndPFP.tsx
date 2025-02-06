@@ -64,10 +64,10 @@ const UsernameAndPFP:React.FC = () => {
 
     const onSubmit = async (values: FormValues) => {
         const { usernamepic, textInput } = values;
-        setError(null);
-        setLoading(true)
-        setTxMessage(null)
         try{
+            setLoading(true)
+            setError(null);
+            setTxMessage(null)
             if(signer !== null){
                 // set pic
                 if(usernamepic === 'picture'){
@@ -100,11 +100,8 @@ const UsernameAndPFP:React.FC = () => {
             if((error as ErrorType).reason){
                 setError((error as ErrorType).reason)
             }
-        }finally{
-            setLoading(false)
-
             // display error
-            if(error !== null){
+            if(error !== null && (error as ErrorType).reason !== undefined){
                 toast({
                     title: "Transaction Error!",
                     description: usernamepic === "username" ?
@@ -116,9 +113,9 @@ const UsernameAndPFP:React.FC = () => {
                             <CircleX size={40}/>
                             <div className="flex flex-col gap-1 text-sm">
                             {
-                                error.length > 100 ?
-                                `${error.slice(0,100)}...` :
-                                error
+                                (error as ErrorType).reason.length > 100 ?
+                                `${(error as ErrorType).reason.slice(0,100)}...` :
+                                (error as ErrorType).reason
                             }
                             </div>
                         </div>
@@ -126,6 +123,9 @@ const UsernameAndPFP:React.FC = () => {
                     variant: "destructive",
                 })
             }
+
+        }finally{
+            setLoading(false)
 
             // display success
             if(txMessage !== null){

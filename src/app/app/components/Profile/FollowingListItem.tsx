@@ -32,7 +32,11 @@ import {
 } from "@/components/components/ui/dialog"
 import { Button } from "@/components/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
-import { toast } from "sonner"
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
 
 interface FollowingListItemProps{
     follow: string;
@@ -46,7 +50,7 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
 
 
     const { alphaPING, signer } = useEtherProviderContext()
-    const { setTxMessageFollow } = useUserProviderContext()
+    const { toast } = useToast()
 
     const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -56,13 +60,15 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
         setError(null)
-        setTxMessageFollow(null)
+        setTxMessage(null)
         setLoading(true)
         try{
             if(follow && follow !== undefined){
                 const tx = await alphaPING?.connect(signer).removeFromPersonalFollowList(follow)
                 await tx?.wait()
-                setTxMessageFollow(tx?.hash)
+                if(tx !== undefined && tx.hash !== undefined){
+                    setTxMessage(tx?.hash)
+                }
             }
         }catch(error: unknown){
             if((error as ErrorType).message)
