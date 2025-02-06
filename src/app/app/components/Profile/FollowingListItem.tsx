@@ -48,7 +48,10 @@ interface ErrorType{
 const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
 
 
-    const { alphaPING, signer } = useEtherProviderContext()
+    const { 
+        alphaPING, 
+        signer 
+    } = useEtherProviderContext()
     const { toast } = useToast()
 
     const [open, setOpen] = useState<boolean>(false)

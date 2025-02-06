@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import Loading from "../Loading";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
 import { Button } from "@/components/components/ui/button";
 import {
     Dialog,
@@ -24,6 +23,11 @@ import {
 } from "@/components/components/ui/avatar"
 import Link from "next/link";
 import { Separator } from "@radix-ui/react-separator";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
 
 interface ErrorType{
     message: string;
@@ -41,29 +45,83 @@ const UserFollowsFollowBack:React.FC<UserFollowsFollowBackProps> = ({
     username
 }) => {
 
-    const { alphaPING, signer } = useEtherProviderContext()
-    const { setTxMessageFollow } = useUserProviderContext()
+    const { 
+        alphaPING, 
+        signer 
+    } = useEtherProviderContext()
+    const { toast } = useToast()
 
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+    const [txMessage, setTxMessage] = useState<null | string>(null)
     const [open, setOpen] = useState<boolean>(false); 
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
-        setError(null)
-        setTxMessageFollow(null)
-        setLoading(true)
         try{
+            setLoading(true)
+            setError(null)
+            setTxMessage(null)
             if(userFollow && userFollow !== undefined){
                 const tx = await alphaPING?.connect(signer).addToPersonalFollowList(userFollow)
                 await tx?.wait()
-                setTxMessageFollow(tx?.hash)
+                if(tx !== undefined && tx.hash !== undefined){
+                    setTxMessage(tx?.hash)
+                }
             }
         }catch(error: unknown){
             if((error as ErrorType).message)
             setError((error as ErrorType).message)
+            // display error
+            if(error !== null && (error as ErrorType).message !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: (username !== null && username !== '') ?
+                        `Follow ${username} Back Not Completed!` :
+                        `Follow ${userFollow.slice(0, 4)}...${userFollow.slice(38,42)} Back Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).message.length > 100 ?
+                                `${(error as ErrorType).message.slice(0,100)}...` :
+                                (error as ErrorType).message
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
         }finally{
             setLoading(false)
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: (username !== null && username !== '') ?
+                        `Follow ${username} Back Completed!` :
+                        `Follow ${userFollow.slice(0, 4)}...${userFollow.slice(38,42)} Back Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
 
     }

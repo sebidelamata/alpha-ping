@@ -12,7 +12,6 @@ import {
     CardHeader
   } from "@/components/components/ui/card"
 import { ScrollArea } from "@/components/components/ui/scroll-area";
-  
 
 const UserFollowsList:React.FC = () => {
 
@@ -77,7 +76,12 @@ const UserFollowsList:React.FC = () => {
     },[userFollows, alphaPING, account])
 
     return(
-        <Card className="bg-primary text-secondary">
+        <Card 
+            className='max-h-64 overflow-y-auto bg-primary text-secondary' 
+            onWheel={(e) => {
+                e.stopPropagation(); 
+            }}
+        >
             {
                 userFollows &&
                 userFollows.length === 0 &&

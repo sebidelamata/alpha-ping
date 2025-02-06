@@ -28,6 +28,7 @@ interface UserFollowsListItemProps{
 const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, followingUserFollow}) => {
 
     const { alphaPING } = useEtherProviderContext()
+    console.log(userFollow, followingUserFollow)
 
     const [loading, setLoading] = useState<boolean>(false)
     const [username, setUsername] = useState<string | null>(null)
@@ -94,7 +95,7 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
                         </Link>
                     </div>
                     {
-                        followingUserFollow === false &&
+                        followingUserFollow === true &&
                         <UserFollowsFollowBack 
                             userFollow={userFollow} 
                             userPFP={userPFP}
@@ -102,7 +103,7 @@ const UserFollowsListItem:React.FC<UserFollowsListItemProps> = ({userFollow, fol
                         />
                     }
                     {
-                        followingUserFollow === true &&
+                        followingUserFollow === false &&
                         <UserFollowsUnfollow 
                             userFollow={userFollow}
                             userPFP={userPFP}
