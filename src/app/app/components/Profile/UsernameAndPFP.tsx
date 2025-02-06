@@ -113,11 +113,11 @@ const UsernameAndPFP:React.FC = () => {
                     duration:5000,
                     action: (
                         <div className="flex flex-col gap-1 justify-center items-center">
-                            <CircleX size={80}/>
+                            <CircleX size={40}/>
                             <div className="flex flex-col gap-1 text-sm">
                             {
-                                error.length > 50 ?
-                                `${error.slice(0,50)}...` :
+                                error.length > 100 ?
+                                `${error.slice(0,100)}...` :
                                 error
                             }
                             </div>
