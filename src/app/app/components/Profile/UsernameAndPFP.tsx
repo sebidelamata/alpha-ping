@@ -25,7 +25,12 @@ import { Input } from "@/components/components/ui/input";
 import { Button } from "@/components/components/ui/button";
 import { Separator } from "@/components/components/ui/separator";
 import Loading from "../Loading"
-
+import { useToast } from "@/components/hooks/use-toast"
+import Link from "next/link";
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
 
 interface ErrorType {
     reason: string
@@ -51,16 +56,20 @@ const UsernameAndPFP:React.FC = () => {
         setUserUsername,
         setUserProfilePic 
     } = useUserProviderContext()
+    const { toast } = useToast()
 
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
+    const [txMessage, setTxMessage] = useState<null | string>(null)
 
     const onSubmit = async (values: FormValues) => {
         const { usernamepic, textInput } = values;
         setError(null);
         setLoading(true)
+        setTxMessage(null)
         try{
             if(signer !== null){
+                // set pic
                 if(usernamepic === 'picture'){
                     // Validate image URL
                     const isValidImageURL = /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(textInput)
@@ -72,12 +81,19 @@ const UsernameAndPFP:React.FC = () => {
                     }
                     const tx = await alphaPING?.connect(signer).setProfilePic(textInput)
                     await tx?.wait()
-                    setUserProfilePic(textInput)
+                    if(tx !== undefined && tx.hash !== undefined){
+                        setTxMessage(tx?.hash)
+                        setUserProfilePic(textInput)
+                    }
                 }
+                // set username
                 if(usernamepic === 'username'){
                     const tx = await alphaPING?.connect(signer).setUsername(textInput)
                     await tx?.wait()
-                    setUserUsername(textInput)
+                    if(tx !== undefined && tx.hash !== undefined){
+                        setTxMessage(tx?.hash)
+                        setUserUsername(textInput)
+                    }
                 }
             }
         }catch(error: unknown){
@@ -86,6 +102,56 @@ const UsernameAndPFP:React.FC = () => {
             }
         }finally{
             setLoading(false)
+
+            // display error
+            if(error !== null){
+                toast({
+                    title: "Transaction Error!",
+                    description: usernamepic === "username" ?
+                        "Username Not Updated" :
+                        "Profile Picture Not Updated",
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={80}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                error.length > 50 ?
+                                `${error.slice(0,50)}...` :
+                                error
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
+
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: usernamepic === "username" ?
+                        "Username Updated" :
+                        "Profile Picture Updated",
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
     }
 
@@ -176,7 +242,11 @@ const UsernameAndPFP:React.FC = () => {
                     {
                         error !== null &&
                         <FormDescription className="text-xl">
-                            {error}
+                            {
+                                error.length > 50 ?
+                                `${error.slice(0,50)}...` :
+                                error
+                            }
                         </FormDescription>
                     }
                 </form>

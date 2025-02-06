@@ -59,7 +59,12 @@ const FollowingList:React.FC = () => {
     },[allUsers, txMessageFollow])
 
     return(
-        <Card className="bg-primary text-secondary">
+        <Card
+            className='max-h-64 overflow-y-auto bg-primary text-secondary' 
+            onWheel={(e) => {
+                e.stopPropagation(); 
+            }}
+        >
             {
                 follows &&
                 follows.length === 0 &&
@@ -70,7 +75,7 @@ const FollowingList:React.FC = () => {
             {
                 follows &&
                 follows.length > 0 &&
-                <ScrollArea className="h-64 rounded-md border">
+                <ScrollArea className="max-h-64 rounded-md border">
                     <ul>
                         {
                             follows.map((follow, index) => {

@@ -32,6 +32,7 @@ import {
 } from "@/components/components/ui/dialog"
 import { Button } from "@/components/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
+import { toast } from "sonner"
 
 interface FollowingListItemProps{
     follow: string;
@@ -50,6 +51,7 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
     const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+    const [txMessage, setTxMessage] = useState<null | string>(null)
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()

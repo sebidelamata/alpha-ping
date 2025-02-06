@@ -18,6 +18,7 @@ import {
     SidebarTrigger 
 } from "@/components/components/ui/sidebar"
 import AppSidebar from "./components/AppSidebar";
+import { Toaster } from "@/components/components/ui/toaster"
 
 const Layout = ({ children }: { children: ReactNode }) => {
 
@@ -56,6 +57,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                                 }
                                 {children}
                             </main>
+                            <Toaster/>
                         </div>
                     </SidebarProvider>
                     </UserProvider>
