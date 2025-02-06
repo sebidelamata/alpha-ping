@@ -6,6 +6,12 @@ import React,
     useEffect,
     ReactNode
 } from "react";
+import ProviderProvider from '../../contexts/ProviderContext';
+import SocketProvider from '../../contexts/SocketContext';
+import MessagesProvider from '../../contexts/MessagesContext';
+import ChannelProvider from '../../contexts/ChannelContext';
+import UserProvider from '../../contexts/UserContext';
+import Web3WalletConnectProvider from '../../contexts/Web3ConnectContext';
 import Navbar from "./components/Navbar/Navbar";
 import { 
     SidebarProvider, 
@@ -33,19 +39,31 @@ const Layout = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return(
-        <SidebarProvider>
-            <Navbar/>
-            <div className="top-24 flex">
-                <AppSidebar/>
-                <main>
-                    {
-                    isMobile === true &&
-                    <SidebarTrigger className="fixed top-24"/>
-                    }
-                    {children}
-                </main>
-            </div>
-        </SidebarProvider>
+        <ProviderProvider>
+          <Web3WalletConnectProvider>
+            <SocketProvider>
+              <ChannelProvider>
+                <MessagesProvider>
+                  <UserProvider>
+                    <SidebarProvider>
+                        <Navbar/>
+                        <div className="top-24 flex">
+                            <AppSidebar/>
+                            <main>
+                                {
+                                isMobile === true &&
+                                <SidebarTrigger className="fixed top-24"/>
+                                }
+                                {children}
+                            </main>
+                        </div>
+                    </SidebarProvider>
+                    </UserProvider>
+                </MessagesProvider>
+              </ChannelProvider>
+            </SocketProvider>
+          </Web3WalletConnectProvider>
+        </ProviderProvider>
     )
 }
 

@@ -1,12 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Metadata } from 'next';
 import '../styles/index.css'; 
-import ProviderProvider from '../contexts/ProviderContext';
-import SocketProvider from '../contexts/SocketContext';
-import MessagesProvider from '../contexts/MessagesContext';
-import ChannelProvider from '../contexts/ChannelContext';
-import UserProvider from '../contexts/UserContext';
-import Web3WalletConnectProvider from '../contexts/Web3ConnectContext';
 import Head from 'next/head';
 import { Roboto } from 'next/font/google'
 
@@ -51,19 +45,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <body id='root'>
-        <ProviderProvider>
-          <Web3WalletConnectProvider>
-            <SocketProvider>
-              <ChannelProvider>
-                <MessagesProvider>
-                  <UserProvider>
-                    <main>{children}</main>
-                  </UserProvider>
-                </MessagesProvider>
-              </ChannelProvider>
-            </SocketProvider>
-          </Web3WalletConnectProvider>
-        </ProviderProvider>
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );

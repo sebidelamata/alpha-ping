@@ -3,7 +3,6 @@
 import React, {
     useState,
     useEffect,
-    MouseEvent
 } from "react";
 import Link from "next/link";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
@@ -74,7 +73,7 @@ const Profile: React.FC = () => {
                                         userProfilePic !== "" &&
                                         userProfilePic !== undefined
                                     ) ?
-                                    <Avatar className=" justify-center object-contain">
+                                    <Avatar className="justify-center object-contain">
                                         <AvatarImage 
                                         src={userProfilePic} 
                                         alt="user profile picture" 

@@ -16,6 +16,9 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		clipPath: {
+		hexagon: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+		},
   		colors: {
   			'color-1': 'var(--color-1)',
   			'color-2': 'var(--color-2)',
