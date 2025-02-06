@@ -18,6 +18,7 @@ const FollowingList:React.FC = () => {
     const { alphaPING } = useEtherProviderContext()
     const { txMessageFollow, account } = useUserProviderContext()
 
+    // need to grab all user addressess to see if they follow back
     const [allUsers, setAllUsers] = useState<string[]>([])
     useEffect(() => {
         const fetchAllUsers = async() => {
@@ -39,6 +40,7 @@ const FollowingList:React.FC = () => {
         fetchAllUsers()
     }, [alphaPING])
 
+    // find user follws
     const [follows, setFollows] = useState<string[]>([])
     useEffect(() => {
         const fetchFollows = async () => {
