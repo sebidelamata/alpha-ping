@@ -92,7 +92,7 @@ const UserFollowsList:React.FC = () => {
             {
                 userFollows &&
                 userFollows.length > 0 &&
-                <ScrollArea className="h-64 rounded-md border">
+                <ScrollArea className="max-h-64 rounded-md border">
                     <ul>
                         {
                             userFollows.map((userFollow, index) => {
