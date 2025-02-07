@@ -233,12 +233,15 @@ const UsernameAndPFP:React.FC = () => {
                             </FormItem>
                         )}
                     />
-                    <Button 
-                        type="submit" 
-                        variant={"secondary"}
-                    >
-                        Submit
-                    </Button>
+                    <div className="flex justify-center items-center">
+                        <Button 
+                            type="submit" 
+                            variant={"secondary"}
+                            className="w-[200px]"
+                        >
+                            Submit
+                        </Button>
+                    </div>
                     {
                         error !== null &&
                         <FormDescription className="text-xl">
