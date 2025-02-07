@@ -27,6 +27,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Input } from "@/components/components/ui/input";
 import { Button } from "@/components/components/ui/button";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
+import Link from "next/link";
 
 interface TransferModProps {
     channel: AlphaPING.ChannelStructOutput;
@@ -61,6 +67,7 @@ const TransferMod:React.FC<TransferModProps> = ({
         mod, 
         setMod 
     } = useUserProviderContext()
+    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -72,12 +79,12 @@ const TransferMod:React.FC<TransferModProps> = ({
     // transfer mod
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-    const [txMessageMod, setTxMessageMod] = useState<string | null | undefined>(null)
+    const [txMessage, setTxMessage] = useState<string | null | undefined>(null)
     const handleSubmit = async (values: FormValues) => {
-        setError(null)
-        setTxMessageMod(null)
-        setLoading(true)
         try{
+            setLoading(true)
+            setError(null)
+            setTxMessage(null)
             const newModAddress = values.textInput.trim();
             // Validate the input is a wallet address
             if (!ethers.isAddress(newModAddress)) {
@@ -88,7 +95,9 @@ const TransferMod:React.FC<TransferModProps> = ({
                 const tx = await alphaPING?.connect(signer).transferMod(newModAddress, channel?.id)
                 await tx?.wait()
                 console.log(tx?.hash)
-                setTxMessageMod(tx?.hash)
+                if(tx !== undefined && tx.hash !== undefined){
+                    setTxMessage(tx?.hash)
+                }
                 const updatedMod = mod.filter(item => item.id !== channel?.id);
                 setMod(updatedMod)
             }
@@ -96,11 +105,52 @@ const TransferMod:React.FC<TransferModProps> = ({
             if((error as ErrorType).reason){
                 setError((error as ErrorType).reason)
             }
-            if(error){
-                console.log(error)
+            // display error
+            if(error !== null && (error as ErrorType).reason !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: "Transfer Mod Not Completed!",
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).reason.length > 100 ?
+                                `${(error as ErrorType).reason.slice(0,100)}...` :
+                                (error as ErrorType).reason
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
             }
         }finally{
             setLoading(false)
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: "Transfer Mod Completed!",
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
 
     }
