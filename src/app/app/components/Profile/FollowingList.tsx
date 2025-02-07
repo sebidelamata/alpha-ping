@@ -77,7 +77,7 @@ const FollowingList:React.FC = () => {
             {
                 follows &&
                 follows.length > 0 &&
-                <ScrollArea className="max-h-64 rounded-md border">
+                <ScrollArea className="h-64 rounded-md border">
                     <ul>
                         {
                             follows.map((follow, index) => {
