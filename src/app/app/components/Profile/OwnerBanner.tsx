@@ -3,8 +3,7 @@
 import React,
 { 
     useState, 
-    MouseEvent, 
-    FormEvent 
+    MouseEvent
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
@@ -17,17 +16,11 @@ import {
     CardHeader,
     CardTitle
   } from "@/components/components/ui/card"
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@/components/components/ui/accordion"
+import { Accordion } from "@/components/components/ui/accordion"
   import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -47,6 +40,12 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Input } from "@/components/components/ui/input";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
+import Link from "next/link";
 
 interface ErrorType {
     reason: string
@@ -65,8 +64,12 @@ type FormValues = z.infer<typeof formSchema>;
 
 const OwnerBanner:React.FC = () => {
 
-    const { alphaPING, signer } = useEtherProviderContext()
+    const { 
+        alphaPING, 
+        signer 
+    } = useEtherProviderContext()
     const { setOwner } = useUserProviderContext()
+    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -82,10 +85,19 @@ const OwnerBanner:React.FC = () => {
         setOpen(false)
     }
 
+    const [username, setUsername] = useState<string | null>(null)
+    const fetchUserMetaData = async (user:string) => {
+        try{
+            const usernameResult = await alphaPING?.username(user) || null
+            setUsername(usernameResult)
+        }catch(error){
+            console.error(error)
+        }
+    }
+
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-    // pass tx message state to transferOwner
-    const [txMessageOwner, setTxMessageOwner] = useState<string | null | undefined>(null)
+    const [txMessage, setTxMessage] = useState<string | null | undefined>(null)
 
     const handleSubmit = async (values: FormValues) => {
         const newOwnerAddress = values.textInput.trim();
@@ -94,21 +106,70 @@ const OwnerBanner:React.FC = () => {
                 setError("Invalid Ethereum address.");
                 return;
             }
-        setError(null)
-        setTxMessageOwner(null)
-        setLoading(true)
         try{
+            setLoading(true)
+            setError(null)
+            setTxMessage(null)
+            await fetchUserMetaData(newOwnerAddress)
             const tx = await alphaPING?.connect(signer).transferOwner(newOwnerAddress)
             await tx?.wait()
-            console.log(tx?.hash)
-            setTxMessageOwner(tx?.hash)
+            if(tx !== undefined && tx.hash !== undefined){
+                setTxMessage(tx?.hash)
+            }
             setOwner(false)
         }catch(error: unknown){
             if((error as ErrorType).reason)
             setError((error as ErrorType).reason)
+        // display error
+                    if(error !== null && (error as ErrorType).reason !== undefined){
+                        toast({
+                            title: "Transaction Error!",
+                            description: (username !== null && username !== '') ?
+                                `Transfer Ownership to ${username} Not Completed!` :
+                                `Transfer Ownership to ${newOwnerAddress.slice(0, 4)}...${newOwnerAddress.slice(38,42)} Not Completed!`,
+                            duration:5000,
+                            action: (
+                                <div className="flex flex-col gap-1 justify-center items-center">
+                                    <CircleX size={40}/>
+                                    <div className="flex flex-col gap-1 text-sm">
+                                    {
+                                        (error as ErrorType).reason.length > 100 ?
+                                        `${(error as ErrorType).reason.slice(0,100)}...` :
+                                        (error as ErrorType).reason
+                                    }
+                                    </div>
+                                </div>
+                            ),
+                            variant: "destructive",
+                        })
+                    }
         }finally{
             setLoading(false)
-            console.log(txMessageOwner)
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: (username !== null && username !== '') ?
+                        `Transfer Ownership to ${username} Completed!` :
+                        `Transfer Ownership to ${newOwnerAddress.slice(0, 4)}...${newOwnerAddress.slice(38,42)} Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
 
     }
