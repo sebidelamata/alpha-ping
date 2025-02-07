@@ -32,50 +32,46 @@ const ChannelBans:React.FC<ChannelBansProps> = ({channel}) => {
     const [txMessageUnban, setTxMessageUnban] = useState<string | null | undefined>(null)
 
     const [channelAuthors, setChannelAuthors] = useState<string[]>([])
-    const getChannelAuthors = () => {
-        const authors = Array.from(
-            new Set (
-                messages
-                    .filter((message) => {
-                        return message.channel === channel.id.toString()
-                    })
-                    .map((message) => {
-                        return message.account
-                    })
-            )
-        )
-        setChannelAuthors(authors)
-    }
     useEffect(() => {
+        const getChannelAuthors = () => {
+            const authors = Array.from(
+                new Set (
+                    messages
+                        .filter((message) => {
+                            return message.channel === channel.id.toString()
+                        })
+                        .map((message) => {
+                            return message.account
+                        })
+                )
+            )
+            setChannelAuthors(authors)
+        }
         getChannelAuthors()
-    }, [messages])
+    }, [messages, channel])
 
     const [channelBans, setChannelBans] = useState<string[]>([])
-    const [error, setError] = useState<string | null>(null)
-    const [loading, setLoading] = useState<boolean>(false)
-    const getChannelBans = async () => {
-        try{
-            if(channel && channel.id !== undefined){
-                const result = await Promise.all(
-                        channelAuthors.map(async (author) => {
-                        return alphaPING?.channelBans(channel?.id, author)
-                    })
-                )
-                const authors = channelAuthors.filter((_, index) => {
-                    return result[index] === true
-                })
-                setChannelBans(authors)
-            }
-        }catch(error: unknown){
-            if((error as ErrorType).reason)
-            setError((error as ErrorType).reason)
-        }finally{
-            setLoading(false)
-        }
-    }
     useEffect(() => {
+        const getChannelBans = async () => {
+            try{
+                if(channel && channel.id !== undefined){
+                    const result = await Promise.all(
+                            channelAuthors.map(async (author) => {
+                            return alphaPING?.channelBans(channel?.id, author)
+                        })
+                    )
+                    const authors = channelAuthors.filter((_, index) => {
+                        return result[index] === true
+                    })
+                    setChannelBans(authors)
+                }
+            }catch(error: unknown){
+                if((error as ErrorType).reason)
+                console.log(error)
+            }
+        }
         getChannelBans()
-    }, [messages, txMessageUnban, channelAuthors])
+    }, [messages, txMessageUnban, channelAuthors, alphaPING, channel])
 
     return(
         <Card className="bg-primary text-secondary">
