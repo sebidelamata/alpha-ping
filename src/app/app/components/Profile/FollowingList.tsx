@@ -16,7 +16,7 @@ import { ScrollArea } from "@/components/components/ui/scroll-area";
 const FollowingList:React.FC = () => {
 
     const { alphaPING } = useEtherProviderContext()
-    const { txMessageFollow, account } = useUserProviderContext()
+    const { account } = useUserProviderContext()
 
     // need to grab all user addressess to see if they follow back
     const [allUsers, setAllUsers] = useState<string[]>([])
@@ -58,7 +58,7 @@ const FollowingList:React.FC = () => {
             }
         }
         fetchFollows()
-    },[allUsers, txMessageFollow, account, alphaPING])
+    },[allUsers, account, alphaPING])
 
     return(
         <Card

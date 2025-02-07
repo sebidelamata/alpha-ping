@@ -7,7 +7,6 @@ import React, {
     FormEvent
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
 import Loading from "../Loading";
 import {
     Card,
@@ -32,6 +31,11 @@ import {
 } from "@/components/components/ui/dialog"
 import { Button } from "@/components/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
 
 interface BlockedListItemProps{
     block: string;
@@ -44,12 +48,16 @@ interface ErrorType{
 const BlockedListItem:React.FC<BlockedListItemProps> = ({block}) => {
 
 
-    const { alphaPING, signer } = useEtherProviderContext()
-    const { setTxMessageBlock } = useUserProviderContext()
+    const { 
+        alphaPING, 
+        signer 
+    } = useEtherProviderContext()
+    const { toast } = useToast()
 
     const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+    const [txMessage, setTxMessage] = useState<null | string>(null)
 
     const handleCancel = (e:MouseEvent) => {
         e.preventDefault()
@@ -58,39 +66,88 @@ const BlockedListItem:React.FC<BlockedListItemProps> = ({block}) => {
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
-        setError(null)
-        setTxMessageBlock(null)
-        setLoading(true)
         try{
+            setLoading(true)
+            setError(null)
+            setTxMessage(null)
             if(block && block !== undefined){
                 const tx = await alphaPING?.connect(signer).removeFromPersonalBlockList(block)
                 await tx?.wait()
-                setTxMessageBlock(tx?.hash)
+                if(tx !== undefined && tx.hash !== undefined){
+                    setTxMessage(tx?.hash)
+                }
             }
         }catch(error: unknown){
             if((error as ErrorType).message)
             setError((error as ErrorType).message)
+            // display error
+            if(error !== null && (error as ErrorType).message !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: (username !== null && username !== '') ?
+                        `Unblock ${username} Not Completed!` :
+                        `Unblock ${block.slice(0, 4)}...${block.slice(38,42)} Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).message.length > 100 ?
+                                `${(error as ErrorType).message.slice(0,100)}...` :
+                                (error as ErrorType).message
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
         }finally{
             setLoading(false)
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: (username !== null && username !== '') ?
+                        `Unblock ${username} Completed!` :
+                        `Unblock ${block.slice(0, 4)}...${block.slice(38,42)} Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
-
     }
 
     const [username, setUsername] = useState<string | null>(null)
     const [userPFP, setUserPFP] = useState<string | null>(null)
-    const fetchUserMetaData = async () => {
-        try{
-            const usernameResult = await alphaPING?.username(block) || null
-            setUsername(usernameResult)
-            const pfpResult = await alphaPING?.profilePic(block) || null
-            setUserPFP(pfpResult)
-        }catch(error){
-            console.error(error)
-        }
-    }
     useEffect(() => {
+        const fetchUserMetaData = async () => {
+            try{
+                const usernameResult = await alphaPING?.username(block) || null
+                setUsername(usernameResult)
+                const pfpResult = await alphaPING?.profilePic(block) || null
+                setUserPFP(pfpResult)
+            }catch(error){
+                console.error(error)
+            }
+        }
         fetchUserMetaData()
-    }, [block])
+    }, [block, alphaPING])
 
     return(
         <Card className="bg-primary text-secondary">
