@@ -31,6 +31,11 @@ import {
 import { Button } from "@/components/components/ui/button";
 import { Separator } from "@/components/components/ui/separator";
 import Link from "next/link";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
 
 interface ErrorType {
     reason: string
@@ -39,20 +44,39 @@ interface ErrorType {
 interface BansListItemProps{
     ban: string;
     channel: AlphaPING.ChannelStructOutput;
-    setTxMessageUnban: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
 const BansListItem:React.FC<BansListItemProps> = ({
     ban, 
-    channel, 
-    setTxMessageUnban
+    channel
 }) => {
 
-    const { alphaPING, signer } = useEtherProviderContext()
+    const { 
+        alphaPING, 
+        signer 
+    } = useEtherProviderContext()
+    const { toast } = useToast()
+
+    const [username, setUsername] = useState<string | null>(null)
+    const [userPFP, setUserPFP] = useState<string | null>(null)
+    useEffect(() => {
+        const fetchUserMetaData = async () => {
+            try{
+                const usernameResult = await alphaPING?.username(ban) || null
+                setUsername(usernameResult)
+                const pfpResult = await alphaPING?.profilePic(ban) || null
+                setUserPFP(pfpResult)
+            }catch(error){
+                console.error(error)
+            }
+        }
+        fetchUserMetaData()
+    }, [ban, alphaPING])
 
     const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+    const [txMessage, setTxMessage] = useState<null | string>(null)
 
     const handleCancel = (e:MouseEvent) => {
         e.preventDefault()
@@ -61,39 +85,73 @@ const BansListItem:React.FC<BansListItemProps> = ({
 
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
-        setError(null)
-        setTxMessageUnban(null)
-        setLoading(true)
         try{
+            setLoading(true)
+            setError(null)
+            setTxMessage(null)
             if(channel && channel.id !== undefined){
                 const tx = await alphaPING?.connect(signer).channelUnban(ban, channel?.id)
                 await tx?.wait()
-                setTxMessageUnban(tx?.hash)
+                if(tx !== undefined && tx.hash !== undefined){
+                    setTxMessage(tx?.hash)
+                }
             }
         }catch(error: unknown){
             if((error as ErrorType).reason)
             setError((error as ErrorType).reason)
+            // display error
+            if(error !== null && (error as ErrorType).reason !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: (username !== null && username !== '') ?
+                        `Unban ${username} Not Completed!` :
+                        `Unban ${ban.slice(0, 4)}...${ban.slice(38,42)} Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).reason.length > 100 ?
+                                `${(error as ErrorType).reason.slice(0,100)}...` :
+                                (error as ErrorType).reason
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
         }finally{
             setLoading(false)
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: (username !== null && username !== '') ?
+                        `Unban ${username} Completed!` :
+                        `Unban ${ban.slice(0, 4)}...${ban.slice(38,42)} Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
 
     }
-
-    const [username, setUsername] = useState<string | null>(null)
-    const [userPFP, setUserPFP] = useState<string | null>(null)
-    const fetchUserMetaData = async () => {
-        try{
-            const usernameResult = await alphaPING?.username(ban) || null
-            setUsername(usernameResult)
-            const pfpResult = await alphaPING?.profilePic(ban) || null
-            setUserPFP(pfpResult)
-        }catch(error){
-            console.error(error)
-        }
-    }
-    useEffect(() => {
-        fetchUserMetaData()
-    }, [ban])
 
     return(
         <Card className="bg-primary text-secondary">
