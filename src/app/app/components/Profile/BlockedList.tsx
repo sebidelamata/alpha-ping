@@ -76,7 +76,7 @@ const BlockedList:React.FC = () => {
                 </CardHeader>
             }
             {
-                <ScrollArea className="h-64 rounded-md border">
+                <ScrollArea className="max-h-64 rounded-md border">
                     <ul className="blocked-list">
                         {
                             blocks &&
