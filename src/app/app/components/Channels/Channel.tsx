@@ -213,7 +213,7 @@ const Channel:React.FC<ChannelProps> = ({
                             {channel.name}
                         </p>
                     </div>
-                    <LeaveChannel isHovered={isHovered} channelID={channel.id.toString()}/>
+                    <LeaveChannel isHovered={isHovered} channel={channel} tokenMetada={tokenMetada}/>
                     {
                         joinChannelLoading === true &&
                             <Loading/>
