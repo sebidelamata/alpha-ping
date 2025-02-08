@@ -13,6 +13,7 @@ import {
     AccordionTrigger,
   } from "@/components/components/ui/accordion"
   import { ScrollArea } from "@/components/components/ui/scroll-area";
+  import { mockUserArray } from "mocks/mockUsers";
 
 const BlacklistList:React.FC = () => {
 
@@ -77,17 +78,17 @@ const BlacklistList:React.FC = () => {
             >
             <ScrollArea className="max-h-64 rounded-md border">
                 {
-                    blacklistedUsers &&
-                    blacklistedUsers.length === 0 &&
+                    mockUserArray &&
+                    mockUserArray.length === 0 &&
                     <div>
                         There are currently no Blacklisted Users on AlphaPING
                     </div>
                 }
                 <ul className="blacklist-list-list">
                     {
-                        blacklistedUsers &&
-                        blacklistedUsers.length > 0 &&
-                        blacklistedUsers.map((user) => (
+                        mockUserArray &&
+                        mockUserArray.length > 0 &&
+                        mockUserArray.map((user) => (
                             <li key={user} className="blacklist-list-item">
                                 <BlacklistListItem 
                                     user={user}
