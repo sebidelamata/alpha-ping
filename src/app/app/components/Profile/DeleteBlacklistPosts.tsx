@@ -25,6 +25,11 @@ import {
     AvatarFallback 
 } from '@/components/components/ui/avatar'
 import Link from 'next/link'
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
 
 interface DeleteBlacklistPostsProps{
     user: string;
@@ -39,32 +44,99 @@ const DeleteBlacklistPosts:React.FC<DeleteBlacklistPostsProps> = ({
 }) => {
 
     const { socket } = useSocketProviderContext()
-
-    const [open, setOpen] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<string | null>(null)
+    const { toast } = useToast()
 
     const handleCancel = (e:MouseEvent) => {
         e.preventDefault()
         setOpen(false)
     }
 
+    const [open, setOpen] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
     const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
-        setError(null)
-        setLoading(true)
-        e.preventDefault()
         if (!socket) {
+            setError("Socket connection not available.");
+            toast({
+                title: "Transaction Error!",
+                description: "No socket connection available. Please check your network and try again.",
+                duration: 5000,
+                variant: "destructive",
+            });
             return
         }
         try{
+            setLoading(true)
+            setError(null)
             if(user && user !== undefined){
-                socket.emit('delete messages by author', { user });
+                socket.emit(
+                    "delete messages by author",
+                    { user },
+                    (response: { success: boolean; message?: string }) => {
+                        if (response.success) {
+                            toast({
+                                title: "Transaction Confirmed!",
+                                description:
+                                    username !== null && username !== ""
+                                        ? `Delete ${username} Posts Completed!`
+                                        : `Delete ${user.slice(0, 4)}...${user.slice(38, 42)} Posts Completed!`,
+                                duration: 5000,
+                                action: (
+                                    <div className="flex flex-row gap-1">
+                                        <ShieldCheck size={80} />
+                                    </div>
+                                ),
+                            });
+                        } else {
+                            throw new Error(response.message || "Failed to delete posts.");
+                        }    
+                    }
+                )
             }
         }catch(error: unknown){
+            console.log(error)
             setError((error as Error).message)
+            // display error
+            if(error !== null && (error as Error).message !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: (username !== null && username !== '') ?
+                        `Delete ${username} Posts Not Completed!` :
+                        `Delete ${user.slice(0, 4)}...${user.slice(38,42)} Posts Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as Error).message.length > 100 ?
+                                `${(error as Error).message.slice(0,100)}...` :
+                                (error as Error).message
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
         }finally{
             setLoading(false)
+            // display success
+            // if(!error){
+            //     toast({
+            //         title: "Transaction Confirmed!",
+            //         description: (username !== null && username !== '') ?
+            //             `Delete ${username} Posts Completed!` :
+            //             `Delete ${user.slice(0, 4)}...${user.slice(38,42)} Posts Completed!`,
+            //         duration:5000,
+            //         action: (
+            //             <div className="flex flex-row gap-1">
+            //                 <ShieldCheck size={80}/>
+            //             </div>
+            //         )
+            //     })
+            // }
         }
 
     }
