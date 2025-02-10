@@ -22,18 +22,17 @@ const App:React.FC = () => {
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
 
-  const findIsMember = async () => {
-    if(signer){
-      const isMember = await alphaPING?.isMember(signer)
-      if(isMember){
-        setIsMember(isMember)
+  useEffect(() => {
+    const findIsMember = async () => {
+      if(signer){
+        const isMember = await alphaPING?.isMember(signer)
+        if(isMember){
+          setIsMember(isMember)
+        }
       }
     }
-  }
-
-  useEffect(() => {
     findIsMember()
-  }, [signer, isConnected])
+  }, [signer, isConnected, alphaPING])
 
   const renderChannelAction = () => {
     switch(channelAction){
