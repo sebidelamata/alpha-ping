@@ -1,5 +1,6 @@
 import React, {
-    useState
+    useState,
+    MouseEvent
 } from "react";
 import {
     DialogContent,
@@ -30,9 +31,13 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
 import Loading from "../Loading";
 import Link from "next/link";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX 
+} from "lucide-react";
 
 const formSchema = z.object({
     tokenAddress: z.string().min(42).max(42),
@@ -48,21 +53,18 @@ interface ErrorType {
     message: string;
 }
 
+interface IAddChannelModal {
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-
-const AddChannelModal:React.FC = () => {
+const AddChannelModal:React.FC<IAddChannelModal> = ({ setOpen }) => {
 
     const { 
         alphaPING, 
         signer, 
         setChannels 
     } = useEtherProviderContext()
-    const { 
-            addChannelLoading, 
-            setAddChannelLoading, 
-    } = useChannelProviderContext()
-
-    const[error, setError] = useState<string | null>(null)
+    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -72,21 +74,31 @@ const AddChannelModal:React.FC = () => {
         },
     })
 
+    const [loading, setLoading] = useState<boolean>(false)
+    const[error, setError] = useState<string | null>(null)
+    const [txMessage, setTxMessage] = useState<null | string>(null)
+    
+
     const onSubmit = async (values: FormValues) => {
-        setAddChannelLoading(true);
     
         const { tokenAddress, tokenType } = values;
     
         try {
-          const transaction = await alphaPING?.connect(signer).createChannel(
-            tokenAddress,
-            tokenType
-          );
-          await transaction?.wait();
+            setLoading(true)
+            setError(null);
+            setTxMessage(null)
+            const tx = await alphaPING?.connect(signer).createChannel(
+                tokenAddress,
+                tokenType
+            );
+            await tx?.wait();
+            if(tx !== undefined && tx.hash !== undefined){
+                setTxMessage(tx?.hash)
+            }
     
-          if (alphaPING !== null) {
-            const totalChannels: bigint = await alphaPING.totalChannels();
-            const channels = [];
+            if (alphaPING !== null) {
+                const totalChannels: bigint = await alphaPING.totalChannels();
+                const channels = [];
     
             for (let i = 1; i <= Number(totalChannels); i++) {
               const channel = await alphaPING.getChannel(i);
@@ -96,13 +108,63 @@ const AddChannelModal:React.FC = () => {
             setChannels(channels);
           }
         }
-        catch(e:unknown){
-            const result = (e as ErrorType).reason || (e as ErrorType).message;
-            setError(result)
+        catch(error:unknown){
+            if((error as ErrorType).message){
+                setError((error as ErrorType).message)
+            }
+            // display error
+            if(error !== null && (error as ErrorType).message !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: `Create Channel ${tokenAddress.slice(0, 4)}...${tokenAddress.slice(38,42)} Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).message.length > 100 ?
+                                `${(error as ErrorType).message.slice(0,100)}...` :
+                                (error as ErrorType).message
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
         }
         finally{
-            setAddChannelLoading(false)
+            setLoading(false)
+            // display success
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: `Create Channel ${tokenAddress.slice(0, 4)}...${tokenAddress.slice(38,42)} Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
+    }
+
+    const handleCancel = (e:MouseEvent) => {
+        e.preventDefault()
+        setOpen(false)
     }
 
     return(
@@ -161,14 +223,16 @@ const AddChannelModal:React.FC = () => {
                                 control={form.control}
                                 name="tokenType"
                                 render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="flex flex-col justify-center items-center">
                                         <FormLabel>Token Type</FormLabel>
-                                        <FormControl>
+                                        <FormControl
+                                        className="flex justify-center items-center"
+                                        >
                                             <Select
                                                 onValueChange={field.onChange}
                                                 defaultValue={field.value}
                                             >
-                                                <SelectTrigger className="w-[180px]">
+                                                <SelectTrigger className="w-[200px]">
                                                     <SelectValue placeholder="ERC-20" />
                                                     <SelectContent>
                                                         <SelectItem 
@@ -192,9 +256,22 @@ const AddChannelModal:React.FC = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" variant="secondary">
-                                Submit
-                            </Button>
+                            <div className="flex flex-col gap-4 items-center justify-center">
+                                <Button 
+                                    type="submit" 
+                                    variant="secondary"
+                                    className="w-[200px]"
+                                >
+                                    Submit
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-[200px]"
+                                    onClick={(e) => handleCancel(e)} 
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
                         </form>
                     </Form>
                     {
@@ -208,7 +285,7 @@ const AddChannelModal:React.FC = () => {
                         </DialogFooter>
                     }
                     {
-                        addChannelLoading === true &&
+                        loading === true &&
                         <Loading/>
                     }
                 </DialogDescription>

@@ -1,6 +1,9 @@
 'use client';
 
-import React from "react";
+import React, 
+{
+    useState
+} from "react";
 import {
     SidebarGroup,
     SidebarGroupContent,
@@ -25,20 +28,25 @@ import AddChannelModal from "./AddChannelModal";
 
 const AddChannel:React.FC = () => {
 
+    const [open, setOpen] = useState<boolean>(false)
+
     return(
         <>
             <SidebarGroup className="gap-14 pt-4">
                 <SidebarGroupContent>
                     <HoverCard>
                         <HoverCardTrigger>
-                            <Dialog>
+                            <Dialog
+                                open={open} 
+                                onOpenChange={setOpen}
+                            >
                                 <DialogTrigger asChild>
                                     <SidebarMenuButton>
                                         <Plus/> 
                                         <p>Channel</p>
                                     </SidebarMenuButton>
                                 </DialogTrigger>
-                                <AddChannelModal/>
+                                <AddChannelModal setOpen={setOpen}/>
                             </Dialog>
                         </HoverCardTrigger>
                         <HoverCardContent className="bg-primary text-secondary">

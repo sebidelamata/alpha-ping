@@ -73,8 +73,9 @@ const FollowingListItem:React.FC<FollowingListItemProps> = ({follow}) => {
                 }
             }
         }catch(error: unknown){
-            if((error as ErrorType).message)
-            setError((error as ErrorType).message)
+            if((error as ErrorType).message){
+                setError((error as ErrorType).message)
+            }
             // display error
             if(error !== null && (error as ErrorType).message !== undefined){
                 toast({
