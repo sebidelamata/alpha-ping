@@ -7,16 +7,15 @@ import React, {
     useRef,
     useEffect
 } from "react"
-import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING'
 import MessageAttachments from "./MessageAttachments"
 import ToggleFollowFilter from "./ToggleFollowFilter"
 import { useSocketProviderContext } from "../../../../contexts/SocketContext"
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext"
 import { useUserProviderContext } from "../../../../contexts/UserContext"
+import { useChannelProviderContext } from "src/contexts/ChannelContext";
 
 
 interface SubmitMessageProps {
-    currentChannel: AlphaPING.ChannelStructOutput | null;
     userBalance: string | null;
     replyId: string | null;
     setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
@@ -25,7 +24,6 @@ interface SubmitMessageProps {
 }
 
 const SubmitMessage: React.FC<SubmitMessageProps> = ({ 
-  currentChannel, 
   userBalance, 
   replyId, 
   setReplyId,
@@ -36,15 +34,19 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
 
     const { socket } = useSocketProviderContext()
     const { signer } = useEtherProviderContext()
-    const { banned, blacklisted } = useUserProviderContext()
+    const { 
+      banned, 
+      blacklisted 
+    } = useUserProviderContext()
+    const { currentChannel } = useChannelProviderContext()
 
     const [message, setMessage] = useState<string>("")
     const inputRef = useRef<HTMLInputElement>(null);
 
     const sendMessage = async () => {
-    
+        // post timestamp
         const now: Date = new Date
-  
+        // create message object
         const messageObj = {
           channel: currentChannel?.id.toString(),
           account: await signer?.getAddress(),
@@ -54,22 +56,23 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
           reactions: {},
           replyId: replyId
         }
-    
+        // prevent blanks and only if there is a connection
         if (message !== "" && socket !== null) {
           socket.emit('new message', messageObj)
         }
-    
+        // reset
         setMessage("")
         setReplyId(null)
         inputRef.current?.focus()
       }
 
-      const sendMessageMouse: MouseEventHandler<HTMLFormElement> = (e) => {
-        e.preventDefault()
-
-        sendMessage();
+    // send a message if we click send
+    const sendMessageMouse: MouseEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault()
+      sendMessage();
     }
 
+    // send a message if we hit enter
     const sendMessageKeyboard: KeyboardEventHandler<HTMLInputElement> = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();

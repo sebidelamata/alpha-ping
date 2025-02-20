@@ -17,6 +17,13 @@ import Message from './Message'
 import SubmitMessage from './SubmitMessage'
 import { useMessagesProviderContext } from '../../../../contexts/MessagesContext'
 import { useUserProviderContext } from '../../../../contexts/UserContext'
+import { 
+  Card, 
+  CardContent,
+  CardFooter,
+  CardHeader
+} from '@/components/components/ui/card';
+import { ScrollArea } from '@/components/components/ui/scroll-area';
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -71,25 +78,25 @@ const Messages:React.FC = () => {
       )
       setToken(token)
     }
-  }, [currentChannel])
+  }, [currentChannel, signer])
 
-  const fetchTokenDecimals = async () => {
-    if(token !== null){
-      const tokenDecimals = await token.decimals()
-      setTokenDecimals(tokenDecimals as number)
-    }
-  }
   useEffect(() => {
+    const fetchTokenDecimals = async () => {
+      if(token !== null){
+        const tokenDecimals = await token.decimals()
+        setTokenDecimals(tokenDecimals as number)
+      }
+    }
     fetchTokenDecimals()
   }, [token])
 
-  const getUserBalance = async () => {
-    if(token !== null){
-      const userBalance = await token.balanceOf(signer)
-      setUserBalance(userBalance.toString())
-    }
-  }
   useEffect(() => {
+    const getUserBalance = async () => {
+      if(token !== null){
+        const userBalance = await token.balanceOf(signer)
+        setUserBalance(userBalance.toString())
+      }
+    }
     getUserBalance()
   }, [token])
 
@@ -107,100 +114,108 @@ const Messages:React.FC = () => {
   const [blocksArrayLoading, setBlocksArrayLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchMessagesMetadata = async () => {
-    try{
-      if(currentChannel !== null){
-        setError(null)
-        // store unique profiles for this message feed
-        const uniqueProfiles = new Set<string>(
-          messages
-            .filter(message => message.channel === currentChannel.id.toString())
-            .map(message => message.account)
-        );
-  
-        // grab unique user avatars
-        setProfilePicsLoading(true)
-        const profilePicsData: ProfilePics = {};
-        await Promise.all(
-          Array.from(uniqueProfiles).map( async (profile) => {
-            const profilePic = await alphaPING?.profilePic(profile)
-            profilePicsData[profile] = profilePic || null
-          })
-        )
-        setProfilePics(profilePicsData)
-  
-        // grab unique usernames
-        setUsernameArrayLoading(true)
-        const usernamesData: Usernames = {};
-        await Promise.all(
-          Array.from(uniqueProfiles).map( async (profile) => {
-            const username = await alphaPING?.username(profile)
-            usernamesData[profile] = username || null
-          })
-        )
-        setUsernameArray(usernamesData)
-  
-        // grab unique user channel ban status
-        setBansArrayLoading(true)
-        const bansData: Bans = {};
-        await Promise.all(
-          Array.from(uniqueProfiles).map( async (profile) => {
-            const ban = await alphaPING?.channelBans(currentChannel.id.toString(), profile) || false
-            bansData[profile] = ban
-          })
-        )
-        setBansArray(bansData)
-  
-        // grab unique user application blacklist status
-        setBlacklistArrayLoading(true)
-        const blacklistData: Blacklists = {};
+  useEffect(() => {
+    const fetchMessagesMetadata = async () => {
+      try{
+        if(currentChannel !== null){
+          setError(null)
+          // store unique profiles for this message feed
+          const uniqueProfiles = new Set<string>(
+            messages
+              .filter(message => message.channel === currentChannel.id.toString())
+              .map(message => message.account)
+          );
+    
+          // grab unique user avatars
+          setProfilePicsLoading(true)
+          const profilePicsData: ProfilePics = {};
           await Promise.all(
             Array.from(uniqueProfiles).map( async (profile) => {
-              const blacklist = await alphaPING?.isBlackListed(profile) || false
-              blacklistData[profile] = blacklist
+              const profilePic = await alphaPING?.profilePic(profile)
+              profilePicsData[profile] = profilePic || null
             })
           )
-        setBlacklistArray(blacklistData)
-
-        // grab all the users you are following
-        setFollowsArrayLoading(true)
-        const followsData: Follows = {}
-        await Promise.all(
-          Array.from(uniqueProfiles).map( async (profile) => {
-            const follow = await alphaPING?.personalFollowList(account, profile) || false
-            followsData[profile] = follow
-          })
-        )
-        setFollowsArray(followsData)
-
-        // grab all the users you have blocked
-        setBlocksArrayLoading(true)
-        const blocksData: Blocks = {}
-        await Promise.all(
-          Array.from(uniqueProfiles).map( async (profile) => {
-            const follow = await alphaPING?.personalBlockList(account, profile) || false
-            blocksData[profile] = follow
-          })
-        )
-        setBlocksArray(blocksData)
+          setProfilePics(profilePicsData)
+    
+          // grab unique usernames
+          setUsernameArrayLoading(true)
+          const usernamesData: Usernames = {};
+          await Promise.all(
+            Array.from(uniqueProfiles).map( async (profile) => {
+              const username = await alphaPING?.username(profile)
+              usernamesData[profile] = username || null
+            })
+          )
+          setUsernameArray(usernamesData)
+    
+          // grab unique user channel ban status
+          setBansArrayLoading(true)
+          const bansData: Bans = {};
+          await Promise.all(
+            Array.from(uniqueProfiles).map( async (profile) => {
+              const ban = await alphaPING?.channelBans(currentChannel.id.toString(), profile) || false
+              bansData[profile] = ban
+            })
+          )
+          setBansArray(bansData)
+    
+          // grab unique user application blacklist status
+          setBlacklistArrayLoading(true)
+          const blacklistData: Blacklists = {};
+            await Promise.all(
+              Array.from(uniqueProfiles).map( async (profile) => {
+                const blacklist = await alphaPING?.isBlackListed(profile) || false
+                blacklistData[profile] = blacklist
+              })
+            )
+          setBlacklistArray(blacklistData)
+  
+          // grab all the users you are following
+          setFollowsArrayLoading(true)
+          const followsData: Follows = {}
+          await Promise.all(
+            Array.from(uniqueProfiles).map( async (profile) => {
+              const follow = await alphaPING?.personalFollowList(account, profile) || false
+              followsData[profile] = follow
+            })
+          )
+          setFollowsArray(followsData)
+  
+          // grab all the users you have blocked
+          setBlocksArrayLoading(true)
+          const blocksData: Blocks = {}
+          await Promise.all(
+            Array.from(uniqueProfiles).map( async (profile) => {
+              const follow = await alphaPING?.personalBlockList(account, profile) || false
+              blocksData[profile] = follow
+            })
+          )
+          setBlocksArray(blocksData)
+        }
+      }catch(error){
+        setError((error as ErrorType).message)
+      }finally{
+        setProfilePicsLoading(false)
+        setUsernameArrayLoading(false)
+        setBansArrayLoading(false)
+        setBlacklistArrayLoading(false)
+        setFollowsArrayLoading(false)
+        setBlocksArrayLoading(false)
       }
-    }catch(error){
-      setError((error as ErrorType).message)
-    }finally{
-      setProfilePicsLoading(false)
-      setUsernameArrayLoading(false)
-      setBansArrayLoading(false)
-      setBlacklistArrayLoading(false)
-      setFollowsArrayLoading(false)
-      setBlocksArrayLoading(false)
     }
-  }
-  useEffect(() => {
     if (currentChannel) {
       fetchMessagesMetadata();
     }
-  }, [currentChannel, txMessageBan, txMessageBlacklist, txMessageFollow, txMessageBlock])
-
+  }, [
+    currentChannel, 
+    txMessageBan, 
+    txMessageBlacklist, 
+    txMessageFollow, 
+    txMessageBlock, 
+    account, 
+    messages, 
+    alphaPING
+  ])
 
   // scroll to end
   const messageEndRef = useRef<HTMLDivElement | null>(null)
@@ -219,94 +234,112 @@ const Messages:React.FC = () => {
   })
 
   return (
-    <div className="messages">
-      <div className="messages-feed">
+    <Card 
+      className="grid grid-rows-[80%_20%] w-full overflow-hidden bg-primary text-secondary"
+      onWheel={(e) => {
+        e.stopPropagation(); 
+      }}
+    >
+      <CardContent className='grid w-[100%]'>
         { 
           (
             messages === undefined || 
             messages === null || 
             messages.length === 0 
           ) &&
-          <div>No messages to display.</div>
+          <CardHeader className='h-[100%] w-[100%] text-2xl'>
+            No messages to display.
+          </CardHeader>
         }
         {
           currentChannel && 
           followFilter === false &&
-          messages
-            .filter(message => message.channel === currentChannel.id.toString())
-            .map((message, index) => (
-              <Message
-                key={message._id}
-                message={message}
-                index={index}
-                tokenDecimals={tokenDecimals}
-                tokenAddress={currentChannel?.tokenAddress}
-                setReplyId={setReplyId}
-                reply={
-                  message.replyId !== null && message.replyId ? 
-                  messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
-                  null
-                }
-                profilePic={profilePics[message.account]}
-                profilePicsLoading={profilePicsLoading}
-                username={usernameArray[message.account]}
-                usernameArrayLoading={usernameArrayLoading}
-                userBan={bansArray[message.account]}
-                bansArrayLoading={bansArrayLoading}
-                userBlacklist={blacklistArray[message.account]}
-                blacklistArrayLoading={blacklistArrayLoading}
-                following={followsArray[message.account]}
-                followsArrayLoading={followsArrayLoading}
-                blocked={blocksArray[message.account]}
-                blocksArrayLoading={blocksArrayLoading}
-              />
-          ))
+          <ScrollArea className='h-[100%] w-[100%]'>
+            <ul>
+              {
+                messages
+                  .filter(message => message.channel === currentChannel.id.toString())
+                  .map((message, index) => (
+                    <Message
+                      key={message._id}
+                      message={message}
+                      index={index}
+                      tokenDecimals={tokenDecimals}
+                      tokenAddress={currentChannel?.tokenAddress}
+                      setReplyId={setReplyId}
+                      reply={
+                        message.replyId !== null && message.replyId ? 
+                        messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                        null
+                      }
+                      profilePic={profilePics[message.account]}
+                      profilePicsLoading={profilePicsLoading}
+                      username={usernameArray[message.account]}
+                      usernameArrayLoading={usernameArrayLoading}
+                      userBan={bansArray[message.account]}
+                      bansArrayLoading={bansArrayLoading}
+                      userBlacklist={blacklistArray[message.account]}
+                      blacklistArrayLoading={blacklistArrayLoading}
+                      following={followsArray[message.account]}
+                      followsArrayLoading={followsArrayLoading}
+                      blocked={blocksArray[message.account]}
+                      blocksArrayLoading={blocksArrayLoading}
+                    />
+                ))
+              }
+            </ul>
+          </ScrollArea>
         }
         {
           currentChannel && 
           followFilter === true &&
-          messages
-            .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
-            .map((message, index) => (
-              <Message
-                key={message._id}
-                message={message}
-                index={index}
-                tokenDecimals={tokenDecimals}
-                tokenAddress={currentChannel?.tokenAddress}
-                setReplyId={setReplyId}
-                reply={
-                  message.replyId !== null && message.replyId ? 
-                  messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
-                  null
-                }
-                profilePic={profilePics[message.account]}
-                profilePicsLoading={profilePicsLoading}
-                username={usernameArray[message.account]}
-                usernameArrayLoading={usernameArrayLoading}
-                userBan={bansArray[message.account]}
-                bansArrayLoading={bansArrayLoading}
-                userBlacklist={blacklistArray[message.account]}
-                blacklistArrayLoading={blacklistArrayLoading}
-                following={followsArray[message.account]}
-                followsArrayLoading={followsArrayLoading}
-                blocked={blocksArray[message.account]}
-                blocksArrayLoading={blocksArrayLoading}
-              />
-          ))
+          <ScrollArea>
+            {
+              messages
+                .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+                .map((message, index) => (
+                  <Message
+                    key={message._id}
+                    message={message}
+                    index={index}
+                    tokenDecimals={tokenDecimals}
+                    tokenAddress={currentChannel?.tokenAddress}
+                    setReplyId={setReplyId}
+                    reply={
+                      message.replyId !== null && message.replyId ? 
+                      messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                      null
+                    }
+                    profilePic={profilePics[message.account]}
+                    profilePicsLoading={profilePicsLoading}
+                    username={usernameArray[message.account]}
+                    usernameArrayLoading={usernameArrayLoading}
+                    userBan={bansArray[message.account]}
+                    bansArrayLoading={bansArrayLoading}
+                    userBlacklist={blacklistArray[message.account]}
+                    blacklistArrayLoading={blacklistArrayLoading}
+                    following={followsArray[message.account]}
+                    followsArrayLoading={followsArrayLoading}
+                    blocked={blocksArray[message.account]}
+                    blocksArrayLoading={blocksArrayLoading}
+                  />
+              ))
+            }
+          </ScrollArea>
         }
         <div ref={messageEndRef} />
         { error !== null && <p>{error}</p>}
-      </div>
-      <SubmitMessage
-        currentChannel={currentChannel}
-        userBalance={userBalance}
-        replyId={replyId}
-        setReplyId={setReplyId}
-        followFilter={followFilter}
-        setFollowFilter={setFollowFilter}
-      />
-    </div>
+          <CardFooter>
+            <SubmitMessage
+              userBalance={userBalance}
+              replyId={replyId}
+              setReplyId={setReplyId}
+              followFilter={followFilter}
+              setFollowFilter={setFollowFilter}
+            />
+        </CardFooter>
+      </CardContent>
+    </Card>
   );
 }
 

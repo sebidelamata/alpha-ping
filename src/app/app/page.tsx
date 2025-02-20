@@ -57,11 +57,15 @@ const App:React.FC = () => {
 
   return (
     <>
-      <div className='app-container'>
-        <div className='app-body'>
+      {
+        (
+          isMember === true &&
+          isConnected === true
+        ) &&
+        <div className='flex flex-row w-[100%] gap-1 relative top-24'>
           {renderChannelAction()}
         </div>
-      </div>
+      }
       {
         blacklisted === true &&
         <BlacklistedScreen/>
