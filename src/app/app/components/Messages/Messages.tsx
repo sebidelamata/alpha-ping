@@ -24,6 +24,7 @@ import {
   CardHeader
 } from '@/components/components/ui/card';
 import { ScrollArea } from '@/components/components/ui/scroll-area';
+import { mockMessages } from 'mocks/mockMessages';
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -243,11 +244,11 @@ const Messages:React.FC = () => {
       <CardContent className='grid w-[100%]'>
         { 
           (
-            messages === undefined || 
-            messages === null || 
-            messages.length === 0 
+            mockMessages === undefined || 
+            mockMessages === null || 
+            mockMessages.length === 0 
           ) &&
-          <CardHeader className='h-[100%] w-[100%] text-2xl'>
+          <CardHeader className='h-[100%] w-[100%] text-2xl flex justify-center items-center'>
             No messages to display.
           </CardHeader>
         }
@@ -257,7 +258,7 @@ const Messages:React.FC = () => {
           <ScrollArea className='h-[100%] w-[100%]'>
             <ul>
               {
-                messages
+                mockMessages
                   .filter(message => message.channel === currentChannel.id.toString())
                   .map((message, index) => (
                     <Message
@@ -295,7 +296,7 @@ const Messages:React.FC = () => {
           followFilter === true &&
           <ScrollArea>
             {
-              messages
+              mockMessages
                 .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
                 .map((message, index) => (
                   <Message
@@ -330,13 +331,13 @@ const Messages:React.FC = () => {
         <div ref={messageEndRef} />
         { error !== null && <p>{error}</p>}
           <CardFooter>
-            <SubmitMessage
+            {/* <SubmitMessage
               userBalance={userBalance}
               replyId={replyId}
               setReplyId={setReplyId}
               followFilter={followFilter}
               setFollowFilter={setFollowFilter}
-            />
+            /> */}
         </CardFooter>
       </CardContent>
     </Card>

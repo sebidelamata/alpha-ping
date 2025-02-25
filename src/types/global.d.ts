@@ -17,7 +17,7 @@ interface Message {
     account: string;
     text: string;
     timestamp: Date;
-    messageTimestampTokenAmount: number;
+    messageTimestampTokenAmount: string;
     reactions: Record<string, string[]>; // Map of reaction types to lists of accounts
     replyId: string | null; // Use string to align with MongoDB ObjectId if necessary
   }

@@ -52,7 +52,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
           account: await signer?.getAddress(),
           text: message,
           timestamp: now,
-          messageTimestampTokenAmount: userBalance,
+          messageTimestampTokenAmount: userBalance?.toString(),
           reactions: {},
           replyId: replyId
         }
