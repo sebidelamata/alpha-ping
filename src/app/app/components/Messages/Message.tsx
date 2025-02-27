@@ -1,18 +1,36 @@
 'use client';
 
 import React, {
-    useState
+  useState,
+    
 } from "react";
+import Link from "next/link";
 import { DateTime } from 'luxon';
 import { ethers } from 'ethers'
 import { useUserProviderContext } from "../../../../contexts/UserContext";
-import Avatar from "./Avatar";
+import PFP from "./PFP";
 import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";
 import BanUser from "./BanUser";
 import UnbanUser from "./UnbanUser";
 import BlacklistUser from "./BlacklistUser";
 import UnblacklistUser from "./UnblacklistUser";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle, 
+  CardFooter 
+} from "@/components/components/ui/card";
+import { 
+  Avatar, 
+  AvatarImage, 
+  AvatarFallback 
+} from "@/components/components/ui/avatar";
+import { Skeleton } from "@/components/components/ui/skeleton";
+import { Badge } from "@/components/components/ui/badge";
+
 
 interface MessageProps {
     message: Message;
@@ -63,7 +81,7 @@ const Message: React.FC<MessageProps> = ({
 
     if (message === null || message === undefined || Object.keys(message).length === 0) {
       // Render a placeholder or nothing if there is no message data
-      return <div>No messages available</div>;
+      return <div>Message unavailable</div>;
     }
 
     // Function to extract image URLs from message text
@@ -99,24 +117,65 @@ const Message: React.FC<MessageProps> = ({
     .replace(/\/>/g, "")
 
   return(
-    <div 
-      className="message" 
+    <Card 
+      className="flex flex-row bg-primary text-secondary" 
       key={index}
       onMouseEnter={() => sethoverOptions(true)}
       onMouseLeave={() => sethoverOptions(false)}
     >
-      <div className='message-header'>
-        <Avatar
+      <CardHeader className='flex flex-col items-center'>
+        {/* <PFP
           profilePic={profilePic}
           profilePicsLoading={profilePicsLoading}
           following={following}
           account={message.account}
           hoverOptions={hoverOptions}
           blocked={blocked}
-        />
+        /> */}
+        {
+          <Avatar>
+            {
+              (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
+              <AvatarImage
+                src={profilePic} 
+                alt="User Icon"
+                loading="lazy"
+              /> :
+              <AvatarImage
+                src={"/monkey.svg"} 
+                alt="User Icon"
+                loading="lazy"
+              />
+            }
+            {
+              (username !== null && username !== '' && username !== undefined) ?
+              <AvatarFallback>
+                {username.slice(0, 2)}
+              </AvatarFallback> :
+              <AvatarFallback>
+                {message.account.slice(0, 2)}
+              </AvatarFallback>
+            }
+          </Avatar>
+        }
+        <Link
+          href={`https://arbiscan.io/address/${message.account}`}
+          className='message-poster-address'
+          target='_blank'
+        >
+          <h3>
+            {
+              usernameArrayLoading === true ?
+              message.account.slice(0, 6) + '...' + message.account.slice(38, 42) :
+                (username !== null && username !== '') ?
+                username :
+                message.account.slice(0, 6) + '...' + message.account.slice(38, 42)
+            }
+          </h3>
+        </Link>
         {
           bansArrayLoading === true &&
-          <div>...</div>
+          <Skeleton className="h-6 w-16 rounded-md" />
         }
         {
           (
@@ -141,16 +200,16 @@ const Message: React.FC<MessageProps> = ({
           owner === false &&
           hoverOptions === true &&
           userBan === true &&
-          <div className="user-banned">
+          <Badge variant="destructive">
             Banned
-          </div>
+          </Badge>
         }
         {
           userBan === true &&
           hoverOptions === false &&
-          <div className="user-banned">
+          <Badge variant="destructive">
             Banned
-          </div>
+          </Badge>
         }
         {
           (
@@ -158,7 +217,7 @@ const Message: React.FC<MessageProps> = ({
             followsArrayLoading === true ||
             blocksArrayLoading == true
           ) &&
-          <div>...</div>
+          <Skeleton className="h-6 w-16 rounded-md" />
         }
         {
           owner === true &&
@@ -176,35 +235,20 @@ const Message: React.FC<MessageProps> = ({
           owner === true &&
           hoverOptions === false &&
           userBlacklist === true &&
-          <div className="user-banned">
+          <Badge variant="destructive">
             Blacklisted
-          </div>
+          </Badge>
         }
         {
           userBlacklist === true &&
           owner === false &&
-          <div className="user-banned">
+          <Badge variant="destructive">
             Blacklisted
-          </div>
+          </Badge>
         }
-      </div>
-      <div className="message-content">
-        <div className='message-content-row-one'>
-          <a 
-            href={`https://arbiscan.io/address/${message.account}`}
-            className='message-poster-address'
-            target='_blank'
-            >
-              <h3>
-              {
-                usernameArrayLoading === true ?
-                message.account.slice(0, 6) + '...' + message.account.slice(38, 42) :
-                  (username !== null && username !== '') ?
-                  username :
-                  message.account.slice(0, 6) + '...' + message.account.slice(38, 42)
-              }
-              </h3>
-            </a>
+      </CardHeader>
+      <CardContent className="grid grid-rows-3">
+        <CardDescription className='flex justify-start items-center gap-4'>
           <div className='post-timestamp-token-amount'>
             <div className='post-timestamp-token-amount-title'>
               <strong>Post Balance:</strong>
@@ -230,7 +274,7 @@ const Message: React.FC<MessageProps> = ({
               setReplyId={setReplyId}
             />
           }
-        </div>
+        </CardDescription>
         <div className='message-content-row-two'>
           {
             reply !== null &&
@@ -318,8 +362,8 @@ const Message: React.FC<MessageProps> = ({
             </div>
           }
         </ul>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }
 

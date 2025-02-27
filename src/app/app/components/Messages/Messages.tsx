@@ -122,7 +122,7 @@ const Messages:React.FC = () => {
           setError(null)
           // store unique profiles for this message feed
           const uniqueProfiles = new Set<string>(
-            messages
+            mockMessages // switch this back to messages
               .filter(message => message.channel === currentChannel.id.toString())
               .map(message => message.account)
           );

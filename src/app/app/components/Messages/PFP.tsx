@@ -5,7 +5,7 @@ import UnfollowUser from "./UnfollowUser";
 import FollowUser from "./FollowUser";
 import BlockUser from "./BlockUser";
 
-interface AvatarProps{
+interface PFPProps{
     profilePic: string | null;
     profilePicsLoading: boolean;
     following: boolean;
@@ -14,7 +14,7 @@ interface AvatarProps{
     blocked: boolean;
 }
 
-const Avatar:React.FC<AvatarProps> = ({ 
+const PFP:React.FC<PFPProps> = ({ 
     profilePic, 
     profilePicsLoading, 
     following, 
@@ -67,4 +67,4 @@ const Avatar:React.FC<AvatarProps> = ({
     )
 }
 
-export default Avatar
+export default PFP
