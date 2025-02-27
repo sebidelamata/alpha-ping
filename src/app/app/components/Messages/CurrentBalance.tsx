@@ -40,7 +40,7 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
     }, [message, tokenAddress])
 
     return(
-        <div className='current-token-amount'>
+        <div className='flex flex-row gap-1'>
             <div className='current-token-amount-title'>
               <strong>Current Balance:</strong>
             </div>
@@ -48,10 +48,17 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
               {
                 tokenDecimals !== null &&
                 userBalance !== null &&
-                    ethers.formatUnits(
-                        userBalance.toString(), 
-                        tokenDecimals
-                    )
+                // round to 8 decimals
+                    (
+                        Math.round(
+                            parseFloat(
+                                ethers.formatUnits(
+                                    userBalance.toString(), 
+                                    tokenDecimals
+                                )   
+                            ) * 1e8
+                        ) / 1e8   
+                    ).toString()
               }
             </div>
         </div>

@@ -9,6 +9,7 @@ import { DateTime } from 'luxon';
 import { ethers } from 'ethers'
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import PFP from "./PFP";
+import PostBalance from "./PostBalance";
 import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";
 import BanUser from "./BanUser";
@@ -118,7 +119,7 @@ const Message: React.FC<MessageProps> = ({
 
   return(
     <Card 
-      className="flex flex-row bg-primary text-secondary" 
+      className="flex flex-row bg-primary text-secondary w-full" 
       key={index}
       onMouseEnter={() => sethoverOptions(true)}
       onMouseLeave={() => sethoverOptions(false)}
@@ -247,22 +248,9 @@ const Message: React.FC<MessageProps> = ({
           </Badge>
         }
       </CardHeader>
-      <CardContent className="grid grid-rows-3">
-        <CardDescription className='flex justify-start items-center gap-4'>
-          <div className='post-timestamp-token-amount'>
-            <div className='post-timestamp-token-amount-title'>
-              <strong>Post Balance:</strong>
-            </div>
-            <div className='post-timestamp-token-amount-value'>
-              {
-                tokenDecimals !== null &&
-                  ethers.formatUnits(
-                    message.messageTimestampTokenAmount.toString(), 
-                    tokenDecimals
-                  )
-              }
-            </div>
-          </div>
+      <CardContent className="grid grid-rows-3 w-full">
+        <CardDescription className='flex justify-between items-center gap-4'>
+          <PostBalance message={message} tokenDecimals={tokenDecimals}/>
           <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
           <div className='message-timestamp'>
             {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
