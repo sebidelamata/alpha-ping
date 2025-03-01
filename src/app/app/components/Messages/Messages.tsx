@@ -270,7 +270,7 @@ const Messages:React.FC = () => {
                       setReplyId={setReplyId}
                       reply={
                         message.replyId !== null && message.replyId ? 
-                        messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                        mockMessages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
                         null
                       }
                       profilePic={profilePics[message.account]}
@@ -308,7 +308,8 @@ const Messages:React.FC = () => {
                     setReplyId={setReplyId}
                     reply={
                       message.replyId !== null && message.replyId ? 
-                      messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                      // swp this
+                      mockMessages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
                       null
                     }
                     profilePic={profilePics[message.account]}

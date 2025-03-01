@@ -1,14 +1,13 @@
 'use client';
 
 import React, {
+  useEffect,
   useState,
-    
 } from "react";
 import Link from "next/link";
 import { DateTime } from 'luxon';
-import { ethers } from 'ethers'
+import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../contexts/UserContext";
-import PFP from "./PFP";
 import PostBalance from "./PostBalance";
 import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";
@@ -76,9 +75,30 @@ const Message: React.FC<MessageProps> = ({
 }) => {
 
     const { currentChannelMod, owner } = useUserProviderContext()
+    const { alphaPING } = useEtherProviderContext()
 
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
     const [hoverReactions, sethoverReactions] = useState<string | null>(null)
+    const [replyPFP, setReplyPFP] = useState<string | null>(null)
+    const [replyUsername, setReplyUsername] = useState<string | null>(null)
+
+    // if there is a reply get username and profile pic to original post
+    useEffect(() => {
+      const fetchReplyPFP = async () => {
+        if(reply && reply !== null){
+          const replyPFP = await alphaPING?.profilePic(reply.account) || null
+          setReplyPFP(replyPFP)
+        }
+      }
+      fetchReplyPFP()
+      const fetchReplyUsername = async () => {
+        if(reply && reply !== null){
+          const replyUsername = await alphaPING?.username(reply.account) || null
+          setReplyUsername(replyUsername)
+        }
+      }
+      fetchReplyUsername()
+    }, [alphaPING, reply])
 
     if (message === null || message === undefined || Object.keys(message).length === 0) {
       // Render a placeholder or nothing if there is no message data
@@ -249,35 +269,56 @@ const Message: React.FC<MessageProps> = ({
         }
       </CardHeader>
       <CardContent className="grid grid-rows-3 w-full">
-        <CardDescription className='flex justify-between items-center gap-4'>
-          <PostBalance message={message} tokenDecimals={tokenDecimals}/>
-          <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
-          <div className='message-timestamp'>
-            {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
+        <CardDescription className='flex flex-col gap-4'>
+          <div className="flex justify-start items-center gap-16">
+            <PostBalance message={message} tokenDecimals={tokenDecimals}/>
+            <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
+            <div className='message-timestamp'>
+              {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
+            </div>
+            {
+              hoverOptions === true &&
+              <MessageHoverOptions 
+                message={message}
+                setReplyId={setReplyId}
+              />
+            }
           </div>
-          {
-            hoverOptions === true &&
-            <MessageHoverOptions 
-              message={message}
-              setReplyId={setReplyId}
-            />
-          }
-        </CardDescription>
-        <div className='message-content-row-two'>
           {
             reply !== null &&
             message.replyId !== null &&
-              <div className="message-content-reply-container">
-                <div className="reply-icon-preview">
-                  <img 
-                    src="/monkey.svg" 
-                    alt="default icon" 
-                    className="reply-preview-icon"
-                    loading="lazy"
-                  />
-                </div>
+              <div className="flex justify-start items-center align-middle gap-2 test-sm">
+                <Avatar>
+                  {
+                    (replyPFP !== null && replyPFP !== '' && replyPFP !== undefined) ?
+                    <AvatarImage
+                      src={replyPFP} 
+                      alt="User Icon"
+                      loading="lazy"
+                      className="size-6"
+                    /> :
+                    <AvatarImage
+                      src={"/monkey.svg"} 
+                      alt="User Icon"
+                      loading="lazy"
+                    />
+                  }
+                  {
+                    (replyUsername !== null && replyUsername !== '' && replyUsername !== undefined) ?
+                    <AvatarFallback>
+                      {replyUsername.slice(0, 2)}
+                    </AvatarFallback> :
+                    <AvatarFallback>
+                      {message.account.slice(0, 2)}
+                    </AvatarFallback>
+                  }
+                </Avatar>
                 <div className="reply-author">
-                  {`${reply.account.slice(0,4)}...${reply.account.slice(28,32)}`}
+                  {
+                    (replyUsername !== null && replyUsername !== '' && replyUsername !== undefined) ?
+                    `${replyUsername}` :
+                    `${reply.account.slice(0,4)}...${reply.account.slice(28,32)}`
+                  }
                 </div>
                 <p className="message-content-reply">
                   {
@@ -286,6 +327,8 @@ const Message: React.FC<MessageProps> = ({
                 </p>
               </div>
           }
+        </CardDescription>
+        <div className='message-content-row-two'>
           <p className='message-content-text'>
             {cleanMessageText}
           </p>
