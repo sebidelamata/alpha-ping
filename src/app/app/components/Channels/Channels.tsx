@@ -73,7 +73,7 @@ const Channels:React.FC = () => {
       for (let i = 1; i <= Number(totalChannels); i++) {
           const channel = await alphaPING?.getChannel(i)
           if(channel){
-          channels.push(channel)
+            channels.push(channel)
           }
       }
       setChannels(channels)

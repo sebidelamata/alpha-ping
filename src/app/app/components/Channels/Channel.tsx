@@ -2,7 +2,8 @@
 
 import React, {
     useState, 
-    useEffect
+    useEffect,
+    useMemo
 } from "react"
 import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { ethers } from 'ethers'
@@ -51,7 +52,7 @@ const Channel:React.FC<ChannelProps> = ({
 
 
     // holds metadata fetched from coinmarketcap
-    const defaultTokenMetadata:tokenMetadata = {
+    const defaultTokenMetadata = useMemo(() => ({
         id: 0,
         name: '',
         category: '',
@@ -94,7 +95,9 @@ const Channel:React.FC<ChannelProps> = ({
             twitter: [],
             website: [],
         }
-      };
+      }), 
+      []
+    );
     const [tokenMetada, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
     const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
     
@@ -107,15 +110,15 @@ const Channel:React.FC<ChannelProps> = ({
         await signer?.getAddress() || ethers.ZeroAddress
       )
   
-      if (hasJoined) {
+      if (hasJoined === true) {
         setCurrentChannel(channel)
-        document.title = `AlphaPING | ${channel.name}`;
+        // document.title = `AlphaPING | ${channel.name}`;
       } else {
         setJoinChannelLoading(true)
         const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
         await transaction?.wait()
         setCurrentChannel(channel)
-        document.title = `AlphaPING | ${channel.name}`;
+        // document.title = `AlphaPING | ${channel.name}`;
         setJoinChannelLoading(false)
       }
     }
@@ -124,7 +127,7 @@ const Channel:React.FC<ChannelProps> = ({
     const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
-        const fetchChannelIcons = async (tokenAddress:string) => {
+        const fetchTokenMetadata = async (tokenAddress:string) => {
             let response
             const url=`https://alpha-ping-proxy-server-670fa5485762.herokuapp.com/token-metadata/${tokenAddress}`
             try{
@@ -158,15 +161,15 @@ const Channel:React.FC<ChannelProps> = ({
             (channel.tokenAddress !== undefined) && 
             (channel.tokenAddress !== null)
         ){
-            fetchChannelIcons(channel.tokenAddress)
+            fetchTokenMetadata(channel.tokenAddress)
         }     
-    }, [channel?.tokenAddress])
+    }, [channel, channel?.tokenAddress, defaultTokenMetadata])
 
     useEffect(() => {
         if(currentChannel && currentChannel.id.toString() === channel.id.toString()){
             setSelectedChannelMetadata(tokenMetada)
         }
-    },[currentChannel, setSelectedChannelMetadata, tokenMetada, channel.id])
+    },[currentChannel, setSelectedChannelMetadata, tokenMetada, channel])
 
     return(
         <HoverCard>

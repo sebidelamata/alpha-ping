@@ -94,7 +94,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
       const signer:Signer = await provider?.getSigner()
       setSigner(signer)
 
-      const hasJoinedChannel = []
+      const hasJoinedChannel:boolean[] = []
 
       for (let i = 1; i <= Number(totalChannels); i++) {
         const hasJoined = await alphaPING.hasJoinedChannel(
@@ -104,7 +104,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         hasJoinedChannel.push(hasJoined)
       }
 
-      setHasJoined(hasJoinedChannel as boolean[])
+      setHasJoined(hasJoinedChannel)
       
 
       window.ethereum.on('accountsChanged', async () => {

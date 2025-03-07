@@ -4,6 +4,7 @@ import React, {
     type ReactNode,
     createContext,
     useContext,
+    useEffect,
     useState
 } from "react"
 import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
@@ -43,6 +44,13 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
   const [addChannelLoading, setAddChannelLoading] = useState<boolean>(false)
   // selected channel's actions ("chat", "analyze", "trade")
   const [channelAction, setChannelAction] = useState<string>("chat")
+
+  // set document title based on current Channel
+  useEffect(() => {
+    if(currentChannel !== null){
+        document.title = `AlphaPING | ${currentChannel.name}`;
+    }
+  }, [currentChannel])
 
   return (
     <ChannelContext.Provider value={{ 

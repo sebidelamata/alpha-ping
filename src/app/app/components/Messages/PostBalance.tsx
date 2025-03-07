@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ethers } from 'ethers'
+import { useChannelProviderContext } from "src/contexts/ChannelContext";
 
 interface PostBalanceProps{
     message: Message;
@@ -13,6 +14,8 @@ const PostBalance:React.FC<PostBalanceProps> = ({
     tokenDecimals 
 }) => {
 
+    const { selectedChannelMetadata } = useChannelProviderContext()
+console.log(selectedChannelMetadata)
     return(
         <div className='flex flex-row gap-1'>
             <div className='current-token-amount-title'>
@@ -32,6 +35,9 @@ const PostBalance:React.FC<PostBalanceProps> = ({
                         ) * 1e8
                     ) / 1e8
                 ).toString()
+                }
+                {
+                    ` ${selectedChannelMetadata?.symbol}`
                 }
             </div>
         </div>
