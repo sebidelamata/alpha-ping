@@ -1,21 +1,44 @@
 'use client';
 
-import React from "react";
+import React, {
+    useState,
+    useEffect
+} from "react";
 import { ethers } from 'ethers'
-import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
+import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 
 interface PostBalanceProps{
     message: Message;
+    tokenAddress: string | null;
     tokenDecimals: number | null;
 }
 
 const PostBalance:React.FC<PostBalanceProps> = ({ 
     message,
+    tokenAddress,
     tokenDecimals 
 }) => {
 
-    const { selectedChannelMetadata } = useChannelProviderContext()
-console.log(selectedChannelMetadata)
+    const { signer } = useEtherProviderContext()
+
+    const [tokenSymbol, setTokenSymbol] = useState<string | null>(null)
+
+    useEffect(() => {
+        const getTokenSymbol = async () => {
+            if(tokenAddress !== null){
+                const token = new ethers.Contract(
+                    tokenAddress,
+                    ERC20Faucet.abi,
+                    signer
+                )
+                const tokenSymbol = await token.symbol()
+                setTokenSymbol(tokenSymbol.toString())
+            }
+        }
+        getTokenSymbol()
+    }, [message, tokenAddress, signer])
+
     return(
         <div className='flex flex-row gap-1'>
             <div className='current-token-amount-title'>
@@ -37,7 +60,7 @@ console.log(selectedChannelMetadata)
                 ).toString()
                 }
                 {
-                    ` ${selectedChannelMetadata?.symbol}`
+                    ` ${tokenSymbol}`
                 }
             </div>
         </div>

@@ -271,7 +271,7 @@ const Message: React.FC<MessageProps> = ({
       <CardContent className="grid grid-rows-3 w-full">
         <CardDescription className='flex flex-col gap-4'>
           <div className="flex justify-start items-center gap-16">
-            <PostBalance message={message} tokenDecimals={tokenDecimals}/>
+            <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
             <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
             <div className='message-timestamp'>
               {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
