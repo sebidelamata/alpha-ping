@@ -12,6 +12,12 @@ import { useEtherProviderContext } from "../../../../contexts/ProviderContext"
 import { useSocketProviderContext } from "../../../../contexts/SocketContext"
 import { useUserProviderContext } from "../../../../contexts/UserContext"
 import DeleteMessage from "./DeleteMessage"
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@/components/components/ui/avatar";
+import { Reply } from "lucide-react";
 
 interface Emoji {
     native: string
@@ -144,12 +150,13 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
                         className="text-reply"
                         onClick={() => handleReplyClick()}    
                     >
-                        <img 
+                        <Reply className="text-accent"/>
+                        {/* <img 
                             src="/reply.svg" 
                             alt="text reply" 
                             className="text-reply"
                             loading="lazy"
-                        />
+                        /> */}
                     </li>
                     {
                         (
