@@ -29,6 +29,8 @@ interface MessageHoverOptionsProps {
     userBan: boolean;
     userBlacklist: boolean;
     currentChannelMod: boolean;
+    username: string;
+    profilePic: string;
 }
 
 const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
@@ -36,7 +38,9 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
     setReplyId,
     userBan,
     userBlacklist,
-    currentChannelMod
+    currentChannelMod,
+    username,
+    profilePic
 }) => {
 
     const { socket } = useSocketProviderContext()
@@ -187,7 +191,11 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
                 ) &&
                 userBan === false &&
                 <li>
-                    <BanUser user={message.account}/>
+                    <BanUser 
+                        user={message.account}
+                        username={username}
+                        profilePic={profilePic}
+                    />
                 </li>
             }
             {

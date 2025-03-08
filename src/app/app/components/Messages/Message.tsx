@@ -367,6 +367,8 @@ const Message: React.FC<MessageProps> = ({
           userBan={userBan}
           userBlacklist={userBlacklist}
           currentChannelMod={currentChannelMod}
+          username={username}
+          profilePic={profilePic}
         />
       </HoverCardContent>
     </HoverCard>
