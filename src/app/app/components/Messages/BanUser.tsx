@@ -40,8 +40,8 @@ interface ErrorType {
 
 interface BanUserProps{
     user: string;
-    username: string;
-    profilePic: string;
+    username: string | null;
+    profilePic: string | null;
 }
 
 const BanUser:React.FC<BanUserProps> = ({

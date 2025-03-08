@@ -29,8 +29,8 @@ interface MessageHoverOptionsProps {
     userBan: boolean;
     userBlacklist: boolean;
     currentChannelMod: boolean;
-    username: string;
-    profilePic: string;
+    username: string | null;
+    profilePic: string | null;
 }
 
 const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
