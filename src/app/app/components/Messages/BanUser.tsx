@@ -140,112 +140,110 @@ const BanUser:React.FC<BanUserProps> = ({
     }
 
     return(
-        <>
-            <Dialog
-                open={open} 
-                onOpenChange={setOpen}
+        <Dialog
+            open={open} 
+            onOpenChange={setOpen}
+        >
+            <DialogTrigger
+                asChild 
+                className="flex justify-center items-center"
             >
-                <DialogTrigger
-                    asChild 
-                    className="flex justify-center items-center"
+                <Button
+                    variant={"outline"}
+                    className="flex justify-center items-center w-[200px]"
                 >
-                    <Button
-                        variant={"outline"}
-                        className="flex justify-center items-center w-[200px]"
-                    >
-                        Ban
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>
-                            <div className="flex flex-row items-center justify-center gap-4 text-3xl">
-                                    <Link 
-                                        className="flex flex-row gap-1"
-                                        href={`https://arbiscan.io/address/${user}`}
-                                        target="_blank"
-                                    >
-                                            { "Ban" } 
+                    Ban
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <div className="flex flex-row items-center justify-center gap-4 text-3xl">
+                                <Link 
+                                    className="flex flex-row gap-1"
+                                    href={`https://arbiscan.io/address/${user}`}
+                                    target="_blank"
+                                >
+                                        { "Ban " } 
+                                        {
+                                            username !== null ? 
+                                            <span 
+                                                className="text-accent">
+                                                    {username}
+                                            </span> : 
+                                            <span 
+                                                className="text-accent">
+                                                    {user.slice(0,4)}...${user.slice(37,41)}
+                                            </span>
+                                        }
+                                        {"?"}
+                                </Link>
+                                {
+                                    (profilePic !== null && profilePic !== '') ?
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={profilePic} 
+                                            alt="User Icon" 
+                                            loading="lazy"
+                                        />
+                                        <AvatarFallback>
                                             {
-                                                username !== null ? 
-                                                <span 
-                                                    className="text-accent">
-                                                        {username}
-                                                </span> : 
-                                                <span 
-                                                    className="text-accent">
-                                                        {user.slice(0,4)}...${user.slice(37,41)}
-                                                </span>
+                                                (username !== null && username !== '') ?
+                                                username.slice(0,2) :
+                                                user.slice(0, 2)
                                             }
-                                            {"?"}
-                                    </Link>
-                                    {
-                                        (profilePic !== null && profilePic !== '') ?
-                                        <Avatar>
-                                            <AvatarImage
-                                                src={profilePic} 
-                                                alt="User Icon" 
-                                                loading="lazy"
-                                            />
-                                            <AvatarFallback>
-                                                {
-                                                    (username !== null && username !== '') ?
-                                                    username.slice(0,2) :
-                                                    user.slice(0, 2)
-                                                }
-                                            </AvatarFallback>
-                                        </Avatar> :
-                                        <Avatar>
-                                            <AvatarImage
-                                                src='/monkey.svg' 
-                                                alt="Default User Icon" 
-                                                loading="lazy"
-                                            />
-                                        </Avatar>
-                                    }
-                                </div>
-                        </DialogTitle>
-                        <DialogDescription className="flex flex-col items-center justify-center gap-4">
-                            They will no longer be able to post or interact with posts on this Channel. 
-                        </DialogDescription>
-                        <Separator/>
-                        <form
-                            onSubmit={(e) => handleSubmit(e)}
-                            className="flex flex-col items-center justify-center gap-4"
+                                        </AvatarFallback>
+                                    </Avatar> :
+                                    <Avatar>
+                                        <AvatarImage
+                                            src='/monkey.svg' 
+                                            alt="Default User Icon" 
+                                            loading="lazy"
+                                        />
+                                    </Avatar>
+                                }
+                            </div>
+                    </DialogTitle>
+                    <DialogDescription className="flex flex-col items-center justify-center gap-4">
+                        They will no longer be able to post or interact with posts on this Channel. 
+                    </DialogDescription>
+                    <Separator/>
+                    <form
+                        onSubmit={(e) => handleSubmit(e)}
+                        className="flex flex-col items-center justify-center gap-4"
+                    >
+                        <Button 
+                            type="submit"
+                            variant="destructive" 
+                            className="w-[200px]"
                         >
-                            <Button 
-                                type="submit"
-                                variant="destructive" 
-                                className="w-[200px]"
-                            >
-                                Ban
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="w-[200px]"
-                                onClick={(e) => handleCancel(e)} 
-                            >
-                                Cancel
-                            </Button>
-                        </form>
-                    </DialogHeader>
-                    {
-                        loading === true &&
-                            <Loading/>
-                    }
-                    {
-                        error !== null &&
-                        <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
-                            {
-                                error.length > 50 ?
-                                `${error.slice(0,50)}...` :
-                                error
-                            }
-                        </DialogFooter>
-                    }
-                </DialogContent>
-            </Dialog>
-        </>
+                            Ban
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="w-[200px]"
+                            onClick={(e) => handleCancel(e)} 
+                        >
+                            Cancel
+                        </Button>
+                    </form>
+                </DialogHeader>
+                {
+                    loading === true &&
+                        <Loading/>
+                }
+                {
+                    error !== null &&
+                    <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
+                        {
+                            error.length > 50 ?
+                            `${error.slice(0,50)}...` :
+                            error
+                        }
+                    </DialogFooter>
+                }
+            </DialogContent>
+        </Dialog>
     )
 }
 

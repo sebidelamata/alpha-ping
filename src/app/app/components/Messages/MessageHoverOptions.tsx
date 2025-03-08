@@ -205,7 +205,11 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
                 ) &&
                 userBan === true &&
                 <li>
-                    <UnbanUser user={message.account}/>
+                    <UnbanUser 
+                        user={message.account}
+                        username={username}
+                        profilePic={profilePic}
+                    />
                 </li>
             }
             {
