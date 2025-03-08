@@ -11,17 +11,11 @@ import { useUserProviderContext } from "../../../../contexts/UserContext";
 import PostBalance from "./PostBalance";
 import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";
-import BanUser from "./BanUser";
-import UnbanUser from "./UnbanUser";
-import BlacklistUser from "./BlacklistUser";
-import UnblacklistUser from "./UnblacklistUser";
 import { 
   Card, 
   CardContent, 
   CardDescription, 
   CardHeader, 
-  CardTitle, 
-  CardFooter 
 } from "@/components/components/ui/card";
 import { 
   Avatar, 
@@ -206,24 +200,6 @@ const Message: React.FC<MessageProps> = ({
             <Skeleton className="h-6 w-16 rounded-md" />
           }
           {
-            (
-              currentChannelMod === true ||
-              owner === true
-            ) &&
-            hoverOptions === true &&
-            userBan === false &&
-            <BanUser user={message.account}/>
-          }
-          {
-            (
-              currentChannelMod === true ||
-              owner === true
-            ) &&
-            hoverOptions === true &&
-            userBan === true &&
-            <UnbanUser user={message.account}/>
-          }
-          {
             currentChannelMod === false &&
             owner === false &&
             hoverOptions === true &&
@@ -246,18 +222,6 @@ const Message: React.FC<MessageProps> = ({
               blocksArrayLoading == true
             ) &&
             <Skeleton className="h-6 w-16 rounded-md" />
-          }
-          {
-            owner === true &&
-            hoverOptions === true &&
-            userBlacklist === false &&
-            <BlacklistUser user={message.account}/>
-          }
-          {
-            owner === true &&
-            hoverOptions === true &&
-            userBlacklist === true &&
-            <UnblacklistUser user={message.account}/>
           }
           {
             owner === true &&
@@ -400,6 +364,9 @@ const Message: React.FC<MessageProps> = ({
         <MessageHoverOptions 
           message={message}
           setReplyId={setReplyId}
+          userBan={userBan}
+          userBlacklist={userBlacklist}
+          currentChannelMod={currentChannelMod}
         />
       </HoverCardContent>
     </HoverCard>

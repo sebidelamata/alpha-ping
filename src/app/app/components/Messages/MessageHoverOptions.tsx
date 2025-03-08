@@ -14,6 +14,10 @@ import { useUserProviderContext } from "../../../../contexts/UserContext"
 import DeleteMessage from "./DeleteMessage"
 import { Button } from "@/components/components/ui/button";
 import { Reply } from "lucide-react";
+import BanUser from "./BanUser";
+import UnbanUser from "./UnbanUser";
+import BlacklistUser from "./BlacklistUser";
+import UnblacklistUser from "./UnblacklistUser";
 
 interface Emoji {
     native: string
@@ -22,9 +26,18 @@ interface Emoji {
 interface MessageHoverOptionsProps {
     message: Message;
     setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
+    userBan: boolean;
+    userBlacklist: boolean;
+    currentChannelMod: boolean;
 }
 
-const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setReplyId}) => {
+const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
+    message, 
+    setReplyId,
+    userBan,
+    userBlacklist,
+    currentChannelMod
+}) => {
 
     const { socket } = useSocketProviderContext()
 
@@ -124,52 +137,80 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
     }, [signer])
 
     return(
-            <>
-                <ul className="flex flex-row gap-2 justify-center align-middle">
-                    <li 
-                        className="emoji-reply"
-                        ref={modalRef}
-                    >
-                        <Button
-                            onClick={handleClick}
-                        >
-                            😊
-                            {
-                                showEmojiKeyboard === true &&
-                                <div className="flex absolute right-[50%] top-[50%]">
-                                    <Picker 
-                                        data={data} 
-                                        onEmojiSelect={(emoji: Emoji) => handleEmojiClick(emoji)} 
-                                    />
-                                </div>
-                            }
-                        </Button>
-                    </li>
-                    <li 
-                        className="text-reply"  
-                    >
-                        <Button
-                            onClick={() => handleReplyClick()}  
-                        >
-                            <Reply className="text-accent"/>
-                        </Button>
-                    </li>
+        <ul className="flex flex-row gap-2 justify-center align-middle">
+            <li 
+                className="emoji-reply"
+                ref={modalRef}
+            >
+                <Button
+                    onClick={handleClick}
+                >
+                    😊
                     {
-                        (
-                            owner === true ||
-                            (mod && mod.length > 0) ||
-                            isAuthor === true
-                        ) &&
-                        banned === false &&
-                        blacklisted === false &&
-                        <li className="delete-message-container">
-                                <DeleteMessage
-                                    messageID={message._id as unknown as string}
-                                />
-                        </li>
+                        showEmojiKeyboard === true &&
+                        <div className="flex absolute right-[50%] top-[50%]">
+                            <Picker 
+                                data={data} 
+                                onEmojiSelect={(emoji: Emoji) => handleEmojiClick(emoji)} 
+                            />
+                        </div>
                     }
-                </ul>
-            </>
+                </Button>
+            </li>
+            <li 
+                className="text-reply"  
+            >
+                <Button
+                    onClick={() => handleReplyClick()}  
+                >
+                    <Reply className="text-accent"/>
+                </Button>
+            </li>
+            {
+                (
+                    owner === true ||
+                    (mod && mod.length > 0) ||
+                    isAuthor === true
+                ) &&
+                banned === false &&
+                blacklisted === false &&
+                <li className="delete-message-container">
+                        <DeleteMessage
+                            messageID={message._id as unknown as string}
+                        />
+                </li>
+            }
+            {
+                (
+                currentChannelMod === true ||
+                owner === true
+                ) &&
+                userBan === false &&
+                <li>
+                    <BanUser user={message.account}/>
+                </li>
+            }
+            {
+                (
+                currentChannelMod === true ||
+                owner === true
+                ) &&
+                userBan === true &&
+                <li>
+                    <UnbanUser user={message.account}/>
+                </li>
+            }
+            {
+                owner === true &&
+                userBlacklist === false &&
+                <BlacklistUser user={message.account}/>
+            }
+            {
+                owner === true &&
+                userBlacklist === true &&
+                <UnblacklistUser user={message.account}/>
+            }
+        </ul>
     )
 }
 

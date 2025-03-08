@@ -67,7 +67,7 @@ const DeleteMessage:React.FC<DeleteMessageProps> = ({messageID}) => {
                         <DialogTitle 
                             className="flex flex-row items-center justify-center gap-4 text-3xl"
                         >
-                            Are You Sure You Want to Delete this message? 
+                            Are You Sure You Want to Delete This Message? 
                         </DialogTitle>
                         <Button
                             onClick={(e) => handleClick(e)}
