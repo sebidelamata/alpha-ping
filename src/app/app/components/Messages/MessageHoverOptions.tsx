@@ -12,11 +12,7 @@ import { useEtherProviderContext } from "../../../../contexts/ProviderContext"
 import { useSocketProviderContext } from "../../../../contexts/SocketContext"
 import { useUserProviderContext } from "../../../../contexts/UserContext"
 import DeleteMessage from "./DeleteMessage"
-import { 
-    Avatar, 
-    AvatarImage, 
-    AvatarFallback 
-} from "@/components/components/ui/avatar";
+import { Button } from "@/components/components/ui/button";
 import { Reply } from "lucide-react";
 
 interface Emoji {
@@ -48,19 +44,19 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
 
     // check if user is the author of this message
     const [isAuthor, setIsAuthor] = useState<boolean>(false)
-    const findIsAuthor = (): void => {
-        const authored = author.some((a) => (
-            a.toString() === message._id.toString()
-        ))
-        setIsAuthor(authored)
-    }
     useEffect(() => {
+        const findIsAuthor = (): void => {
+            const authored = author.some((a) => (
+                a.toString() === message._id.toString()
+            ))
+            setIsAuthor(authored)
+        }
         findIsAuthor()
-    }, [message])
+    }, [message, author])
 
     const modalRef = useRef<HTMLLIElement>(null);
 
-    const handleClick:MouseEventHandler<HTMLLIElement> = (e) => {
+    const handleClick:MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault()
         setShowEmojiKeyboard(true)
     }
@@ -117,11 +113,11 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
         };
     }, []);
 
-    const fetchAddress = async () => {
-        const address = await signer.getAddress()
-        setAddress(address)
-    }
     useEffect(() => {
+        const fetchAddress = async () => {
+            const address = await signer.getAddress()
+            setAddress(address)
+        }
         if(signer){
             fetchAddress()
         }
@@ -129,34 +125,34 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
 
     return(
             <>
-                <ul className="message-hover-options">
+                <ul className="flex flex-row gap-2 justify-center align-middle">
                     <li 
                         className="emoji-reply"
                         ref={modalRef}
-                        onClick={handleClick}
                     >
-                        😊
-                        {
-                            showEmojiKeyboard === true &&
-                            <div className="emoji-reaction">
-                                <Picker 
-                                    data={data} 
-                                    onEmojiSelect={(emoji: Emoji) => handleEmojiClick(emoji)} 
-                                />
-                            </div>
-                        }
+                        <Button
+                            onClick={handleClick}
+                        >
+                            😊
+                            {
+                                showEmojiKeyboard === true &&
+                                <div className="flex absolute right-[50%] top-[50%]">
+                                    <Picker 
+                                        data={data} 
+                                        onEmojiSelect={(emoji: Emoji) => handleEmojiClick(emoji)} 
+                                    />
+                                </div>
+                            }
+                        </Button>
                     </li>
                     <li 
-                        className="text-reply"
-                        onClick={() => handleReplyClick()}    
+                        className="text-reply"  
                     >
-                        <Reply className="text-accent"/>
-                        {/* <img 
-                            src="/reply.svg" 
-                            alt="text reply" 
-                            className="text-reply"
-                            loading="lazy"
-                        /> */}
+                        <Button
+                            onClick={() => handleReplyClick()}  
+                        >
+                            <Reply className="text-accent"/>
+                        </Button>
                     </li>
                     {
                         (
@@ -167,9 +163,9 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({message, setRe
                         banned === false &&
                         blacklisted === false &&
                         <li className="delete-message-container">
-                            <DeleteMessage
-                                messageID={message._id as unknown as string}
-                            />
+                                <DeleteMessage
+                                    messageID={message._id as unknown as string}
+                                />
                         </li>
                     }
                 </ul>

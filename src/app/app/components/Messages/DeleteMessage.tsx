@@ -4,6 +4,8 @@ import React, {
     useState
 } from "react";
 import { useSocketProviderContext } from "../../../../contexts/SocketContext";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/components/ui/button";
 
 interface DeleteMessageProps {
     messageID: string;
@@ -31,13 +33,16 @@ const DeleteMessage:React.FC<DeleteMessageProps> = ({messageID}) => {
     }
 
     return(
-        <div className="delete-message">
-            <button 
-                className="delete-message-button"
+        <div className="flex justify-center items-center">
+            <Button
                 onClick={(e) => handleClick(e)}
             >
-                {messageDeleteLoading ? 'Deleting...' : 'Delete'}
-            </button>
+                {
+                    messageDeleteLoading ? 
+                    'Deleting...' : 
+                    <Trash2/>
+                }
+            </Button>
             {messageDeleteError && <p className="error-message">{messageDeleteError}</p>}
         </div>
     )
