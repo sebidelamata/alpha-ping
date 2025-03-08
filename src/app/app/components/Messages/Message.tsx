@@ -371,6 +371,8 @@ const Message: React.FC<MessageProps> = ({
           profilePic={profilePic}
         />
       </HoverCardContent>
+
+      
     </HoverCard>
   )
 }

@@ -215,7 +215,11 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
             {
                 owner === true &&
                 userBlacklist === false &&
-                <BlacklistUser user={message.account}/>
+                <BlacklistUser 
+                    user={message.account}
+                    username={username}
+                    profilePic={profilePic}
+                />
             }
             {
                 owner === true &&
