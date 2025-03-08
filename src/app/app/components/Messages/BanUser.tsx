@@ -215,7 +215,7 @@ const BanUser:React.FC<BanUserProps> = ({
                         >
                             <Button 
                                 type="submit"
-                                variant="secondary" 
+                                variant="destructive" 
                                 className="w-[200px]"
                             >
                                 Ban
