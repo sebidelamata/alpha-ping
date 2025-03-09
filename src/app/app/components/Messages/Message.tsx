@@ -144,7 +144,7 @@ const Message: React.FC<MessageProps> = ({
 
   return(
     <HoverCard>
-      <HoverCardTrigger>
+      <HoverCardTrigger asChild>
         <Card 
           className="flex flex-cols-2 bg-primary text-secondary w-full" 
           key={index}
@@ -237,9 +237,9 @@ const Message: React.FC<MessageProps> = ({
             </Badge>
           }
         </CardHeader>
-        <CardContent className="flex flex-col w-full">
+        <CardContent className="flex flex-col w-full gap-4">
           <CardDescription className='flex flex-col gap-4 flex-wrap'>
-            <div className="flex justify-start items-center gap-16">
+            <div className="flex justify-start items-center lg:gap-16 med:gap-8 sm:gap-4 flex-wrap">
               <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
               <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
               <div className='message-timestamp'>
@@ -291,7 +291,7 @@ const Message: React.FC<MessageProps> = ({
             }
           </CardDescription>
           <div className='flex flex-col gap-8 justify-start w-full'>
-            <p className='flex'>
+            <p className='flex flex-wrap'>
               {cleanMessageText}
             </p>
             {
@@ -335,8 +335,9 @@ const Message: React.FC<MessageProps> = ({
                     onMouseEnter={() => sethoverReactions(key)}
                     onMouseLeave={() => sethoverReactions(null)}
                   >
-                    <div className="reaction-emoji">{key}</div>
-                    <div className="reaction-count">{value.length}</div>
+                    <Badge className="border-secondary text-lg">
+                      {`${key} ${value.length}`}
+                    </Badge>
                   </li>
                 )
               ))
