@@ -180,7 +180,6 @@ const Message: React.FC<MessageProps> = ({
           }
           <Link
             href={`https://arbiscan.io/address/${message.account}`}
-            className='message-poster-address'
             target='_blank'
           >
             <h4>
@@ -331,32 +330,47 @@ const Message: React.FC<MessageProps> = ({
                   message.reactions[key].length > 0 && 
                   <li
                     key={key}
-                    className="reaction-item"
-                    onMouseEnter={() => sethoverReactions(key)}
-                    onMouseLeave={() => sethoverReactions(null)}
                   >
-                    <Badge className="border-secondary text-lg">
-                      {`${key} ${value.length}`}
-                    </Badge>
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <Badge 
+                          className="border-secondary text-lg" 
+                          onMouseEnter={() => sethoverReactions(key)}
+                        >
+                          {`${key} ${value.length}`}
+                        </Badge>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="bg-primary text-secondary border-accent">
+                        {
+                          hoverReactions !== null &&
+                          <div>
+                            <div className="flex items-center justify-center text-lg">
+                              {hoverReactions}
+                            </div>
+                            <ul className="hover-reaction-address-list">
+                              {
+                                message.reactions[hoverReactions].length > 0 &&
+                                message.reactions[hoverReactions].map((address) => (
+                                  <li className="hover-reaction-address" key={address}>
+                                    <Link
+                                      href={`https://arbiscan.io/address/${address}`}
+                                      target="_blank"
+                                    >
+                                      {
+                                        address.slice(0,4)}...{address.slice(38,42)
+                                      }
+                                    </Link>
+                                  </li>
+                                ))
+                              }
+                            </ul>
+                          </div> 
+                        }
+                      </HoverCardContent>
+                    </HoverCard>
                   </li>
                 )
               ))
-            }
-            {
-              hoverReactions !== null &&
-              <div className="hover-reactions-accounts">
-                <div className="hover-reaction-icon">{hoverReactions}</div>
-                <ul className="hover-reaction-address-list">
-                  {
-                    message.reactions[hoverReactions].length > 0 &&
-                    message.reactions[hoverReactions].map((address) => (
-                      <li className="hover-reaction-address" key={address}>
-                        {address.slice(0,4)}...{address.slice(38,42)}
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
             }
           </ul>
         </CardContent>
