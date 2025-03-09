@@ -274,16 +274,13 @@ const Messages:React.FC = () => {
                         null
                       }
                       profilePic={profilePics[message.account]}
-                      profilePicsLoading={profilePicsLoading}
                       username={usernameArray[message.account]}
                       usernameArrayLoading={usernameArrayLoading}
                       userBan={bansArray[message.account]}
                       bansArrayLoading={bansArrayLoading}
                       userBlacklist={blacklistArray[message.account]}
                       blacklistArrayLoading={blacklistArrayLoading}
-                      following={followsArray[message.account]}
                       followsArrayLoading={followsArrayLoading}
-                      blocked={blocksArray[message.account]}
                       blocksArrayLoading={blocksArrayLoading}
                     />
                 ))
@@ -313,16 +310,13 @@ const Messages:React.FC = () => {
                       null
                     }
                     profilePic={profilePics[message.account]}
-                    profilePicsLoading={profilePicsLoading}
                     username={usernameArray[message.account]}
                     usernameArrayLoading={usernameArrayLoading}
                     userBan={bansArray[message.account]}
                     bansArrayLoading={bansArrayLoading}
                     userBlacklist={blacklistArray[message.account]}
                     blacklistArrayLoading={blacklistArrayLoading}
-                    following={followsArray[message.account]}
                     followsArrayLoading={followsArrayLoading}
-                    blocked={blocksArray[message.account]}
                     blocksArrayLoading={blocksArrayLoading}
                   />
               ))

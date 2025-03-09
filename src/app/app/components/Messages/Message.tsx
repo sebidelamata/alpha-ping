@@ -41,16 +41,13 @@ interface MessageProps {
     setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
     reply: Message | null;
     profilePic: string | null;
-    profilePicsLoading: boolean;
     username: string | null;
     usernameArrayLoading: boolean;
     userBan: boolean;
     bansArrayLoading: boolean;
     userBlacklist: boolean;
     blacklistArrayLoading: boolean;
-    following: boolean;
     followsArrayLoading: boolean;
-    blocked: boolean;
     blocksArrayLoading: boolean;
 }
 
@@ -62,16 +59,13 @@ const Message: React.FC<MessageProps> = ({
   setReplyId, 
   reply, 
   profilePic,
-  profilePicsLoading,
   username,
   usernameArrayLoading,
   userBan,
   bansArrayLoading,
   userBlacklist,
   blacklistArrayLoading,
-  following,
   followsArrayLoading,
-  blocked,
   blocksArrayLoading
 }) => {
 

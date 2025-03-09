@@ -72,7 +72,7 @@ const MessageReactions:React.FC<IMessageReactions> = ({reaction, count, message}
                 {`${reaction} ${count}`}
             </Badge>
             </HoverCardTrigger>
-            <HoverCardContent className="bg-primary text-secondary border border-accent border-solid p-2 rounded-lg shadow-md">
+            <HoverCardContent className="bg-primary text-secondary border border-accent border-solid p-2 rounded-lg shadow-md m-2">
             {
                 hoverReaction !== null &&
                 <div className="bg-primary text-secondary p-4">
