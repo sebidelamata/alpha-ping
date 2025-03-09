@@ -141,13 +141,13 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
     }, [signer])
 
     return(
-        <ul className="flex flex-row gap-2 justify-center align-middle">
+        <ul className="flex flex-wrap gap-4 justify-center items-center">
             <li 
-                className="emoji-reply"
                 ref={modalRef}
             >
                 <Button
                     onClick={handleClick}
+                    variant={"ghost"}
                 >
                     😊
                     {
@@ -161,13 +161,12 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
                     }
                 </Button>
             </li>
-            <li 
-                className="text-reply"  
-            >
+            <li >
                 <Button
+                    variant={"ghost"}
                     onClick={() => handleReplyClick()}  
                 >
-                    <Reply className="text-accent"/>
+                    <Reply className="text-secondary"/>
                 </Button>
             </li>
             {
@@ -178,7 +177,7 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
                 ) &&
                 banned === false &&
                 blacklisted === false &&
-                <li className="delete-message-container">
+                <li>
                         <DeleteMessage
                             messageID={message._id as unknown as string}
                         />

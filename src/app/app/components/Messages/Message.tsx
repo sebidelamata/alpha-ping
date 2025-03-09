@@ -29,6 +29,7 @@ import {
 } from "@/components/components/ui/hover-card";
 import { Skeleton } from "@/components/components/ui/skeleton";
 import { Badge } from "@/components/components/ui/badge";
+import Image from "next/image";
 
 
 interface MessageProps {
@@ -136,24 +137,21 @@ const Message: React.FC<MessageProps> = ({
     .replace(/<iframe src="(.*?)"/g, "")
     .replace(/\/>/g, "")
 
+
+  const customLoader = ({ src }) => {
+    return src; // Returns the full URL without relying on Next.js optimization
+  };
+
   return(
     <HoverCard>
       <HoverCardTrigger>
         <Card 
-          className="flex flex-row bg-primary text-secondary w-full" 
+          className="flex flex-cols-2 bg-primary text-secondary w-full" 
           key={index}
           onMouseEnter={() => sethoverOptions(true)}
           onMouseLeave={() => sethoverOptions(false)}
         >
         <CardHeader className='flex flex-col items-center'>
-          {/* <PFP
-            profilePic={profilePic}
-            profilePicsLoading={profilePicsLoading}
-            following={following}
-            account={message.account}
-            hoverOptions={hoverOptions}
-            blocked={blocked}
-          /> */}
           {
             <Avatar>
               {
@@ -185,7 +183,7 @@ const Message: React.FC<MessageProps> = ({
             className='message-poster-address'
             target='_blank'
           >
-            <h3>
+            <h4>
               {
                 usernameArrayLoading === true ?
                 message.account.slice(0, 6) + '...' + message.account.slice(38, 42) :
@@ -193,7 +191,7 @@ const Message: React.FC<MessageProps> = ({
                   username :
                   message.account.slice(0, 6) + '...' + message.account.slice(38, 42)
               }
-            </h3>
+            </h4>
           </Link>
           {
             bansArrayLoading === true &&
@@ -239,8 +237,8 @@ const Message: React.FC<MessageProps> = ({
             </Badge>
           }
         </CardHeader>
-        <CardContent className="grid grid-rows-3 w-full">
-          <CardDescription className='flex flex-col gap-4'>
+        <CardContent className="flex flex-col w-full">
+          <CardDescription className='flex flex-col gap-4 flex-wrap'>
             <div className="flex justify-start items-center gap-16">
               <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
               <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
@@ -292,18 +290,21 @@ const Message: React.FC<MessageProps> = ({
                 </div>
             }
           </CardDescription>
-          <div className='message-content-row-two'>
-            <p className='message-content-text'>
+          <div className='flex flex-col gap-8 justify-start w-full'>
+            <p className='flex'>
               {cleanMessageText}
             </p>
             {
               imageUrls.map((url, idx) => (
-                <img 
+                <Image 
                   key={idx} 
                   src={url} 
                   alt={`Linked content ${idx}`} 
-                  className='message-image' 
+                  width={800}
+                  height={800}
                   loading="lazy"
+                  loader={customLoader}
+                  sizes="(max-width: 600px) 150px, (max-width: 1024px) 300px, 600px"
                 />
               ))
             }
@@ -360,7 +361,10 @@ const Message: React.FC<MessageProps> = ({
         </CardContent>
       </Card>
       </HoverCardTrigger>
-      <HoverCardContent className="bg-primary text-secondary">
+      <HoverCardContent 
+        className="bg-primary text-secondary" 
+        sticky="always"
+      >
         <MessageHoverOptions 
           message={message}
           setReplyId={setReplyId}
@@ -371,8 +375,6 @@ const Message: React.FC<MessageProps> = ({
           profilePic={profilePic}
         />
       </HoverCardContent>
-
-      
     </HoverCard>
   )
 }

@@ -56,11 +56,15 @@ const DeleteMessage:React.FC<DeleteMessageProps> = ({messageID}) => {
                     asChild 
                     className="flex flex-row"
                 >
-                    {
-                        messageDeleteLoading ? 
-                        'Deleting...' : 
-                        <Trash2/>
-                    }
+                    <Button
+                    variant={"ghost"}
+                    >
+                        {
+                            messageDeleteLoading ? 
+                            'Deleting...' : 
+                            <Trash2/>
+                        }
+                    </Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
