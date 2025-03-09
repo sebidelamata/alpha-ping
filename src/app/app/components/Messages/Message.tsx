@@ -11,6 +11,7 @@ import { useUserProviderContext } from "../../../../contexts/UserContext";
 import PostBalance from "./PostBalance";
 import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";
+import MessageReactions from "./MessageReactions";
 import { 
   Card, 
   CardContent, 
@@ -78,7 +79,6 @@ const Message: React.FC<MessageProps> = ({
     const { alphaPING } = useEtherProviderContext()
 
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
-    const [hoverReactions, sethoverReactions] = useState<string | null>(null)
     const [replyPFP, setReplyPFP] = useState<string | null>(null)
     const [replyUsername, setReplyUsername] = useState<string | null>(null)
 
@@ -331,43 +331,11 @@ const Message: React.FC<MessageProps> = ({
                   <li
                     key={key}
                   >
-                    <HoverCard>
-                      <HoverCardTrigger asChild>
-                        <Badge 
-                          className="border-secondary text-lg" 
-                          onMouseEnter={() => sethoverReactions(key)}
-                        >
-                          {`${key} ${value.length}`}
-                        </Badge>
-                      </HoverCardTrigger>
-                      <HoverCardContent className="bg-primary text-secondary border-accent">
-                        {
-                          hoverReactions !== null &&
-                          <div>
-                            <div className="flex items-center justify-center text-lg">
-                              {hoverReactions}
-                            </div>
-                            <ul className="hover-reaction-address-list">
-                              {
-                                message.reactions[hoverReactions].length > 0 &&
-                                message.reactions[hoverReactions].map((address) => (
-                                  <li className="hover-reaction-address" key={address}>
-                                    <Link
-                                      href={`https://arbiscan.io/address/${address}`}
-                                      target="_blank"
-                                    >
-                                      {
-                                        address.slice(0,4)}...{address.slice(38,42)
-                                      }
-                                    </Link>
-                                  </li>
-                                ))
-                              }
-                            </ul>
-                          </div> 
-                        }
-                      </HoverCardContent>
-                    </HoverCard>
+                    <MessageReactions
+                      reaction={key}
+                      count={value.length.toString()}
+                      message={message}
+                    />
                   </li>
                 )
               ))
