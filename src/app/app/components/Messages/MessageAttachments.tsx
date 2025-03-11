@@ -87,9 +87,10 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
             <DialogTrigger asChild>
                 <Button 
                     type="button" 
-                    className="w-[200px]"
+                    className="w-[36px] h-[36px] border-accent"
+                    variant={"outline"}
                 >
-                    <FilePlus2 className="text-accent"/>
+                    <FilePlus2/>
                 </Button>
             </DialogTrigger>
             <DialogContent>
