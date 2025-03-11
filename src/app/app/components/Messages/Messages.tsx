@@ -326,13 +326,13 @@ const Messages:React.FC = () => {
         <div ref={messageEndRef} />
         { error !== null && <p>{error}</p>}
           <CardFooter>
-            {/* <SubmitMessage
+            <SubmitMessage
               userBalance={userBalance}
               replyId={replyId}
               setReplyId={setReplyId}
               followFilter={followFilter}
               setFollowFilter={setFollowFilter}
-            /> */}
+            />
         </CardFooter>
       </CardContent>
     </Card>

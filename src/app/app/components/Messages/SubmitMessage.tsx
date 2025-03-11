@@ -125,7 +125,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
 
 
     return(
-        <form onSubmit={sendMessageMouse} className='message-submit-form'>
+        <form onSubmit={sendMessageMouse} className='flex flex-col justify-start gap-4 w-full'>
         {
           (
             currentChannel && 

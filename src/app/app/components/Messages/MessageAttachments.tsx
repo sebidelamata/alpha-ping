@@ -1,14 +1,22 @@
 'use client';
 
 import React, {
-    MouseEventHandler,
     useState,
-    useEffect,
-    useRef,
     ChangeEvent
 } from "react"
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import { 
+    Dialog, 
+    DialogTrigger, 
+    DialogContent, 
+    DialogDescription, 
+    DialogTitle, 
+    DialogHeader, 
+    DialogFooter 
+} from "@/components/components/ui/dialog";
+import { Button } from "@/components/components/ui/button";
+import { FilePlus2 } from "lucide-react";
 
 interface MessageAttachmentsProps {
     message: string;
@@ -22,34 +30,12 @@ interface Emoji {
 
 const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMessage, inputRef }) => {
 
-    const [active, setActive] = useState<boolean>(false)
+    const [open, setOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<string>('emoji')
     const [imageUrl, setImageUrl] = useState<string>('')
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [duneURL, setDuneURL] = useState<string>('')
     const [duneSrc, setDuneSrc] = useState<string>('');
-
-    const modalRef = useRef<HTMLDivElement>(null);
-
-    const handleClick:MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.preventDefault()
-        setActive(true)
-    }
-
-    // handling closing the modal when clicking outside of it
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-                setActive(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
 
     const handleEmojiClick = (emoji: Emoji) => {
         setMessage(message + emoji.native)
@@ -68,7 +54,6 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
             setMessage(message + `![image](${imageUrl})`)
             setImageUrl('')
             setImagePreview(null)
-            setActive(false)
             setSelectedOption('emoji')
             inputRef.current?.focus();
         }
@@ -89,31 +74,25 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
         if (duneURL) {
             setMessage(message + `${duneURL}`)
             setDuneURL('')
-            setActive(false)
             setSelectedOption('emoji')
             inputRef.current?.focus();
         }
     }
 
     return(
-        <div className="attachments-container">
-            <div className="attach-button-container">
-                <button 
-                    className="attach-button"
-                    type="button"
-                    onClick={(e) => handleClick(e)}
+        <Dialog
+            open={open} 
+            onOpenChange={setOpen}
+        >
+            <DialogTrigger asChild>
+                <Button 
+                    type="button" 
+                    className="w-[200px]"
                 >
-                +
-                </button>
-            </div>
-            <div 
-                ref={modalRef}
-                className={
-                    active === true ?
-                    "attachments-options-container active" :
-                    "attachments-options-container"
-                }
-            >
+                    <FilePlus2 className="text-accent"/>
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
                 <div className="options-container">
                     {
                         selectedOption === "emoji" ?
@@ -205,8 +184,8 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                         </button>
                     </li>
                 </ul>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     )
 }
 
