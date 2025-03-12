@@ -13,6 +13,8 @@ import { useSocketProviderContext } from "../../../../contexts/SocketContext"
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext"
 import { useUserProviderContext } from "../../../../contexts/UserContext"
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import { Button } from "@/components/components/ui/button";
+import { Send } from "lucide-react";
 
 
 interface SubmitMessageProps {
@@ -125,7 +127,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
 
 
     return(
-        <form onSubmit={sendMessageMouse} className='flex flex-col justify-start gap-4 w-full'>
+        <form onSubmit={sendMessageMouse} className='flex flex-row justify-between gap-4 w-full'>
         {
           (
             currentChannel && 
@@ -204,14 +206,9 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
           )
         }
         <div className="submit-button-container">
-          <button type="submit" className='message-form-submit-button'>
-            <img 
-              src='/Banana.svg' 
-              alt="Send Message" 
-              className='banana-send-icon'
-              loading="lazy"
-            />
-          </button>
+          <Button type="submit" variant={"outline"} className="border-accent">
+            <Send/>
+          </Button>
         </div>
         <ToggleFollowFilter followFilter={followFilter} setFollowFilter={setFollowFilter}/>
       </form>

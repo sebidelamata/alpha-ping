@@ -236,26 +236,26 @@ const Messages:React.FC = () => {
 
   return (
     <Card 
-      className="grid grid-rows-[80%_20%] w-full overflow-hidden bg-primary text-secondary"
+      className="flex flex-col w-full h-full bg-primary text-secondary"
       onWheel={(e) => {
         e.stopPropagation(); 
       }}
     >
-      <CardContent className='grid w-[100%]'>
+      <CardContent className='flex-1 h-full w-[100%]'>
         { 
           (
             mockMessages === undefined || 
             mockMessages === null || 
             mockMessages.length === 0 
           ) &&
-          <CardHeader className='h-[100%] w-[100%] text-2xl flex justify-center items-center'>
+          <CardHeader className='h-full overflow-y-auto w-[100%] text-2xl flex justify-center items-center'>
             No messages to display.
           </CardHeader>
         }
         {
           currentChannel && 
           followFilter === false &&
-          <ScrollArea className='h-[100%] w-[100%]'>
+          <ScrollArea className='h-full overflow-y-auto w-[100%]'>
             <ul>
               {
                 mockMessages
@@ -291,7 +291,7 @@ const Messages:React.FC = () => {
         {
           currentChannel && 
           followFilter === true &&
-          <ScrollArea>
+          <ScrollArea className='h-full overflow-y-auto w-[100%]'>
             {
               mockMessages
                 .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
@@ -325,7 +325,7 @@ const Messages:React.FC = () => {
         }
         <div ref={messageEndRef} />
         { error !== null && <p>{error}</p>}
-          <CardFooter>
+          <CardFooter className="sticky bottom-0 bg-primary py-3">
             <SubmitMessage
               userBalance={userBalance}
               replyId={replyId}
