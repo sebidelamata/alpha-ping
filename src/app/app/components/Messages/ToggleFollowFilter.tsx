@@ -1,4 +1,11 @@
 import React from "react";
+import { 
+  Card, 
+  CardContent, 
+  CardHeader 
+} from "@/components/components/ui/card";
+import { Label } from "@/components/components/ui/label";
+import { Switch } from "@/components/components/ui/switch";
 
 interface ToggleFollowFilterProps{
     followFilter: boolean;
@@ -7,53 +14,26 @@ interface ToggleFollowFilterProps{
 
 const ToggleFollowFilter:React.FC<ToggleFollowFilterProps> = ({followFilter, setFollowFilter}) => {
 
-    return (
-        <div className="follows-toggle">
-            <h4>Follows</h4>
-            <label style={styles.switch} className="follows-toggle-switch">
-            <input
-                type="checkbox"
-                checked={followFilter}
-                onChange={() => setFollowFilter(!followFilter)}
-                style={styles.input}
-            />
-            <span style={followFilter ? { ...styles.slider, ...styles.sliderOn } : styles.slider}></span>
-            </label>
-        </div>
+  const handleToggle = (checked:boolean) => {
+    setFollowFilter(checked)
+  }
 
-      );
-    }
-    
-    const styles: { [key: string]: React.CSSProperties } = {
-      switch: {
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        position: "relative",
-        width: "50px",
-        height: "24px",
-      },
-      label: {
-        fontSize: "14px",
-      },
-      input: {
-        display: "none",
-      },
-      slider: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgb(167, 165, 168, 0.8)",
-        transition: "0.4s",
-        borderRadius: "24px",
-        cursor: "pointer",
-      },
-      sliderOn: {
-        backgroundColor: "rgb(188, 146, 222, 0.8)",
-        transform: "translateX(26px)",
-      },
-    };
+  return (
+    <Card className="flex flex-col gap-2 bg-primary text-secondary">
+      <CardContent>
+        <CardHeader>
+          <Label>
+            Follows
+          </Label>
+          <Switch 
+            checked={followFilter}
+            onCheckedChange={handleToggle}
+            className="border-secondary"
+          />
+        </CardHeader>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default ToggleFollowFilter;

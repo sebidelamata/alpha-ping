@@ -10,13 +10,30 @@ import {
     Dialog, 
     DialogTrigger, 
     DialogContent, 
-    DialogDescription, 
-    DialogTitle, 
-    DialogHeader, 
-    DialogFooter 
 } from "@/components/components/ui/dialog";
+import { 
+    Card, 
+    CardContent, 
+    CardDescription,
+    CardHeader, 
+    CardTitle
+} from "@/components/components/ui/card";
 import { Button } from "@/components/components/ui/button";
 import { FilePlus2 } from "lucide-react";
+import { 
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger 
+} from "@/components/components/ui/tabs";
+import { Image as ImageIcon } from "lucide-react";
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@/components/components/ui/avatar";
+import { Input } from "@/components/components/ui/input";
+import { Plus, SmilePlus } from "lucide-react";
 
 interface MessageAttachmentsProps {
     message: string;
@@ -31,7 +48,6 @@ interface Emoji {
 const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMessage, inputRef }) => {
 
     const [open, setOpen] = useState<boolean>(false)
-    const [selectedOption, setSelectedOption] = useState<string>('emoji')
     const [imageUrl, setImageUrl] = useState<string>('')
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [duneURL, setDuneURL] = useState<string>('')
@@ -54,7 +70,6 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
             setMessage(message + `![image](${imageUrl})`)
             setImageUrl('')
             setImagePreview(null)
-            setSelectedOption('emoji')
             inputRef.current?.focus();
         }
     }
@@ -74,7 +89,6 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
         if (duneURL) {
             setMessage(message + `${duneURL}`)
             setDuneURL('')
-            setSelectedOption('emoji')
             inputRef.current?.focus();
         }
     }
@@ -94,97 +108,127 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
                 </Button>
             </DialogTrigger>
             <DialogContent>
-                <div className="options-container">
-                    {
-                        selectedOption === "emoji" ?
-                        <div className="emoji-keyboard">
-                            <Picker 
-                                data={data} 
-                                onEmojiSelect={(emoji: Emoji) => handleEmojiClick(emoji)} 
-                            />
-                        </div> :
-                            selectedOption === "picture" ?
-                                <div className="picture-attach">
-                                    <input
-                                        type="text"
-                                        placeholder="Paste image URL"
-                                        value={imageUrl}
-                                        onChange={handleImageUrlChange}
-                                    />
-                                    {
-                                        imagePreview !== null && 
-                                        <img 
-                                            src={imagePreview} 
-                                            alt="Image preview" 
-                                            className="image-preview" 
-                                            loading="lazy"
-                                        />
-                                    }
-                                    <button 
-                                        onClick={(e) => handleAddImageUrl(e)}
-                                    >
-                                        Add Image
-                                    </button>
-                                </div> :
-                                <div className="dune-attach">
-                                    <input
-                                        type="text"
-                                        placeholder="Paste Dune Embed Link"
-                                        value={duneURL}
-                                        onChange={handleDuneUrlChange}
-                                    />
-                                    {
-                                        duneSrc !== null && 
-                                        <iframe
-                                                src={duneSrc}
-                                                title="Dune Preview"
-                                                className="dune-preview"
-                                        />
-                                    }
-                                    <button 
-                                        onClick={(e) => handleAddDuneUrl(e)}
-                                    >
-                                        Add Dune Embed Link
-                                    </button>
-                                </div>
-                    }
-                </div>
-                <ul className="options-list">
-                    <li className="emojis">
-                        <button
-                            onClick={() => setSelectedOption("emoji")}
-                            className="emoji-select"
-                        >
-                            😊
-                        </button>
-                    </li>
-                    <li className="pictures">
-                        <button
-                            className="picture-select"
-                            onClick={() => setSelectedOption("picture")}
-                        >
-                            <img 
-                                src="/picture.svg" 
-                                alt="add picture" 
-                                className="picture-icon"
-                                loading="lazy"
-                            />
-                        </button>
-                    </li>
-                    <li className="dune-analytics">
-                        <button 
-                            className="dune-select"
-                            onClick={() => setSelectedOption('dune')}
-                        >
-                            <img 
-                                src="https://dune.com/assets/DuneLogoCircle.svg" 
-                                alt="Dune Analytics Icon" 
-                                className="dune-icon"
-                                loading="lazy"
-                            />
-                        </button>
-                    </li>
-                </ul>
+                <Card className="bg-primary text-secondary">
+                    <CardContent>
+                        <CardHeader>
+                            <Tabs defaultValue="emoji" className="w-[400px] gap-8">
+                                <TabsList className="grid w-full grid-cols-3 bg-primary text-secondary">
+                                    <TabsTrigger value="emoji">
+                                        <SmilePlus/>
+                                    </TabsTrigger> 
+                                    <TabsTrigger value="picture">
+                                        <ImageIcon/>
+                                    </TabsTrigger> 
+                                    <TabsTrigger value="dune">
+                                        <Avatar className="h-[24px] w-[24px]">
+                                            <AvatarImage
+                                                src="https://dune.com/assets/DuneLogoCircle.svg" 
+                                                alt="Dune Analytics Icon" 
+                                                loading="lazy"
+                                            />
+                                            <AvatarFallback>
+                                                Dune
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </TabsTrigger> 
+                                </TabsList>
+                                <TabsContent 
+                                    value="emoji" 
+                                    className="flex items-center justify-center relative top-4"
+                                >
+                                    <Card className="bg-primary text-secondary">
+                                        <CardTitle>
+                                            Add Emoji
+                                        </CardTitle>
+                                        <CardContent>
+                                            <Picker 
+                                                data={data} 
+                                                onEmojiSelect={(emoji: Emoji) => handleEmojiClick(emoji)} 
+                                            />
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                                <TabsContent value="picture">
+                                    <Card className="bg-primary text-secondary flex flex-col gap-4">
+                                        <CardTitle>
+                                            Add Image
+                                        </CardTitle>
+                                        <CardDescription>
+                                            Paste Image URL
+                                        </CardDescription>
+                                        <CardContent className="flex flex-col w-[400px] gap-4">
+                                            <Input
+                                                type="text"
+                                                placeholder="Paste image URL"
+                                                value={imageUrl}
+                                                onChange={handleImageUrlChange}
+                                            />
+                                            {
+                                                imagePreview !== null && 
+                                                <img 
+                                                    src={imagePreview} 
+                                                    alt="Image Preview" 
+                                                    loading="lazy"
+                                                    className="h-[200px] w-[200px]"
+                                                />
+                                            }
+                                            {
+                                                imagePreview === null  &&
+                                                <ImageIcon className="w-[200px] h-[200px] justify-center items-center align-middle"/>
+                                               
+                                            }
+                                            <Button 
+                                                onClick={(e) => handleAddImageUrl(e)}
+                                                variant={"outline"}
+                                            >
+                                               <Plus/>
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                                <TabsContent value="dune">
+                                    <Card className="bg-primary text-secondary">
+                                        <CardHeader>
+                                            <CardTitle>
+                                                Embed Dune Link
+                                            </CardTitle>
+                                            <CardDescription>
+                                                Paste Dune Embed link here.
+                                            </CardDescription>
+                                            <CardContent className="flex flex-col w-[400px] gap-4">
+                                                <Input
+                                                    type="text"
+                                                    placeholder='<iframe src="https://dune.com/embeds/..."/>'
+                                                    value={duneURL}
+                                                    onChange={handleDuneUrlChange}
+                                                />
+                                                {
+                                                    duneSrc !== '' && 
+                                                    <iframe
+                                                            src={duneSrc}
+                                                            title="Dune Preview"
+                                                            className="h-[200px] w-[200px]"
+                                                    />
+                                                }
+                                                {
+                                                    duneSrc === ''  &&
+                                                    <ImageIcon className="w-[200px] h-[200px] justify-center items-center align-middle"/>
+                                               
+                                                }
+                                                <Button 
+                                                    onClick={(e) => handleAddDuneUrl(e)}
+                                                    variant={"outline"}
+                                                >
+                                                    <Plus/>
+                                                </Button>
+                                            </CardContent>
+                                        </CardHeader>
+                                    </Card>
+                                </TabsContent>
+                            </Tabs>
+                        </CardHeader>
+                    </CardContent>
+                </Card>
             </DialogContent>
         </Dialog>
     )

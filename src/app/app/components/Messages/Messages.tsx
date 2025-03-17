@@ -232,7 +232,7 @@ const Messages:React.FC = () => {
 
   useEffect(() => {
     scrollHandler()
-  })
+  }, [])
 
   return (
     <Card 
