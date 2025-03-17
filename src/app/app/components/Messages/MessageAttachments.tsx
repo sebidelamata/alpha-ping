@@ -38,7 +38,7 @@ import { Plus, SmilePlus } from "lucide-react";
 interface MessageAttachmentsProps {
     message: string;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
-    inputRef: React.RefObject<HTMLInputElement>;
+    inputRef: React.RefObject<HTMLTextAreaElement>;
 }
 
 interface Emoji {
@@ -56,6 +56,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
     const handleEmojiClick = (emoji: Emoji) => {
         setMessage(message + emoji.native)
         inputRef.current?.focus();
+        setOpen(false)
     }
 
     const handleImageUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +72,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
             setImageUrl('')
             setImagePreview(null)
             inputRef.current?.focus();
+            setOpen(false)
         }
     }
 
@@ -90,6 +92,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
             setMessage(message + `${duneURL}`)
             setDuneURL('')
             inputRef.current?.focus();
+            setOpen(false)
         }
     }
 
