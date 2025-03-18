@@ -4,7 +4,7 @@ import React from "react";
 import Channels from "./Channels/Channels";
 import AddChannel from "./Channels/AddChannel";
 import ChannelActions from "./Channels/ChannelActions";
-import ToggleFollowFilter from "./Messages/ToggleFollowFilter";
+import ToggleFollowFilter from "./Profile/ToggleFollowFilter";
 import {
     Sidebar,
     SidebarContent,
