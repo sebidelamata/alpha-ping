@@ -28,9 +28,16 @@ import {
   HoverCardTrigger, 
   HoverCardContent 
 } from "@/components/components/ui/hover-card";
+import { 
+  Popover, 
+  PopoverTrigger, 
+  PopoverContent 
+} from "@/components/components/ui/popover";
 import { Skeleton } from "@/components/components/ui/skeleton";
 import { Badge } from "@/components/components/ui/badge";
 import Image from "next/image";
+import { Button } from "@/components/components/ui/button";
+import { SmilePlus } from "lucide-react";
 
 
 interface MessageProps {
@@ -137,181 +144,180 @@ const Message: React.FC<MessageProps> = ({
   };
 
   return(
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        <Card 
-          className="flex flex-cols-2 bg-primary text-secondary w-full" 
-          key={index}
-          onMouseEnter={() => sethoverOptions(true)}
-          onMouseLeave={() => sethoverOptions(false)}
+      <Card 
+        className="flex flex-cols-2 bg-primary text-secondary w-full" 
+        key={index}
+        onMouseEnter={() => sethoverOptions(true)}
+        onMouseLeave={() => sethoverOptions(false)}
+      >
+      <CardHeader className='flex flex-col items-center'>
+        {
+          <Avatar>
+            {
+              (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
+              <AvatarImage
+                src={profilePic} 
+                alt="User Icon"
+                loading="lazy"
+              /> :
+              <AvatarImage
+                src={"/monkey.svg"} 
+                alt="User Icon"
+                loading="lazy"
+              />
+            }
+            {
+              (username !== null && username !== '' && username !== undefined) ?
+              <AvatarFallback>
+                {username.slice(0, 2)}
+              </AvatarFallback> :
+              <AvatarFallback>
+                {message.account.slice(0, 2)}
+              </AvatarFallback>
+            }
+          </Avatar>
+        }
+        <Link
+          href={`https://arbiscan.io/address/${message.account}`}
+          target='_blank'
         >
-        <CardHeader className='flex flex-col items-center'>
-          {
-            <Avatar>
-              {
-                (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
-                <AvatarImage
-                  src={profilePic} 
-                  alt="User Icon"
-                  loading="lazy"
-                /> :
-                <AvatarImage
-                  src={"/monkey.svg"} 
-                  alt="User Icon"
-                  loading="lazy"
-                />
-              }
-              {
-                (username !== null && username !== '' && username !== undefined) ?
-                <AvatarFallback>
-                  {username.slice(0, 2)}
-                </AvatarFallback> :
-                <AvatarFallback>
-                  {message.account.slice(0, 2)}
-                </AvatarFallback>
-              }
-            </Avatar>
-          }
-          <Link
-            href={`https://arbiscan.io/address/${message.account}`}
-            target='_blank'
-          >
-            <h4>
-              {
-                usernameArrayLoading === true ?
-                message.account.slice(0, 6) + '...' + message.account.slice(38, 42) :
-                  (username !== null && username !== '') ?
-                  username :
-                  message.account.slice(0, 6) + '...' + message.account.slice(38, 42)
-              }
-            </h4>
-          </Link>
-          {
-            bansArrayLoading === true &&
-            <Skeleton className="h-6 w-16 rounded-md" />
-          }
-          {
-            currentChannelMod === false &&
-            owner === false &&
-            hoverOptions === true &&
-            userBan === true &&
-            <Badge variant="destructive">
-              Banned
-            </Badge>
-          }
-          {
-            userBan === true &&
-            hoverOptions === false &&
-            <Badge variant="destructive">
-              Banned
-            </Badge>
-          }
-          {
-            (
-              blacklistArrayLoading === true ||
-              followsArrayLoading === true ||
-              blocksArrayLoading == true
-            ) &&
-            <Skeleton className="h-6 w-16 rounded-md" />
-          }
-          {
-            owner === true &&
-            hoverOptions === false &&
-            userBlacklist === true &&
-            <Badge variant="destructive">
-              Blacklisted
-            </Badge>
-          }
-          {
-            userBlacklist === true &&
-            owner === false &&
-            <Badge variant="destructive">
-              Blacklisted
-            </Badge>
-          }
-        </CardHeader>
-        <CardContent className="flex flex-col w-full gap-4">
-          <CardDescription className='flex flex-col gap-4 flex-wrap'>
-            <div className="flex justify-start items-center lg:gap-16 med:gap-8 sm:gap-4 flex-wrap">
-              <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
-              <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
-              <div className='message-timestamp'>
-                {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
-              </div>
+          <h4>
+            {
+              usernameArrayLoading === true ?
+              message.account.slice(0, 6) + '...' + message.account.slice(38, 42) :
+                (username !== null && username !== '') ?
+                username :
+                message.account.slice(0, 6) + '...' + message.account.slice(38, 42)
+            }
+          </h4>
+        </Link>
+        {
+          bansArrayLoading === true &&
+          <Skeleton className="h-6 w-16 rounded-md" />
+        }
+        {
+          currentChannelMod === false &&
+          owner === false &&
+          hoverOptions === true &&
+          userBan === true &&
+          <Badge variant="destructive">
+            Banned
+          </Badge>
+        }
+        {
+          userBan === true &&
+          hoverOptions === false &&
+          <Badge variant="destructive">
+            Banned
+          </Badge>
+        }
+        {
+          (
+            blacklistArrayLoading === true ||
+            followsArrayLoading === true ||
+            blocksArrayLoading == true
+          ) &&
+          <Skeleton className="h-6 w-16 rounded-md" />
+        }
+        {
+          owner === true &&
+          hoverOptions === false &&
+          userBlacklist === true &&
+          <Badge variant="destructive">
+            Blacklisted
+          </Badge>
+        }
+        {
+          userBlacklist === true &&
+          owner === false &&
+          <Badge variant="destructive">
+            Blacklisted
+          </Badge>
+        }
+      </CardHeader>
+      <CardContent className="flex flex-col w-full gap-4">
+        <CardDescription className='flex flex-col gap-4 flex-wrap'>
+          <div className="flex justify-start items-center lg:gap-16 med:gap-8 sm:gap-4 flex-wrap">
+            <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
+            <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
+            <div className='message-timestamp'>
+              {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
             </div>
-            {
-              reply !== null &&
-              message.replyId !== null &&
-                <div className="flex justify-start items-center align-middle gap-2 test-sm">
-                  <Avatar>
-                    {
-                      (replyPFP !== null && replyPFP !== '' && replyPFP !== undefined) ?
-                      <AvatarImage
-                        src={replyPFP} 
-                        alt="User Icon"
-                        loading="lazy"
-                        className="size-6"
-                      /> :
-                      <AvatarImage
-                        src={"/monkey.svg"} 
-                        alt="User Icon"
-                        loading="lazy"
-                      />
-                    }
-                    {
-                      (replyUsername !== null && replyUsername !== '' && replyUsername !== undefined) ?
-                      <AvatarFallback>
-                        {replyUsername.slice(0, 2)}
-                      </AvatarFallback> :
-                      <AvatarFallback>
-                        {message.account.slice(0, 2)}
-                      </AvatarFallback>
-                    }
-                  </Avatar>
-                  <div className="reply-author">
-                    {
-                      (replyUsername !== null && replyUsername !== '' && replyUsername !== undefined) ?
-                      `${replyUsername}` :
-                      `${reply.account.slice(0,4)}...${reply.account.slice(28,32)}`
-                    }
-                  </div>
-                  <p className="message-content-reply">
-                    {
-                    `${reply.text}...`
-                    }
-                  </p>
-                </div>
-            }
-          </CardDescription>
-          <div className='flex flex-col gap-8 justify-start w-full'>
-            <p className='flex flex-wrap'>
-              {cleanMessageText}
-            </p>
-            {
-              imageUrls.map((url, idx) => (
-                <Image 
-                  key={idx} 
-                  src={url} 
-                  alt={`Linked content ${idx}`} 
-                  width={800}
-                  height={800}
-                  loading="lazy"
-                  loader={customLoader}
-                  sizes="(max-width: 600px) 150px, (max-width: 1024px) 300px, 600px"
-                />
-              ))
-            }
-            {
-              iframeStrings.map((iframeString, idx) => (
-                <iframe
-                  key={idx}
-                  src={iframeString}
-                  title={`Embedded content ${idx}`}
-                  className="message-iframe"
-                />
-              ))
-            }
           </div>
+          {
+            reply !== null &&
+            message.replyId !== null &&
+              <div className="flex justify-start items-center align-middle gap-2 test-sm">
+                <Avatar>
+                  {
+                    (replyPFP !== null && replyPFP !== '' && replyPFP !== undefined) ?
+                    <AvatarImage
+                      src={replyPFP} 
+                      alt="User Icon"
+                      loading="lazy"
+                      className="size-6"
+                    /> :
+                    <AvatarImage
+                      src={"/monkey.svg"} 
+                      alt="User Icon"
+                      loading="lazy"
+                    />
+                  }
+                  {
+                    (replyUsername !== null && replyUsername !== '' && replyUsername !== undefined) ?
+                    <AvatarFallback>
+                      {replyUsername.slice(0, 2)}
+                    </AvatarFallback> :
+                    <AvatarFallback>
+                      {message.account.slice(0, 2)}
+                    </AvatarFallback>
+                  }
+                </Avatar>
+                <div className="reply-author">
+                  {
+                    (replyUsername !== null && replyUsername !== '' && replyUsername !== undefined) ?
+                    `${replyUsername}` :
+                    `${reply.account.slice(0,4)}...${reply.account.slice(28,32)}`
+                  }
+                </div>
+                <p className="message-content-reply">
+                  {
+                  `${reply.text}...`
+                  }
+                </p>
+              </div>
+          }
+        </CardDescription>
+        <div className='flex flex-col gap-8 justify-start w-full'>
+          <p className='flex flex-wrap'>
+            {cleanMessageText}
+          </p>
+          {
+            imageUrls.map((url, idx) => (
+              <Image 
+                key={idx} 
+                src={url} 
+                alt={`Linked content ${idx}`} 
+                width={800}
+                height={800}
+                loading="lazy"
+                loader={customLoader}
+                sizes="(max-width: 600px) 150px, (max-width: 1024px) 300px, 600px"
+              />
+            ))
+          }
+          {
+            iframeStrings.map((iframeString, idx) => (
+              <iframe
+                key={idx}
+                src={iframeString}
+                title={`Embedded content ${idx}`}
+                className="message-iframe"
+              />
+            ))
+          }
+        </div>
+        <div className="flex flex-row gap-4">
           <ul className="message-content-row-three">
             {
               message !== null && 
@@ -335,24 +341,27 @@ const Message: React.FC<MessageProps> = ({
               ))
             }
           </ul>
-        </CardContent>
-      </Card>
-      </HoverCardTrigger>
-      <HoverCardContent 
-        className="bg-primary text-secondary absolute bottom-8" 
-        sticky="always"
-      >
-        <MessageHoverOptions 
-          message={message}
-          setReplyId={setReplyId}
-          userBan={userBan}
-          userBlacklist={userBlacklist}
-          currentChannelMod={currentChannelMod}
-          username={username}
-          profilePic={profilePic}
-        />
-      </HoverCardContent>
-    </HoverCard>
+          <Popover>
+            <PopoverTrigger>
+              <Button>
+                <SmilePlus/>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="bg-primary text-secondary">
+              <MessageHoverOptions 
+                message={message}
+                setReplyId={setReplyId}
+                userBan={userBan}
+                userBlacklist={userBlacklist}
+                currentChannelMod={currentChannelMod}
+                username={username}
+                profilePic={profilePic}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
