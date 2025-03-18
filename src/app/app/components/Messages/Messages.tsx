@@ -13,10 +13,10 @@ import {
 import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { useEtherProviderContext } from '../../../../contexts/ProviderContext'
 import { useChannelProviderContext } from '../../../../contexts/ChannelContext'
+import { useUserProviderContext } from '../../../../contexts/UserContext';
 import Message from './Message'
 import SubmitMessage from './SubmitMessage'
 import { useMessagesProviderContext } from '../../../../contexts/MessagesContext'
-import { useUserProviderContext } from '../../../../contexts/UserContext'
 import { 
   Card, 
   CardContent,
@@ -56,10 +56,20 @@ interface ErrorType{
 
 const Messages:React.FC = () => {
 
-  const { signer, alphaPING } = useEtherProviderContext()
+  const { 
+    signer, 
+    alphaPING 
+  } = useEtherProviderContext()
   const { currentChannel } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()
-  const { txMessageBan, txMessageBlacklist, account, txMessageFollow, txMessageBlock } = useUserProviderContext()
+  const { 
+    txMessageBan, 
+    txMessageBlacklist, 
+    account, 
+    txMessageFollow, 
+    txMessageBlock, 
+    followFilter 
+  } = useUserProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -67,8 +77,6 @@ const Messages:React.FC = () => {
 
   // this holds the value (if there is one) of the reply id of a message
   const [replyId, setReplyId] = useState<string | null>(null)
-  // this is the follow filter state
-  const [followFilter, setFollowFilter] = useState(false);
 
   useEffect(() => {
     if(currentChannel?.tokenAddress !== undefined){
@@ -236,12 +244,12 @@ const Messages:React.FC = () => {
 
   return (
     <Card 
-      className="flex flex-col w-full h-full bg-primary text-secondary"
+      className="flex flex-col w-full h-full bg-primary text-secondary overflow-clip"
       onWheel={(e) => {
         e.stopPropagation(); 
       }}
     >
-      <CardContent className='flex-1 h-full w-[100%]'>
+      <CardContent className='flex-1 h-full w-full'>
         { 
           (
             mockMessages === undefined || 
@@ -291,47 +299,47 @@ const Messages:React.FC = () => {
         {
           currentChannel && 
           followFilter === true &&
-          <ScrollArea className='h-full overflow-y-auto w-[100%]'>
-            {
-              mockMessages
-                .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
-                .map((message, index) => (
-                  <Message
-                    key={message._id}
-                    message={message}
-                    index={index}
-                    tokenDecimals={tokenDecimals}
-                    tokenAddress={currentChannel?.tokenAddress}
-                    setReplyId={setReplyId}
-                    reply={
-                      message.replyId !== null && message.replyId ? 
-                      // swp this
-                      mockMessages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
-                      null
-                    }
-                    profilePic={profilePics[message.account]}
-                    username={usernameArray[message.account]}
-                    usernameArrayLoading={usernameArrayLoading}
-                    userBan={bansArray[message.account]}
-                    bansArrayLoading={bansArrayLoading}
-                    userBlacklist={blacklistArray[message.account]}
-                    blacklistArrayLoading={blacklistArrayLoading}
-                    followsArrayLoading={followsArrayLoading}
-                    blocksArrayLoading={blocksArrayLoading}
-                  />
-              ))
-            }
+          <ScrollArea className='h-full overflow-y-auto w-full'>
+            <ul>
+              {
+                mockMessages
+                  .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+                  .map((message, index) => (
+                    <Message
+                      key={message._id}
+                      message={message}
+                      index={index}
+                      tokenDecimals={tokenDecimals}
+                      tokenAddress={currentChannel?.tokenAddress}
+                      setReplyId={setReplyId}
+                      reply={
+                        message.replyId !== null && message.replyId ? 
+                        // swp this
+                        mockMessages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                        null
+                      }
+                      profilePic={profilePics[message.account]}
+                      username={usernameArray[message.account]}
+                      usernameArrayLoading={usernameArrayLoading}
+                      userBan={bansArray[message.account]}
+                      bansArrayLoading={bansArrayLoading}
+                      userBlacklist={blacklistArray[message.account]}
+                      blacklistArrayLoading={blacklistArrayLoading}
+                      followsArrayLoading={followsArrayLoading}
+                      blocksArrayLoading={blocksArrayLoading}
+                    />
+                ))
+              }
+            </ul>
           </ScrollArea>
         }
         <div ref={messageEndRef} />
         { error !== null && <p>{error}</p>}
-          <CardFooter className="sticky bottom-0 bg-primary py-3">
+          <CardFooter className="sticky bottom-0 bg-primary py-3 w-full h-full">
             <SubmitMessage
               userBalance={userBalance}
               replyId={replyId}
               setReplyId={setReplyId}
-              followFilter={followFilter}
-              setFollowFilter={setFollowFilter}
             />
         </CardFooter>
       </CardContent>

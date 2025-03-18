@@ -34,6 +34,8 @@ interface UserProviderType{
     setUserUsername: React.Dispatch<React.SetStateAction<string | null>>;
     userProfilePic: string | null;
     setUserProfilePic: React.Dispatch<React.SetStateAction<string | null>>;
+    followFilter: boolean;
+    setFollowFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface ErrorType{
@@ -84,6 +86,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [userUsername, setUserUsername] = useState<string | null>(null)
     // grab user profile pic
     const [userProfilePic, setUserProfilePic] = useState<string | null>(null)
+    // is the follow filter on
+    const [followFilter, setFollowFilter] = useState(false);
 
     // loadstates
     const [userAttributesLoading, setUserAttributesLoading] = useState<boolean>(false)
@@ -206,7 +210,9 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             userUsername,
             setUserUsername,
             userProfilePic,
-            setUserProfilePic
+            setUserProfilePic,
+            followFilter,
+            setFollowFilter
         }}>
             {children}
         </UserContext.Provider>

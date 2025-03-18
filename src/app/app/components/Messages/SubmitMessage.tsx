@@ -8,7 +8,6 @@ import React, {
     useEffect
 } from "react"
 import MessageAttachments from "./MessageAttachments"
-import ToggleFollowFilter from "./ToggleFollowFilter"
 import { useSocketProviderContext } from "../../../../contexts/SocketContext"
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext"
 import { useUserProviderContext } from "../../../../contexts/UserContext"
@@ -27,16 +26,12 @@ interface SubmitMessageProps {
     userBalance: string | null;
     replyId: string | null;
     setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
-    followFilter: boolean;
-    setFollowFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SubmitMessage: React.FC<SubmitMessageProps> = ({ 
   userBalance, 
   replyId, 
   setReplyId,
-  followFilter,
-  setFollowFilter
 }) => {
 
 
@@ -154,7 +149,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
 
 
     return(
-        <form onSubmit={sendMessageMouse} className='flex flex-row justify-between gap-4 w-full'>
+        <form onSubmit={sendMessageMouse} className='flex flex-row justify-between items-center gap-4 w-full'>
         {
           (
             currentChannel && 
@@ -279,7 +274,6 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
             <Send/>
           </Button>
         </div>
-        <ToggleFollowFilter followFilter={followFilter} setFollowFilter={setFollowFilter}/>
       </form>
     )
 }

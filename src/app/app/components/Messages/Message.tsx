@@ -339,7 +339,7 @@ const Message: React.FC<MessageProps> = ({
       </Card>
       </HoverCardTrigger>
       <HoverCardContent 
-        className="bg-primary text-secondary" 
+        className="bg-primary text-secondary absolute bottom-8" 
         sticky="always"
       >
         <MessageHoverOptions 

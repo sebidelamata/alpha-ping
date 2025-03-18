@@ -4,6 +4,7 @@ import React from "react";
 import Channels from "./Channels/Channels";
 import AddChannel from "./Channels/AddChannel";
 import ChannelActions from "./Channels/ChannelActions";
+import ToggleFollowFilter from "./Messages/ToggleFollowFilter";
 import {
     Sidebar,
     SidebarContent,
@@ -34,6 +35,7 @@ const AppSidebar = () => {
                     className="border border-accent"
                 />
                 <ChannelActions/>
+                <ToggleFollowFilter/>
             </SidebarContent>
             <Separator 
                     className="border border-accent"

@@ -1,4 +1,5 @@
 import React from "react";
+import { useUserProviderContext } from "src/contexts/UserContext";
 import { 
   Card, 
   CardContent, 
@@ -7,12 +8,9 @@ import {
 import { Label } from "@/components/components/ui/label";
 import { Switch } from "@/components/components/ui/switch";
 
-interface ToggleFollowFilterProps{
-    followFilter: boolean;
-    setFollowFilter: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const ToggleFollowFilter:React.FC = () => {
 
-const ToggleFollowFilter:React.FC<ToggleFollowFilterProps> = ({followFilter, setFollowFilter}) => {
+  const { followFilter, setFollowFilter } = useUserProviderContext()
 
   const handleToggle = (checked:boolean) => {
     setFollowFilter(checked)
@@ -20,7 +18,7 @@ const ToggleFollowFilter:React.FC<ToggleFollowFilterProps> = ({followFilter, set
 
   return (
     <Card className="flex flex-col gap-2 bg-primary text-secondary">
-      <CardContent>
+      <CardContent className="flex justify-end align-bottom items-baseline">
         <CardHeader>
           <Label>
             Follows
@@ -28,7 +26,7 @@ const ToggleFollowFilter:React.FC<ToggleFollowFilterProps> = ({followFilter, set
           <Switch 
             checked={followFilter}
             onCheckedChange={handleToggle}
-            className="border-secondary"
+            className="border-secondary data-[state=checked]:bg-accent data-[state=checked]:border-accent"
           />
         </CardHeader>
       </CardContent>

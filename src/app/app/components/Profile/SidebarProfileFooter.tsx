@@ -24,7 +24,7 @@ const SidebarProfileFooter:React.FC = () => {
 
     return(
         <SidebarFooter
-            className="bg-primary text-accent"
+            className="flex flex-col bg-primary text-accent"
         >
             <Drawer>
                 <DrawerTrigger>

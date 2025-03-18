@@ -101,7 +101,7 @@ const MessageAttachments: React.FC<MessageAttachmentsProps> = ({ message, setMes
             open={open} 
             onOpenChange={setOpen}
         >
-            <DialogTrigger asChild>
+            <DialogTrigger asChild className="flex px-8 items-center justify-center">
                 <Button 
                     type="button" 
                     className="w-[36px] h-[36px] border-accent"
