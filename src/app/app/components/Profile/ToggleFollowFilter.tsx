@@ -17,16 +17,16 @@ const ToggleFollowFilter:React.FC = () => {
   }
 
   return (
-    <Card className="flex flex-col gap-2 bg-primary text-secondary">
-      <CardContent className="flex justify-end align-bottom items-baseline">
-        <CardHeader>
-          <Label>
+    <Card className="bg-primary text-secondary">
+      <CardContent className="h-4">
+        <CardHeader className="relative bottom-8 flex flex-row gap-2 justify-start align-middle items-center">
+          <Label className="text-lg align-middle items-center">
             Follows
           </Label>
           <Switch 
             checked={followFilter}
             onCheckedChange={handleToggle}
-            className="border-secondary data-[state=checked]:bg-accent data-[state=checked]:border-accent"
+            className="relative data-[state=unchecked]:bg-accent  data-[state=unchecked]:border-secondary data-[state=checked]:bg-secondary data-[state=checked]:border-secondary"
           />
         </CardHeader>
       </CardContent>

@@ -24,11 +24,6 @@ import {
   AvatarFallback 
 } from "@/components/components/ui/avatar";
 import { 
-  HoverCard, 
-  HoverCardTrigger, 
-  HoverCardContent 
-} from "@/components/components/ui/hover-card";
-import { 
   Popover, 
   PopoverTrigger, 
   PopoverContent 
@@ -38,6 +33,7 @@ import { Badge } from "@/components/components/ui/badge";
 import Image from "next/image";
 import { Button } from "@/components/components/ui/button";
 import { SmilePlus } from "lucide-react";
+import PfpPopover from "./pfpPopover";
 
 
 interface MessageProps {
@@ -76,7 +72,10 @@ const Message: React.FC<MessageProps> = ({
   blocksArrayLoading
 }) => {
 
-    const { currentChannelMod, owner } = useUserProviderContext()
+    const { 
+      currentChannelMod, 
+      owner 
+    } = useUserProviderContext()
     const { alphaPING } = useEtherProviderContext()
 
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
@@ -152,30 +151,41 @@ const Message: React.FC<MessageProps> = ({
       >
       <CardHeader className='flex flex-col items-center'>
         {
-          <Avatar>
-            {
-              (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
-              <AvatarImage
-                src={profilePic} 
-                alt="User Icon"
-                loading="lazy"
-              /> :
-              <AvatarImage
-                src={"/monkey.svg"} 
-                alt="User Icon"
-                loading="lazy"
+          <Popover>
+            <PopoverTrigger asChild>
+              <Avatar>
+                {
+                  (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
+                  <AvatarImage
+                    src={profilePic} 
+                    alt="User Icon"
+                    loading="lazy"
+                  /> :
+                  <AvatarImage
+                    src={"/monkey.svg"} 
+                    alt="User Icon"
+                    loading="lazy"
+                  />
+                }
+                {
+                  (username !== null && username !== '' && username !== undefined) ?
+                  <AvatarFallback>
+                    {username.slice(0, 2)}
+                  </AvatarFallback> :
+                  <AvatarFallback>
+                    {message.account.slice(0, 2)}
+                  </AvatarFallback>
+                }
+              </Avatar>
+            </PopoverTrigger>
+            <PopoverContent className="bg-primary text-secondary border-accent">
+              <PfpPopover
+                profilePic={profilePic}
+                username={username}
+                message={message}
               />
-            }
-            {
-              (username !== null && username !== '' && username !== undefined) ?
-              <AvatarFallback>
-                {username.slice(0, 2)}
-              </AvatarFallback> :
-              <AvatarFallback>
-                {message.account.slice(0, 2)}
-              </AvatarFallback>
-            }
-          </Avatar>
+            </PopoverContent>
+          </Popover>
         }
         <Link
           href={`https://arbiscan.io/address/${message.account}`}
