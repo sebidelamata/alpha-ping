@@ -14,10 +14,6 @@ import { useUserProviderContext } from "../../../../contexts/UserContext"
 import DeleteMessage from "./DeleteMessage"
 import { Button } from "@/components/components/ui/button";
 import { Reply } from "lucide-react";
-import BanUser from "./BanUser";
-import UnbanUser from "./UnbanUser";
-import BlacklistUser from "./BlacklistUser";
-import UnblacklistUser from "./UnblacklistUser";
 
 interface Emoji {
     native: string
@@ -26,21 +22,11 @@ interface Emoji {
 interface MessageHoverOptionsProps {
     message: Message;
     setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
-    userBan: boolean;
-    userBlacklist: boolean;
-    currentChannelMod: boolean;
-    username: string | null;
-    profilePic: string | null;
 }
 
 const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
     message, 
-    setReplyId,
-    userBan,
-    userBlacklist,
-    currentChannelMod,
-    username,
-    profilePic
+    setReplyId
 }) => {
 
     const { socket } = useSocketProviderContext()
@@ -141,7 +127,7 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
     }, [signer])
 
     return(
-        <ul className="flex flex-wrap gap-4 justify-center items-center">
+        <ul className="flex flex-wrap gap-4 justify-center items-center border-accent-1 border-solid">
             <li 
                 ref={modalRef}
             >
@@ -182,52 +168,6 @@ const MessageHoverOptions: React.FC<MessageHoverOptionsProps> = ({
                             messageID={message._id as unknown as string}
                         />
                 </li>
-            }
-            {
-                (
-                currentChannelMod === true ||
-                owner === true
-                ) &&
-                userBan === false &&
-                <li>
-                    <BanUser 
-                        user={message.account}
-                        username={username}
-                        profilePic={profilePic}
-                    />
-                </li>
-            }
-            {
-                (
-                currentChannelMod === true ||
-                owner === true
-                ) &&
-                userBan === true &&
-                <li>
-                    <UnbanUser 
-                        user={message.account}
-                        username={username}
-                        profilePic={profilePic}
-                    />
-                </li>
-            }
-            {
-                owner === true &&
-                userBlacklist === false &&
-                <BlacklistUser 
-                    user={message.account}
-                    username={username}
-                    profilePic={profilePic}
-                />
-            }
-            {
-                owner === true &&
-                userBlacklist === true &&
-                <UnblacklistUser 
-                    user={message.account}
-                    username={username}
-                    profilePic={profilePic}
-                />
             }
         </ul>
     )

@@ -33,7 +33,7 @@ import { Badge } from "@/components/components/ui/badge";
 import Image from "next/image";
 import { Button } from "@/components/components/ui/button";
 import { SmilePlus } from "lucide-react";
-import PfpPopover from "./pfpPopover";
+import PfpPopover from "./PfpPopover";
 
 
 interface MessageProps {
@@ -47,6 +47,8 @@ interface MessageProps {
     username: string | null;
     usernameArrayLoading: boolean;
     userBan: boolean;
+    following: boolean;
+    blocked: boolean;
     bansArrayLoading: boolean;
     userBlacklist: boolean;
     blacklistArrayLoading: boolean;
@@ -65,6 +67,8 @@ const Message: React.FC<MessageProps> = ({
   username,
   usernameArrayLoading,
   userBan,
+  following,
+  blocked,
   bansArrayLoading,
   userBlacklist,
   blacklistArrayLoading,
@@ -183,6 +187,10 @@ const Message: React.FC<MessageProps> = ({
                 profilePic={profilePic}
                 username={username}
                 message={message}
+                userBan={userBan}
+                userBlacklist={userBlacklist}
+                following={following}
+                blocked={blocked}
               />
             </PopoverContent>
           </Popover>
@@ -361,11 +369,6 @@ const Message: React.FC<MessageProps> = ({
               <MessageHoverOptions 
                 message={message}
                 setReplyId={setReplyId}
-                userBan={userBan}
-                userBlacklist={userBlacklist}
-                currentChannelMod={currentChannelMod}
-                username={username}
-                profilePic={profilePic}
               />
             </PopoverContent>
           </Popover>

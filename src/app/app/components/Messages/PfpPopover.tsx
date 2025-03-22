@@ -11,26 +11,50 @@ import {
     Card, 
     CardHeader, 
     CardTitle, 
-    CardContent, 
-    CardDescription 
+    CardContent
 } from "@/components/components/ui/card";
-import MessageHoverOptions from "./MessageHoverOptions";
+import BanUser from "./BanUser";
+import UnbanUser from "./UnbanUser";
+import BlacklistUser from "./BlacklistUser";
+import UnblacklistUser from "./UnblacklistUser";
+import FollowUser from "./FollowUser";
+import UnfollowUser from "./UnfollowUser";
+import BlockUser from "./BlockUser";
+import { useUserProviderContext } from "src/contexts/UserContext";
+
 
 interface IPfpPopover{
     profilePic: string | null;
     username: string | null;
     message: Message;
+    userBan: boolean;
+    userBlacklist: boolean;
+    following: boolean;
+    blocked: boolean;
 }
 
 const PfpPopover:React.FC<IPfpPopover> = ({
     profilePic,
     username,
-    message
+    message,
+    userBan,
+    userBlacklist,
+    following,
+    blocked
 }) => {
+
+    const { 
+        owner, 
+        currentChannelMod,
+        account 
+    } = useUserProviderContext()
+
     return(
-       <Card className="flex bg-primary text-secondary">
+       <Card className="flex flex-col bg-primary text-secondary">
         <CardHeader className="flex bg-primary text-secondary">
-            <CardTitle className="flex bg-accent text-secondary justify-center items-center gap-4 px-2 rounded-lg">
+            <CardTitle 
+                className="flex flex-col bg-accent text-secondary justify-center items-center gap-4 px-2 rounded-lg"
+            >
                <Avatar>
                     {
                         (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
@@ -71,8 +95,81 @@ const PfpPopover:React.FC<IPfpPopover> = ({
                 </Link>
             </CardTitle>
         </CardHeader>
-        <CardContent>
-            
+        <CardContent className="flex flex-col gap-4">
+            <ul>
+                {
+                    (
+                    currentChannelMod === true ||
+                    owner === true
+                    ) &&
+                    userBan === false &&
+                    message.account !== account &&
+
+                    <li>
+                        test
+                        <BanUser 
+                            user={message.account}
+                            username={username}
+                            profilePic={profilePic}
+                        />
+                    </li>
+                }
+                {
+                    (
+                    currentChannelMod === true ||
+                    owner === true
+                    ) &&
+                    userBan === true &&
+                    message.account !== account &&
+                    <li>
+                        <UnbanUser 
+                            user={message.account}
+                            username={username}
+                            profilePic={profilePic}
+                        />
+                    </li>
+                }
+                {
+                    owner === true &&
+                    userBlacklist === false &&
+                    <li>
+                        <BlacklistUser 
+                            user={message.account}
+                            username={username}
+                            profilePic={profilePic}
+                        />
+                    </li>
+                }
+                {
+                    owner === true &&
+                    userBlacklist === true &&
+                    <li>
+                        <UnblacklistUser 
+                            user={message.account}
+                            username={username}
+                            profilePic={profilePic}
+                        />
+                    </li>
+                }
+                {
+                    following === false &&
+                    <li>
+                        <FollowUser account={account}/>
+                    </li>
+                }
+                {
+                    following === true &&
+                    <li>
+                        <UnfollowUser account={account}/> 
+                    </li>
+                }
+                {
+                    blocked === false &&
+                    <li>
+                        <BlockUser user={account}/> 
+                    </li>
+                }
+            </ul>
         </CardContent>
        </Card>
     )
