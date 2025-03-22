@@ -14,6 +14,7 @@ import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC2
 import { useEtherProviderContext } from '../../../../contexts/ProviderContext'
 import { useChannelProviderContext } from '../../../../contexts/ChannelContext'
 import { useUserProviderContext } from '../../../../contexts/UserContext';
+import SkeletonMessageFeed from './SkeletonMessageFeed';
 import Message from './Message'
 import SubmitMessage from './SubmitMessage'
 import { useMessagesProviderContext } from '../../../../contexts/MessagesContext'
@@ -254,11 +255,15 @@ const Messages:React.FC = () => {
           (
             mockMessages === undefined || 
             mockMessages === null || 
-            mockMessages.length === 0 
+            mockMessages.length === 0 ||
+            currentChannel === null ||
+            mockMessages
+              .filter(message => message.channel === currentChannel.id.toString())
+              .length === 0
           ) &&
-          <CardHeader className='h-full overflow-y-auto w-[100%] text-2xl flex justify-center items-center'>
-            No messages to display.
-          </CardHeader>
+          <ScrollArea className='h-full overflow-y-auto w-full'>
+            <SkeletonMessageFeed/>
+          </ScrollArea>
         }
         {
           currentChannel && 
@@ -299,6 +304,21 @@ const Messages:React.FC = () => {
         {
           currentChannel && 
           followFilter === true &&
+          // if length of messages from follow array is > 0 we will display
+          mockMessages
+            .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+            .length === 0 &&
+          <ScrollArea className='h-full overflow-y-auto w-full'>
+            <SkeletonMessageFeed/>
+          </ScrollArea>
+        }
+        {
+          currentChannel && 
+          followFilter === true &&
+          // if length of messages from follow array is > 0 we will display
+          mockMessages
+            .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+            .length > 0 &&
           <ScrollArea className='h-full overflow-y-auto w-full'>
             <ul>
               {
