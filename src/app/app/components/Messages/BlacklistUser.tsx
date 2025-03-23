@@ -72,8 +72,9 @@ const BlacklistUser:React.FC<BlacklistUserProps> = ({
                 }
             }
         }catch(error: unknown){
-            if((error as ErrorType).reason)
-            setError((error as ErrorType).reason)
+            if((error as ErrorType).reason){
+                setError((error as ErrorType).reason)
+            }
             if(error !== null && (error as ErrorType).reason !== undefined){
                 toast({
                     title: "Transaction Error!",

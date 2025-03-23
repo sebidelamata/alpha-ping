@@ -202,7 +202,7 @@ const UnfollowUser:React.FC<UnfollowUserProps> = ({
                             variant="destructive" 
                             className="w-[200px]"
                         >
-                            Follow
+                            <UserMinus/>
                         </Button>
                         <Button
                             variant="outline"

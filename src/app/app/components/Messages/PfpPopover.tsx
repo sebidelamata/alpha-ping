@@ -175,7 +175,11 @@ const PfpPopover:React.FC<IPfpPopover> = ({
                     {
                         blocked === false &&
                         <li>
-                            <BlockUser user={account}/> 
+                            <BlockUser 
+                                user={account}
+                                username={username}
+                                profilePic={profilePic}
+                            /> 
                         </li>
                     }
                 </ul>
