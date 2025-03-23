@@ -1,7 +1,8 @@
 'use client';
 
 import React, {
-    useState
+    useState,
+    MouseEvent
 } from "react";
 import { ethers } from 'ethers';
 import { AlphaPING } from "../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
