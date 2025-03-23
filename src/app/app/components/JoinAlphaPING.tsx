@@ -1,6 +1,8 @@
 'use client';
 
-import React from "react";
+import React, {
+    useState
+} from "react";
 import { useEtherProviderContext } from '../../../contexts/ProviderContext';
 import {
     Dialog,
@@ -8,9 +10,21 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
+    DialogFooter
 } from "@/components/components/ui/dialog"
 import { Button } from "@/components/components/ui/button";
-import { Separator } from "@radix-ui/react-separator";
+import { Separator } from "@/components/components/ui/separator";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck,
+    CircleX
+} from "lucide-react";
+import Link from "next/link";
+import Loading from "./Loading";
+
+interface ErrorType {
+    reason: string
+}
 
 interface JoinAlphaPINGProps {
     setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,13 +34,83 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
     setIsMember
 }) => {
 
+    const { toast } = useToast()
     const { alphaPING, signer, provider } = useEtherProviderContext()
 
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
+    const [txMessage, setTxMessage] = useState<string | null>(null)
+
     const joinAlphaPING = async() => {
-        if(provider){
-            const tx = await alphaPING?.connect(signer).mint()
-            await tx?.wait()
-            setIsMember(true)
+        try{
+            if(provider){
+                setError(null)
+                setLoading(true)
+                const tx = await alphaPING?.connect(signer).mint()
+                await tx?.wait()
+                if(tx !== undefined && tx.hash !== undefined){
+                    setTxMessage(tx?.hash)
+                }
+                setIsMember(true)
+            }
+        }catch(error: unknown){
+            if((error as ErrorType).reason){
+                setError((error as ErrorType).reason)
+            }
+            if(error !== null && (error as ErrorType).reason !== undefined && signer){
+                toast({
+                    title: "Transaction Error!",
+                    description: `Mint Membership for ${(await signer.getAddress())
+                        .toString()
+                        .slice(0, 4)}...
+                        ${(await signer.getAddress())
+                            .toString()
+                            .slice(38,42)} Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).reason.length > 100 ?
+                                `${(error as ErrorType).reason.slice(0,100)}...` :
+                                (error as ErrorType).reason
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
+        }finally{
+            setLoading(false)
+            if(txMessage !== null && signer){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: `Mint Membership for ${(await signer.getAddress())
+                        .toString()
+                        .slice(0, 4)}...
+                        ${(await signer.getAddress())
+                            .toString()
+                            .slice(38,42)} Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
     }
 
@@ -67,6 +151,20 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
 
                         }
                 </DialogHeader>
+                {
+                    loading === true &&
+                        <Loading/>
+                }
+                {
+                    error !== null &&
+                    <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
+                        {
+                            error.length > 50 ?
+                            `${error.slice(0,50)}...` :
+                            error
+                        }
+                    </DialogFooter>
+                }
             </DialogContent>
         </Dialog>
     )
