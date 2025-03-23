@@ -2,7 +2,8 @@
 
 import React, {
     useState,
-    FormEvent
+    FormEvent,
+    MouseEvent
 } from "react";
 import Loading from "../Loading";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
