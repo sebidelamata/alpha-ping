@@ -132,13 +132,15 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
                         </div>
                         <Separator className="w-64 border border-secondary"/>
                         <DialogDescription>
-                            Mint a Membership and Swing into the Chat!
+                            Mint a Free Membership and Swing into the Chat!
                         </DialogDescription>
                         <Separator className="h-2"/>
                         {
                             signer ? (
                                 <Button 
                                     onClick={() => joinAlphaPING()}
+                                    variant={"outline"}
+                                    className="w-[200px] text-3xl"
                                 >
                                     Join
                                 </Button>
