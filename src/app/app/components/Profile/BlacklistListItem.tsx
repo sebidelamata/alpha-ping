@@ -32,19 +32,19 @@ const BlacklistListItem:React.FC<BlacklistListItemProps> = ({
 
     const [username, setUsername] = useState<string | null>(null)
     const [userPFP, setUserPFP] = useState<string | null>(null)
-    const fetchUserMetaData = async () => {
-        try{
-            const usernameResult = await alphaPING?.username(user) || null
-            setUsername(usernameResult)
-            const pfpResult = await alphaPING?.profilePic(user) || null
-            setUserPFP(pfpResult)
-        }catch(error){
-            console.error(error)
-        }
-    }
     useEffect(() => {
+        const fetchUserMetaData = async () => {
+            try{
+                const usernameResult = await alphaPING?.username(user) || null
+                setUsername(usernameResult)
+                const pfpResult = await alphaPING?.profilePic(user) || null
+                setUserPFP(pfpResult)
+            }catch(error){
+                console.error(error)
+            }
+        }
         fetchUserMetaData()
-    }, [user])
+    }, [user, alphaPING])
 
     return(
         <Card className="bg-primary text-secondary">

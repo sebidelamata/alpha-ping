@@ -215,7 +215,7 @@ describe("AlphaPING", function () {
     let isBlackListedBefore: boolean
     this.beforeEach(async () => {
       isBlackListedBefore = await alphaPING.isBlackListed(user)
-      let tx = await alphaPING.connect(deployer).blacklistUser(user)
+      const tx = await alphaPING.connect(deployer).blacklistUser(user)
       await tx.wait()
     })
 
@@ -223,13 +223,13 @@ describe("AlphaPING", function () {
       expect(isBlackListedBefore).to.equal(false)
     })
     it("Allows owner to blacklist user", async () => {
-      let isBlacklisted = await alphaPING.isBlackListed(user)
+      const isBlacklisted = await alphaPING.isBlackListed(user)
       expect(isBlacklisted).to.equal(true)
     })
     it("Allows owner to unblacklist user", async () => {
-      let tx = await alphaPING.connect(deployer).unBlacklistUser(user)
+      const tx = await alphaPING.connect(deployer).unBlacklistUser(user)
       await tx.wait()
-      let isBlackListed = await alphaPING.isBlackListed(user)
+      const isBlackListed = await alphaPING.isBlackListed(user)
       expect(isBlackListed).to.equal(false)
     })
   })
@@ -298,7 +298,7 @@ describe("AlphaPING", function () {
     it("User can unblock Deployer", async () => {
       const tx = await alphaPING.connect(user).removeFromPersonalFollowList(deployer)
       await tx.wait()
-      let isFollowed: boolean = await alphaPING.personalFollowList(user, deployer)
+      const isFollowed: boolean = await alphaPING.personalFollowList(user, deployer)
       expect(isFollowed).to.equal(false)
     })
   })
@@ -307,7 +307,7 @@ describe("AlphaPING", function () {
     let isPromoPeriodBefore: boolean
     beforeEach(async () => {
       isPromoPeriodBefore = await alphaPING.promoPeriod()
-      let tx = await alphaPING.connect(deployer).togglePromoPeriod()
+      const tx = await alphaPING.connect(deployer).togglePromoPeriod()
       await tx.wait()
     })
 
@@ -315,28 +315,28 @@ describe("AlphaPING", function () {
       expect(isPromoPeriodBefore).to.equal(true)
     })
     it("Can turn off promo period", async () => {
-      let isPromoPeriod: boolean = await alphaPING.promoPeriod()
+      const isPromoPeriod: boolean = await alphaPING.promoPeriod()
       expect(isPromoPeriod).to.equal(false)
     })
     it("Can turn promo period back on", async () => {
-      let tx = await alphaPING.connect(deployer).togglePromoPeriod()
-      let isPromoPeriod: boolean = await alphaPING.promoPeriod()
+      const tx = await alphaPING.connect(deployer).togglePromoPeriod()
+      const isPromoPeriod: boolean = await alphaPING.promoPeriod()
       expect(isPromoPeriod).to.equal(true)
     })
   })
 
   describe("Set Premium Subscription Prices", function() {
-    let initialSubscriptionPriceMonth = 5000000
+    const initialSubscriptionPriceMonth = 5000000
 
     it("Premium subscription prices starts at deployment", async () => {
-      let subscriptionPriceMonth = await alphaPING.subscriptionPriceMonthly()
+      const subscriptionPriceMonth = await alphaPING.subscriptionPriceMonthly()
       expect(subscriptionPriceMonth).to.equal(initialSubscriptionPriceMonth)
     })
     it("Can set new monthly subscription price", async () => {
-      let newPrice = 3000
-      let tx = await alphaPING.setSubscriptionPriceMonthly(newPrice)
+      const newPrice = 3000
+      const tx = await alphaPING.setSubscriptionPriceMonthly(newPrice)
       await tx.wait()
-      let newMonthlyPrice = await alphaPING.subscriptionPriceMonthly()
+      const newMonthlyPrice = await alphaPING.subscriptionPriceMonthly()
       expect(newMonthlyPrice).to.equal(newPrice)
     })
   })
@@ -349,7 +349,7 @@ describe("AlphaPING", function () {
       ERC20Faucet = await ethers.getContractFactory("ERC20Faucet")
       eRC20Faucet = await ERC20Faucet.connect(user).deploy()
 
-      let tokenAddress = await eRC20Faucet.getAddress()
+      const tokenAddress = await eRC20Faucet.getAddress()
       // approve spending first
       alphaPINGContract = await alphaPING.getAddress()
       subscriptionPrice = await alphaPING.subscriptionPriceMonthly()
@@ -363,32 +363,32 @@ describe("AlphaPING", function () {
     })
 
     it("Owner is premium subscriber by default (no fee)", async () => {
-      let isOwnerPremium = await alphaPING.isSubscriptionActive(deployer)
+      const isOwnerPremium = await alphaPING.isSubscriptionActive(deployer)
       expect(isOwnerPremium).to.equal(true)
     })
     it("User starts out with no subscription", async () => {
       expect(isPremiumSunscribedBefore).to.equal(false)
     })
     it("User can buy a premium subscription", async () => {
-      let tx = await alphaPING.connect(user).purchaseMonthlySubscription()
+      const tx = await alphaPING.connect(user).purchaseMonthlySubscription()
       await tx.wait()
      
-      let isUserPremium = await alphaPING.isSubscriptionActive(user)
+      const isUserPremium = await alphaPING.isSubscriptionActive(user)
       expect(isUserPremium).to.equal(true)
     })
     it("Confirm premium subscription expiration", async () => {
-      let numberOfSecondsInMonth = 2592000
-      let tx = await alphaPING.connect(user).purchaseMonthlySubscription()
+      const numberOfSecondsInMonth = 2592000
+      const tx = await alphaPING.connect(user).purchaseMonthlySubscription()
       await tx.wait()
-      let userPremiumExpiration = await alphaPING.premiumMembershipExpiry(user)
-      let currentBlock = await ethers.provider.getBlock()
+      const userPremiumExpiration = await alphaPING.premiumMembershipExpiry(user)
+      const currentBlock = await ethers.provider.getBlock()
       expect(userPremiumExpiration).to.equal(currentBlock.timestamp + numberOfSecondsInMonth)
     })
   })
 
   describe("Withdrawing", function() {
-    let balanceBefore: BigInt
-    let subscriptionPrice: BigInt
+    let balanceBefore: bigint
+    let subscriptionPrice: bigint
     beforeEach(async() => {
       // deploy our mock usdc 
       ERC20Faucet = await ethers.getContractFactory("ERC20Faucet")
@@ -397,7 +397,7 @@ describe("AlphaPING", function () {
       balanceBefore = await eRC20Faucet.balanceOf(deployer)
 
       // set mock usdc as currency
-      let tokenAddress = await eRC20Faucet.getAddress()
+      const tokenAddress = await eRC20Faucet.getAddress()
 
       // set our subscription to our mock usdc
       let tx = await alphaPING.setSubscriptionCurrency(tokenAddress)
@@ -416,11 +416,11 @@ describe("AlphaPING", function () {
     })
 
     it("Updates owner balance", async () => {
-      let balanceAfter = await eRC20Faucet.balanceOf(deployer)
+      const balanceAfter = await eRC20Faucet.balanceOf(deployer)
       expect(balanceAfter).to.be.greaterThan(balanceBefore)
     })
     it("Updates contract balance", async () => {
-      let result = await eRC20Faucet.balanceOf(alphaPINGContract)
+      const result = await eRC20Faucet.balanceOf(alphaPINGContract)
       expect(result).to.be.equal(0)
     })
   })

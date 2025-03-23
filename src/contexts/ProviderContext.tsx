@@ -62,60 +62,59 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
   // an array to keep track of which channels the user has joined
   const [hasJoined, setHasJoined] = useState<boolean[]>([])
 
-  const loadBlockchainData = async () => {
-    try{
-
-      // dont freak out if no wallet
-      if (!walletProvider) {
-        console.error("No wallet provider found.");
-        return;
-      }
-      
-      const provider = new ethers.BrowserProvider(walletProvider)
-      setProvider(provider)
-      const network = await provider.getNetwork()//await provider.send('eth_chainId',[]);
-      const chainId = network.chainId.toString()
-      const alphaPING = new ethers.Contract(
-        (config as BlockChainConfig)[chainId].AlphaPING.address,
-        AlphaPINGABI.abi,
-        provider
-      ) as unknown as AlphaPING
-      setAlphaPING(alphaPING)
-  
-      const totalChannels:bigint = await alphaPING.totalChannels()
-      const channels = []
-
-      for (let i = 1; i <= Number(totalChannels); i++) {
-        const channel = await alphaPING.getChannel(i)
-        channels.push(channel)
-      }
-      setChannels(channels)
-
-      const signer:Signer = await provider?.getSigner()
-      setSigner(signer)
-
-      const hasJoinedChannel:boolean[] = []
-
-      for (let i = 1; i <= Number(totalChannels); i++) {
-        const hasJoined = await alphaPING.hasJoinedChannel(
-          (i as ethers.BigNumberish), 
-          await signer.getAddress()
-        )
-        hasJoinedChannel.push(hasJoined)
-      }
-
-      setHasJoined(hasJoinedChannel)
-      
-
-      window.ethereum.on('accountsChanged', async () => {
-        window.location.reload()
-      })
-    }catch(error){
-      console.error("Error loading blockchain data:", error);
-    }
-  }
-
   useEffect(() => {
+    const loadBlockchainData = async () => {
+      try{
+  
+        // dont freak out if no wallet
+        if (!walletProvider) {
+          console.error("No wallet provider found.");
+          return;
+        }
+        
+        const provider = new ethers.BrowserProvider(walletProvider)
+        setProvider(provider)
+        const network = await provider.getNetwork()//await provider.send('eth_chainId',[]);
+        const chainId = network.chainId.toString()
+        const alphaPING = new ethers.Contract(
+          (config as BlockChainConfig)[chainId].AlphaPING.address,
+          AlphaPINGABI.abi,
+          provider
+        ) as unknown as AlphaPING
+        setAlphaPING(alphaPING)
+    
+        const totalChannels:bigint = await alphaPING.totalChannels()
+        const channels = []
+  
+        for (let i = 1; i <= Number(totalChannels); i++) {
+          const channel = await alphaPING.getChannel(i)
+          channels.push(channel)
+        }
+        setChannels(channels)
+  
+        const signer:Signer = await provider?.getSigner()
+        setSigner(signer)
+  
+        const hasJoinedChannel:boolean[] = []
+  
+        for (let i = 1; i <= Number(totalChannels); i++) {
+          const hasJoined = await alphaPING.hasJoinedChannel(
+            (i as ethers.BigNumberish), 
+            await signer.getAddress()
+          )
+          hasJoinedChannel.push(hasJoined)
+        }
+  
+        setHasJoined(hasJoinedChannel)
+        
+  
+        window.ethereum.on('accountsChanged', async () => {
+          window.location.reload()
+        })
+      }catch(error){
+        console.error("Error loading blockchain data:", error);
+      }
+    }
     loadBlockchainData()
     }, [isConnected, walletProvider])
 

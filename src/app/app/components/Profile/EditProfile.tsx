@@ -46,12 +46,22 @@ const EditProfile: React.FC = () => {
             } else {
                 setUserProfilePic(profilePic)
             }
-            console.log(userProfilePic)
         }
     }
+    
     useEffect(() => {
+        const fetchUserProfilePic = async (userAddress: string | null) => {
+            if(userAddress !== null){
+                const profilePic = await alphaPING?.profilePic(userAddress)
+                if(profilePic === undefined){
+                    setUserProfilePic(null)
+                } else {
+                    setUserProfilePic(profilePic)
+                }
+            }
+        }
         fetchUserProfilePic(userAddress)
-    }, [userAddress])
+    }, [userAddress, alphaPING])
 
     // grab username
     const [userUsername, setUserUsername] = useState<string | null>(null)
@@ -66,8 +76,18 @@ const EditProfile: React.FC = () => {
         }
     }
     useEffect(() => {
+        const fetchUserUsername = async (userAddress: string | null) => {
+            if(userAddress !== null){
+                const username = await alphaPING?.username(userAddress)
+                if(username === undefined){
+                    setUserUsername(null)
+                } else {
+                    setUserUsername(username)
+                }
+            }
+        }
         fetchUserUsername(userAddress)
-    }, [userAddress])
+    }, [userAddress, alphaPING])
 
     const handleEditClick = (e: ReactMouseEvent<HTMLDivElement>) => {
         e.preventDefault()

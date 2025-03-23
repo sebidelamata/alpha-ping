@@ -93,92 +93,91 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [userAttributesLoading, setUserAttributesLoading] = useState<boolean>(false)
     const [userAttributesError, setUserAttributesError] = useState<string>('')
 
-    // load up user attributes for this channel
-    const loadUserAttributes = async (): Promise<void> => {
-        if(alphaPING === null){
-            return
-        }
-        // if(currentChannel === null){
-        //     return
-        // }
-        if(signer === null){
-            return
-        }
-
-        // grab user address
-        const account =  await signer.getAddress()
-        setAccount(account)
-
-        try{
-            setUserAttributesLoading(true)
-            
-            //owner
-            const owner = await alphaPING.owner()
-            setOwner(owner === account ? true : false)
-
-            // fetch all channels for which this account is a mod
-            const modResults = []
-            for(let i=0; i<channels.length; i++){
-                const result = await alphaPING.mods(channels[i].id)
-                if(result === account){
-                    modResults.push(channels[i])
-                }
-            }
-            setMod(modResults)
-
-            // fetch current channel mod
-            const checkCurrentChannelMod = currentChannel !== null ? 
-                await alphaPING.mods(currentChannel.id) === account : 
-                false
-            setCurrentChannelMod(checkCurrentChannelMod)
-            
-            //banned
-            const banned = currentChannel ? await alphaPING.channelBans(currentChannel.id, account) : false
-            setBanned(banned)
-            
-            //blacklisted
-            const blacklisted = await alphaPING.isBlackListed(account)
-            setBlacklisted(blacklisted)
-            
-            //author
-            const channelMessages = currentChannel ? messages.filter(message => message.channel === currentChannel.id.toString()) : messages
-            const author = []
-            for(let i=0; i<channelMessages.length; i++){
-                if(account === channelMessages[i].account){
-                    author.push(channelMessages[i]._id)
-                }
-            }
-            setAuthor(author)
-            
-            // grab username
-            if(account !== null){
-                const username = await alphaPING?.username(account)
-                if(username === undefined){
-                    setUserUsername(null)
-                } else {
-                    setUserUsername(username)
-                }
-            }
-            
-            // grab profile pic
-            if(account !== null){
-                const profilePic = await alphaPING?.profilePic(account)
-                if(profilePic === undefined){
-                    setUserProfilePic(null)
-                } else {
-                    setUserProfilePic(profilePic)
-                }
-            }
-
-        }catch(err: unknown){
-            console.error(err as string)
-            setUserAttributesError((err as ErrorType).message)
-        }finally{
-            setUserAttributesLoading(false)
-        }
-    }
-
     useEffect(() => {
+         // load up user attributes for this channel
+        const loadUserAttributes = async (): Promise<void> => {
+            if(alphaPING === null){
+                return
+            }
+            // if(currentChannel === null){
+            //     return
+            // }
+            if(signer === null){
+                return
+            }
+
+            // grab user address
+            const account =  await signer.getAddress()
+            setAccount(account)
+
+            try{
+                setUserAttributesLoading(true)
+                
+                //owner
+                const owner = await alphaPING.owner()
+                setOwner(owner === account ? true : false)
+
+                // fetch all channels for which this account is a mod
+                const modResults = []
+                for(let i=0; i<channels.length; i++){
+                    const result = await alphaPING.mods(channels[i].id)
+                    if(result === account){
+                        modResults.push(channels[i])
+                    }
+                }
+                setMod(modResults)
+
+                // fetch current channel mod
+                const checkCurrentChannelMod = currentChannel !== null ? 
+                    await alphaPING.mods(currentChannel.id) === account : 
+                    false
+                setCurrentChannelMod(checkCurrentChannelMod)
+                
+                //banned
+                const banned = currentChannel ? await alphaPING.channelBans(currentChannel.id, account) : false
+                setBanned(banned)
+                
+                //blacklisted
+                const blacklisted = await alphaPING.isBlackListed(account)
+                setBlacklisted(blacklisted)
+                
+                //author
+                const channelMessages = currentChannel ? messages.filter(message => message.channel === currentChannel.id.toString()) : messages
+                const author = []
+                for(let i=0; i<channelMessages.length; i++){
+                    if(account === channelMessages[i].account){
+                        author.push(channelMessages[i]._id)
+                    }
+                }
+                setAuthor(author)
+                
+                // grab username
+                if(account !== null){
+                    const username = await alphaPING?.username(account)
+                    if(username === undefined){
+                        setUserUsername(null)
+                    } else {
+                        setUserUsername(username)
+                    }
+                }
+                
+                // grab profile pic
+                if(account !== null){
+                    const profilePic = await alphaPING?.profilePic(account)
+                    if(profilePic === undefined){
+                        setUserProfilePic(null)
+                    } else {
+                        setUserProfilePic(profilePic)
+                    }
+                }
+
+            }catch(err: unknown){
+                console.error(err as string)
+                setUserAttributesError((err as ErrorType).message)
+            }finally{
+                setUserAttributesLoading(false)
+            }
+        }
         loadUserAttributes()
         if(userAttributesLoading){
             console.log("User Attributes Loading...")
@@ -186,7 +185,16 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         if(userAttributesError){
             console.error(userAttributesError)
         }
-    }, [currentChannel, account, messages, signer])
+    }, [
+        currentChannel, 
+        account, 
+        messages, 
+        signer,
+        alphaPING,
+        channels,
+        userAttributesError,
+        userAttributesLoading
+    ])
     
     return (
         <UserContext.Provider value={{ 

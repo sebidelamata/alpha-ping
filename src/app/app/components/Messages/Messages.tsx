@@ -21,11 +21,9 @@ import { useMessagesProviderContext } from '../../../../contexts/MessagesContext
 import { 
   Card, 
   CardContent,
-  CardFooter,
-  CardHeader
+  CardFooter
 } from '@/components/components/ui/card';
 import { ScrollArea } from '@/components/components/ui/scroll-area';
-import { mockMessages } from 'mocks/mockMessages';
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -108,10 +106,9 @@ const Messages:React.FC = () => {
       }
     }
     getUserBalance()
-  }, [token])
+  }, [token, signer])
 
   const [profilePics, setProfilePics] = useState<ProfilePics>({})
-  const [profilePicsLoading, setProfilePicsLoading] = useState<boolean>(false)
   const [usernameArray, setUsernameArray] = useState<Usernames>({})
   const [usernameArrayLoading, setUsernameArrayLoading] = useState<boolean>(false)
   const [bansArray, setBansArray] = useState<Bans>({})
@@ -131,13 +128,12 @@ const Messages:React.FC = () => {
           setError(null)
           // store unique profiles for this message feed
           const uniqueProfiles = new Set<string>(
-            mockMessages // switch this back to messages
+            messages // switch this back to messages
               .filter(message => message.channel === currentChannel.id.toString())
               .map(message => message.account)
           );
     
           // grab unique user avatars
-          setProfilePicsLoading(true)
           const profilePicsData: ProfilePics = {};
           await Promise.all(
             Array.from(uniqueProfiles).map( async (profile) => {
@@ -205,7 +201,6 @@ const Messages:React.FC = () => {
       }catch(error){
         setError((error as ErrorType).message)
       }finally{
-        setProfilePicsLoading(false)
         setUsernameArrayLoading(false)
         setBansArrayLoading(false)
         setBlacklistArrayLoading(false)
@@ -253,11 +248,11 @@ const Messages:React.FC = () => {
       <CardContent className='flex-1 h-full w-full'>
         { 
           (
-            mockMessages === undefined || 
-            mockMessages === null || 
-            mockMessages.length === 0 ||
+            messages === undefined || 
+            messages === null || 
+            messages.length === 0 ||
             currentChannel === null ||
-            mockMessages
+            messages
               .filter(message => message.channel === currentChannel.id.toString())
               .length === 0
           ) &&
@@ -271,7 +266,7 @@ const Messages:React.FC = () => {
           <ScrollArea className='h-full overflow-y-auto w-[100%]'>
             <ul>
               {
-                mockMessages
+                messages
                   .filter(message => message.channel === currentChannel.id.toString())
                   .map((message, index) => (
                     <Message
@@ -283,7 +278,7 @@ const Messages:React.FC = () => {
                       setReplyId={setReplyId}
                       reply={
                         message.replyId !== null && message.replyId ? 
-                        mockMessages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                        messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
                         null
                       }
                       profilePic={profilePics[message.account]}
@@ -307,7 +302,7 @@ const Messages:React.FC = () => {
           currentChannel && 
           followFilter === true &&
           // if length of messages from follow array is > 0 we will display
-          mockMessages
+          messages
             .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
             .length === 0 &&
           <ScrollArea className='h-full overflow-y-auto w-full'>
@@ -318,13 +313,13 @@ const Messages:React.FC = () => {
           currentChannel && 
           followFilter === true &&
           // if length of messages from follow array is > 0 we will display
-          mockMessages
+          messages
             .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
             .length > 0 &&
           <ScrollArea className='h-full overflow-y-auto w-full'>
             <ul>
               {
-                mockMessages
+                messages
                   .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
                   .map((message, index) => (
                     <Message
@@ -337,7 +332,7 @@ const Messages:React.FC = () => {
                       reply={
                         message.replyId !== null && message.replyId ? 
                         // swp this
-                        mockMessages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                        messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
                         null
                       }
                       profilePic={profilePics[message.account]}

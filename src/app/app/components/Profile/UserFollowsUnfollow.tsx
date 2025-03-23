@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import Loading from "../Loading";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
 import { Button } from "@/components/components/ui/button";
 import {
     Dialog,
