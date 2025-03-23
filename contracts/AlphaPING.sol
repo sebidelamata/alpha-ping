@@ -385,7 +385,7 @@ contract AlphaPING is ERC721 {
         // can not block yourself
         require(
             _blockedAddress != msg.sender,
-            "Can not blacklist yourself!"
+            "Can not block yourself!"
             );
         personalBlockList[msg.sender][_blockedAddress] = true;
     }
