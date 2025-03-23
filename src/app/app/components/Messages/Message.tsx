@@ -142,7 +142,7 @@ const Message: React.FC<MessageProps> = ({
     .replace(/\/>/g, "")
 
 
-  const customLoader = ({ src }) => {
+  const customLoader = ({ src }: { src: string }) => {
     return src; // Returns the full URL without relying on Next.js optimization
   };
 
