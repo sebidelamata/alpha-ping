@@ -8,6 +8,8 @@ import React,
 import { useUserProviderContext } from "../../../../contexts/UserContext";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import Loading from "../Loading";
+import { UserX } from "lucide-react";
+import { Button } from "@/components/components/ui/button";
 
 interface ErrorType {
     reason: string
@@ -44,13 +46,12 @@ const BlockUser:React.FC<BlockUserProps> = ({user}) => {
 
     return(
         <div className="block-container">
-            <img 
-                src='/block.svg' 
-                alt="block-user" 
-                className="block-user-icon" 
+            <Button 
+                variant={"destructive"}
                 onClick={(e) => handleClick(e)}
-                loading="lazy"
-            />
+            >
+                <UserX/>
+            </Button>
             {
                 loading &&
                     <Loading/>

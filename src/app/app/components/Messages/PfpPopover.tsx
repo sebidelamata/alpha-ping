@@ -50,7 +50,7 @@ const PfpPopover:React.FC<IPfpPopover> = ({
     } = useUserProviderContext()
 
     return(
-       <Card className="flex flex-col bg-primary text-secondary">
+       <Card className="flex flex-col bg-primary text-secondary mx-0">
         <CardHeader className="flex bg-primary text-secondary">
             <CardTitle 
                 className="flex flex-col bg-accent text-secondary justify-center items-center gap-4 px-2 rounded-lg"
@@ -96,7 +96,7 @@ const PfpPopover:React.FC<IPfpPopover> = ({
             </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-            <ul>
+            <ul className="flex flex-col gap-4">
                 {
                     (
                     currentChannelMod === true ||
@@ -151,24 +151,30 @@ const PfpPopover:React.FC<IPfpPopover> = ({
                         />
                     </li>
                 }
-                {
-                    following === false &&
-                    <li>
-                        <FollowUser account={account}/>
-                    </li>
-                }
-                {
-                    following === true &&
-                    <li>
-                        <UnfollowUser account={account}/> 
-                    </li>
-                }
-                {
-                    blocked === false &&
-                    <li>
-                        <BlockUser user={account}/> 
-                    </li>
-                }
+                <ul className="flex flex-row gap-8 justify-center items-center">
+                    {
+                        following === false &&
+                        <li>
+                            <FollowUser 
+                                account={account}
+                                username={username}
+                                profilePic={profilePic}
+                            />
+                        </li>
+                    }
+                    {
+                        following === true &&
+                        <li>
+                            <UnfollowUser account={account}/> 
+                        </li>
+                    }
+                    {
+                        blocked === false &&
+                        <li>
+                            <BlockUser user={account}/> 
+                        </li>
+                    }
+                </ul>
             </ul>
         </CardContent>
        </Card>
