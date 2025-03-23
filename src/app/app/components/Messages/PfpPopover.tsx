@@ -165,7 +165,11 @@ const PfpPopover:React.FC<IPfpPopover> = ({
                     {
                         following === true &&
                         <li>
-                            <UnfollowUser account={account}/> 
+                            <UnfollowUser 
+                                account={account}
+                                username={username}
+                                profilePic={profilePic}
+                            /> 
                         </li>
                     }
                     {

@@ -191,7 +191,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
                             </div>
                     </DialogTitle>
                     <DialogDescription className="flex flex-col items-center justify-center gap-4">
-                        Their messages and input will appear when you turn you Follows Filter ON. 
+                        Their messages and input will appear when you turn your Follows Filter ON. 
                     </DialogDescription>
                     <Separator/>
                     <form

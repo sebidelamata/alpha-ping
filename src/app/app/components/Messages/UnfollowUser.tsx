@@ -2,11 +2,34 @@
 
 import React, {
     useState,
+    FormEvent,
     MouseEvent
 } from "react";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
 import Loading from "../Loading";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogFooter,
+    DialogDescription
+} from "@/components/components/ui/dialog"
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@/components/components/ui/avatar";
+import { Separator } from "@/components/components/ui/separator";
+import { useToast } from "@/components/hooks/use-toast"
+import { 
+    ShieldCheck, 
+    CircleX,
+    UserMinus 
+} from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/components/ui/button";
 
 interface ErrorType{
     message: string;
@@ -14,52 +37,198 @@ interface ErrorType{
 
 interface UnfollowUserProps{
     account: string;
+    username: string | null;
+    profilePic: string | null;
 }
 
-const UnfollowUser:React.FC<UnfollowUserProps> = ({account}) => {
+const UnfollowUser:React.FC<UnfollowUserProps> = ({
+    account,
+    username,
+    profilePic
+}) => {
 
     const { alphaPING, signer } = useEtherProviderContext()
-    const { setTxMessageFollow } = useUserProviderContext()
+    const { toast } = useToast()
 
-    const [followLoading, setFollowLoading] = useState<boolean>(false)
-    const [followError, setFollowError] = useState<string | null | undefined>(null)
+    const [open, setOpen] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
+    const [txMessage, setTxMessage] = useState<string | null>(null)
 
-    const handleClick = async (e:MouseEvent) => {
+    const handleClick = async (e:FormEvent) => {
         e.preventDefault()
-        setFollowError(null)
-        setFollowLoading(true)
         try{
+            setError(null)
+            setLoading(true)
             const tx = await alphaPING?.connect(signer).removeFromPersonalFollowList(account)
             await tx?.wait()
-            console.log(tx?.hash)
-            setTxMessageFollow(tx?.hash)
+            if(tx !== undefined && tx.hash !== undefined){
+                setTxMessage(tx?.hash)
+            }
         }catch(error: unknown){
-            if((error as ErrorType).message)
-                setFollowError((error as ErrorType).message)
+            if((error as ErrorType).message){
+                setError((error as ErrorType).message)
+            }
+            if(error !== null && (error as ErrorType).message !== undefined){
+                toast({
+                    title: "Transaction Error!",
+                    description: (username !== null && username !== '') ?
+                        `Unfollow ${username} Not Completed!` :
+                        `Unfollow ${account.slice(0, 4)}...${account.slice(38,42)} Not Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-col gap-1 justify-center items-center">
+                            <CircleX size={40}/>
+                            <div className="flex flex-col gap-1 text-sm">
+                            {
+                                (error as ErrorType).message.length > 100 ?
+                                `${(error as ErrorType).message.slice(0,100)}...` :
+                                (error as ErrorType).message
+                            }
+                            </div>
+                        </div>
+                    ),
+                    variant: "destructive",
+                })
+            }
         }finally{
-            setFollowLoading(false)
+            setLoading(false)
+            if(txMessage !== null){
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: (username !== null && username !== '') ?
+                        `Unfollow ${username} Completed!` :
+                        `Unfollow ${account.slice(0, 4)}...${account.slice(38,42)} Completed!`,
+                    duration:5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80}/>
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         }
     }
 
+    const handleCancel = (e:MouseEvent) => {
+        e.preventDefault()
+        setOpen(false)
+    }
 
     return(
-        <div className="unfollowing-container">
-            <img 
-                src='/unfollow.svg'
-                alt="unfollow-user" 
-                className="unfollow-user-icon" 
-                onClick={(e) => handleClick(e)}
-                loading="lazy"
-            />
-            {
-                followLoading &&
-                <Loading/>
-            }
-            {
-                followError &&
-                <p>{followError}</p>
-            }
-        </div>  
+       <Dialog
+            open={open} 
+            onOpenChange={setOpen}
+        >
+            <DialogTrigger
+                asChild 
+                className="flex justify-center items-center"
+            >
+                <Button
+                    variant={"destructive"}
+                >
+                    <UserMinus/>
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <div className="flex flex-row items-center justify-center gap-4 text-3xl">
+                                <Link 
+                                    className="flex flex-row gap-1"
+                                    href={`https://arbiscan.io/address/${account}`}
+                                    target="_blank"
+                                >
+                                        { "UnFollow " } 
+                                        {
+                                            username !== null ? 
+                                            <span 
+                                                className="text-accent">
+                                                    {username}
+                                            </span> : 
+                                            <span 
+                                                className="text-accent">
+                                                    {account.slice(0,4)}...${account.slice(37,41)}
+                                            </span>
+                                        }
+                                        {"?"}
+                                </Link>
+                                {
+                                    (profilePic !== null && profilePic !== '') ?
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={profilePic} 
+                                            alt="User Icon" 
+                                            loading="lazy"
+                                        />
+                                        <AvatarFallback>
+                                            {
+                                                (username !== null && username !== '') ?
+                                                username.slice(0,2) :
+                                                account.slice(0, 2)
+                                            }
+                                        </AvatarFallback>
+                                    </Avatar> :
+                                    <Avatar>
+                                        <AvatarImage
+                                            src='/monkey.svg' 
+                                            alt="Default User Icon" 
+                                            loading="lazy"
+                                        />
+                                    </Avatar>
+                                }
+                            </div>
+                    </DialogTitle>
+                    <DialogDescription className="flex flex-col items-center justify-center gap-4">
+                        Their messages and input will no longer appear when you turn your Follows Filter ON. 
+                    </DialogDescription>
+                    <Separator/>
+                    <form
+                        onSubmit={(e) => handleClick(e)}
+                        className="flex flex-col items-center justify-center gap-4"
+                    >
+                        <Button 
+                            type="submit"
+                            variant="destructive" 
+                            className="w-[200px]"
+                        >
+                            Follow
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="w-[200px]"
+                            onClick={(e) => handleCancel(e)} 
+                        >
+                            Cancel
+                        </Button>
+                    </form>
+                </DialogHeader>
+                {
+                    loading === true &&
+                        <Loading/>
+                }
+                {
+                    error !== null &&
+                    <DialogFooter className="relative right-3 flex w-full flex-row items-center justify-center pr-16 text-sm text-accent">
+                        {
+                            error.length > 50 ?
+                            `${error.slice(0,50)}...` :
+                            error
+                        }
+                    </DialogFooter>
+                }
+            </DialogContent>
+        </Dialog>  
     )
 }
 
