@@ -17,4 +17,12 @@ module.exports = {
     "react/prop-types": "off",
     "no-console": "off", 
   },
+  overrides: [
+    {
+      files: ["*.cts"],
+      rules: {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }
