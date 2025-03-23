@@ -32,7 +32,7 @@ import { Skeleton } from "@/components/components/ui/skeleton";
 import { Badge } from "@/components/components/ui/badge";
 import Image from "next/image";
 import { Button } from "@/components/components/ui/button";
-import { SmilePlus } from "lucide-react";
+import { SmilePlus, UserPlus } from "lucide-react";
 import PfpPopover from "./PfpPopover";
 
 
@@ -157,30 +157,40 @@ const Message: React.FC<MessageProps> = ({
         {
           <Popover>
             <PopoverTrigger asChild>
-              <Avatar>
-                {
-                  (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
-                  <AvatarImage
-                    src={profilePic} 
-                    alt="User Icon"
-                    loading="lazy"
-                  /> :
-                  <AvatarImage
-                    src={"/monkey.svg"} 
-                    alt="User Icon"
-                    loading="lazy"
-                  />
-                }
-                {
-                  (username !== null && username !== '' && username !== undefined) ?
-                  <AvatarFallback>
-                    {username.slice(0, 2)}
-                  </AvatarFallback> :
-                  <AvatarFallback>
-                    {message.account.slice(0, 2)}
-                  </AvatarFallback>
-                }
-              </Avatar>
+              <div 
+                className="relative group cursor-pointer "
+              >
+                <Avatar 
+                  className="transition-transform duration-200 group-hover:scale-105 group-hover:ring-2 group-hover:ring-accent"
+                >
+                  {
+                    (profilePic !== null && profilePic !== '' && profilePic !== undefined) ?
+                    <AvatarImage
+                      src={profilePic} 
+                      alt="User Icon"
+                      loading="lazy"
+                    /> :
+                    <AvatarImage
+                      src={"/monkey.svg"} 
+                      alt="User Icon"
+                      loading="lazy"
+                    />
+                  }
+                  {
+                    (username !== null && username !== '' && username !== undefined) ?
+                    <AvatarFallback>
+                      {username.slice(0, 2)}
+                    </AvatarFallback> :
+                    <AvatarFallback>
+                      {message.account.slice(0, 2)}
+                    </AvatarFallback>
+                  }
+                </Avatar>
+                <UserPlus className="size-4 relative bottom-2 left-8 text-accent transition-transform duration-200 group-hover:scale-105"/>
+                <div 
+                  className="absolute inset-0 bg-accent/10 opacity-0 group-hover:opacity-20 transition-opacity rounded-full"
+                />
+              </div>
             </PopoverTrigger>
             <PopoverContent className="bg-primary text-secondary border-accent">
               <PfpPopover
