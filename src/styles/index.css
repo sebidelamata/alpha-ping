@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+  --background: 0 0 14;
+}
+
 @layer base {
   :root {
     --background: 0 0 14;
