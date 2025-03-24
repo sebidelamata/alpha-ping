@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 const Home:React.FC = () => {
     return(
-        <div className="flex h-screen flex-col bg-primary text-secondary">
+        <div className="flex h-screen flex-col bg-primary text-secondary dark:bg-primary">
             <HomeNav/>
             <h1 className="flex h-[16vh] justify-center align-middle text-2xl">
                 AlphaPING
