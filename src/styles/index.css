@@ -83,3 +83,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  background-color: var(--primary) !important;
+  color: var(--secondary) !important;
+}
