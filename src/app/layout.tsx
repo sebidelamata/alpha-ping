@@ -44,7 +44,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <link rel="icon" type="image/svg+xml" href="/Apes.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <body id='root' className='bg-primary text-secondary'>
+      <body id='root' className='bg-primary text-secondary !important'>
         <main>
           {children}
         </main>
