@@ -83,3 +83,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  background: hsl(var(--background, 0 0% 14%));
+}
