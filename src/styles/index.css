@@ -88,3 +88,7 @@ body {
   background-color: var(--primary) !important;
   color: var(--secondary) !important;
 }
+html {
+  background-color: var(--primary) !important;
+  color: var(--secondary) !important;
+}
