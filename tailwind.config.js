@@ -9,7 +9,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}", 
     "./src/styles/**/*.css"
   ],
-  safelist: ["bg-primary"],
+  safelist: [
+    "bg-primary",
+    "text-primary",
+    "border-primary",
+    "bg-accent",
+    "text-accent",
+    "border-accent"
+],
   theme: {
       extend: {
           borderRadius: {
