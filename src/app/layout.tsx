@@ -38,13 +38,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <html lang="en" className="bg-primary">
+    <html lang="en" className={roboto.className}>
       <Head>
         <meta charSet="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/Apes.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <body id='root'>
+      <body id='root' className='bg-primary text-secondary'>
         <main>
           {children}
         </main>
