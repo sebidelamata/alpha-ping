@@ -9,6 +9,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}", 
     "./src/styles/**/*.css"
   ],
+  safelist: ["bg-primary"],
   theme: {
       extend: {
           borderRadius: {
