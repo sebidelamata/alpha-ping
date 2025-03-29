@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 // messages
 import Messages from './components/Messages/Messages'
+//analyze
+import Analyze from './components/Analyze/Analyze';
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
 import { useAppKitAccount } from "@reown/appkit/react";
@@ -39,12 +41,7 @@ const App:React.FC = () => {
       case 'chat':
         return <Messages/>
       case 'analyze':
-        return <div>
-                <h2 className='analyze-title'>Analyze</h2>
-                <p className='analyze-placeholder'>
-                  This is being built in beta and will allow users to use sentiment analysis from each feed
-                </p>
-              </div>
+        return <Analyze/>
       case 'trade':
         return  <div>
                   <h2 className='trade-title'>Trade</h2>
