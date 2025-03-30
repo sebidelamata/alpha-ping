@@ -14,6 +14,7 @@ import {
     CardFooter 
 } from "@/components/components/ui/card";
 import OverallScoreDial from "./OverallScoreDial";
+import ChannelScoreDial from "./ChannelScoreDial";
 
 const Analyze:React.FC = () => {
 
@@ -32,9 +33,10 @@ const Analyze:React.FC = () => {
                 </CardTitle>
             </CardHeader>
             <CardContent
-                className='flex-1 h-full w-full'
+                className='flex flex-row h-full w-full'
             >
                 <OverallScoreDial/>
+                <ChannelScoreDial/>
             </CardContent>
         </Card>
     )

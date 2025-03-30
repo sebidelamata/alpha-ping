@@ -5,6 +5,7 @@ import React, {
 import vader from 'vader-sentiment'
 import { useMessagesProviderContext } from "src/contexts/MessagesContext";
 import { mockMessages } from "mocks/mockMessages";
+import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { 
     Card, 
     CardHeader, 
@@ -26,7 +27,7 @@ import {
 } from "@/components/components/ui/chart"
 import Loading from "../Loading";
 
-const OverallScoreDial:React.FC = () => {
+const ChannelScoreDial:React.FC = () => {
 
     type SentimentScore = {
         compound: number;
@@ -35,29 +36,34 @@ const OverallScoreDial:React.FC = () => {
         neg: number;
     };
 
+    const { currentChannel } = useChannelProviderContext()
     const { messages } = useMessagesProviderContext()
 
     const chartConfig = {
         allMessagesScore: {
-        label: "All Channels Average Sentiment",
+        label: `${currentChannel?.name || 'Current Channel'} Average Sentiment`,
     },
     } satisfies ChartConfig
     
-    const [allMessagesScore, setallMessagesScore] = useState<SentimentScore | null>(null)
+    const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const getAllMessagesScore = () => {
             const input = mockMessages.map((message) => {
-                return message.text
+                console.log(message.channel)
+                console.log(currentChannel?.id)
+                if(message.channel.toString() === currentChannel?.id.toString()){
+                    return message.text
+                }
             })
             .join()
             const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
-            setallMessagesScore(intensity)
+            setcurrentChannelMessagesScore(intensity)
             setLoading(false)
         }
         getAllMessagesScore()
-    }, [messages])
+    }, [messages, currentChannel])
 
     loading === true &&
     <Loading/>
@@ -66,10 +72,10 @@ const OverallScoreDial:React.FC = () => {
         <Card className="bg-primary text-secondary p-4 shadow-lg size-[300px]">
             <CardHeader>
                 <CardTitle>
-                    All Channels Avg Vibe
+                    {currentChannel?.name} Avg Vibe
                 </CardTitle>
             </CardHeader>
-            {allMessagesScore !== null && (
+            {currentChannelMessagesScore !== null && (
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
@@ -78,13 +84,13 @@ const OverallScoreDial:React.FC = () => {
                         <RadialBarChart
                             data={
                                 [
-                                    { allMessagesScore: allMessagesScore.compound, 
+                                    { allMessagesScore: currentChannelMessagesScore.compound, 
                                         fill: "hsl(273 54% 72)",
                                     },
                                 ]
                             }
                             startAngle={0}
-                            endAngle={((allMessagesScore.compound + 1) / 2) * 360}
+                            endAngle={((currentChannelMessagesScore.compound + 1) / 2) * 360}
                             innerRadius={75}
                             outerRadius={105}
                         >
@@ -120,7 +126,7 @@ const OverallScoreDial:React.FC = () => {
                                         y={viewBox.cy}
                                         className="fill-secondary text-4xl font-bold"
                                         >
-                                        {(allMessagesScore.compound * 100).toLocaleString()}%
+                                        {(currentChannelMessagesScore.compound * 100).toLocaleString()}%
                                         </tspan>
                                         <tspan
                                         x={viewBox.cx}
@@ -160,4 +166,4 @@ const OverallScoreDial:React.FC = () => {
     )
 }
 
-export default OverallScoreDial;
+export default ChannelScoreDial;
