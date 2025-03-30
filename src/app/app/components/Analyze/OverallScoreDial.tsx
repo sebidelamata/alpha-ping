@@ -97,7 +97,6 @@ const OverallScoreDial:React.FC = () => {
                             />
                             <RadialBar 
                                 dataKey="allMessagesScore" 
-                                background
                                 cornerRadius={10} 
                             />
                             <PolarRadiusAxis 

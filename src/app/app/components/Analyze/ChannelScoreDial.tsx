@@ -101,7 +101,6 @@ const ChannelScoreDial:React.FC = () => {
                             />
                             <RadialBar 
                                 dataKey="allMessagesScore" 
-                                background
                                 cornerRadius={10} 
                             />
                             <PolarRadiusAxis 
