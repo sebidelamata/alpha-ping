@@ -22,8 +22,11 @@ import {
   } from "recharts"
   import { 
     ChartConfig, 
-    ChartContainer 
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent, 
 } from "@/components/components/ui/chart"
+import Loading from "../Loading";
 
 const OverallScoreDial:React.FC = () => {
 
@@ -38,7 +41,7 @@ const OverallScoreDial:React.FC = () => {
 
     const chartConfig = {
         allMessagesScore: {
-        label: "All Channels Average Message Sentiment",
+        label: "All Channels Average Sentiment",
     },
     } satisfies ChartConfig
     
@@ -57,6 +60,9 @@ const OverallScoreDial:React.FC = () => {
         }
         getAllMessagesScore()
     }, [messages])
+
+    loading === true &&
+    <Loading/>
 
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg size-[300px]">
@@ -131,6 +137,11 @@ const OverallScoreDial:React.FC = () => {
                                 }}
                             />
                             </PolarRadiusAxis>
+                            <ChartTooltip
+                                content={<ChartTooltipContent hideLabel />}
+                                cursor={false}
+                                defaultIndex={1}
+                            />
                         </RadialBarChart>
                         </ChartContainer>
                 </CardContent>
