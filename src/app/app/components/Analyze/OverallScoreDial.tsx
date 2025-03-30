@@ -138,9 +138,21 @@ const OverallScoreDial:React.FC = () => {
                             />
                             </PolarRadiusAxis>
                             <ChartTooltip
-                                content={<ChartTooltipContent hideLabel />}
+                                content={<ChartTooltipContent hideLabel/>}
                                 cursor={false}
                                 defaultIndex={1}
+                                formatter={(value, name) => (
+                                    <div className="flex min-w-[130px] items-center text-xs text-secondary">
+                                      {chartConfig[name as keyof typeof chartConfig]?.label ||
+                                        name}
+                                      <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-accent">
+                                        {value as number * 100}
+                                        <span className="font-normal text-accent">
+                                          %
+                                        </span>
+                                      </div>
+                                    </div>
+                                  )}
                             />
                         </RadialBarChart>
                         </ChartContainer>
