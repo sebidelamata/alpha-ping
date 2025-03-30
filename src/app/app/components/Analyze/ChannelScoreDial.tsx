@@ -51,8 +51,6 @@ const ChannelScoreDial:React.FC = () => {
     useEffect(() => {
         const getAllMessagesScore = () => {
             const input = mockMessages.map((message) => {
-                console.log(message.channel)
-                console.log(currentChannel?.id)
                 if(message.channel.toString() === currentChannel?.id.toString()){
                     return message.text
                 }
@@ -69,7 +67,7 @@ const ChannelScoreDial:React.FC = () => {
     <Loading/>
 
     return(
-        <Card className="bg-primary text-secondary p-4 shadow-lg size-[300px]">
+        <Card className="bg-primary text-secondary p-4 shadow-lg size-[360px]">
             <CardHeader>
                 <CardTitle>
                     {currentChannel?.name} Avg Vibe
@@ -79,13 +77,13 @@ const ChannelScoreDial:React.FC = () => {
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square h-[175px] bg-primary"
+                        className="mx-auto aspect-square h-[300px] bg-primary"
                     >
                         <RadialBarChart
                             data={
                                 [
                                     { allMessagesScore: currentChannelMessagesScore.compound, 
-                                        fill: "hsl(273 54% 72)",
+                                        fill: "hsl(0 0% 100%)",
                                     },
                                 ]
                             }

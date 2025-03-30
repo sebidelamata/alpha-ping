@@ -20,6 +20,7 @@ import {
 } from "@radix-ui/react-avatar";
 import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
+import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
 
 const Analyze:React.FC = () => {
 
@@ -65,8 +66,9 @@ const Analyze:React.FC = () => {
             <CardContent
                 className='flex flex-row h-full w-full'
             >
-                <OverallScoreDial/>
                 <ChannelScoreDial/>
+                <OverallScoreDial/>
+                <ChannelScoreBarChartPosNeutNeg/>
             </CardContent>
         </Card>
     )
