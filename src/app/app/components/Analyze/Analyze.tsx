@@ -58,6 +58,9 @@ const Analyze:React.FC = () => {
                         </div>
                     }
                 </CardTitle>
+                <CardDescription>
+                    Dive into user sentiments, drill down to your follow list.
+                </CardDescription>
             </CardHeader>
             <CardContent
                 className='flex flex-row h-full w-full'
