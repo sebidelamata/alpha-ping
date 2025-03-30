@@ -2,9 +2,6 @@ import React, {
     useState,
     useEffect
 } from "react";
-import vader from 'vader-sentiment'
-import { useMessagesProviderContext } from "src/contexts/MessagesContext";
-import { mockMessages } from "mocks/mockMessages";
 import { 
     Card, 
     CardHeader, 
@@ -24,18 +21,18 @@ import {
     ChartTooltip,
     ChartTooltipContent, 
 } from "@/components/components/ui/chart"
-import Loading from "../Loading";
 
-const OverallScoreDial:React.FC = () => {
+type SentimentScore = {
+    compound: number;
+    pos: number;
+    neu: number;
+    neg: number;
+};
+interface IOverallScoreDial{
+    allMessagesScore: null | SentimentScore;
+}
 
-    type SentimentScore = {
-        compound: number;
-        pos: number;
-        neu: number;
-        neg: number;
-    };
-
-    const { messages } = useMessagesProviderContext()
+const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
 
     const chartConfig = {
         allMessagesScore: {
@@ -43,24 +40,6 @@ const OverallScoreDial:React.FC = () => {
     },
     } satisfies ChartConfig
     
-    const [allMessagesScore, setallMessagesScore] = useState<SentimentScore | null>(null)
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        const getAllMessagesScore = () => {
-            const input = mockMessages.map((message) => {
-                return message.text
-            })
-            .join()
-            const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
-            setallMessagesScore(intensity)
-            setLoading(false)
-        }
-        getAllMessagesScore()
-    }, [messages])
-
-    loading === true &&
-    <Loading/>
 
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg size-[360px]">

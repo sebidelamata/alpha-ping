@@ -5,13 +5,14 @@ import React, {
     useState
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import { useMessagesProviderContext } from "src/contexts/MessagesContext";
+import vader from 'vader-sentiment'
 import { 
     Card, 
     CardHeader, 
     CardTitle, 
     CardDescription, 
-    CardContent, 
-    CardFooter 
+    CardContent
 } from "@/components/components/ui/card";
 import { 
     Avatar, 
@@ -21,10 +22,56 @@ import {
 import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
 import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
+import { mockMessages } from "mocks/mockMessages";
+import Loading from "../Loading";
 
 const Analyze:React.FC = () => {
 
+    type SentimentScore = {
+        compound: number;
+        pos: number;
+        neu: number;
+        neg: number;
+    };
+
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
+    const {messages} = useMessagesProviderContext()
+
+    const [allMessagesScore, setallMessagesScore] = useState<SentimentScore | null>(null)
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const getAllMessagesScore = () => {
+            const input = mockMessages.map((message) => {
+                return message.text
+            })
+            .join()
+            const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
+            setallMessagesScore(intensity)
+            setLoading(false)
+        }
+        getAllMessagesScore()
+    }, [messages])
+
+    const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
+    
+    useEffect(() => {
+        const getAllMessagesScore = () => {
+            const input = mockMessages.map((message) => {
+                if(message.channel.toString() === currentChannel?.id.toString()){
+                    return message.text
+                }
+            })
+            .join()
+            const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
+            setcurrentChannelMessagesScore(intensity)
+            setLoading(false)
+        }
+        getAllMessagesScore()
+    }, [messages, currentChannel])
+
+    loading === true &&
+        <Loading/>
 
     return(
         <Card
@@ -66,9 +113,16 @@ const Analyze:React.FC = () => {
             <CardContent
                 className='flex flex-row h-full w-full'
             >
-                <ChannelScoreDial/>
-                <OverallScoreDial/>
-                <ChannelScoreBarChartPosNeutNeg/>
+                <ChannelScoreDial  
+                    currentChannelMessagesScore={currentChannelMessagesScore}
+                />
+                <OverallScoreDial 
+                    allMessagesScore={allMessagesScore}
+                />
+                <ChannelScoreBarChartPosNeutNeg
+                    currentChannelMessagesScore={currentChannelMessagesScore}
+                    allMessagesScore={allMessagesScore}
+                />
             </CardContent>
         </Card>
     )

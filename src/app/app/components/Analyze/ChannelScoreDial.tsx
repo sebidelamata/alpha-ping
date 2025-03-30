@@ -1,10 +1,4 @@
-import React, {
-    useState,
-    useEffect
-} from "react";
-import vader from 'vader-sentiment'
-import { useMessagesProviderContext } from "src/contexts/MessagesContext";
-import { mockMessages } from "mocks/mockMessages";
+import React from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { 
     Card, 
@@ -25,46 +19,27 @@ import {
     ChartTooltip,
     ChartTooltipContent, 
 } from "@/components/components/ui/chart"
-import Loading from "../Loading";
 
-const ChannelScoreDial:React.FC = () => {
+type SentimentScore = {
+    compound: number;
+    pos: number;
+    neu: number;
+    neg: number;
+};
 
-    type SentimentScore = {
-        compound: number;
-        pos: number;
-        neu: number;
-        neg: number;
-    };
+interface IChannelScoreDial{
+    currentChannelMessagesScore: null | SentimentScore;
+}
+
+const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesScore}) => {
 
     const { currentChannel } = useChannelProviderContext()
-    const { messages } = useMessagesProviderContext()
 
     const chartConfig = {
         allMessagesScore: {
         label: `${currentChannel?.name || 'Current Channel'} Vibe Score`,
     },
     } satisfies ChartConfig
-    
-    const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        const getAllMessagesScore = () => {
-            const input = mockMessages.map((message) => {
-                if(message.channel.toString() === currentChannel?.id.toString()){
-                    return message.text
-                }
-            })
-            .join()
-            const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
-            setcurrentChannelMessagesScore(intensity)
-            setLoading(false)
-        }
-        getAllMessagesScore()
-    }, [messages, currentChannel])
-
-    loading === true &&
-    <Loading/>
 
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg size-[360px]">
