@@ -17,6 +17,8 @@ import OverallScoreDial from "./OverallScoreDial";
 
 const Analyze:React.FC = () => {
 
+    const { currentChannel } = useChannelProviderContext()
+
     return(
         <Card
         className="flex flex-col w-full h-full bg-primary text-secondary overflow-clip"
@@ -25,8 +27,8 @@ const Analyze:React.FC = () => {
       }}
         >
             <CardHeader>
-                <CardTitle>
-                    Analyze
+                <CardTitle className="text-3xl">
+                    Analyze {currentChannel?.name || ""}
                 </CardTitle>
             </CardHeader>
             <CardContent

@@ -75,7 +75,7 @@ const OverallScoreDial:React.FC = () => {
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square h-[150px] bg-primary"
+                        className="mx-auto aspect-square h-[175px] bg-primary"
                     >
                         <RadialBarChart
                             data={
@@ -87,8 +87,8 @@ const OverallScoreDial:React.FC = () => {
                             }
                             startAngle={0}
                             endAngle={((allMessagesScore.compound + 1) / 2) * 360}
-                            innerRadius={60}
-                            outerRadius={90}
+                            innerRadius={75}
+                            outerRadius={105}
                         >
                             <PolarGrid
                             gridType="circle"
@@ -122,7 +122,7 @@ const OverallScoreDial:React.FC = () => {
                                         y={viewBox.cy}
                                         className="fill-secondary text-4xl font-bold"
                                         >
-                                        {allMessagesScore.compound.toLocaleString()}
+                                        {(allMessagesScore.compound * 100).toLocaleString()}%
                                         </tspan>
                                         <tspan
                                         x={viewBox.cx}
