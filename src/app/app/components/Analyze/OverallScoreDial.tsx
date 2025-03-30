@@ -140,7 +140,7 @@ const OverallScoreDial:React.FC = () => {
                                 cursor={false}
                                 defaultIndex={1}
                                 formatter={(value, name) => (
-                                    <div className="flex min-w-[130px] items-center text-xs text-secondary">
+                                    <div className="flex min-w-[130px] items-center text-xs text-secondary gap-1">
                                       {chartConfig[name as keyof typeof chartConfig]?.label ||
                                         name}
                                       <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-accent">
