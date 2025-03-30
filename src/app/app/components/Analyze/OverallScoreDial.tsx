@@ -39,7 +39,7 @@ const OverallScoreDial:React.FC = () => {
 
     const chartConfig = {
         allMessagesScore: {
-        label: "All Channels Average Sentiment",
+        label: "All Channels Average Vibe",
     },
     } satisfies ChartConfig
     
@@ -120,7 +120,7 @@ const OverallScoreDial:React.FC = () => {
                                         y={viewBox.cy}
                                         className="fill-secondary text-4xl font-bold"
                                         >
-                                        {(allMessagesScore.compound * 100).toLocaleString()}%
+                                        {(allMessagesScore.compound * 100).toFixed(0).toLocaleString()}%
                                         </tspan>
                                         <tspan
                                         x={viewBox.cx}
@@ -144,7 +144,7 @@ const OverallScoreDial:React.FC = () => {
                                       {chartConfig[name as keyof typeof chartConfig]?.label ||
                                         name}
                                       <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-accent">
-                                        {value as number * 100}
+                                        {(value as number * 100).toFixed(2).toString()}
                                         <span className="font-normal text-accent">
                                           %
                                         </span>
