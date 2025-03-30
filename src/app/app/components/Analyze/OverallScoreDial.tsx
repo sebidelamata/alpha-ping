@@ -82,7 +82,7 @@ const OverallScoreDial:React.FC = () => {
                             startAngle={0}
                             endAngle={((allMessagesScore.compound + 1) / 2) * 360}
                             innerRadius={60}
-                            outerRadius={85}
+                            outerRadius={90}
                         >
                             <PolarGrid
                             gridType="circle"
