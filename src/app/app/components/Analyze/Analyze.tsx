@@ -51,7 +51,7 @@ const Analyze:React.FC = () => {
             setLoading(false)
         }
         getAllMessagesScore()
-    }, [messages])
+    }, [messages, currentChannel])
 
     const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
     
