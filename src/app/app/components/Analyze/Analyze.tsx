@@ -13,12 +13,17 @@ import {
     CardContent, 
     CardFooter 
 } from "@/components/components/ui/card";
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@radix-ui/react-avatar";
 import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
 
 const Analyze:React.FC = () => {
 
-    const { currentChannel } = useChannelProviderContext()
+    const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
 
     return(
         <Card
@@ -28,8 +33,30 @@ const Analyze:React.FC = () => {
       }}
         >
             <CardHeader>
-                <CardTitle className="text-3xl">
+                <CardTitle className="flex flex-row text-3xl gap-4">
                     Analyze {currentChannel?.name || ""}
+                    {
+                        currentChannel &&
+                        selectedChannelMetadata &&
+                        <div className="flex flex-row gap-2">
+                            <Avatar className="size-10">
+                                <AvatarImage
+                                    src={
+                                        selectedChannelMetadata.logo !== '' ? 
+                                        selectedChannelMetadata.logo : 
+                                        (
+                                            currentChannel.tokenType === 'ERC20' ?
+                                            '/erc20Icon.svg' :
+                                            '/blank_nft.svg'
+                                        )
+                                    }
+                                    loading="lazy"
+                                    alt="AlphaPING Logo"
+                                />
+                                <AvatarFallback>AP</AvatarFallback>
+                            </Avatar>
+                        </div>
+                    }
                 </CardTitle>
             </CardHeader>
             <CardContent
