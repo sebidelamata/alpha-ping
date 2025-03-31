@@ -22,17 +22,23 @@ import {
 import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
 import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
+import ChannelScoreOverTime from "./ChannelScoreOverTime";
 import { mockMessages } from "mocks/mockMessages";
 import Loading from "../Loading";
 
-const Analyze:React.FC = () => {
+type SentimentScore = {
+    compound: number;
+    pos: number;
+    neu: number;
+    neg: number;
+};
 
-    type SentimentScore = {
-        compound: number;
-        pos: number;
-        neu: number;
-        neg: number;
-    };
+type SentimentScoresTimeseries = {
+    datetime: Date;
+    score: number;
+};
+
+const Analyze:React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
     const {messages} = useMessagesProviderContext()
@@ -42,6 +48,7 @@ const Analyze:React.FC = () => {
 
     useEffect(() => {
         const getAllMessagesScore = () => {
+            setLoading(true)
             const input = mockMessages.map((message) => {
                 return message.text
             })
@@ -56,7 +63,8 @@ const Analyze:React.FC = () => {
     const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
     
     useEffect(() => {
-        const getAllMessagesScore = () => {
+        const getCurrentChannelMessagesScore = () => {
+            setLoading(true)
             const input = mockMessages.map((message) => {
                 if(message.channel.toString() === currentChannel?.id.toString()){
                     return message.text
@@ -67,7 +75,34 @@ const Analyze:React.FC = () => {
             setcurrentChannelMessagesScore(intensity)
             setLoading(false)
         }
-        getAllMessagesScore()
+        getCurrentChannelMessagesScore()
+    }, [messages, currentChannel])
+
+    const [scoreTimeseries, setScoreTimeseries] = useState<null | SentimentScoresTimeseries[]>(null)
+    useEffect(() => {
+        const getChannelScoreTimeseries = () => {
+            setLoading(true)
+            const input = mockMessages.map((message) => {
+                if(message.channel.toString() === currentChannel?.id.toString()){
+                    return message
+                }
+            })
+            const intensity: SentimentScoresTimeseries[] = input
+                .map((message) => {
+                    if(message !== null && message !== undefined){
+                        return(
+                            {
+                                datetime: message.timestamp,
+                                score: vader.SentimentIntensityAnalyzer.polarity_scores(message.text).compound
+                            } as SentimentScoresTimeseries
+                        )
+                    }
+                })
+                .filter((item): item is SentimentScoresTimeseries => item !== undefined); 
+            setScoreTimeseries(intensity)
+            setLoading(false)
+        }
+        getChannelScoreTimeseries()
     }, [messages, currentChannel])
 
     loading === true &&
@@ -111,7 +146,7 @@ const Analyze:React.FC = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent
-                className='flex flex-row h-full w-full'
+                className='flex flex-row flex-wrap h-full w-full overflow-y-auto'
             >
                 <ChannelScoreDial  
                     currentChannelMessagesScore={currentChannelMessagesScore}
@@ -122,6 +157,9 @@ const Analyze:React.FC = () => {
                 <ChannelScoreBarChartPosNeutNeg
                     currentChannelMessagesScore={currentChannelMessagesScore}
                     allMessagesScore={allMessagesScore}
+                />
+                <ChannelScoreOverTime 
+                    scoreTimeseries={scoreTimeseries}
                 />
             </CardContent>
         </Card>
