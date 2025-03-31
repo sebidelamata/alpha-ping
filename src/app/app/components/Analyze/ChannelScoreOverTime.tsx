@@ -63,7 +63,7 @@ const CustomTooltip = ({ active, payload }: ICustomTooltipProps) => {
 };
 
     return(
-        <Card className="bg-primary text-secondary p-4 shadow-lg size-[500px]">
+        <Card className="bg-primary text-secondary p-4 shadow-lg h-[500px] w-full">
             <CardHeader>
                 <CardTitle>
                     {currentChannel?.name} Vibes Over Time
@@ -73,7 +73,7 @@ const CustomTooltip = ({ active, payload }: ICustomTooltipProps) => {
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square h-[400px] bg-primary"
+                        className="mx-auto aspect-square h-[400px] w-full bg-primary"
                     >
                         <LineChart
                             accessibilityLayer
