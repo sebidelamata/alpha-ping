@@ -45,7 +45,7 @@ const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
 
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg size-[360px]">
-            <CardHeader>
+            <CardHeader className="h-[80px]">
                 <CardTitle>
                     All Channels Avg Vibe
                 </CardTitle>
@@ -54,7 +54,7 @@ const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square h-[300px] bg-primary"
+                        className="mx-auto aspect-square h-[280px] bg-primary"
                     >
                         <RadialBarChart
                             data={

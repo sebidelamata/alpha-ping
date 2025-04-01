@@ -97,7 +97,7 @@ const ChannelScoreBarChartPosNeutNeg:React.FC<IChannelScoreBarChartPosNeutNeg> =
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square h-[300px] bg-primary"
+                        className="mx-auto aspect-square h-[240px] bg-primary"
                     >
                         <AreaChart
                             accessibilityLayer
