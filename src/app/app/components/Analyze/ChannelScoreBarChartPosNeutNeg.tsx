@@ -86,7 +86,7 @@ const ChannelScoreBarChartPosNeutNeg:React.FC<IChannelScoreBarChartPosNeutNeg> =
 
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg size-[360px]">
-            <CardHeader>
+            <CardHeader className="h-[80px]">
                 <CardTitle>
                     {currentChannel?.name} Vibe Distribution
                 </CardTitle>
