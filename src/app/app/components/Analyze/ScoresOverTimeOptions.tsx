@@ -19,8 +19,94 @@ interface IChannelScoreDial{
 }
 
 const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => {
+
+    // get different lengths of data 
+    const yearData = (scoreTimeseries:SentimentScoresTimeseries[] | null) => {
+        if(scoreTimeseries !== null){
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    
+            const filteredData = scoreTimeseries?.filter(entry => 
+                new Date(entry.datetime) >= oneYearAgo
+            );
+            return filteredData as SentimentScoresTimeseries[]
+        } else {
+            return null
+        }
+    }
+
+    const halfYearData = (scoreTimeseries:SentimentScoresTimeseries[] | null) => {
+        if(scoreTimeseries !== null){
+            const oneYearAgo = new Date();
+            oneYearAgo.setMonth(oneYearAgo.getMonth() - 6);
+    
+            const filteredData = scoreTimeseries?.filter(entry => 
+                new Date(entry.datetime) >= oneYearAgo
+            );
+            return filteredData as SentimentScoresTimeseries[]
+        } else {
+            return null
+        }
+    }
+
+    const quarterData = (scoreTimeseries:SentimentScoresTimeseries[] | null) => {
+        if(scoreTimeseries !== null){
+            const oneYearAgo = new Date();
+            oneYearAgo.setMonth(oneYearAgo.getMonth() - 3);
+    
+            const filteredData = scoreTimeseries?.filter(entry => 
+                new Date(entry.datetime) >= oneYearAgo
+            );
+            return filteredData as SentimentScoresTimeseries[]
+        } else {
+            return null
+        }
+    }
+    
+    const monthData = (scoreTimeseries:SentimentScoresTimeseries[] | null) => {
+        if(scoreTimeseries !== null){
+            const oneYearAgo = new Date();
+            oneYearAgo.setMonth(oneYearAgo.getMonth() - 1);
+    
+            const filteredData = scoreTimeseries?.filter(entry => 
+                new Date(entry.datetime) >= oneYearAgo
+            );
+            return filteredData as SentimentScoresTimeseries[]
+        } else {
+            return null
+        }
+    }
+
+    const weekData = (scoreTimeseries:SentimentScoresTimeseries[] | null) => {
+        if(scoreTimeseries !== null){
+            const oneYearAgo = new Date();
+            oneYearAgo.setDate(oneYearAgo.getDate() - 7);
+    
+            const filteredData = scoreTimeseries?.filter(entry => 
+                new Date(entry.datetime) >= oneYearAgo
+            );
+            return filteredData as SentimentScoresTimeseries[]
+        } else {
+            return null
+        }
+    }
+
+    const dayData = (scoreTimeseries:SentimentScoresTimeseries[] | null) => {
+        if(scoreTimeseries !== null){
+            const oneYearAgo = new Date();
+            oneYearAgo.setDate(oneYearAgo.getDate() - 1);
+    
+            const filteredData = scoreTimeseries?.filter(entry => 
+                new Date(entry.datetime) >= oneYearAgo
+            );
+            return filteredData as SentimentScoresTimeseries[]
+        } else {
+            return null
+        }
+    }
+
     return(
-        <Tabs defaultValue="account" className="bg-primary text-secondary p-4 shadow-lg h-[500px] w-full">
+        <Tabs defaultValue="all" className="bg-primary text-secondary p-4 shadow-lg h-[500px] w-full">
         <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="year">Y</TabsTrigger>
@@ -34,22 +120,22 @@ const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) =>
                 <ChannelScoreOverTime scoreTimeseries={scoreTimeseries}/>
             </TabsContent>
             <TabsContent value="year">
-                <ChannelScoreOverTime scoreTimeseries={scoreTimeseries}/>
+                <ChannelScoreOverTime scoreTimeseries={yearData(scoreTimeseries)}/>
             </TabsContent>
             <TabsContent value="sixmonth">
-                <ChannelScoreOverTime scoreTimeseries={scoreTimeseries}/>
+                <ChannelScoreOverTime scoreTimeseries={halfYearData(scoreTimeseries)}/>
             </TabsContent>
             <TabsContent value="quarter">
-                <ChannelScoreOverTime scoreTimeseries={scoreTimeseries}/>
+                <ChannelScoreOverTime scoreTimeseries={quarterData(scoreTimeseries)}/>
             </TabsContent>
             <TabsContent value="month">
-                <ChannelScoreOverTime scoreTimeseries={scoreTimeseries}/>
+                <ChannelScoreOverTime scoreTimeseries={monthData(scoreTimeseries)}/>
             </TabsContent>
             <TabsContent value="week">
-                <ChannelScoreOverTime scoreTimeseries={scoreTimeseries}/>
+                <ChannelScoreOverTime scoreTimeseries={weekData(scoreTimeseries)}/>
             </TabsContent>
             <TabsContent value="day">
-                <ChannelScoreOverTime scoreTimeseries={scoreTimeseries}/>
+                <ChannelScoreOverTime scoreTimeseries={dayData(scoreTimeseries)}/>
             </TabsContent>
         </Tabs>
     )
