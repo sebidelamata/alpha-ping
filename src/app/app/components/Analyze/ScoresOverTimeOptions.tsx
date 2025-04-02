@@ -25,7 +25,6 @@ const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) =>
         if(scoreTimeseries !== null){
             const oneYearAgo = new Date();
             oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-    
             const filteredData = scoreTimeseries?.filter(entry => 
                 new Date(entry.datetime) >= oneYearAgo
             );
@@ -39,7 +38,6 @@ const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) =>
         if(scoreTimeseries !== null){
             const oneYearAgo = new Date();
             oneYearAgo.setMonth(oneYearAgo.getMonth() - 6);
-    
             const filteredData = scoreTimeseries?.filter(entry => 
                 new Date(entry.datetime) >= oneYearAgo
             );
@@ -53,7 +51,6 @@ const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) =>
         if(scoreTimeseries !== null){
             const oneYearAgo = new Date();
             oneYearAgo.setMonth(oneYearAgo.getMonth() - 3);
-    
             const filteredData = scoreTimeseries?.filter(entry => 
                 new Date(entry.datetime) >= oneYearAgo
             );
@@ -67,7 +64,6 @@ const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) =>
         if(scoreTimeseries !== null){
             const oneYearAgo = new Date();
             oneYearAgo.setMonth(oneYearAgo.getMonth() - 1);
-    
             const filteredData = scoreTimeseries?.filter(entry => 
                 new Date(entry.datetime) >= oneYearAgo
             );
@@ -81,7 +77,6 @@ const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) =>
         if(scoreTimeseries !== null){
             const oneYearAgo = new Date();
             oneYearAgo.setDate(oneYearAgo.getDate() - 7);
-    
             const filteredData = scoreTimeseries?.filter(entry => 
                 new Date(entry.datetime) >= oneYearAgo
             );
@@ -95,7 +90,6 @@ const ScoresOverTimeOptions:React.FC<IChannelScoreDial> = ({scoreTimeseries}) =>
         if(scoreTimeseries !== null){
             const oneYearAgo = new Date();
             oneYearAgo.setDate(oneYearAgo.getDate() - 1);
-    
             const filteredData = scoreTimeseries?.filter(entry => 
                 new Date(entry.datetime) >= oneYearAgo
             );
