@@ -83,7 +83,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
         return null;
     };
 
-    const [timeRange, setTimeRange] = useState<string>("90d")
+    const [timeRange, setTimeRange] = useState<string>("3m")
     const filteredData = scoreTimeseries !== null ?
         scoreTimeseries.filter((item) => {
             const date = new Date(item.datetime)
