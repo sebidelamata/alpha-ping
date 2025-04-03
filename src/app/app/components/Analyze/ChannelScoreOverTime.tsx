@@ -115,7 +115,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                             currentChannel &&
                             selectedChannelMetadata &&
                             <div className="flex flex-row gap-2">
-                                <Avatar className="size-10">
+                                <Avatar className="size-8">
                                     <AvatarImage
                                         src={
                                             selectedChannelMetadata.logo !== '' ? 
