@@ -88,7 +88,6 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
         scoreTimeseries.filter((item) => {
             const date = new Date(item.datetime)
             const referenceDate = new Date()
-            console.log(referenceDate)
             let daysToSubtract = 90
             if (timeRange === "1y") {
                 daysToSubtract = 365
