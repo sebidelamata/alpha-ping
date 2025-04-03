@@ -110,7 +110,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
         <Card className="bg-primary text-secondary p-4 shadow-lg h-[500px] w-full">
             <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                 <div className="grid flex-1 gap-1 text-center sm:text-left">
-                    <CardTitle>
+                    <CardTitle className="flex flex-row gap-4">
                         {
                             currentChannel &&
                             selectedChannelMetadata &&
