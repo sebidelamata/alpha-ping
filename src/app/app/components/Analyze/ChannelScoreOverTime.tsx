@@ -209,7 +209,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                             dataKey="score"
                             type="natural"
                             stroke="hsl(273 54% 72)"
-                            strokeWidth={2}
+                            strokeWidth={4}
                             dot={false}
                             />
                         </LineChart>
