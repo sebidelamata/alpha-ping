@@ -22,7 +22,7 @@ import {
 import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
 import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
-import ScoresOverTimeOptions from "./ScoresOverTimeOptions";
+import ChannelScoreOverTime from "./ChannelScoreOverTime";
 import { mockMessages } from "mocks/mockMessages";
 import Loading from "../Loading";
 
@@ -158,7 +158,7 @@ const Analyze:React.FC = () => {
                     currentChannelMessagesScore={currentChannelMessagesScore}
                     allMessagesScore={allMessagesScore}
                 />
-                <ScoresOverTimeOptions 
+                <ChannelScoreOverTime 
                     scoreTimeseries={scoreTimeseries}
                 />
             </CardContent>
