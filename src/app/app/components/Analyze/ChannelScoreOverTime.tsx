@@ -228,32 +228,34 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                                 config={chartConfig}
                                 className="mx-auto aspect-square h-[400px] w-full bg-primary"
                             >
-                                <LineChart
-                                    accessibilityLayer
-                                    data={emptyData}
-                                    margin={{
-                                    left: 12,
-                                    right: 12,
-                                    }}
-                                >
-                                    <CartesianGrid vertical={false} />
-                                    <XAxis
-                                    dataKey="datetime"
-                                    tickLine={true}
-                                    axisLine={false}
-                                    tickMargin={8}
-                                    tickFormatter={(value) => new Date(value).toLocaleDateString()}
-                                    />
-                                    <YAxis
-                                        domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
+                                <>
+                                    <LineChart
+                                        accessibilityLayer
+                                        data={emptyData}
+                                        margin={{
+                                        left: 12,
+                                        right: 12,
+                                        }}
+                                    >
+                                        <CartesianGrid vertical={false} />
+                                        <XAxis
+                                        dataKey="datetime"
                                         tickLine={true}
                                         axisLine={false}
                                         tickMargin={8}
-                                    />
-                                </LineChart>
-                                <div className="relative left-[50%] bottom-[50%] text-4xl text-accent">
-                                    No Data
-                                </div>
+                                        tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                                        />
+                                        <YAxis
+                                            domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
+                                            tickLine={true}
+                                            axisLine={false}
+                                            tickMargin={8}
+                                        />
+                                    </LineChart>
+                                    <div className="relative left-[50%] bottom-[50%] text-4xl text-accent">
+                                        No Data
+                                    </div>
+                                </>
                             </ChartContainer>
                         )
                     }
