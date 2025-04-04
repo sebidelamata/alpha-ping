@@ -21,7 +21,7 @@ import {
     Line, 
     LineChart, 
     XAxis,
-    YAxis 
+    YAxis
 } from "recharts"
   import { 
     ChartConfig, 
@@ -105,6 +105,12 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
             return date >= startDate
         }) :
         scoreTimeseries
+    
+    // Dummy data for empty chart template
+    const emptyData = [
+        { datetime: new Date(), score: 0 }
+    ];
+
 
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg h-[500px] w-full">
@@ -173,49 +179,85 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
             </SelectContent>
             </Select>
         </CardHeader>
-            {filteredData !== null && (
                 <CardContent className="flex flex-col items-center bg-primary">
-                    <ChartContainer
-                        config={chartConfig}
-                        className="mx-auto aspect-square h-[400px] w-full bg-primary"
-                    >
-                        <LineChart
-                            accessibilityLayer
-                            data={filteredData}
-                            margin={{
-                            left: 12,
-                            right: 12,
-                            }}
-                        >
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                            dataKey="datetime"
-                            tickLine={true}
-                            axisLine={false}
-                            tickMargin={8}
-                            tickFormatter={(value) => new Date(value).toLocaleDateString()}
-                            />
-                            <YAxis
-                                domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
-                                tickLine={true}
-                                axisLine={false}
-                                tickMargin={8}
-                            />
-                            <ChartTooltip
-                            cursor={false}
-                            content={<CustomTooltip />}
-                            />
-                            <Line
-                            dataKey="score"
-                            type="natural"
-                            stroke="hsl(273 54% 72)"
-                            strokeWidth={4}
-                            dot={false}
-                            />
-                        </LineChart>
-                    </ChartContainer>
+                    {
+                        filteredData !== null && 
+                        filteredData.length > 0 ?
+                        (
+                            <ChartContainer
+                                config={chartConfig}
+                                className="mx-auto aspect-square h-[400px] w-full bg-primary"
+                            >
+                                <LineChart
+                                    accessibilityLayer
+                                    data={filteredData}
+                                    margin={{
+                                    left: 12,
+                                    right: 12,
+                                    }}
+                                >
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis
+                                    dataKey="datetime"
+                                    tickLine={true}
+                                    axisLine={false}
+                                    tickMargin={8}
+                                    tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                                    />
+                                    <YAxis
+                                        domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
+                                        tickLine={true}
+                                        axisLine={false}
+                                        tickMargin={8}
+                                    />
+                                    <ChartTooltip
+                                    cursor={false}
+                                    content={<CustomTooltip />}
+                                    />
+                                    <Line
+                                    dataKey="score"
+                                    type="natural"
+                                    stroke="hsl(273 54% 72)"
+                                    strokeWidth={4}
+                                    dot={false}
+                                    />
+                                </LineChart>
+                            </ChartContainer>
+                        ) : (
+                            <ChartContainer
+                                config={chartConfig}
+                                className="mx-auto aspect-square h-[400px] w-full bg-primary"
+                            >
+                                <LineChart
+                                    accessibilityLayer
+                                    data={emptyData}
+                                    margin={{
+                                    left: 12,
+                                    right: 12,
+                                    }}
+                                >
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis
+                                    dataKey="datetime"
+                                    tickLine={true}
+                                    axisLine={false}
+                                    tickMargin={8}
+                                    tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                                    />
+                                    <YAxis
+                                        domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
+                                        tickLine={true}
+                                        axisLine={false}
+                                        tickMargin={8}
+                                    />
+                                </LineChart>
+                                <div className="relative left-[50%] bottom-[50%] text-4xl text-accent">
+                                    No Data
+                                </div>
+                            </ChartContainer>
+                        )
+                    }
                 </CardContent>
-            )}
         </Card>
     )
 }
