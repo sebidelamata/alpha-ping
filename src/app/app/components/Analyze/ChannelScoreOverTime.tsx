@@ -41,6 +41,8 @@ type SentimentScoresTimeseries = {
     score: number;
 };
 
+type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
+
 interface IChannelScoreDial{
     scoreTimeseries: null | SentimentScoresTimeseries[];
 }
@@ -83,7 +85,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
         return null;
     };
 
-    const [timeRange, setTimeRange] = useState<string>("3m")
+    const [timeRange, setTimeRange] = useState<TimeFrame>("3m")
     const filteredData = scoreTimeseries !== null ?
         scoreTimeseries.filter((item) => {
             const date = new Date(item.datetime)
@@ -110,6 +112,17 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
     const emptyData = [
         { datetime: new Date(), score: 0 }
     ];
+
+    // Description strings change based on selectors
+    const descriptions = {
+        'all': `Vibe Scores Over Time`,
+        '1y': 'Vibe Scores for the Last Year',
+        '6m': 'Vibe Scores for the Last Six Months',
+        '3m': 'Vibe Scores for the Last Three Months',
+        '30d': 'Vibe Scores for the Last Thirty Days',
+        '7d': 'Vibe Scores for the Last Week',
+        '1d': 'Vibe Scores for the Last Day',
+    }
 
 
     return(
@@ -144,91 +157,93 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                         </div>
             </CardTitle>
             <CardDescription>
-                Showing total visitors for the last 3 months
+                {
+                    descriptions[timeRange].toString() || ""
+                }
             </CardDescription>
             </div>
             <Select 
                 value={timeRange} 
-                onValueChange={setTimeRange}
+                onValueChange={(value: string) => setTimeRange(value as TimeFrame)}
             >
-            <SelectTrigger
-                className="w-[160px] rounded-lg sm:ml-auto"
-                aria-label="Select a value"
-            >
-                <SelectValue placeholder="Last 3 months" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-                <SelectItem value="all" className="rounded-lg">
-                    All Time
-                </SelectItem>
-                <SelectItem value="1y" className="rounded-lg">
-                    Last Year
-                </SelectItem>
-                <SelectItem value="6m" className="rounded-lg">
-                    Last 6 months
-                </SelectItem>
-                <SelectItem value="3m" className="rounded-lg">
-                    Last 3 months
+                <SelectTrigger
+                    className="w-[160px] rounded-lg sm:ml-auto"
+                    aria-label="Select a value"
+                >
+                    <SelectValue placeholder="Last 3 months" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                    <SelectItem value="all" className="rounded-lg">
+                        All Time
                     </SelectItem>
-                <SelectItem value="30d" className="rounded-lg">
-                    Last 30 days
-                </SelectItem>
-                    <SelectItem value="7d" className="rounded-lg">
-                    Last 7 days
-                </SelectItem>
-            </SelectContent>
+                    <SelectItem value="1y" className="rounded-lg">
+                        Last Year
+                    </SelectItem>
+                    <SelectItem value="6m" className="rounded-lg">
+                        Last 6 months
+                    </SelectItem>
+                    <SelectItem value="3m" className="rounded-lg">
+                        Last 3 months
+                        </SelectItem>
+                    <SelectItem value="30d" className="rounded-lg">
+                        Last 30 days
+                    </SelectItem>
+                        <SelectItem value="7d" className="rounded-lg">
+                        Last 7 days
+                    </SelectItem>
+                </SelectContent>
             </Select>
-        </CardHeader>
-                <CardContent className="flex flex-col items-center bg-primary">
-                    {
-                        filteredData !== null && 
-                        filteredData.length > 0 ?
-                        (
-                            <ChartContainer
-                                config={chartConfig}
-                                className="mx-auto aspect-square h-[400px] w-full bg-primary"
+            </CardHeader>
+            <CardContent className="flex flex-col items-center bg-primary">
+                {
+                    filteredData !== null && 
+                    filteredData.length > 0 ?
+                    (
+                        <ChartContainer
+                            config={chartConfig}
+                            className="mx-auto aspect-square h-[400px] w-full bg-primary"
+                        >
+                            <LineChart
+                                accessibilityLayer
+                                data={filteredData}
+                                margin={{
+                                left: 12,
+                                right: 12,
+                                }}
                             >
-                                <LineChart
-                                    accessibilityLayer
-                                    data={filteredData}
-                                    margin={{
-                                    left: 12,
-                                    right: 12,
-                                    }}
-                                >
-                                    <CartesianGrid vertical={false} />
-                                    <XAxis
-                                    dataKey="datetime"
+                                <CartesianGrid vertical={false} />
+                                <XAxis
+                                dataKey="datetime"
+                                tickLine={true}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                                />
+                                <YAxis
+                                    domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
                                     tickLine={true}
                                     axisLine={false}
                                     tickMargin={8}
-                                    tickFormatter={(value) => new Date(value).toLocaleDateString()}
-                                    />
-                                    <YAxis
-                                        domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
-                                        tickLine={true}
-                                        axisLine={false}
-                                        tickMargin={8}
-                                    />
-                                    <ChartTooltip
-                                    cursor={false}
-                                    content={<CustomTooltip />}
-                                    />
-                                    <Line
-                                    dataKey="score"
-                                    type="natural"
-                                    stroke="hsl(273 54% 72)"
-                                    strokeWidth={4}
-                                    dot={false}
-                                    />
-                                </LineChart>
-                            </ChartContainer>
-                        ) : (
+                                />
+                                <ChartTooltip
+                                cursor={false}
+                                content={<CustomTooltip />}
+                                />
+                                <Line
+                                dataKey="score"
+                                type="natural"
+                                stroke="hsl(273 54% 72)"
+                                strokeWidth={4}
+                                dot={false}
+                                />
+                            </LineChart>
+                        </ChartContainer>
+                    ) : (
+                        <div className="flex flex-col w-full">
                             <ChartContainer
                                 config={chartConfig}
                                 className="mx-auto aspect-square h-[400px] w-full bg-primary"
                             >
-                                <>
                                     <LineChart
                                         accessibilityLayer
                                         data={emptyData}
@@ -252,14 +267,14 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                                             tickMargin={8}
                                         />
                                     </LineChart>
-                                    <div className="relative left-[50%] bottom-[50%] text-4xl text-accent">
-                                        No Data
-                                    </div>
-                                </>
                             </ChartContainer>
-                        )
-                    }
-                </CardContent>
+                            <div className="relative translate-x-96 bottom-48 text-4xl text-accent w-[50%]">
+                                No Data
+                            </div>
+                        </div>
+                    )
+                }
+            </CardContent>
         </Card>
     )
 }
