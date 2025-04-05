@@ -159,7 +159,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
             </SelectTrigger>
             <SelectContent className="rounded-xl">
                 <SelectItem value="all" className="rounded-lg">
-                    All
+                    All Time
                 </SelectItem>
                 <SelectItem value="1y" className="rounded-lg">
                     Last Year
