@@ -39,9 +39,11 @@ import {
 type SentimentScoresTimeseries = {
     datetime: Date;
     score: number;
+    postBalance: string;
 };
 
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
+type Weighting = 'unweighted' | 'post' | 'current' | 'delta' | 'inverse';
 
 interface IChannelScoreDial{
     scoreTimeseries: null | SentimentScoresTimeseries[];
@@ -107,6 +109,8 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
             return date >= startDate
         }) :
         scoreTimeseries
+
+    const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
     
     // Dummy data for empty chart template
     const emptyData = [
@@ -162,6 +166,34 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                 }
             </CardDescription>
             </div>
+            <Select 
+                value={messageWeighting} 
+                onValueChange={(value: string) => setMessageWeighting(value as Weighting)}
+            >
+                <SelectTrigger
+                    className="w-[220px] rounded-lg sm:ml-auto"
+                    aria-label="Select a value"
+                >
+                    <SelectValue placeholder="Unweighted" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                    <SelectItem value="unweighted" className="rounded-lg">
+                        Unweighted
+                    </SelectItem>
+                    <SelectItem value="post" className="rounded-lg">
+                        Post Balance Weighted
+                    </SelectItem>
+                    <SelectItem value="current" className="rounded-lg">
+                        Current Balance Weighted
+                    </SelectItem>
+                    <SelectItem value="delta" className="rounded-lg">
+                        Balance Delta Weighted
+                        </SelectItem>
+                    <SelectItem value="inverse" className="rounded-lg">
+                        Inverse Balance Weighted
+                    </SelectItem>
+                </SelectContent>
+            </Select>
             <Select 
                 value={timeRange} 
                 onValueChange={(value: string) => setTimeRange(value as TimeFrame)}

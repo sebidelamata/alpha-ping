@@ -25,6 +25,16 @@ import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
 import ChannelScoreOverTime from "./ChannelScoreOverTime";
 import { mockMessages } from "mocks/mockMessages";
 import Loading from "../Loading";
+import { 
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/components/ui/select";
+import timeFilterMessages from "src/lib/timeFilterMessages";
+import weightAllMessages from "src/lib/weightAllMessages";
+import weightChannelMessages from "src/lib/weightChannelMessages";
 
 type SentimentScore = {
     compound: number;
@@ -36,7 +46,9 @@ type SentimentScore = {
 type SentimentScoresTimeseries = {
     datetime: Date;
     score: number;
+    postBalance: string;
 };
+
 
 const Analyze:React.FC = () => {
 
@@ -45,6 +57,25 @@ const Analyze:React.FC = () => {
 
     const [allMessagesScore, setallMessagesScore] = useState<SentimentScore | null>(null)
     const [loading, setLoading] = useState<boolean>(true);
+
+    // filter for date range before weighting
+    const [timeRange, setTimeRange] = useState<TimeFrame>("3m")
+    const timeFilteredData = mockMessages !== null ?
+        timeFilterMessages(mockMessages, timeRange) : 
+        null
+    // weight messages
+    const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
+    // all channels
+    const weightedData = messageWeighting !== "unweighted" && 
+        timeFilteredData !== null ?
+        weightAllMessages(timeFilteredData, messageWeighting) :
+        timeFilteredData;
+    // current channel
+    const weightedChannelData = messageWeighting !== "unweighted" && 
+        timeFilteredData !== null &&
+        currentChannel !== null ?
+        weightChannelMessages(timeFilteredData, messageWeighting, currentChannel) :
+        timeFilteredData;
 
     useEffect(() => {
         const getAllMessagesScore = () => {
@@ -93,7 +124,8 @@ const Analyze:React.FC = () => {
                         return(
                             {
                                 datetime: message.timestamp,
-                                score: vader.SentimentIntensityAnalyzer.polarity_scores(message.text).compound
+                                score: vader.SentimentIntensityAnalyzer.polarity_scores(message.text).compound,
+                                postBalance: message.messageTimestampTokenAmount
                             } as SentimentScoresTimeseries
                         )
                     }
@@ -138,12 +170,77 @@ const Analyze:React.FC = () => {
                                 />
                                 <AvatarFallback>AP</AvatarFallback>
                             </Avatar>
+                            {
+                                weightedChannelData !== null && 
+                                weightedChannelData[0].weighting?.toString()
+                            }
                         </div>
                     }
                 </CardTitle>
                 <CardDescription>
                     Dive into user sentiments, drill down to your follow list.
                 </CardDescription>
+                <div className="flex flex-row justify-start gap-4">
+                    <Select 
+                        value={messageWeighting} 
+                        onValueChange={(value: string) => setMessageWeighting(value as Weighting)}
+                    >
+                        <SelectTrigger
+                            className="w-[220px] rounded-lg sm:ml-auto"
+                            aria-label="Select a value"
+                        >
+                            <SelectValue placeholder="Unweighted" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl">
+                            <SelectItem value="unweighted" className="rounded-lg">
+                                Unweighted
+                            </SelectItem>
+                            <SelectItem value="post" className="rounded-lg">
+                                Post Balance Weighted
+                            </SelectItem>
+                            <SelectItem value="current" className="rounded-lg">
+                                Current Balance Weighted
+                            </SelectItem>
+                            <SelectItem value="delta" className="rounded-lg">
+                                Balance Delta Weighted
+                                </SelectItem>
+                            <SelectItem value="inverse" className="rounded-lg">
+                                Inverse Balance Weighted
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Select 
+                        value={timeRange} 
+                        onValueChange={(value: string) => setTimeRange(value as TimeFrame)}
+                    >
+                        <SelectTrigger
+                            className="w-[160px] rounded-lg sm:ml-auto"
+                            aria-label="Select a value"
+                        >
+                            <SelectValue placeholder="Last 3 months" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl">
+                            <SelectItem value="all" className="rounded-lg">
+                                All Time
+                            </SelectItem>
+                            <SelectItem value="1y" className="rounded-lg">
+                                Last Year
+                            </SelectItem>
+                            <SelectItem value="6m" className="rounded-lg">
+                                Last 6 months
+                            </SelectItem>
+                            <SelectItem value="3m" className="rounded-lg">
+                                Last 3 months
+                                </SelectItem>
+                            <SelectItem value="30d" className="rounded-lg">
+                                Last 30 days
+                            </SelectItem>
+                                <SelectItem value="7d" className="rounded-lg">
+                                Last 7 days
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </CardHeader>
             <CardContent
                 className='flex flex-row flex-wrap h-full w-full overflow-y-auto'

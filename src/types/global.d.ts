@@ -20,6 +20,8 @@ interface Message {
     messageTimestampTokenAmount: string;
     reactions: Record<string, string[]>; // Map of reaction types to lists of accounts
     replyId: string | null; // Use string to align with MongoDB ObjectId if necessary
+    // option weighting for senitiment scores
+    weighting?: string | null;
   }
 
 interface tokenMetadataContract_address {
@@ -79,3 +81,6 @@ interface tokenMetadata {
         website: string[];
     };
 }
+
+type Weighting = 'unweighted' | 'post' | 'current' | 'delta' | 'inverse';
+type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
