@@ -2,7 +2,10 @@ const weightAllMessages = (
     messages:Message[], 
     messageWeighting: Weighting
 ):Message[] => {
-    if(messageWeighting === "unweighted"){
+    if(
+        messageWeighting === "unweighted" || 
+        messages.length === 0
+    ){
         return messages
     } else {
         // find total for avg calc, if its undefined just make it zero
