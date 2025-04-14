@@ -65,17 +65,17 @@ const Analyze:React.FC = () => {
         null
     // weight messages
     const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
-    // all channels
-    const weightedData = messageWeighting !== "unweighted" && 
-        timeFilteredData !== null ?
+    // // all channels
+    console.log(timeFilteredData)
+    const weightedData =  timeFilteredData !== null ?
         weightAllMessages(timeFilteredData, messageWeighting) :
         timeFilteredData;
-    // current channel
-    const weightedChannelData = messageWeighting !== "unweighted" && 
-        timeFilteredData !== null &&
-        currentChannel !== null ?
-        weightChannelMessages(timeFilteredData, messageWeighting, currentChannel) :
-        timeFilteredData;
+    // // current channel
+    // const weightedChannelData = messageWeighting !== "unweighted" && 
+    //     timeFilteredData !== null &&
+    //     currentChannel !== null ?
+    //     weightChannelMessages(timeFilteredData, messageWeighting, currentChannel) :
+    //     timeFilteredData;
 
     useEffect(() => {
         const getAllMessagesScore = () => {
@@ -171,8 +171,10 @@ const Analyze:React.FC = () => {
                                 <AvatarFallback>AP</AvatarFallback>
                             </Avatar>
                             {
-                                weightedChannelData !== null && 
-                                weightedChannelData[0].weighting?.toString()
+                                weightedData !== null && 
+                                weightedData[0] &&
+                                weightedData[0].weighting &&
+                                weightedData[0].weighting?.toString() || "hi"
                             }
                         </div>
                     }

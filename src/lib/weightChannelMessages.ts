@@ -5,6 +5,9 @@ const weightChannelMessages = (
     messageWeighting: Weighting, 
     currentChannel: AlphaPING.ChannelStructOutput
 ):Message[] => {
+    if(messages.length <= 0){
+        return messages
+    }
     const channelMessages = messages.filter((message) => {
         return message.channel.toString() === currentChannel.id.toString()
     })
