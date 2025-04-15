@@ -2,7 +2,8 @@
 
 import React, {
     useEffect,
-    useState
+    useState,
+    useMemo,
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useMessagesProviderContext } from "src/contexts/MessagesContext";
@@ -55,41 +56,53 @@ const Analyze:React.FC = () => {
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
     const {messages} = useMessagesProviderContext()
 
-    const [allMessagesScore, setallMessagesScore] = useState<SentimentScore | null>(null)
-    const [loading, setLoading] = useState<boolean>(true);
-
     // filter for date range before weighting
     const [timeRange, setTimeRange] = useState<TimeFrame>("3m")
-    const timeFilteredData = mockMessages !== null ?
+    const timeFilteredData = useMemo(() => {
+        return mockMessages !== null ?
         timeFilterMessages(mockMessages, timeRange) : 
         null
+    },[mockMessages, timeRange])
+
     // weight messages
+    // all channels
     const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
-    // // all channels
-    console.log(timeFilteredData)
-    const weightedData =  timeFilteredData !== null ?
+    const weightedData = useMemo(() => {
+        return timeFilteredData !== null ?
         weightAllMessages(timeFilteredData, messageWeighting) :
         timeFilteredData;
+    }, [timeFilteredData, messageWeighting])
     // // current channel
     // const weightedChannelData = messageWeighting !== "unweighted" && 
     //     timeFilteredData !== null &&
     //     currentChannel !== null ?
     //     weightChannelMessages(timeFilteredData, messageWeighting, currentChannel) :
     //     timeFilteredData;
-
+    
+    // get scores from filtered and weighted data
+    const [allMessagesScore, setAllMessagesScore] = useState<SentimentScore | null>(null)
+    const [loading, setLoading] = useState<boolean>(true);
     useEffect(() => {
         const getAllMessagesScore = () => {
-            setLoading(true)
-            const input = mockMessages.map((message) => {
-                return message.text
-            })
-            .join()
-            const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
-            setallMessagesScore(intensity)
-            setLoading(false)
+            if(weightedData !== null){
+                setLoading(true)
+                const input = weightedData.map((message) => {
+                    return message.text
+                })
+                .join()
+                if(input.length > 0){
+                    const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
+                    console.log(intensity)
+                    setAllMessagesScore(intensity)
+                    setLoading(false)
+                }else{
+                    setAllMessagesScore(null)
+                    setLoading(false)
+                }
+            }
         }
         getAllMessagesScore()
-    }, [messages, currentChannel])
+    }, [weightedData, currentChannel])
 
     const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
     

@@ -1,9 +1,6 @@
 'use client';
 
-import React, {
-    useState,
-    useEffect
-} from "react";
+import React from "react";
 import { 
     Card, 
     CardHeader, 
@@ -35,6 +32,7 @@ interface IOverallScoreDial{
 }
 
 const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
+    console.log(allMessagesScore)
 
     const chartConfig = {
         allMessagesScore: {
@@ -50,7 +48,6 @@ const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
                     All Channels Avg Vibe
                 </CardTitle>
             </CardHeader>
-            {allMessagesScore !== null && (
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
@@ -59,13 +56,19 @@ const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
                         <RadialBarChart
                             data={
                                 [
-                                    { allMessagesScore: allMessagesScore.compound, 
+                                    { allMessagesScore: allMessagesScore !== null ? 
+                                            allMessagesScore.compound :
+                                            null, 
                                         fill: "hsl(273 54% 72)",
                                     },
                                 ]
                             }
                             startAngle={0}
-                            endAngle={((allMessagesScore.compound + 1) / 2) * 360}
+                            endAngle={
+                                allMessagesScore !== null ?
+                                ((allMessagesScore.compound + 1) / 2) * 360 :
+                                0.5 * 360
+                            }
                             innerRadius={75}
                             outerRadius={105}
                         >
@@ -100,7 +103,11 @@ const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
                                         y={viewBox.cy}
                                         className="fill-secondary text-4xl font-bold"
                                         >
-                                        {(allMessagesScore.compound * 100).toFixed(0).toLocaleString()}%
+                                            {
+                                                allMessagesScore !== null ?
+                                                `${(allMessagesScore.compound * 100).toFixed(0).toLocaleString()}%` :
+                                                'NA'
+                                            }
                                         </tspan>
                                         <tspan
                                         x={viewBox.cx}
@@ -135,7 +142,6 @@ const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
                         </RadialBarChart>
                         </ChartContainer>
                 </CardContent>
-            )}
         </Card>
     )
 }
