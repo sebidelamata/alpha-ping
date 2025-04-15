@@ -34,11 +34,12 @@ interface IChannelScoreDial{
 }
 
 const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesScore}) => {
+    // console.log(currentChannelMessagesScore)
 
     const { currentChannel } = useChannelProviderContext()
 
     const chartConfig = {
-        allMessagesScore: {
+        currentChannelMessagesScore: {
         label: `${currentChannel?.name || 'Current Channel'} Vibe Score`,
     },
     } satisfies ChartConfig
@@ -50,7 +51,6 @@ const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesSco
                     {currentChannel?.name} Avg Vibe
                 </CardTitle>
             </CardHeader>
-            {currentChannelMessagesScore !== null && (
                 <CardContent className="flex flex-col items-center bg-primary">
                     <ChartContainer
                         config={chartConfig}
@@ -59,13 +59,20 @@ const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesSco
                         <RadialBarChart
                             data={
                                 [
-                                    { allMessagesScore: currentChannelMessagesScore.compound, 
+                                    { 
+                                        currentChannelMessagesScore: currentChannelMessagesScore !== null ? 
+                                            currentChannelMessagesScore.compound : 
+                                            null, 
                                         fill: "hsl(0 0% 100%)",
                                     },
                                 ]
                             }
                             startAngle={0}
-                            endAngle={((currentChannelMessagesScore.compound + 1) / 2) * 360}
+                            endAngle={
+                                currentChannelMessagesScore !== null ?
+                                    ((currentChannelMessagesScore.compound + 1) / 2) * 360 :
+                                    180
+                            }
                             innerRadius={75}
                             outerRadius={105}
                         >
@@ -77,7 +84,7 @@ const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesSco
                             polarRadius={[86, 74]}
                             />
                             <RadialBar 
-                                dataKey="allMessagesScore" 
+                                dataKey="currentChannelMessagesScore" 
                                 cornerRadius={10} 
                             />
                             <PolarRadiusAxis 
@@ -100,7 +107,11 @@ const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesSco
                                         y={viewBox.cy}
                                         className="fill-secondary text-4xl font-bold"
                                         >
-                                        {(currentChannelMessagesScore.compound * 100).toFixed(0).toLocaleString()}%
+                                            {
+                                                currentChannelMessagesScore !== null ?
+                                                    `${(currentChannelMessagesScore.compound * 100).toFixed(0).toLocaleString()}%`:
+                                                    'NA'
+                                            }
                                         </tspan>
                                         <tspan
                                         x={viewBox.cx}
@@ -124,7 +135,10 @@ const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesSco
                                       {chartConfig[name as keyof typeof chartConfig]?.label ||
                                         name}
                                       <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-accent">
-                                        {(value as number * 100).toFixed(2)}
+                                        { value !== null ?
+                                            (value as number * 100).toFixed(2) : 
+                                            'NA'
+                                        }
                                         <span className="font-normal text-accent">
                                           %
                                         </span>
@@ -135,7 +149,6 @@ const ChannelScoreDial:React.FC<IChannelScoreDial> = ({currentChannelMessagesSco
                         </RadialBarChart>
                         </ChartContainer>
                 </CardContent>
-            )}
         </Card>
     )
 }

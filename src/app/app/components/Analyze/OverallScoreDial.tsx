@@ -32,7 +32,6 @@ interface IOverallScoreDial{
 }
 
 const OverallScoreDial:React.FC<IOverallScoreDial> = ({allMessagesScore}) => {
-    console.log(allMessagesScore)
 
     const chartConfig = {
         allMessagesScore: {
