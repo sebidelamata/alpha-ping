@@ -186,7 +186,7 @@ const ChannelScoreBarChartPosNeutNeg:React.FC<IChannelScoreBarChartPosNeutNeg> =
                             NA
                         </CardTitle>
                         <CardDescription>
-                            Vibe Distributions
+                            Vibe Distribution
                         </CardDescription>
                     </CardHeader>
                 </Card>
