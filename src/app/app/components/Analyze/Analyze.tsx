@@ -112,17 +112,14 @@ const Analyze:React.FC = () => {
         const getCurrentChannelMessagesScore = () => {
             if(weightedChannelData !== null){
                 setLoading(true)
-                console.log(weightedChannelData)
                 const input = weightedChannelData.map((message) => {
                     if(message.channel.toString() === currentChannel?.id.toString()){
                         return message.text
                     }
                 })
                 .join()
-                console.log(input)
                 if(input.length > 0){
                     const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
-                    console.log(intensity)
                     setcurrentChannelMessagesScore(intensity)
                     setLoading(false)
                 }else{
@@ -196,12 +193,6 @@ const Analyze:React.FC = () => {
                                 />
                                 <AvatarFallback>AP</AvatarFallback>
                             </Avatar>
-                            {
-                                weightedData !== null && 
-                                weightedData[0] &&
-                                weightedData[0].weighting &&
-                                weightedData[0].weighting?.toString() || "hi"
-                            }
                         </div>
                     }
                 </CardTitle>

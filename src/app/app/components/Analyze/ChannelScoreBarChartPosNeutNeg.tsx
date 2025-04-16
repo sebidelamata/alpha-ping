@@ -9,13 +9,14 @@ import {
     Card, 
     CardHeader, 
     CardTitle, 
-    CardContent, 
+    CardContent,
+    CardDescription, 
 } from "@/components/components/ui/card";
 import { 
     Area, 
     AreaChart, 
     CartesianGrid, 
-    XAxis 
+    XAxis
 } from "recharts"
   import { 
     ChartConfig, 
@@ -54,32 +55,43 @@ const ChannelScoreBarChartPosNeutNeg:React.FC<IChannelScoreBarChartPosNeutNeg> =
         }
     } satisfies ChartConfig
 
-    const [chartData, setChartData] = useState<{ bias: string; currentChannelScore: string; }[] | null>(null)
+    const [chartData, setChartData] = useState<{ 
+        bias: string;
+        currentChannelScore: string | null; 
+        allMessagesScore: string | null;
+    }[] | null>(null)
     useEffect(() => {
         const getChartData = () => {
-            if(
-                currentChannelMessagesScore !== null &&
-                allMessagesScore !== null
-            ){
-                const chartData = [
-                    {
-                        bias: "Negative",
-                        currentChannelScore: (currentChannelMessagesScore.neg * 100).toFixed(0).toString(),
-                        allMessagesScore: (allMessagesScore.neg * 100).toFixed(0).toString()
-                    },
-                    {
-                        bias: "Neutral",
-                        currentChannelScore: (currentChannelMessagesScore.neu * 100).toFixed(0).toString(),
-                        allMessagesScore: (allMessagesScore.neu * 100).toFixed(0).toString()
-                    },
-                    {
-                        bias: "Positive",
-                        currentChannelScore: (currentChannelMessagesScore.pos * 100).toFixed(0).toString(),
-                        allMessagesScore: (allMessagesScore.pos * 100).toFixed(0).toString()
-                    }
-                ]
-                setChartData(chartData)
-            }
+            const chartData = [
+                {
+                    bias: "Negative",
+                    currentChannelScore: currentChannelMessagesScore !== null ?
+                        (currentChannelMessagesScore.neg * 100).toFixed(0).toString():
+                        null,
+                    allMessagesScore: allMessagesScore !== null ?
+                        (allMessagesScore.neg * 100).toFixed(0).toString() :
+                        null
+                },
+                {
+                    bias: "Neutral",
+                    currentChannelScore: currentChannelMessagesScore !== null ?
+                        (currentChannelMessagesScore.neu * 100).toFixed(0).toString():
+                        null,
+                    allMessagesScore: allMessagesScore !== null ?
+                        (allMessagesScore.neu * 100).toFixed(0).toString() :
+                        null
+                },
+                {
+                    bias: "Positive",
+                    currentChannelScore: currentChannelMessagesScore !== null ?
+                        (currentChannelMessagesScore.pos * 100).toFixed(0).toString():
+                        null,
+                    allMessagesScore: allMessagesScore !== null ?
+                        (allMessagesScore.pos * 100).toFixed(0).toString() :
+                        null
+                }
+            ]
+            setChartData(chartData)
         }
         getChartData()
     }, [currentChannelMessagesScore, allMessagesScore])
@@ -159,6 +171,25 @@ const ChannelScoreBarChartPosNeutNeg:React.FC<IChannelScoreBarChartPosNeutNeg> =
                         </AreaChart>
                     </ChartContainer>
                 </CardContent>
+            }
+            {
+                currentChannelMessagesScore === null &&
+                <Card
+                    className="text-secondary bg-primary justify-center items-center text-3xl"
+                >
+                    <CardHeader
+                        className="justify-center items-center text-3xl relative top-20"
+                    >
+                        <CardTitle
+                            className="justify-center items-center text-3xl"
+                        >
+                            NA
+                        </CardTitle>
+                        <CardDescription>
+                            Vibe Distributions
+                        </CardDescription>
+                    </CardHeader>
+                </Card>
             }
         </Card>
     )
