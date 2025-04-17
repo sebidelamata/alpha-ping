@@ -174,35 +174,37 @@ const Analyze:React.FC = () => {
         e.stopPropagation(); 
       }}
         >
-            <CardHeader>
-                <CardTitle className="flex flex-row text-3xl gap-4">
-                    Analyze {currentChannel?.name || ""}
-                    {
-                        currentChannel &&
-                        selectedChannelMetadata &&
-                        <div className="flex flex-row gap-2">
-                            <Avatar className="size-10">
-                                <AvatarImage
-                                    src={
-                                        selectedChannelMetadata.logo !== '' ? 
-                                        selectedChannelMetadata.logo : 
-                                        (
-                                            currentChannel.tokenType === 'ERC20' ?
-                                            '/erc20Icon.svg' :
-                                            '/blank_nft.svg'
-                                        )
-                                    }
-                                    loading="lazy"
-                                    alt="AlphaPING Logo"
-                                />
-                                <AvatarFallback>AP</AvatarFallback>
-                            </Avatar>
-                        </div>
-                    }
-                </CardTitle>
-                <CardDescription>
-                    Dive into user sentiments, drill down to your follow list.
-                </CardDescription>
+            <CardHeader className="flex flex-row justify-between gap-2">
+                <div className="flex flex-col gap-2">
+                    <CardTitle className="flex flex-row text-3xl gap-4">
+                        Analyze {currentChannel?.name || ""}
+                        {
+                            currentChannel &&
+                            selectedChannelMetadata &&
+                            <div className="flex flex-row gap-2">
+                                <Avatar className="size-10">
+                                    <AvatarImage
+                                        src={
+                                            selectedChannelMetadata.logo !== '' ? 
+                                            selectedChannelMetadata.logo : 
+                                            (
+                                                currentChannel.tokenType === 'ERC20' ?
+                                                '/erc20Icon.svg' :
+                                                '/blank_nft.svg'
+                                            )
+                                        }
+                                        loading="lazy"
+                                        alt="AlphaPING Logo"
+                                    />
+                                    <AvatarFallback>AP</AvatarFallback>
+                                </Avatar>
+                            </div>
+                        }
+                    </CardTitle>
+                    <CardDescription>
+                        Dive into user sentiments, drill down to your follow list.
+                    </CardDescription>
+                </div>
                 <div className="flex flex-row justify-start gap-4">
                     <Select 
                         value={messageWeighting} 

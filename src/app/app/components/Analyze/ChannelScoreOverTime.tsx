@@ -101,7 +101,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg h-[500px] w-full">
             <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-                <div className="grid flex-1 gap-1 text-center sm:text-left">
+                <div className="grid flex-1 gap-4 text-center sm:text-left">
                     <CardTitle className="flex flex-row gap-4">
                         {
                             currentChannel &&
@@ -125,15 +125,15 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                                 </Avatar>
                             </div>
                         }
-                        <div>
-                            {currentChannel?.name} Vibes Over Time
-                        </div>
-            </CardTitle>
-            <CardDescription>
-                {
-                    descriptions[timeRange].toString() || ""
-                }
-            </CardDescription>
+                            <div>
+                                {currentChannel?.name} Vibes Over Time
+                            </div>
+                </CardTitle>
+                <CardDescription>
+                    {
+                        descriptions[timeRange].toString() || ""
+                    }
+                </CardDescription>
             </div>
             </CardHeader>
             <CardContent className="flex flex-col items-center bg-primary">
@@ -166,6 +166,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                                     tickLine={true}
                                     axisLine={false}
                                     tickMargin={8}
+                                    tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
                                 />
                                 <ChartTooltip
                                 cursor={false}
@@ -207,6 +208,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                                             tickLine={true}
                                             axisLine={false}
                                             tickMargin={8}
+                                            tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
                                         />
                                     </LineChart>
                             </ChartContainer>
