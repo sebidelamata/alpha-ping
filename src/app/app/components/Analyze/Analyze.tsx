@@ -57,7 +57,7 @@ const Analyze:React.FC = () => {
     const {messages} = useMessagesProviderContext()
 
     // filter for date range before weighting
-    const [timeRange, setTimeRange] = useState<TimeFrame>("3m")
+    const [timeRange, setTimeRange] = useState<TimeFrame>("all")
     const timeFilteredData = useMemo(() => {
         return mockMessages !== null ?
         timeFilterMessages(mockMessages, timeRange) : 
