@@ -135,30 +135,34 @@ const Analyze:React.FC = () => {
     const [scoreTimeseries, setScoreTimeseries] = useState<null | SentimentScoresTimeseries[]>(null)
     useEffect(() => {
         const getChannelScoreTimeseries = () => {
-            setLoading(true)
-            const input = mockMessages.map((message) => {
-                if(message.channel.toString() === currentChannel?.id.toString()){
-                    return message
-                }
-            })
-            const intensity: SentimentScoresTimeseries[] = input
-                .map((message) => {
-                    if(message !== null && message !== undefined){
-                        return(
-                            {
-                                datetime: message.timestamp,
-                                score: vader.SentimentIntensityAnalyzer.polarity_scores(message.text).compound,
-                                postBalance: message.messageTimestampTokenAmount
-                            } as SentimentScoresTimeseries
-                        )
+            if(weightedChannelData !== null){
+                setLoading(true)
+                const input = weightedChannelData.map((message) => {
+                    if(message.channel.toString() === currentChannel?.id.toString()){
+                        return message
                     }
                 })
-                .filter((item): item is SentimentScoresTimeseries => item !== undefined); 
-            setScoreTimeseries(intensity)
-            setLoading(false)
+                const intensity: SentimentScoresTimeseries[] = input
+                    .map((message) => {
+                        if(message !== null && message !== undefined){
+                            return(
+                                {
+                                    datetime: message.timestamp,
+                                    score: vader.SentimentIntensityAnalyzer.polarity_scores(message.text).compound,
+                                    postBalance: message.messageTimestampTokenAmount
+                                } as SentimentScoresTimeseries
+                            )
+                        }
+                    })
+                    .filter((item): item is SentimentScoresTimeseries => item !== undefined); 
+                setScoreTimeseries(intensity)
+                setLoading(false)
+            } else {
+                return null
+            }
         }
         getChannelScoreTimeseries()
-    }, [messages, currentChannel])
+    }, [weightedChannelData, currentChannel])
 
     loading === true &&
         <Loading/>
@@ -276,6 +280,7 @@ const Analyze:React.FC = () => {
                 />
                 <ChannelScoreOverTime 
                     scoreTimeseries={scoreTimeseries}
+                    timeRange={timeRange}
                 />
             </CardContent>
         </Card>

@@ -1,8 +1,6 @@
 'use client';
 
-import React, {
-    useState 
-} from "react";
+import React from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { 
     Avatar, 
@@ -28,13 +26,6 @@ import {
     ChartContainer,
     ChartTooltip,
 } from "@/components/components/ui/chart"
-import { 
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/components/ui/select";
 
 type SentimentScoresTimeseries = {
     datetime: Date;
@@ -43,10 +34,10 @@ type SentimentScoresTimeseries = {
 };
 
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
-type Weighting = 'unweighted' | 'post' | 'current' | 'delta' | 'inverse';
 
 interface IChannelScoreDial{
     scoreTimeseries: null | SentimentScoresTimeseries[];
+    timeRange: TimeFrame;
 }
 
 interface ICustomTooltipProps {
@@ -54,7 +45,10 @@ interface ICustomTooltipProps {
     payload?: Array<{ payload: SentimentScoresTimeseries }>;
 }
 
-const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => {
+const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
+    scoreTimeseries, 
+    timeRange
+}) => {
 
     const { 
         currentChannel, 
@@ -86,31 +80,6 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
         }
         return null;
     };
-
-    const [timeRange, setTimeRange] = useState<TimeFrame>("3m")
-    const filteredData = scoreTimeseries !== null ?
-        scoreTimeseries.filter((item) => {
-            const date = new Date(item.datetime)
-            const referenceDate = new Date()
-            let daysToSubtract = 90
-            if (timeRange === "1y") {
-                daysToSubtract = 365
-            } else if(timeRange === "6m"){
-                daysToSubtract = 180
-            } else if (timeRange === "30d") {
-                daysToSubtract = 30
-            } else if (timeRange === "7d"){
-                daysToSubtract = 7
-            } else if(timeRange === "all"){
-                return scoreTimeseries
-            }
-            const startDate = new Date(referenceDate)
-            startDate.setDate(startDate.getDate() - daysToSubtract)
-            return date >= startDate
-        }) :
-        scoreTimeseries
-
-    const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
     
     // Dummy data for empty chart template
     const emptyData = [
@@ -166,70 +135,11 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                 }
             </CardDescription>
             </div>
-            <Select 
-                value={messageWeighting} 
-                onValueChange={(value: string) => setMessageWeighting(value as Weighting)}
-            >
-                <SelectTrigger
-                    className="w-[220px] rounded-lg sm:ml-auto"
-                    aria-label="Select a value"
-                >
-                    <SelectValue placeholder="Unweighted" />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                    <SelectItem value="unweighted" className="rounded-lg">
-                        Unweighted
-                    </SelectItem>
-                    <SelectItem value="post" className="rounded-lg">
-                        Post Balance Weighted
-                    </SelectItem>
-                    <SelectItem value="current" className="rounded-lg">
-                        Current Balance Weighted
-                    </SelectItem>
-                    <SelectItem value="delta" className="rounded-lg">
-                        Balance Delta Weighted
-                        </SelectItem>
-                    <SelectItem value="inverse" className="rounded-lg">
-                        Inverse Balance Weighted
-                    </SelectItem>
-                </SelectContent>
-            </Select>
-            <Select 
-                value={timeRange} 
-                onValueChange={(value: string) => setTimeRange(value as TimeFrame)}
-            >
-                <SelectTrigger
-                    className="w-[160px] rounded-lg sm:ml-auto"
-                    aria-label="Select a value"
-                >
-                    <SelectValue placeholder="Last 3 months" />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                    <SelectItem value="all" className="rounded-lg">
-                        All Time
-                    </SelectItem>
-                    <SelectItem value="1y" className="rounded-lg">
-                        Last Year
-                    </SelectItem>
-                    <SelectItem value="6m" className="rounded-lg">
-                        Last 6 months
-                    </SelectItem>
-                    <SelectItem value="3m" className="rounded-lg">
-                        Last 3 months
-                        </SelectItem>
-                    <SelectItem value="30d" className="rounded-lg">
-                        Last 30 days
-                    </SelectItem>
-                        <SelectItem value="7d" className="rounded-lg">
-                        Last 7 days
-                    </SelectItem>
-                </SelectContent>
-            </Select>
             </CardHeader>
             <CardContent className="flex flex-col items-center bg-primary">
                 {
-                    filteredData !== null && 
-                    filteredData.length > 0 ?
+                    scoreTimeseries !== null && 
+                    scoreTimeseries.length > 0 ?
                     (
                         <ChartContainer
                             config={chartConfig}
@@ -237,7 +147,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({scoreTimeseries}) => 
                         >
                             <LineChart
                                 accessibilityLayer
-                                data={filteredData}
+                                data={scoreTimeseries}
                                 margin={{
                                 left: 12,
                                 right: 12,
