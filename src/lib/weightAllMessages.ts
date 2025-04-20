@@ -1,31 +1,30 @@
 const weightAllMessages = (
     messages:Message[], 
     messageWeighting: Weighting
-):Message[] => {
+):number[] => {
     if(
         messageWeighting === "unweighted" || 
         messages.length === 0
     ){
-        return messages
-    } else {
+        // we return full weighting * by 1 (or return empty array)
+        const identityWeights = Array(messages.length).fill(1) || []
+        return identityWeights
+    } else if(messageWeighting === "post"){
         // find total for avg calc, if its undefined just make it zero
         const total = messages.reduce((sum, message) => sum + BigInt(message.messageTimestampTokenAmount), BigInt(0)) || BigInt(0)
-        const weightedMessages = messages.map((message) => {
-                if (messageWeighting === "post") {
-                    return {
-                        ...message,
-                        weighting: total !== undefined
-                            // fallback to 0 in case we divide by zero or divide zero or anything weird
-                            ? (Number(message.messageTimestampTokenAmount) / Number(total) * 100)
-                                .toFixed(2)
-                                .toString() || "0"
-                            : null
-                    }
-                }
-                return message
-             }
+        const weights = messages.map((message) => {
+                return (
+                    // fallback to 0 in case we divide by zero or divide zero or anything weird
+                    Number(
+                        (Number(message.messageTimestampTokenAmount) / Number(total) * 100)
+                        .toFixed(2) || 0 
+                    )
+                )
+            }
         )
-        return weightedMessages
+        return weights
+    } else {
+        return []
     }
 }
 

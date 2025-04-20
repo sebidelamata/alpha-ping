@@ -37,13 +37,6 @@ import timeFilterMessages from "src/lib/timeFilterMessages";
 import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
 
-type SentimentScore = {
-    compound: number;
-    pos: number;
-    neu: number;
-    neg: number;
-};
-
 type SentimentScoresTimeseries = {
     datetime: Date;
     score: number;
@@ -64,9 +57,37 @@ const Analyze:React.FC = () => {
         null
     },[mockMessages, timeRange])
 
+    // get message scores
+    const [scores, setScores] = useState<SentimentScore[]>([])
+    useEffect(() => {
+        const getScores = ():void => {
+            const scores:SentimentScore[] = []
+            if(timeFilteredData !== null){
+                timeFilteredData.map((message) => {
+                    scores.push(
+                        vader.SentimentIntensityAnalyzer.polarity_scores(message.text) 
+                    )
+                })
+            }
+            console.log(scores)
+            setScores(scores)
+        }
+        getScores()
+    }, [timeFilteredData])
+
+
     // weight messages
     // all channels
     const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
+    const [weights, setWeights] = useState<number[]>([])
+    useEffect(() => {
+        const weights = timeFilteredData !== null ?
+            weightAllMessages(timeFilteredData, messageWeighting) :
+            []
+        setWeights(weights)
+    }, [timeFilteredData, messageWeighting])
+    // current channels
+    const [channelWeights, setChannelWeights] = useState<number[]>([])
     const weightedData = useMemo(() => {
         return timeFilteredData !== null ?
         weightAllMessages(timeFilteredData, messageWeighting) :
@@ -169,12 +190,12 @@ const Analyze:React.FC = () => {
 
     return(
         <Card
-        className="flex flex-col w-full h-full bg-primary text-secondary overflow-clip"
+        className="flex flex-col w-full h-full bg-primary text-secondary overflow-hidden"
         onWheel={(e) => {
         e.stopPropagation(); 
       }}
         >
-            <CardHeader className="flex flex-row justify-between gap-2">
+            <CardHeader className="sticky top-0 z-10 flex flex-row justify-between gap-2">
                 <div className="flex flex-col gap-2">
                     <CardTitle className="flex flex-row text-3xl gap-4">
                         Analyze {currentChannel?.name || ""}

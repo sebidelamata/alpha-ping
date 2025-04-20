@@ -11,6 +11,13 @@ interface Window {
     ethereum?: typeof window.ethereum;
 }
 
+interface SentimentScore {
+    compound: number;
+    pos: number;
+    neu: number;
+    neg: number;
+}
+
 interface Message {
     _id: string; // Use string to align with MongoDB ObjectId type
     channel: string;
@@ -20,8 +27,6 @@ interface Message {
     messageTimestampTokenAmount: string;
     reactions: Record<string, string[]>; // Map of reaction types to lists of accounts
     replyId: string | null; // Use string to align with MongoDB ObjectId if necessary
-    // option weighting for senitiment scores
-    weighting?: string | null;
   }
 
 interface tokenMetadataContract_address {
