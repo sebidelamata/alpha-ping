@@ -27,12 +27,6 @@ import {
     ChartTooltip,
 } from "@/components/components/ui/chart"
 
-type SentimentScoresTimeseries = {
-    datetime: Date;
-    score: number;
-    postBalance: string;
-};
-
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
 
 interface IChannelScoreDial{
@@ -69,7 +63,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
     const CustomTooltip = ({ active, payload }: ICustomTooltipProps) => {
         if (active && payload && payload.length) {
             const data = payload[0].payload as SentimentScoresTimeseries; // Full data object
-            const date = data.datetime instanceof Date ? data.datetime : new Date(data.datetime);
+            const date = data.message.timestamp instanceof Date ? data.message.timestamp : new Date(data.message.timestamp);
             const score = `${(data.score * 100).toFixed(2).toString()}%`;
             return (
                 <div className="bg-primary text-secondary p-2 rounded shadow font-light">
@@ -83,7 +77,19 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
     
     // Dummy data for empty chart template
     const emptyData = [
-        { datetime: new Date(), score: 0 }
+        { 
+            message: {
+            _id: '',
+            channel: '',
+            account: '',
+            text: '',
+            timestamp: new Date(0), // Epoch time
+            messageTimestampTokenAmount: '0',
+            reactions: {},
+            replyId: null
+          }, 
+          score: 0 
+        }
     ];
 
     // Description strings change based on selectors
@@ -155,7 +161,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                             >
                                 <CartesianGrid vertical={false} />
                                 <XAxis
-                                dataKey="datetime"
+                                dataKey="message.timestamp"
                                 tickLine={true}
                                 axisLine={false}
                                 tickMargin={8}
@@ -197,7 +203,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                                     >
                                         <CartesianGrid vertical={false} />
                                         <XAxis
-                                        dataKey="datetime"
+                                        dataKey="message.datetime"
                                         tickLine={true}
                                         axisLine={false}
                                         tickMargin={8}

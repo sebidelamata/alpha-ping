@@ -11,9 +11,11 @@ const weightChannelMessages = (
     const channelMessages = messages.filter((message) => {
         return message.channel.toString() === currentChannel.id.toString()
     })
+    console.log(channelMessages)
+    console.log(messageWeighting)
     if(messageWeighting === "unweighted"){
         // we return full weighting * by 1 (or return empty array)
-        const identityWeights = Array(messages.length).fill(1) || []
+        const identityWeights = Array(channelMessages.length).fill(1) || []
         return identityWeights
     } else if(messageWeighting === "post"){
         // find total for avg calc, if its undefined just make it zero

@@ -11,13 +11,6 @@ interface Window {
     ethereum?: typeof window.ethereum;
 }
 
-interface SentimentScore {
-    compound: number;
-    pos: number;
-    neu: number;
-    neg: number;
-}
-
 interface Message {
     _id: string; // Use string to align with MongoDB ObjectId type
     channel: string;
@@ -29,6 +22,17 @@ interface Message {
     replyId: string | null; // Use string to align with MongoDB ObjectId if necessary
   }
 
+  interface SentimentScore {
+    compound: number;
+    pos: number;
+    neu: number;
+    neg: number;
+}
+
+type SentimentScoresTimeseries = {
+    message: Message;
+    score: number;
+};
 interface tokenMetadataContract_address {
     contract_address: string;
     platform: {
