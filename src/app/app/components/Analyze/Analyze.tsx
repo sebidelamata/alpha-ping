@@ -36,6 +36,7 @@ import {
 import timeFilterMessages from "src/lib/timeFilterMessages";
 import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
+import averageScores from "src/lib/averageScores";
 
 type SentimentScoresTimeseries = {
     datetime: Date;
@@ -58,6 +59,7 @@ const Analyze:React.FC = () => {
     },[mockMessages, timeRange])
 
     // get message scores
+    // all channels
     const [scores, setScores] = useState<SentimentScore[]>([])
     useEffect(() => {
         const getScores = ():void => {
@@ -69,11 +71,29 @@ const Analyze:React.FC = () => {
                     )
                 })
             }
-            console.log(scores)
             setScores(scores)
         }
         getScores()
     }, [timeFilteredData])
+    // current channel
+    const [channelScores, setChannelScores] = useState<SentimentScore[]>([])
+    useEffect(() => {
+        const getChannelScores = ():void => {
+            const scores:SentimentScore[] = []
+            if(timeFilteredData !== null && currentChannel !== null){
+                const channelMessages: Message[] = timeFilteredData.filter((message) => {
+                    return message.channel.toString() === currentChannel.id.toString()
+                })
+                channelMessages.map((message) => {
+                    scores.push(
+                        vader.SentimentIntensityAnalyzer.polarity_scores(message.text) 
+                    )
+                })
+            }
+            setChannelScores(scores)
+        }
+        getChannelScores()
+    }, [timeFilteredData, currentChannel])
 
 
     // weight messages
@@ -102,51 +122,25 @@ const Analyze:React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     useEffect(() => {
         const getAllMessagesScore = () => {
-            if(weightedData !== null){
-                setLoading(true)
-                const input = weightedData.map((message) => {
-                    return message.text
-                })
-                .join()
-                if(input.length > 0){
-                    const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
-                    setAllMessagesScore(intensity)
-                    setLoading(false)
-                }else{
-                    setLoading(true)
-                    setAllMessagesScore(null)
-                    setLoading(false)
-                }
-            }
+            setLoading(true)
+            const averagedScores = averageScores(weights, scores)
+            setAllMessagesScore(averagedScores)
+            setLoading(false)
         }
         getAllMessagesScore()
-    }, [weightedData])
+    }, [scores, weights])
 
     // get the overall current channel score
     const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
     useEffect(() => {
         const getCurrentChannelMessagesScore = () => {
-            if(weightedChannelData !== null){
                 setLoading(true)
-                const input = weightedChannelData.map((message) => {
-                    if(message.channel.toString() === currentChannel?.id.toString()){
-                        return message.text
-                    }
-                })
-                .join()
-                if(input.length > 0){
-                    const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(input);
-                    setcurrentChannelMessagesScore(intensity)
-                    setLoading(false)
-                }else{
-                    setLoading(true)
-                    setcurrentChannelMessagesScore(null)
-                    setLoading(false)
-                }
-            }
+                const averagedScores = averageScores(channelWeights, channelScores)
+                setcurrentChannelMessagesScore(averagedScores)
+                setLoading(false)
         }
         getCurrentChannelMessagesScore()
-    }, [weightedChannelData, currentChannel])
+    }, [channelWeights, channelScores])
 
     const [scoreTimeseries, setScoreTimeseries] = useState<null | SentimentScoresTimeseries[]>(null)
     useEffect(() => {
