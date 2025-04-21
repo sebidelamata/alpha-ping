@@ -86,19 +86,14 @@ const Analyze:React.FC = () => {
             []
         setWeights(weights)
     }, [timeFilteredData, messageWeighting])
-    // current channels
-    const [channelWeights, setChannelWeights] = useState<number[]>([])
-    const weightedData = useMemo(() => {
-        return timeFilteredData !== null ?
-        weightAllMessages(timeFilteredData, messageWeighting) :
-        timeFilteredData;
-    }, [timeFilteredData, messageWeighting])
     // current channel
-    const weightedChannelData = useMemo(() => {
-        return timeFilteredData !== null &&
+    const [channelWeights, setChannelWeights] = useState<number[]>([])
+    useEffect(() => {
+        const weights = timeFilteredData !== null &&
             currentChannel !== null ?
-        weightChannelMessages(timeFilteredData, messageWeighting, currentChannel) :
-        timeFilteredData;
+            weightChannelMessages(timeFilteredData, messageWeighting, currentChannel) :
+            []
+        setChannelWeights(weights)
     }, [timeFilteredData, messageWeighting, currentChannel])
     
     // get scores from filtered and weighted data
