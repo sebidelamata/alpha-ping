@@ -42,7 +42,7 @@ import weightTimeseries from "src/lib/weightTimeseries";
 const Analyze:React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
-    const {messages} = useMessagesProviderContext()
+    const {messages, authorCurrentTokenBalances} = useMessagesProviderContext()
 
     // filter for date range before weighting
     const [timeRange, setTimeRange] = useState<TimeFrame>("all")
@@ -109,10 +109,10 @@ const Analyze:React.FC = () => {
     const [weights, setWeights] = useState<number[]>([])
     useEffect(() => {
         const weights = timeFilteredData !== null ?
-            weightAllMessages(timeFilteredData, messageWeighting) :
+            weightAllMessages(timeFilteredData, messageWeighting, authorCurrentTokenBalances) :
             []
         setWeights(weights)
-    }, [timeFilteredData, messageWeighting])
+    }, [timeFilteredData, messageWeighting, authorCurrentTokenBalances])
     // current channel
     const [channelWeights, setChannelWeights] = useState<number[]>([])
     useEffect(() => {

@@ -47,7 +47,7 @@ const weightChannelMessages = (
                 )
             }
         )
-return weights
+        return weights
     } else {
         return []
     }

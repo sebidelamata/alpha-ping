@@ -8,10 +8,15 @@ import React, {
     useEffect
 } from "react"
 import { useSocketProviderContext } from "./SocketContext"
+import { ethers } from 'ethers'
+import { useEtherProviderContext } from "./ProviderContext";
+import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import { mockMessages } from "mocks/mockMessages";
 
 interface MessagesProviderType{
     messages: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+    authorCurrentTokenBalances: Record<string, Record<string, number>>;
 }
 
 // create context
@@ -78,11 +83,61 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         }
         }
       }, [socket])
+
+      // remove mock messages
+      const { signer, alphaPING } = useEtherProviderContext()
+      const [authorCurrentTokenBalances, setAuthorCurrentTokenBalances] = useState<Record<string, Record<string, number>>>({});
+      useEffect(() => {
+        if (!mockMessages || !alphaPING || !signer) return;
+    
+        const fetchChannelAndBuildMap = async () => {
+            const map: Record<string, Record<string, number>> = {};
+    
+            for (const message of mockMessages) {
+                const { account, channel } = message;
+    
+                // Fetch channel struct from AlphaPING contract using channelId
+                try {
+                    const channelStruct = await alphaPING.channels(channel);
+                    const tokenAddress = channelStruct.tokenAddress
+                    // If the account already has a balance for this token, skip the fetching process
+                    if (map[tokenAddress] && map[tokenAddress][account] !== undefined) {
+                      continue; // Skip if balance already exists
+                    }
+                    let balance = 0
+                    if(tokenAddress !== null){
+                      const token = new ethers.Contract(
+                          tokenAddress,
+                          ERC20Faucet.abi,
+                          signer
+                      )
+                      balance = await token.balanceOf(message.account)
+                  }
+    
+                    if (!map[tokenAddress]) {
+                        map[tokenAddress] = {};
+                    }
+    
+                    // We can store multiple token addresses per account in case there's logic related to multiple tokens
+                    // In this case, we only use the tokenAddress from the message
+                    map[tokenAddress][account] = balance;
+    
+                } catch (error) {
+                    console.error("Error fetching channel details", error);
+                }
+            }
+    
+            setAuthorCurrentTokenBalances(map);
+        };
+    
+        fetchChannelAndBuildMap();
+    }, [messages, alphaPING, signer]);
     
     return (
         <MessagesContext.Provider value={{ 
             messages,
-            setMessages
+            setMessages,
+            authorCurrentTokenBalances
         }}>
             {children}
         </MessagesContext.Provider>

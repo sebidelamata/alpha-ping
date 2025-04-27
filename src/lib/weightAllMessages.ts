@@ -1,6 +1,7 @@
 const weightAllMessages = (
     messages:Message[], 
-    messageWeighting: Weighting
+    messageWeighting: Weighting,
+    authorCurrentTokenBalances: Record<string, Record<string, number>>,
 ):number[] => {
     if(
         messageWeighting === "unweighted" || 
@@ -28,7 +29,9 @@ const weightAllMessages = (
             }
         )
         return weights
-    } else if(messageWeighting === "inverse"){
+    } else if(messageWeighting === "current") {
+        authorCurrentTokenBalances
+    }else if(messageWeighting === "inverse"){
         // find total for avg calc, if its undefined just make it zero
         const total = messages.reduce((sum, message) => sum + BigInt(message.messageTimestampTokenAmount), BigInt(0)) || BigInt(0)
         // if the total is zero everything is zero and therefore we weight them all 100%
