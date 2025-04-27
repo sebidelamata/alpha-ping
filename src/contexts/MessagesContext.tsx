@@ -11,7 +11,6 @@ import { useSocketProviderContext } from "./SocketContext"
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from "./ProviderContext";
 import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
-import { mockMessages } from "mocks/mockMessages";
 
 interface MessagesProviderType{
     messages: Message[];
@@ -84,16 +83,16 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         }
       }, [socket])
 
-      // remove mock messages
+      // create a mapping of current balances for eaxch token channel
       const { signer, alphaPING } = useEtherProviderContext()
       const [authorCurrentTokenBalances, setAuthorCurrentTokenBalances] = useState<Record<string, Record<string, Record<string, number>>>>({});
       useEffect(() => {
-        if (!mockMessages || !alphaPING || !signer) return;
+        if (!messages || !alphaPING || !signer) return;
     
         const fetchChannelAndBuildMap = async () => {
             const map: Record<string, Record<string, Record<string, number>>> = {};
     
-            for (const message of mockMessages) {
+            for (const message of messages) {
                 const { account, channel } = message;
     
                 // Fetch channel struct from AlphaPING contract using channelId

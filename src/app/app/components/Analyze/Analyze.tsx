@@ -24,7 +24,6 @@ import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
 import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
 import ChannelScoreOverTime from "./ChannelScoreOverTime";
-import { mockMessages } from "mocks/mockMessages";
 import Loading from "../Loading";
 import { 
     Select,
@@ -47,10 +46,10 @@ const Analyze:React.FC = () => {
     // filter for date range before weighting
     const [timeRange, setTimeRange] = useState<TimeFrame>("all")
     const timeFilteredData = useMemo(() => {
-        return mockMessages !== null ?
-        timeFilterMessages(mockMessages, timeRange) : 
+        return messages !== null ?
+        timeFilterMessages(messages, timeRange) : 
         null
-    },[mockMessages, timeRange])
+    },[messages, timeRange])
 
     // current channel time filtered data
     const currentChanneltimeFilteredData = useMemo(() => {
