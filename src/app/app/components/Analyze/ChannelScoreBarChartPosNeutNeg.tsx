@@ -16,7 +16,8 @@ import {
     Area, 
     AreaChart, 
     CartesianGrid, 
-    XAxis
+    XAxis,
+    YAxis
 } from "recharts"
   import { 
     ChartConfig, 
@@ -96,6 +97,20 @@ const ChannelScoreBarChartPosNeutNeg:React.FC<IChannelScoreBarChartPosNeutNeg> =
         getChartData()
     }, [currentChannelMessagesScore, allMessagesScore])
 
+    const [maxValue, setMexValue] = useState(100)
+    useEffect(() => {
+        const maxValue = chartData ? 
+        Math.ceil(
+            Math.max(
+            ...chartData.map((d) => Math.max(
+                Number(d.currentChannelScore ?? 0), 
+                Number(d.allMessagesScore ?? 0)
+            ))
+            ) * 1.1  // add 10% buffer
+        ) : 100; 
+        setMexValue(maxValue)
+    }, [chartData])
+
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg size-[360px]">
             <CardHeader className="h-[80px]">
@@ -126,6 +141,12 @@ const ChannelScoreBarChartPosNeutNeg:React.FC<IChannelScoreBarChartPosNeutNeg> =
                             axisLine={false}
                             tickMargin={8}
                             tickFormatter={(value) => value.slice(0, 3)}
+                            />
+                            <YAxis 
+                                domain={[0, maxValue]} 
+                                tickLine={true} 
+                                axisLine={false} 
+                                tickMargin={8} 
                             />
                             <ChartTooltip cursor={false} content={<ChartTooltipContent/>}/>
                             <defs>
