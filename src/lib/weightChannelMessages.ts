@@ -1,30 +1,23 @@
-import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 
 const weightChannelMessages = (
     messages:Message[], 
     messageWeighting: Weighting, 
-    currentChannel: AlphaPING.ChannelStructOutput
 ):number[] => {
     if(messages.length === 0){
         return []
     }
-    const channelMessages = messages.filter((message) => {
-        return message.channel.toString() === currentChannel.id.toString()
-    })
-    console.log(channelMessages)
-    console.log(messageWeighting)
     if(messageWeighting === "unweighted"){
         // we return full weighting * by 1 (or return empty array)
-        const identityWeights = Array(channelMessages.length).fill(1) || []
+        const identityWeights = Array(messages.length).fill(1) || []
         return identityWeights
     } else if(messageWeighting === "post"){
         // find total for avg calc, if its undefined just make it zero
-        const total = channelMessages.reduce((sum, message) => sum + BigInt(message.messageTimestampTokenAmount), BigInt(0)) || BigInt(0)
-        const weights = channelMessages.map((message) => {
+        const total = messages.reduce((sum, message) => sum + BigInt(message.messageTimestampTokenAmount), BigInt(0)) || BigInt(0)
+        const weights = messages.map((message) => {
                 return (
                     // fallback to 0 in case we divide by zero or divide zero or anything weird
                     Number(
-                        (Number(message.messageTimestampTokenAmount) / Number(total) * 100)
+                        (Number(message.messageTimestampTokenAmount) / Number(total))
                         .toFixed(2) || 0 
                     )
                 )

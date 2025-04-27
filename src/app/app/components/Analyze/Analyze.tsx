@@ -116,12 +116,15 @@ const Analyze:React.FC = () => {
     // current channel
     const [channelWeights, setChannelWeights] = useState<number[]>([])
     useEffect(() => {
-        const weights = timeFilteredData !== null &&
+        const weights = currentChanneltimeFilteredData !== null &&
             currentChannel !== null ?
-            weightChannelMessages(timeFilteredData, messageWeighting, currentChannel) :
+            weightChannelMessages(
+                currentChanneltimeFilteredData, 
+                messageWeighting,
+            ) :
             []
         setChannelWeights(weights)
-    }, [timeFilteredData, messageWeighting, currentChannel])
+    }, [currentChanneltimeFilteredData, messageWeighting, currentChannel])
     
     // get scores from filtered and weighted data
     // all messages
@@ -141,17 +144,10 @@ const Analyze:React.FC = () => {
     const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
     useEffect(() => {
         const getCurrentChannelMessagesScore = () => {
-            if(
-                channelWeights.length > 0 &&
-                channelScores.length > 0)
-            {
-                console.log(channelWeights)
-                console.log(channelScores)
-                setLoading(true)
-                const averagedScores = averageScores(channelWeights, channelScores)
-                setcurrentChannelMessagesScore(averagedScores)
-                setLoading(false)
-            }
+            setLoading(true)
+            const averagedScores = averageScores(channelWeights, channelScores)
+            setcurrentChannelMessagesScore(averagedScores)
+            setLoading(false)
         }
         getCurrentChannelMessagesScore()
     }, [channelWeights, channelScores])
@@ -165,9 +161,6 @@ const Analyze:React.FC = () => {
                 channelWeights.length > 0 &&
                 currentChanneltimeFilteredData !== null
             ){
-                console.log("channelScores:", channelScores);
-                console.log("channelWeights:", channelWeights);
-                console.log("currentChanneltimeFilteredData:", currentChanneltimeFilteredData);
                 setLoading(true)
                 const timeseriesWeightedScores = weightTimeseries(channelWeights, channelScores)
                 const timeseries: SentimentScoresTimeseries[] = channelScores.map((score, index) => {
