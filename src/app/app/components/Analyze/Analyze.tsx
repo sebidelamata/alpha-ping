@@ -167,7 +167,7 @@ const Analyze:React.FC = () => {
             ){
                 setLoading(true)
                 const timeseriesWeightedScores = weightTimeseries(channelWeights, channelScores)
-                const timeseries: SentimentScoresTimeseries[] = channelScores.map((score, index) => {
+                const timeseries: SentimentScoresTimeseries[] = channelScores.map((_, index) => {
                     const message = currentChanneltimeFilteredData[index];
                     const weighted = timeseriesWeightedScores[index];
                     if (message && weighted && typeof weighted.compound === 'number') {
