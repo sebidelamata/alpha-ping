@@ -1,7 +1,8 @@
 
 const weightChannelMessages = (
     messages:Message[], 
-    messageWeighting: Weighting, 
+    messageWeighting: Weighting,
+    authorCurrentTokenBalances: Record<string, Record<string, Record<string, number>>>,
 ):number[] => {
     if(messages.length === 0){
         return []
@@ -28,6 +29,34 @@ const weightChannelMessages = (
             }
         )
         return weights
+    } else if(messageWeighting === "current") {
+        // find total for avg calc if it is undefined just make it zero
+        const total = Object.values(authorCurrentTokenBalances).reduce((sum, channelBalances) => {
+            // Iterate through each channel's token balances
+            return sum + Object.values(channelBalances).reduce((tokenSum, tokenBalances) => {
+                // Iterate through each token's account balances
+                return tokenSum + Object.values(tokenBalances).reduce((balanceSum, balance) => {
+                    return balanceSum + BigInt(balance); // Sum the balances for each account
+                }, BigInt(0));
+            }, BigInt(0));
+        }, BigInt(0));
+        if (total === BigInt(0)) {
+            // fallback to 0 weights to prevent NaN
+            return Array(messages.length).fill(0);
+        }
+        const weights = messages.map((message) => {
+            const tokenAddress = Object.keys(authorCurrentTokenBalances[message.channel])[0]
+            const currentBalance = authorCurrentTokenBalances[message.channel][tokenAddress][message.account]
+            return (
+                // fallback to 0 in case we divide by zero or divide zero or anything weird
+                Number(
+                    (Number(currentBalance) / Number(total))
+                    .toFixed(2) || 0 
+                )
+            )
+        }
+    )
+    return weights
     } else if(messageWeighting === "inverse"){
         // find total for avg calc, if its undefined just make it zero
         const total = messages.reduce((sum, message) => sum + BigInt(message.messageTimestampTokenAmount), BigInt(0)) || BigInt(0)

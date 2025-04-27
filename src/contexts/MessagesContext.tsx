@@ -16,7 +16,7 @@ import { mockMessages } from "mocks/mockMessages";
 interface MessagesProviderType{
     messages: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-    authorCurrentTokenBalances: Record<string, Record<string, number>>;
+    authorCurrentTokenBalances: Record<string, Record<string, Record<string, number>>>;
 }
 
 // create context
@@ -86,12 +86,12 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
       // remove mock messages
       const { signer, alphaPING } = useEtherProviderContext()
-      const [authorCurrentTokenBalances, setAuthorCurrentTokenBalances] = useState<Record<string, Record<string, number>>>({});
+      const [authorCurrentTokenBalances, setAuthorCurrentTokenBalances] = useState<Record<string, Record<string, Record<string, number>>>>({});
       useEffect(() => {
         if (!mockMessages || !alphaPING || !signer) return;
     
         const fetchChannelAndBuildMap = async () => {
-            const map: Record<string, Record<string, number>> = {};
+            const map: Record<string, Record<string, Record<string, number>>> = {};
     
             for (const message of mockMessages) {
                 const { account, channel } = message;
@@ -101,7 +101,7 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                     const channelStruct = await alphaPING.channels(channel);
                     const tokenAddress = channelStruct.tokenAddress
                     // If the account already has a balance for this token, skip the fetching process
-                    if (map[tokenAddress] && map[tokenAddress][account] !== undefined) {
+                    if (map[channel] && map[channel][tokenAddress] && map[channel][tokenAddress][account] !== undefined) {
                       continue; // Skip if balance already exists
                     }
                     let balance = 0
@@ -112,21 +112,23 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                           signer
                       )
                       balance = await token.balanceOf(message.account)
-                  }
+                    }
     
-                    if (!map[tokenAddress]) {
-                        map[tokenAddress] = {};
+                    if (!map[channel]) {
+                        map[channel] = {};
+                    }
+                    if (!map[channel][tokenAddress]) {
+                      map[channel][tokenAddress] = {}; // Initialize tokenAddress if not already initialized
                     }
     
                     // We can store multiple token addresses per account in case there's logic related to multiple tokens
                     // In this case, we only use the tokenAddress from the message
-                    map[tokenAddress][account] = balance;
+                    map[channel][tokenAddress][account] = balance;
     
                 } catch (error) {
                     console.error("Error fetching channel details", error);
                 }
             }
-    
             setAuthorCurrentTokenBalances(map);
         };
     

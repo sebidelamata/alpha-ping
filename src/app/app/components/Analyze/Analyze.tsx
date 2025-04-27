@@ -109,7 +109,11 @@ const Analyze:React.FC = () => {
     const [weights, setWeights] = useState<number[]>([])
     useEffect(() => {
         const weights = timeFilteredData !== null ?
-            weightAllMessages(timeFilteredData, messageWeighting, authorCurrentTokenBalances) :
+            weightAllMessages(
+                timeFilteredData, 
+                messageWeighting, 
+                authorCurrentTokenBalances
+            ) :
             []
         setWeights(weights)
     }, [timeFilteredData, messageWeighting, authorCurrentTokenBalances])
@@ -121,10 +125,11 @@ const Analyze:React.FC = () => {
             weightChannelMessages(
                 currentChanneltimeFilteredData, 
                 messageWeighting,
+                authorCurrentTokenBalances
             ) :
             []
         setChannelWeights(weights)
-    }, [currentChanneltimeFilteredData, messageWeighting, currentChannel])
+    }, [currentChanneltimeFilteredData, messageWeighting, currentChannel, authorCurrentTokenBalances])
     
     // get scores from filtered and weighted data
     // all messages
