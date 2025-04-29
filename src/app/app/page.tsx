@@ -6,6 +6,9 @@ import React, { useEffect, useState } from 'react';
 import Messages from './components/Messages/Messages'
 //analyze
 import Analyze from './components/Analyze/Analyze';
+// trade
+import Trade from './components/Trade/Trade';
+
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
 import { useAppKitAccount } from "@reown/appkit/react";
@@ -43,12 +46,7 @@ const App:React.FC = () => {
       case 'analyze':
         return <Analyze/>
       case 'trade':
-        return  <div>
-                  <h2 className='trade-title'>Trade</h2>
-                  <p className='trade-placeholder'>
-                    This is being built in beta and will allow users to swap assets in-app using 1Inch router
-                  </p>
-                </div>
+        return  <Trade/>
     }
   }
 
