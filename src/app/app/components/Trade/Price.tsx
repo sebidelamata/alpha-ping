@@ -36,6 +36,8 @@ import {
     SelectValue 
 } from "@/components/components/ui/select";
 import { Input } from "@/components/components/ui/input";
+import { Button } from "@/components/components/ui/button";
+import { ArrowDownUp } from "lucide-react";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -45,9 +47,8 @@ export const DEFAULT_BUY_TOKEN = (chainId: number) => {
 
 interface IPrice {
     price: any;
-  setPrice: (price: any) => void;
-  setFinalize: (finalize: boolean) => void;
-  chainId: number;
+    setPrice: (price: any) => void;
+    setFinalize: (finalize: boolean) => void;
 }
 
 const Price:React.FC = ({
@@ -79,12 +80,24 @@ const Price:React.FC = ({
       sellTaxBps: "0",
     });
 
+    // update token values for swap
     const handleSellTokenChange = (value: string) => {
         setSellToken(value);
     };
     const handleBuyTokenChange = (value: string) => {
         setBuyToken(value);
     }
+    // flip tokens and values
+    const flipTokens = () => {
+        const currentSellToken = sellToken;
+        setSellToken(buyToken);
+        setBuyToken(currentSellToken);
+        const currentSellAmount = sellAmount;
+        setSellAmount(buyAmount);
+        setBuyAmount(currentSellAmount); 
+    }
+
+    // grab the token objects from the token list
     const sellTokenObject = tokensByChain(tokenList, Number(chainId)).
         filter((token) => token.symbol.toLowerCase() === sellToken.toLowerCase())[0];
     const buyTokenObject = tokensByChain(tokenList, Number(chainId)).
@@ -269,6 +282,15 @@ const Price:React.FC = ({
                             }}
                         >
                         </Input>
+                </section>
+                <section className="flex flex-col items-center justify-center">
+                    <Button 
+                        onClick={flipTokens} 
+                        className="mt-4 h-30 w-30 text-4xl justify-center align-middle items-center scale-150" 
+                        variant={"outline"}
+                    >
+                        <ArrowDownUp size={48}/>
+                    </Button>
                 </section>
                 <section className="mt-4 flex items-start justify-center gap-2 h-20 w-full">
                     <Label
