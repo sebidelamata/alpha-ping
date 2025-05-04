@@ -6,6 +6,7 @@ import type { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/Al
   
   export interface EtherProviderType {
     provider: Provider | null | undefined
+    chainId: string | null
     signer: Signer | null
     alphaPING: AlphaPING | null
     channels: AlphaPING.ChannelStructOutput[] | []

@@ -93,3 +93,26 @@ interface tokenMetadata {
 
 type Weighting = 'unweighted' | 'post' | 'current' | 'delta' | 'inverse';
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
+
+// token meta data for the trading interface
+interface Token {
+    address: string;
+    chainId: number;
+    decimals: number;
+    symbol: string;
+    name: string;
+    logoURI: string | null;
+  }
+  
+  interface TokenList {
+    name: string;
+    timestamp: string;
+    version: {
+      major: number;
+      minor: number;
+      patch: number;
+    };
+    keywords: string[];
+    logoURI: string;
+    tokens: Token[];
+  }

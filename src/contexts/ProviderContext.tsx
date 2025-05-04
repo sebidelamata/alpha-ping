@@ -52,6 +52,8 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
   
   // account stuff
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null)
+  // chain id
+  const [chainId, setChainId] = useState<string | null>(null)
   //
   const [signer, setSigner] = useState<Signer | null>(null)
   // the alpha ping contract object
@@ -76,6 +78,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         setProvider(provider)
         const network = await provider.getNetwork()//await provider.send('eth_chainId',[]);
         const chainId = network.chainId.toString()
+        setChainId(chainId)
         const alphaPING = new ethers.Contract(
           (config as BlockChainConfig)[chainId].AlphaPING.address,
           AlphaPINGABI.abi,
@@ -120,7 +123,8 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
     return (
         <ProviderContext.Provider value={{ 
-            provider, 
+            provider,
+            chainId, 
             signer, 
             alphaPING, 
             channels, 
