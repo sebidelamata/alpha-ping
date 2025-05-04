@@ -194,7 +194,7 @@ const Price:React.FC = ({
                     <div>
                         Swap at the best prices using 0x aggregator
                     </div>
-                    <div>
+                    <div className="text-accent">
                         0x collects a fee of 0.15% on each swap, AlphaPING collects 0.05% on each swap, for a total of 0.2% fee
                     </div>
                 </div>
