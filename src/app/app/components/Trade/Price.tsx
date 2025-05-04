@@ -175,15 +175,16 @@ const Price:React.FC = ({
 
     return(
         <Card className="flex flex-col h-full w-[100%] bg-primary text-secondary">
-            <CardHeader className="w-[100%]">
-                <CardTitle>
-                   <Avatar>
-                    <AvatarImage src={ZeroExLogo.src} className="w-[100%] h-[100%]"></AvatarImage>
+            <CardHeader className="w-[100%] flex flex-row justify-start items-center">
+                <CardTitle className="text-5xl">
+                    Trade with
+                </CardTitle>
+                <Avatar>
+                    <AvatarImage src={ZeroExLogo.src} className="h-24"/>
                     <AvatarFallback>
                         0x
                     </AvatarFallback>
                    </Avatar>
-                </CardTitle>
             </CardHeader>
             <CardContent>
                 lipsem oreem

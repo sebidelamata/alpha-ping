@@ -11,9 +11,6 @@ const Trade:React.FC = () => {
     return(
         <Card className="flex flex-col h-full w-[100%] bg-primary text-secondary">
             <CardHeader className="w-[100%]">
-                <CardTitle>
-                    Trade with 0x
-                </CardTitle>
             </CardHeader>
             <CardContent>
                 <Price/>
