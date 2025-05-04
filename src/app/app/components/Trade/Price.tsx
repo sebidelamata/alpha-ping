@@ -26,7 +26,15 @@ import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import tokensByChain from "src/lib/tokensByChain";
-import { token } from "typechain-types/@openzeppelin/contracts";
+import { Label } from "@/components/components/ui/label";
+import { 
+    Select, 
+    SelectContent, 
+    SelectItem, 
+    SelectTrigger, 
+    SelectValue 
+} from "@/components/components/ui/select";
+import { Input } from "@/components/components/ui/input";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -69,11 +77,11 @@ const Price:React.FC = ({
       sellTaxBps: "0",
     });
 
-    const handleSellTokenChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSellToken(e.target.value);
+    const handleSellTokenChange = (value: string) => {
+        setSellToken(value);
     };
-    function handleBuyTokenChange(e: ChangeEvent<HTMLSelectElement>) {
-    setBuyToken(e.target.value);
+    const handleBuyTokenChange = (value: string) => {
+        setBuyToken(value);
     }
     const sellTokenObject = tokensByChain(tokenList, Number(chainId)).
         filter((token) => token.symbol.toLowerCase() === sellToken.toLowerCase())[0];
@@ -187,7 +195,128 @@ const Price:React.FC = ({
                    </Avatar>
             </CardHeader>
             <CardContent>
-                lipsem oreem
+                <section className="mt-4 flex items-start justify-center gap-2">
+                    <Label
+                        htmlFor="sell-select"
+                        className="w-36"
+                    >
+                        <Avatar>
+                            <AvatarImage 
+                                alt={sellToken}
+                                src={
+                                    (
+                                        sellTokenObject !== null && 
+                                        sellTokenObject.logoURI !== null
+                                    ) ? 
+                                    sellTokenObject.logoURI : 
+                                    ""
+                                } 
+                                className="h-16 w-16"
+                            />
+                            <AvatarFallback>
+                                {sellTokenObject.symbol}
+                            </AvatarFallback>
+                        </Avatar>
+                    </Label>
+                    <Select
+                        value={sellToken}
+                        name="sell-token-select"
+                        onValueChange={handleSellTokenChange}
+                    >
+                        <SelectTrigger
+                            id="sell-token-select"
+                            className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
+                        >
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {
+                            tokensByChain(tokenList, Number(chainId))
+                                .map((token) => (
+                                    <SelectItem
+                                        key={token.address}
+                                        value={token.symbol.toLowerCase()}
+                                    >
+                                        {token.symbol}
+                                    </SelectItem>
+                            ))
+                        }
+                        </SelectContent>
+                        </Select>
+                        <Label htmlFor="sell-amount"/>
+                        <Input
+                            id="sell-amount"
+                            value={sellAmount}
+                            className="h-16 rounded-md text-3xl"
+                            type="number"
+                            onChange={(e) => {
+                            setTradeDirection("sell");
+                            setSellAmount(e.target.value);
+                            }}
+                        >
+                        </Input>
+                </section>
+                <section className="mt-4 flex items-start justify-center gap-2 h-20 w-full">
+                    <Label
+                        htmlFor="buy-select"
+                        className="w-36"
+                    >
+                        <Avatar>
+                            <AvatarImage 
+                                alt={buyToken}
+                                src={
+                                    (
+                                        buyTokenObject !== null && 
+                                        buyTokenObject.logoURI !== null
+                                    ) ? 
+                                    buyTokenObject.logoURI : 
+                                    ""
+                                } 
+                                className="h-16 w-16"
+                            />
+                            <AvatarFallback>
+                                {buyTokenObject.symbol}
+                            </AvatarFallback>
+                        </Avatar>
+                    </Label>
+                    <Select
+                        value={buyToken}
+                        name="buy-token-select"
+                        onValueChange={handleBuyTokenChange}
+                    >
+                        <SelectTrigger
+                            id="buy-token-select"
+                            className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
+                        >
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {
+                            tokensByChain(tokenList, Number(chainId))
+                                .map((token) => (
+                                    <SelectItem
+                                        key={token.address}
+                                        value={token.symbol.toLowerCase()}
+                                    >
+                                        {token.symbol}
+                                    </SelectItem>
+                            ))
+                        }
+                        </SelectContent>
+                    </Select>
+                    <Label htmlFor="buy-amount"/>
+                    <Input
+                        id="buy-amount"
+                        value={buyAmount}
+                        className="h-16 rounded-md text-3xl"
+                        type="number"
+                        onChange={(e) => {
+                            setTradeDirection("buy");
+                            setBuyAmount(e.target.value);
+                        }}
+                    >
+                    </Input>
+                </section>
             </CardContent>
             <CardFooter>
                 <div className="flex flex-col gap-1">
