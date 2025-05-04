@@ -23,6 +23,7 @@ import ZeroExLogo from "../../../../../public/dark-0x-logo.png";
 import tokenList from "../../../../../public/tokenList.json";
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
+import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import tokensByChain from "src/lib/tokensByChain";
@@ -61,9 +62,10 @@ const Price:React.FC = ({
 
     const { chainId, signer } = useEtherProviderContext()
     const { account } = useUserProviderContext()
+    const { currentChannel } = useChannelProviderContext()
 
     const [sellToken, setSellToken] = useState("weth");
-    const [buyToken, setBuyToken] = useState("usdc");
+    const [buyToken, setBuyToken] = useState<string>("usdc");
     const [sellAmount, setSellAmount] = useState("");
     const [buyAmount, setBuyAmount] = useState("");
     const [tradeDirection, setTradeDirection] = useState("sell");
@@ -88,8 +90,20 @@ const Price:React.FC = ({
     const buyTokenObject = tokensByChain(tokenList, Number(chainId)).
         filter((token) => token.symbol.toLowerCase() === buyToken.toLowerCase())[0];
 
-    const sellTokenDecimals = sellTokenObject.decimals;
-    const buyTokenDecimals = buyTokenObject.decimals;
+    const sellTokenDecimals = (
+        sellTokenObject !== undefined &&
+        sellTokenObject !== null &&
+        sellTokenObject.decimals !== undefined &&
+        sellTokenObject.decimals !== null
+    ) ? sellTokenObject.decimals : 
+    18;
+    const buyTokenDecimals = (
+        buyTokenObject !== undefined &&
+        buyTokenObject !== null &&
+        buyTokenObject.decimals !== undefined &&
+        buyTokenObject.decimals !== null
+    ) ? buyTokenObject.decimals :
+    18;
     const sellTokenAddress = sellTokenObject.address;
 
     const parsedSellAmount =
@@ -317,6 +331,35 @@ const Price:React.FC = ({
                     >
                     </Input>
                 </section>
+                {/* Affiliate Fee Display */}
+                <div className="text-slate-400">
+                    {price && price.fees.integratorFee.amount
+                    ? "Affiliate Fee: " +
+                        Number(
+                        formatUnits(
+                            BigInt(price.fees.integratorFee.amount),
+                            buyTokenDecimals
+                        )
+                        ) +
+                        " " +
+                        buyTokenObject.symbol
+                    : null}
+                </div>
+                {/* Tax Information Display */}
+                <div className="text-slate-400">
+                    {buyTokenTax.buyTaxBps !== "0" && (
+                    <p>
+                        {buyTokenObject.symbol +
+                        ` Buy Tax: ${formatTax(buyTokenTax.buyTaxBps)}%`}
+                    </p>
+                    )}
+                    {sellTokenTax.sellTaxBps !== "0" && (
+                    <p>
+                        {sellTokenObject.symbol +
+                        ` Sell Tax: ${formatTax(sellTokenTax.sellTaxBps)}%`}
+                    </p>
+                    )}
+                </div>
             </CardContent>
             <CardFooter>
                 <div className="flex flex-col gap-1">
