@@ -76,9 +76,9 @@ const Price:React.FC = ({
     setBuyToken(e.target.value);
     }
     const sellTokenObject = tokensByChain(tokenList, Number(chainId)).
-        filter((token) => token.symbol.toLowerCase() === sellToken)[0];
+        filter((token) => token.symbol.toLowerCase() === sellToken.toLowerCase())[0];
     const buyTokenObject = tokensByChain(tokenList, Number(chainId)).
-        filter((token) => token.symbol.toLowerCase() === buyToken)[0];
+        filter((token) => token.symbol.toLowerCase() === buyToken.toLowerCase())[0];
 
     const sellTokenDecimals = sellTokenObject.decimals;
     const buyTokenDecimals = buyTokenObject.decimals;
