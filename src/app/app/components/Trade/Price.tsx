@@ -39,6 +39,7 @@ import { Input } from "@/components/components/ui/input";
 import { Button } from "@/components/components/ui/button";
 import { ArrowDownUp } from "lucide-react";
 import { Separator } from "@/components/components/ui/separator";
+import ApproveOrReviewButton from "./ApproveOrReviewButton";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -52,15 +53,11 @@ interface IPrice {
     setFinalize: (finalize: boolean) => void;
 }
 
-const Price:React.FC = ({
+const Price:React.FC<IPrice> = ({
     price,
     setPrice,
     setFinalize,
-}: {
-    price: any;
-    setPrice: (price: any) => void;
-    setFinalize: (finalize: boolean) => void;
-  }) => {
+}) => {
 
     const { chainId, signer } = useEtherProviderContext()
     const { account } = useUserProviderContext()
@@ -404,17 +401,21 @@ const Price:React.FC = ({
                 </section>
                 {/* Affiliate Fee Display */}
                 <div className="text-slate-400">
-                    {price && price.fees.integratorFee.amount
-                    ? "Affiliate Fee: " +
-                        Number(
-                        formatUnits(
-                            BigInt(price.fees.integratorFee.amount),
-                            buyTokenDecimals
-                        )
-                        ) +
-                        " " +
-                        buyTokenObject.symbol
-                    : null}
+                    {
+                        price && 
+                        price.fees.integratorFee !== null 
+                        && price.fees.integratorFee.amount ? 
+                            "Affiliate Fee: " +
+                            Number(
+                            formatUnits(
+                                BigInt(price.fees.integratorFee.amount),
+                                buyTokenDecimals
+                            )
+                            ) +
+                            " " +
+                            buyTokenObject.symbol: 
+                            null
+                    }
                 </div>
                 {/* Tax Information Display */}
                 <div className="text-slate-400">
@@ -431,6 +432,14 @@ const Price:React.FC = ({
                     </p>
                     )}
                 </div>
+                <ApproveOrReviewButton
+                    onClick={() => {
+                        setFinalize(true);
+                    }}
+                    sellTokenAddress={sellTokenObject.address}
+                    disabled={inSufficientBalance}
+                    price={price}
+                />
             </CardContent>
             <CardFooter>
                 <div className="flex flex-col gap-1">
