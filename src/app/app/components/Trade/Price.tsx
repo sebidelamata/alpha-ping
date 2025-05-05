@@ -427,6 +427,7 @@ const Price:React.FC<IPrice> = ({
                     </p>
                     )}
                 </div>
+                <Separator color="accent" className="h-4" />
                 <ApproveOrReviewButton
                     onClick={() => {
                         setFinalize(true);

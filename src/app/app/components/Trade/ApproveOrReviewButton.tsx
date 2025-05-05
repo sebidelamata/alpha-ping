@@ -7,6 +7,8 @@ import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { ethers } from 'ethers'
+import { Avatar } from "@radix-ui/react-avatar";
+import { AvatarFallback, AvatarImage } from "@/components/components/ui/avatar";
 
 interface IApproveOrReviewButton {
     onClick: () => void;
@@ -95,10 +97,29 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                 userAllowance && 
                 BigInt(userAllowance) < parsedSellAmount && (
                     <Button
-                        type="button"
+                        variant="ghost"
                         onClick={handleApprove}
                     >
-                        {`Approve ${sellTokenSymbol}`}
+                        <div className="flex flex-row items-center gap-2">
+                            <div>
+                                {`Approve ${sellTokenSymbol}`}
+                            </div>
+                            {
+                                sellTokenURI && 
+                                <Avatar>
+                                    <AvatarImage
+                                        src={sellTokenURI}
+                                        alt="Token Image"
+                                        className="w-4 h-4"
+                                    />
+                                    <AvatarFallback>
+                                        {
+                                            sellTokenSymbol || "0x"
+                                        }
+                                    </AvatarFallback>
+                                </Avatar>
+                            }
+                        </div>
                     </Button>
                 ) 
             }
