@@ -1,13 +1,10 @@
 import React, {
     useEffect,
     useState,
-    ChangeEvent
 } from "react";
 import { 
     formatUnits, 
     parseUnits,
-    erc20ABI, 
-    Address,
 } from "ethers";
 import { 
     Card, 
@@ -194,8 +191,6 @@ const Price:React.FC<IPrice> = ({
     }
     getUserBalance()
 }, [ sellTokenObject.address, signer, account])
-
-  console.log("taker sellToken balance: ", userBalance);
 
   const inSufficientBalance =
   userBalance && sellAmount
@@ -437,6 +432,9 @@ const Price:React.FC<IPrice> = ({
                         setFinalize(true);
                     }}
                     sellTokenAddress={sellTokenObject.address}
+                    parsedSellAmount={sellAmount && sellTokenDecimals ? parseUnits(sellAmount, sellTokenDecimals) : BigInt(0)}
+                    sellTokenSymbol={sellTokenObject.symbol}
+                    sellTokenURI={sellTokenObject.logoURI || null}
                     disabled={inSufficientBalance}
                     price={price}
                 />

@@ -11,6 +11,9 @@ import { ethers } from 'ethers'
 interface IApproveOrReviewButton {
     onClick: () => void;
     sellTokenAddress: string;
+    parsedSellAmount: bigint;
+    sellTokenSymbol: string;
+    sellTokenURI: string | null;
     disabled?: boolean;
     price: any;
   }
@@ -18,6 +21,9 @@ interface IApproveOrReviewButton {
 const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     onClick,
     sellTokenAddress,
+    parsedSellAmount,
+    sellTokenSymbol,
+    sellTokenURI,
     disabled,
     price,
   }) => {
@@ -40,7 +46,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                     signer
                 )
             const userAllowance = await token.allowance(account, price.issues.allowance.spender)
-            console.log("userAllowance", userAllowance)
             setUserAllowance(userAllowance.toString())
           }
       }
@@ -63,11 +68,40 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
         );
     }
 
+    // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
+    const handleApprove = async () => {
+        if (!signer || !sellTokenAddress || !price?.issues?.allowance?.spender) {
+            console.error("Signer or sellTokenAddress is not available");
+            return;
+        }
+        const tokenContract = new ethers.Contract(
+            sellTokenAddress,
+            ERC20Faucet.abi,
+            signer
+        )
+        const maxApproval = ethers.MaxUint256
+        try {
+            const tx = await tokenContract.approve(price.issues.allowance.spender, maxApproval);
+            await tx.wait();
+            setUserAllowance(maxApproval.toString()); // optimistically update
+          } catch (err) {
+            console.error("Approval failed:", err);
+          }
+    }
+
     return (
         <div className="flex flex-col w-full">
-            <Button className="w-full bg-primary text-secondary hover:bg-secondary hover:text-primary">
-                Approve
-            </Button>
+            {
+                userAllowance && 
+                BigInt(userAllowance) < parsedSellAmount && (
+                    <Button
+                        type="button"
+                        onClick={handleApprove}
+                    >
+                        {`Approve ${sellTokenSymbol}`}
+                    </Button>
+                ) 
+            }
             <Button className="w-full bg-primary text-secondary hover:bg-secondary hover:text-primary">
                 Review
             </Button>
