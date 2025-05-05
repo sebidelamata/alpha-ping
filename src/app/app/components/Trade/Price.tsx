@@ -38,6 +38,7 @@ import {
 import { Input } from "@/components/components/ui/input";
 import { Button } from "@/components/components/ui/button";
 import { ArrowDownUp } from "lucide-react";
+import { Separator } from "@/components/components/ui/separator";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -222,68 +223,91 @@ const Price:React.FC = ({
                    </Avatar>
             </CardHeader>
             <CardContent>
-                <section className="mt-4 flex items-start justify-center gap-2">
-                    <Label
-                        htmlFor="sell-select"
-                        className="w-36"
-                    >
-                        <Avatar>
-                            <AvatarImage 
-                                alt={sellToken}
-                                src={
-                                    (
-                                        sellTokenObject !== null && 
-                                        sellTokenObject.logoURI !== null
-                                    ) ? 
-                                    sellTokenObject.logoURI : 
-                                    ""
-                                } 
-                                className="h-16 w-16"
-                            />
-                            <AvatarFallback>
-                                {sellTokenObject.symbol}
-                            </AvatarFallback>
-                        </Avatar>
-                    </Label>
-                    <Select
-                        value={sellToken}
-                        name="sell-token-select"
-                        onValueChange={handleSellTokenChange}
-                    >
-                        <SelectTrigger
-                            id="sell-token-select"
-                            className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
+                <section className="mt-4 flex flex-col items-start justify-center gap-4">
+                    <div className="flex flex-row">
+                        <Label
+                            htmlFor="sell-select"
+                            className="w-36"
                         >
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                        {
-                            tokensByChain(tokenList, Number(chainId))
-                                .map((token) => (
-                                    <SelectItem
-                                        key={token.address}
-                                        value={token.symbol.toLowerCase()}
-                                    >
-                                        {token.symbol}
-                                    </SelectItem>
-                            ))
-                        }
-                        </SelectContent>
+                            <div className="text-3xl">
+                                Sell
+                            </div>
+                        </Label>
+                    </div>
+                    <div className="flex flex-row w-full gap-2">
+                        <Select
+                            value={sellToken}
+                            name="sell-token-select"
+                            onValueChange={handleSellTokenChange}
+                        >
+                            <SelectTrigger
+                                id="sell-token-select"
+                                className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
+                            >
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                            {
+                                tokensByChain(tokenList, Number(chainId))
+                                    .map((token) => (
+                                        <SelectItem
+                                            key={token.address}
+                                            value={token.symbol.toLowerCase()}
+                                        >
+                                            <div className="flex flex-row items-center justify-start gap-4">
+                                                <Avatar>
+                                                    <AvatarImage 
+                                                        alt={token.symbol}
+                                                        src={
+                                                            (
+                                                                token !== null && 
+                                                                token.logoURI !== null
+                                                            ) ? 
+                                                            token.logoURI : 
+                                                            ""
+                                                        } 
+                                                        className="h-12 w-12"
+                                                    />
+                                                    <AvatarFallback>
+                                                        {token.symbol}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <div>
+                                                    {token.symbol}
+                                                </div>
+                                            </div>
+                                        </SelectItem>
+                                ))
+                            }
+                            </SelectContent>
                         </Select>
                         <Label htmlFor="sell-amount"/>
                         <Input
-                            id="sell-amount"
-                            value={sellAmount}
                             className="h-16 rounded-md text-3xl"
-                            type="number"
+                            type="text"
+                            inputMode="decimal"
+                            pattern="[0-9]*[.]?[0-9]*"
+                            placeholder="0.0"
+                            onBeforeInput={(e) => {
+                                const inputEvent = e.nativeEvent as InputEvent;
+                                if (inputEvent.data && !/[\d.]/.test(inputEvent.data)) {
+                                  e.preventDefault();
+                                }
+                            }}
                             onChange={(e) => {
-                            setTradeDirection("sell");
-                            setSellAmount(e.target.value);
+                                const value = e.target.value;
+                                // Allow only numbers and a single decimal point
+                                if (/^\d*\.?\d*$/.test(value)) {
+                                  setTradeDirection("sell");
+                                  setSellAmount(value);
+                                }
                             }}
                         >
                         </Input>
+                    </div>
                 </section>
-                <section className="flex flex-col items-center justify-center">
+                <section className="flex flex-col items-center justify-center gap-4">
+                    <Separator color="accent"/>
                     <Button 
                         onClick={flipTokens} 
                         className="mt-4 h-30 w-30 text-4xl justify-center align-middle items-center scale-150" 
@@ -291,67 +315,92 @@ const Price:React.FC = ({
                     >
                         <ArrowDownUp size={48}/>
                     </Button>
+                    <Separator color="accent"/>
                 </section>
-                <section className="mt-4 flex items-start justify-center gap-2 h-20 w-full">
-                    <Label
-                        htmlFor="buy-select"
-                        className="w-36"
-                    >
-                        <Avatar>
-                            <AvatarImage 
-                                alt={buyToken}
-                                src={
-                                    (
-                                        buyTokenObject !== null && 
-                                        buyTokenObject.logoURI !== null
-                                    ) ? 
-                                    buyTokenObject.logoURI : 
-                                    ""
-                                } 
-                                className="h-16 w-16"
-                            />
-                            <AvatarFallback>
-                                {buyTokenObject.symbol}
-                            </AvatarFallback>
-                        </Avatar>
-                    </Label>
-                    <Select
-                        value={buyToken}
-                        name="buy-token-select"
-                        onValueChange={handleBuyTokenChange}
-                    >
-                        <SelectTrigger
-                            id="buy-token-select"
-                            className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
+                <section className="mt-4 flex flex-col items-start justify-center gap-4">
+                    <div className="flex flex-row">
+                        <Label
+                            htmlFor="buy-select"
+                            className="w-36"
                         >
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                        {
-                            tokensByChain(tokenList, Number(chainId))
-                                .map((token) => (
-                                    <SelectItem
-                                        key={token.address}
-                                        value={token.symbol.toLowerCase()}
-                                    >
-                                        {token.symbol}
-                                    </SelectItem>
-                            ))
-                        }
-                        </SelectContent>
-                    </Select>
-                    <Label htmlFor="buy-amount"/>
-                    <Input
-                        id="buy-amount"
-                        value={buyAmount}
-                        className="h-16 rounded-md text-3xl"
-                        type="number"
-                        onChange={(e) => {
-                            setTradeDirection("buy");
-                            setBuyAmount(e.target.value);
-                        }}
-                    >
-                    </Input>
+                            <div className="text-3xl">
+                                Buy
+                            </div>
+                        </Label>
+                    </div>
+                    <div className="flex flex-row w-full gap-2">
+                        <Select
+                            value={buyToken}
+                            name="buy-token-select"
+                            onValueChange={handleBuyTokenChange}
+                        >
+                            <SelectTrigger
+                                id="buy-token-select"
+                                className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
+                            >
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                            {
+                                tokensByChain(tokenList, Number(chainId))
+                                    .map((token) => (
+                                        <SelectItem
+                                            key={token.address}
+                                            value={token.symbol.toLowerCase()}
+                                        >
+                                            <div className="flex flex-row items-center justify-start gap-4">
+                                                <Avatar>
+                                                    <AvatarImage 
+                                                        alt={token.symbol}
+                                                        src={
+                                                            (
+                                                                token !== null && 
+                                                                token.logoURI !== null
+                                                            ) ? 
+                                                            token.logoURI : 
+                                                            ""
+                                                        } 
+                                                        className="h-12 w-12"
+                                                    />
+                                                    <AvatarFallback>
+                                                        {token.symbol}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <div>
+                                                    {token.symbol}
+                                                </div>
+                                            </div>
+                                        </SelectItem>
+                                ))
+                            }
+                            </SelectContent>
+                        </Select>
+                        <Label htmlFor="buy-amount"/>
+                        <Input
+                            id="buy-amount"
+                            value={buyAmount}
+                            className="h-16 rounded-md text-3xl"
+                            type="text"
+                            inputMode="decimal"
+                            pattern="[0-9]*[.]?[0-9]*"
+                            placeholder="0.0"
+                            onBeforeInput={(e) => {
+                                const inputEvent = e.nativeEvent as InputEvent;
+                                if (inputEvent.data && !/[\d.]/.test(inputEvent.data)) {
+                                e.preventDefault();
+                                }
+                            }}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                // Allow only numbers and a single decimal point
+                                if (/^\d*\.?\d*$/.test(value)) {
+                                setTradeDirection("buy");
+                                setBuyAmount(value);
+                                }
+                            }}
+                        >
+                        </Input>
+                    </div>
                 </section>
                 {/* Affiliate Fee Display */}
                 <div className="text-slate-400">
@@ -389,7 +438,7 @@ const Price:React.FC = ({
                         Swap at the best prices using 0x aggregator
                     </div>
                     <div className="text-accent">
-                        0x collects a fee of 0.15% on each swap, AlphaPING collects 0.05% on each swap, for a total of 0.2% fee
+                        0x collects a fee of 0.15% on each swap, AlphaPING collects 0% on each swap, for a total of 0.15% fee
                     </div>
                 </div>
             </CardFooter>
