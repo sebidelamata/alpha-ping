@@ -200,6 +200,18 @@ const Price:React.FC<IPrice> = ({
   // Helper function to format tax basis points to percentage
   const formatTax = (taxBps: string) => (parseFloat(taxBps) / 100).toFixed(2);
 
+  //function to enter max balance to sell
+  const handleMaxSellAmount = () => {
+    if (userBalance && sellTokenDecimals) {
+        const balance = formatUnits(
+            BigInt(userBalance),
+            sellTokenDecimals
+        );
+        setTradeDirection("sell")
+        setSellAmount(balance);
+    }
+  };
+
 
     return(
         <Card className="flex flex-col h-full w-[100%] bg-primary text-secondary">
@@ -225,6 +237,27 @@ const Price:React.FC<IPrice> = ({
                                 Sell
                             </div>
                         </Label>
+                    </div>
+                    <div className="flex flex-row w-full justify-between items-baseline">
+                        <div className="text-accent items-bottom justify-start text-sm">
+                            Balance: {userBalance && sellTokenDecimals ?
+                                Number(
+                                    formatUnits(
+                                        BigInt(userBalance),
+                                        sellTokenDecimals
+                                    )
+                                ).toFixed(8) + "... " + sellTokenObject.symbol : 
+                                null
+                            }   
+                        </div>
+                        <Button
+                            className="text-xl"
+                            variant="outline"
+                            onClick={handleMaxSellAmount}
+                            //disabled={inSufficientBalance}
+                        >
+                            Max
+                        </Button>
                     </div>
                     <div className="flex flex-row w-full gap-2">
                         <Select
@@ -294,6 +327,7 @@ const Price:React.FC<IPrice> = ({
                                   setSellAmount(value);
                                 }
                             }}
+                            value={sellAmount}
                         >
                         </Input>
                     </div>
@@ -446,7 +480,10 @@ const Price:React.FC<IPrice> = ({
                         Swap at the best prices using 0x aggregator
                     </div>
                     <div className="text-accent">
-                        0x collects a fee of 0.15% on each swap, AlphaPING collects 0% on each swap, for a total of 0.15% fee
+                        0x collects a fee of 0.15% on each swap,
+                    </div>
+                    <div className="text-accent">
+                        AlphaPING collects 0% on each swap, for a total of a 0.15% fee.
                     </div>
                 </div>
             </CardFooter>

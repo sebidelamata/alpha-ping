@@ -65,22 +65,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
       getUserAllowance()
     }, [ sellTokenAddress, signer, account, price])
 
-    // If price.issues.allowance is null, show the Review Trade button
-    if (price?.issues.allowance === null) {
-        return (
-            <Button
-                type="button"
-                disabled={disabled}
-                onClick={() => {
-                // fetch data, when finished, show quote view
-                onClick();
-                }}
-            >
-                {disabled ? "Insufficient Balance" : "Review Trade"}
-            </Button>
-        );
-    }
-
     // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -155,6 +139,22 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                 })
             }
         }
+    }
+
+    // If price.issues.allowance is null, show the Review Trade button
+    if (price?.issues.allowance === null) {
+        return (
+            <Button
+                type="button"
+                disabled={disabled}
+                onClick={() => {
+                // fetch data, when finished, show quote view
+                onClick();
+                }}
+            >
+                {disabled ? "Insufficient Balance" : "Review Trade"}
+            </Button>
+        );
     }
 
     return (
