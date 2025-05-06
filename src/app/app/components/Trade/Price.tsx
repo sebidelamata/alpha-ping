@@ -112,7 +112,6 @@ const Price:React.FC<IPrice> = ({
         buyTokenObject.decimals !== null
     ) ? buyTokenObject.decimals :
     18;
-    const sellTokenAddress = sellTokenObject.address;
 
     const parsedSellAmount =
         sellAmount && tradeDirection === "sell"
@@ -405,7 +404,7 @@ const Price:React.FC<IPrice> = ({
                         <Input
                             id="buy-amount"
                             value={buyAmount}
-                            className="h-16 rounded-md text-3xl"
+                            className="h-16 rounded-md text-3xl cursor-not-allowed"
                             type="text"
                             inputMode="decimal"
                             pattern="[0-9]*[.]?[0-9]*"
@@ -424,6 +423,7 @@ const Price:React.FC<IPrice> = ({
                                 setBuyAmount(value);
                                 }
                             }}
+                            disabled={true}
                         >
                         </Input>
                     </div>
