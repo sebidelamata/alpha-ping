@@ -67,7 +67,8 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     }, [ sellTokenAddress, signer, account, price])
 
     // get latest quote in USD
-    const [cmcError, setCmcError] = useState([]);
+    const [sellTokenUSDPrice, setSellTokenUSDPrice] = useState<string>("");
+    const [cmcError, setCmcError] = useState<string | null>(null);
     useEffect(() => {
         const params = {
             symbol: sellTokenSymbol,
@@ -75,17 +76,16 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
         async function main() {
             const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
             const data = await response.json();
-            console.log("cmc data", data);
-            // if (data?.validationErrors?.length > 0) {
-            //     // error for sellAmount too low
-            //     setCmcError(data.validationErrors);
-            // } else {
-            //     setCmcError([]);
-            // }
-            // if (data.buyAmount) {
-            //     setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
-            //     setPrice(data);
-            // }
+           // Get the first token's data dynamically
+           const tokenDataArray = Object.values(data.data)[0] as any[];
+           if (!tokenDataArray?.length || !tokenDataArray[0]?.quote?.USD?.price) {
+               throw new Error("USD price not found in response");
+           }
+        
+            const usdPrice = tokenDataArray[0].quote.USD.price;
+            console.log("usdPrice", usdPrice);
+            setSellTokenUSDPrice(usdPrice.toString());
+            setCmcError(null);
         }
         main();
     },[sellTokenSymbol])

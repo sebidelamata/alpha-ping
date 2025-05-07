@@ -15,11 +15,6 @@ export async function GET(request: NextRequest) {
     );
     const data = await res.json();
 
-    console.log(
-      "cmc quote latest api",
-      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?${searchParams}`
-    );
-
     console.log("price data", data);
 
     return Response.json(data);
