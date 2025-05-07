@@ -145,16 +145,19 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     // If price.issues.allowance is null, show the Review Trade button
     if (price?.issues.allowance === null) {
         return (
-            <Button
-                type="button"
-                disabled={disabled}
-                onClick={() => {
-                // fetch data, when finished, show quote view
-                onClick();
-                }}
-            >
-                {disabled ? "Insufficient Balance" : "Review Trade"}
-            </Button>
+            <div className="flex flex-col w-full">
+                <Button
+                    variant="ghost"
+                    className="w-[400px]"
+                    disabled={disabled}
+                    onClick={() => {
+                    // fetch data, when finished, show quote view
+                    onClick();
+                    }}
+                >
+                    {disabled ? "Insufficient Balance" : "Review Trade"}
+                </Button>
+            </div>
         );
     }
 
@@ -190,9 +193,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                     </Button>
                 ) 
             }
-            <Button className="w-full bg-primary text-secondary hover:bg-secondary hover:text-primary">
-                Review
-            </Button>
         </div>
     );
 }

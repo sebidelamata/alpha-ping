@@ -23,11 +23,15 @@ const Trade:React.FC = () => {
             <CardHeader className="w-[100%]">
             </CardHeader>
             <CardContent>
-                <Price
-                    price={price}
-                    setPrice={setPrice}
-                    setFinalize={setFinalize}
-                />
+                {
+                    finalize && price ?
+                    <div>Quote</div> :
+                    <Price
+                        price={price}
+                        setPrice={setPrice}
+                        setFinalize={setFinalize}
+                    />
+                }
             </CardContent>
         </Card>
     )
