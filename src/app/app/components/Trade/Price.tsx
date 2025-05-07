@@ -1,3 +1,5 @@
+'use client'
+
 import React, {
     useEffect,
     useState,
@@ -39,6 +41,7 @@ import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import SellTokenPriceUSD from "./SellTokenPriceUSD";
 import { Badge } from "@/components/components/ui/badge";
+import TaxInfoDisplay from "./TaxInfoDisplay";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -197,9 +200,6 @@ const Price:React.FC<IPrice> = ({
   userBalance && sellAmount
       ? parseUnits(sellAmount, sellTokenDecimals) > BigInt(userBalance)
       : true;
-
-  // Helper function to format tax basis points to percentage
-  const formatTax = (taxBps: string) => (parseFloat(taxBps) / 100).toFixed(2);
 
   //function to enter max balance to sell
   const handleMaxSellAmount = () => {
@@ -453,24 +453,13 @@ const Price:React.FC<IPrice> = ({
                     }
                 </div>
                 {/* Tax Information Display */}
-                <div className="text-slate-400">
-                    {buyTokenTax.buyTaxBps !== "0" &&
-                        <Badge variant={"destructive"}>
-                            {
-                            buyTokenObject.symbol +
-                            ` Buy Tax: ${formatTax(buyTokenTax.buyTaxBps)}%`
-                            }
-                        </Badge>
-                    }
-                    {sellTokenTax.sellTaxBps !== "0" && (
-                    <Badge variant={"destructive"}>
-                        {
-                        sellTokenObject.symbol +
-                        ` Sell Tax: ${formatTax(sellTokenTax.buyTaxBps)}%`
-                        }
-                    </Badge>
-                    )}
-                </div>
+                <Separator color="accent" className="h-4" />
+                <TaxInfoDisplay
+                    buyTokenTax={buyTokenTax}
+                    sellTokenTax={sellTokenTax}
+                    buyTokenObject={buyTokenObject}
+                    sellTokenObject={sellTokenObject}
+                />
                 <Separator color="accent" className="h-4" />
                 <ApproveOrReviewButton
                     onClick={() => {
