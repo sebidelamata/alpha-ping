@@ -25,15 +25,6 @@ import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import tokensByChain from "src/lib/tokensByChain";
-import { Label } from "@/components/components/ui/label";
-import { 
-    Select, 
-    SelectContent, 
-    SelectItem, 
-    SelectTrigger, 
-    SelectValue 
-} from "@/components/components/ui/select";
-import { Input } from "@/components/components/ui/input";
 import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import PriceFlipTokens from "./PriceFlipTokens";
