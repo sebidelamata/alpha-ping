@@ -37,6 +37,7 @@ import { Button } from "@/components/components/ui/button";
 import { ArrowDownUp } from "lucide-react";
 import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
+import SellTokenPriceUSD from "./SellTokenPriceUSD";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -258,6 +259,10 @@ const Price:React.FC<IPrice> = ({
                             Max
                         </Button>
                     </div>
+                    {
+                        sellTokenObject.symbol !== undefined &&
+                        <SellTokenPriceUSD sellTokenSymbol={sellTokenObject.symbol}/>
+                    }
                     <div className="flex flex-row w-full gap-2">
                         <Select
                             value={sellToken}

@@ -66,30 +66,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
       getUserAllowance()
     }, [ sellTokenAddress, signer, account, price])
 
-    // get latest quote in USD
-    const [sellTokenUSDPrice, setSellTokenUSDPrice] = useState<string>("");
-    const [cmcError, setCmcError] = useState<string | null>(null);
-    useEffect(() => {
-        const params = {
-            symbol: sellTokenSymbol,
-        }
-        async function main() {
-            const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
-            const data = await response.json();
-           // Get the first token's data dynamically
-           const tokenDataArray = Object.values(data.data)[0] as any[];
-           if (!tokenDataArray?.length || !tokenDataArray[0]?.quote?.USD?.price) {
-               throw new Error("USD price not found in response");
-           }
-        
-            const usdPrice = tokenDataArray[0].quote.USD.price;
-            console.log("usdPrice", usdPrice);
-            setSellTokenUSDPrice(usdPrice.toString());
-            setCmcError(null);
-        }
-        main();
-    },[sellTokenSymbol])
-
     // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
