@@ -12,8 +12,7 @@ import {
     Card, 
     CardHeader, 
     CardTitle, 
-    CardContent, 
-    CardFooter 
+    CardContent
 } from "@/components/components/ui/card";
 import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { permit2Abi } from "src/lib/permit2abi";
@@ -40,8 +39,9 @@ import { ArrowDownUp } from "lucide-react";
 import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import SellTokenPriceUSD from "./SellTokenPriceUSD";
-import { Badge } from "@/components/components/ui/badge";
+import AffiliateFeeDisplay from "./AffiliateFeeDisplay";
 import TaxInfoDisplay from "./TaxInfoDisplay";
+import PriceFooter from "./PriceFooter";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -434,25 +434,12 @@ const Price:React.FC<IPrice> = ({
                         </Input>
                     </div>
                 </section>
-                {/* Affiliate Fee Display */}
-                <div className="text-slate-400">
-                    {
-                        price && 
-                        price.fees.integratorFee !== null 
-                        && price.fees.integratorFee.amount ? 
-                            "Affiliate Fee: " +
-                            Number(
-                            formatUnits(
-                                BigInt(price.fees.integratorFee.amount),
-                                buyTokenDecimals
-                            )
-                            ) +
-                            " " +
-                            buyTokenObject.symbol: 
-                            null
-                    }
-                </div>
-                {/* Tax Information Display */}
+                <Separator color="accent" className="h-4" />
+                <AffiliateFeeDisplay
+                    price={price}
+                    buyTokenObject={buyTokenObject}
+                    buyTokenDecimals={buyTokenDecimals}
+                />
                 <Separator color="accent" className="h-4" />
                 <TaxInfoDisplay
                     buyTokenTax={buyTokenTax}
@@ -473,19 +460,7 @@ const Price:React.FC<IPrice> = ({
                     price={price}
                 />
             </CardContent>
-            <CardFooter>
-                <div className="flex flex-col gap-1">
-                    <div>
-                        Swap at the best prices using 0x aggregator
-                    </div>
-                    <div className="text-accent">
-                        0x collects a fee of 0.15% on each swap,
-                    </div>
-                    <div className="text-accent">
-                        AlphaPING collects 0% on each swap, for a total of a 0.15% fee.
-                    </div>
-                </div>
-            </CardFooter>
+            <PriceFooter/>
         </Card>
     )
 }
