@@ -15,6 +15,7 @@ import {
     CircleX 
 } from "lucide-react";
 import Link from "next/link";
+import qs from "qs";
 
 interface IApproveOrReviewButton {
     onClick: () => void;
@@ -43,7 +44,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     const { toast } = useToast()
     const { signer } = useEtherProviderContext()
     const { account } = useUserProviderContext()
-
+  
     const [ userAllowance, setUserAllowance ] = useState<string | null>(null)
     useEffect(() => {
         const getUserAllowance = async () => {
@@ -64,6 +65,30 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
       }
       getUserAllowance()
     }, [ sellTokenAddress, signer, account, price])
+
+    // get latest quote in USD
+    const [cmcError, setCmcError] = useState([]);
+    useEffect(() => {
+        const params = {
+            symbol: sellTokenSymbol,
+        }
+        async function main() {
+            const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
+            const data = await response.json();
+            console.log("cmc data", data);
+            // if (data?.validationErrors?.length > 0) {
+            //     // error for sellAmount too low
+            //     setCmcError(data.validationErrors);
+            // } else {
+            //     setCmcError([]);
+            // }
+            // if (data.buyAmount) {
+            //     setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
+            //     setPrice(data);
+            // }
+        }
+        main();
+    },[sellTokenSymbol])
 
     // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const [open, setOpen] = useState<boolean>(false)
