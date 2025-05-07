@@ -38,6 +38,7 @@ import { ArrowDownUp } from "lucide-react";
 import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import SellTokenPriceUSD from "./SellTokenPriceUSD";
+import { Badge } from "@/components/components/ui/badge";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
     if (chainId === 42161) {
@@ -453,17 +454,21 @@ const Price:React.FC<IPrice> = ({
                 </div>
                 {/* Tax Information Display */}
                 <div className="text-slate-400">
-                    {buyTokenTax.buyTaxBps !== "0" && (
-                    <p>
-                        {buyTokenObject.symbol +
-                        ` Buy Tax: ${formatTax(buyTokenTax.buyTaxBps)}%`}
-                    </p>
-                    )}
+                    {buyTokenTax.buyTaxBps !== "0" &&
+                        <Badge variant={"destructive"}>
+                            {
+                            buyTokenObject.symbol +
+                            ` Buy Tax: ${formatTax(buyTokenTax.buyTaxBps)}%`
+                            }
+                        </Badge>
+                    }
                     {sellTokenTax.sellTaxBps !== "0" && (
-                    <p>
-                        {sellTokenObject.symbol +
-                        ` Sell Tax: ${formatTax(sellTokenTax.sellTaxBps)}%`}
-                    </p>
+                    <Badge variant={"destructive"}>
+                        {
+                        sellTokenObject.symbol +
+                        ` Sell Tax: ${formatTax(sellTokenTax.buyTaxBps)}%`
+                        }
+                    </Badge>
                     )}
                 </div>
                 <Separator color="accent" className="h-4" />
