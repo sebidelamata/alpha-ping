@@ -7,6 +7,7 @@ import React, {
 import { 
     formatUnits, 
     parseUnits,
+    ethers
 } from "ethers";
 import { 
     Card, 
@@ -14,12 +15,11 @@ import {
     CardTitle, 
     CardContent
 } from "@/components/components/ui/card";
-import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { permit2Abi } from "src/lib/permit2abi";
+import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import qs from 'qs'
 import ZeroExLogo from "../../../../../public/dark-0x-logo.png";
 import tokenList from "../../../../../public/tokenList.json";
-import { ethers } from 'ethers'
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
@@ -34,11 +34,10 @@ import {
     SelectValue 
 } from "@/components/components/ui/select";
 import { Input } from "@/components/components/ui/input";
-import { Button } from "@/components/components/ui/button";
-import { ArrowDownUp } from "lucide-react";
 import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
-import SellTokenPriceUSD from "./SellTokenPriceUSD";
+import PriceFlipTokens from "./PriceFlipTokens";
+import PriceSellTokenDisplay from "./PriceSellTokenDisplay";
 import AffiliateFeeDisplay from "./AffiliateFeeDisplay";
 import TaxInfoDisplay from "./TaxInfoDisplay";
 import PriceFooter from "./PriceFooter";
@@ -61,8 +60,8 @@ const Price:React.FC<IPrice> = ({
     setFinalize,
 }) => {
 
-    const { chainId, signer } = useEtherProviderContext()
     const { account } = useUserProviderContext()
+    const { chainId, signer } = useEtherProviderContext()
     const { currentChannel } = useChannelProviderContext()
 
     const [sellToken, setSellToken] = useState("weth");
@@ -80,13 +79,10 @@ const Price:React.FC<IPrice> = ({
       sellTaxBps: "0",
     });
 
-    // update token values for swap
-    const handleSellTokenChange = (value: string) => {
-        setSellToken(value);
-    };
     const handleBuyTokenChange = (value: string) => {
         setBuyToken(value);
     }
+
     // flip tokens and values
     const flipTokens = () => {
         const currentSellToken = sellToken;
@@ -179,9 +175,9 @@ const Price:React.FC<IPrice> = ({
         signer
     ]);
 
-  // Hook for fetching balance information for specified token for a specific taker address
-  const [ userBalance, setUserBalance ] = useState<string | null>(null)
-  useEffect(() => {
+    // Hook for fetching balance information for specified token for a specific taker address
+    const [ userBalance, setUserBalance ] = useState<string | null>(null)
+    useEffect(() => {
     const getUserBalance = async () => {
         if(sellTokenObject.address !== null){
             const token = new ethers.Contract(
@@ -201,19 +197,6 @@ const Price:React.FC<IPrice> = ({
       ? parseUnits(sellAmount, sellTokenDecimals) > BigInt(userBalance)
       : true;
 
-  //function to enter max balance to sell
-  const handleMaxSellAmount = () => {
-    if (userBalance && sellTokenDecimals) {
-        const balance = formatUnits(
-            BigInt(userBalance),
-            sellTokenDecimals
-        );
-        setTradeDirection("sell")
-        setSellAmount(balance);
-    }
-  };
-
-
     return(
         <Card className="flex flex-col h-full w-[100%] bg-primary text-secondary">
             <CardHeader className="w-[100%] flex flex-row justify-start items-center">
@@ -228,126 +211,19 @@ const Price:React.FC<IPrice> = ({
                    </Avatar>
             </CardHeader>
             <CardContent>
-                <section className="mt-4 flex flex-col items-start justify-center gap-4">
-                    <div className="flex flex-row">
-                        <Label
-                            htmlFor="sell-select"
-                            className="w-36"
-                        >
-                            <div className="text-3xl">
-                                Sell
-                            </div>
-                        </Label>
-                    </div>
-                    <div className="flex flex-row w-full justify-between items-baseline">
-                        <div className="text-accent items-bottom justify-start text-sm">
-                            Balance: {userBalance && sellTokenDecimals ?
-                                Number(
-                                    formatUnits(
-                                        BigInt(userBalance),
-                                        sellTokenDecimals
-                                    )
-                                ).toFixed(8) + "... " + sellTokenObject.symbol : 
-                                null
-                            }   
-                        </div>
-                        <Button
-                            className="text-xl"
-                            variant="outline"
-                            onClick={handleMaxSellAmount}
-                            //disabled={inSufficientBalance}
-                        >
-                            Max
-                        </Button>
-                    </div>
-                    {
-                        sellTokenObject.symbol !== undefined &&
-                        <SellTokenPriceUSD sellTokenSymbol={sellTokenObject.symbol}/>
-                    }
-                    <div className="flex flex-row w-full gap-2">
-                        <Select
-                            value={sellToken}
-                            name="sell-token-select"
-                            onValueChange={handleSellTokenChange}
-                        >
-                            <SelectTrigger
-                                id="sell-token-select"
-                                className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
-                            >
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                            {
-                                tokensByChain(tokenList, Number(chainId))
-                                    .map((token) => (
-                                        <SelectItem
-                                            key={token.address}
-                                            value={token.symbol.toLowerCase()}
-                                        >
-                                            <div className="flex flex-row items-center justify-start gap-4">
-                                                <Avatar>
-                                                    <AvatarImage 
-                                                        alt={token.symbol}
-                                                        src={
-                                                            (
-                                                                token !== null && 
-                                                                token.logoURI !== null
-                                                            ) ? 
-                                                            token.logoURI : 
-                                                            ""
-                                                        } 
-                                                        className="h-12 w-12"
-                                                    />
-                                                    <AvatarFallback>
-                                                        {token.symbol}
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                                <div>
-                                                    {token.symbol}
-                                                </div>
-                                            </div>
-                                        </SelectItem>
-                                ))
-                            }
-                            </SelectContent>
-                        </Select>
-                        <Label htmlFor="sell-amount"/>
-                        <Input
-                            className="h-16 rounded-md text-3xl"
-                            type="text"
-                            inputMode="decimal"
-                            pattern="[0-9]*[.]?[0-9]*"
-                            placeholder="0.0"
-                            onBeforeInput={(e) => {
-                                const inputEvent = e.nativeEvent as InputEvent;
-                                if (inputEvent.data && !/[\d.]/.test(inputEvent.data)) {
-                                  e.preventDefault();
-                                }
-                            }}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                // Allow only numbers and a single decimal point
-                                if (/^\d*\.?\d*$/.test(value)) {
-                                  setTradeDirection("sell");
-                                  setSellAmount(value);
-                                }
-                            }}
-                            value={sellAmount}
-                        >
-                        </Input>
-                    </div>
-                </section>
-                <section className="flex flex-col items-center justify-center gap-4">
-                    <Separator color="accent"/>
-                    <Button 
-                        onClick={flipTokens} 
-                        className="mt-4 h-30 w-30 text-4xl justify-center align-middle items-center scale-150" 
-                        variant={"outline"}
-                    >
-                        <ArrowDownUp size={48}/>
-                    </Button>
-                    <Separator color="accent"/>
-                </section>
+                <PriceSellTokenDisplay
+                    setTradeDirection={setTradeDirection}
+                    setSellToken={setSellToken}
+                    setSellAmount={setSellAmount}
+                    userBalance={userBalance}
+                    sellToken={sellToken}
+                    sellAmount={sellAmount}
+                    sellTokenObject={sellTokenObject}
+                    sellTokenDecimals={sellTokenDecimals}
+                />
+                <PriceFlipTokens
+                    flipTokens={flipTokens}
+                />
                 <section className="mt-4 flex flex-col items-start justify-center gap-4">
                     <div className="flex flex-row">
                         <Label
