@@ -41,7 +41,10 @@ const SellTokenPriceUSD: React.FC<ISellTokenPriceUSD> = ({sellTokenSymbol}) => {
         sellTokenUSDPrice !== "" && !cmcError ? (
             <Badge variant={"default"}>
                 {
+                    // if its is less than a penny extend to 10 decimal places
                     `1 ${sellTokenSymbol} = $${
+                        Number(Number(sellTokenUSDPrice).toFixed(2)) === 0 ?
+                        (Number(sellTokenUSDPrice).toFixed(10)).toString() :
                         (Number(sellTokenUSDPrice).toFixed(2)).toString()
                     } USD`
                 }
