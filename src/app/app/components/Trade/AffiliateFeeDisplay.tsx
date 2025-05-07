@@ -1,5 +1,6 @@
 import React from "react";
 import { formatUnits } from "ethers";
+import { Badge } from "@/components/components/ui/badge";
 
 interface IAffiliateFeeDisplay {
     price: {
@@ -27,15 +28,19 @@ const AffiliateFeeDisplay: React.FC<IAffiliateFeeDisplay> = ({
                 price && 
                 price.fees.integratorFee !== null 
                 && price.fees.integratorFee.amount ? 
-                    "Affiliate Fee: " +
-                    Number(
-                    formatUnits(
-                        BigInt(price.fees.integratorFee.amount),
-                        buyTokenDecimals
-                    )
-                    ) +
-                    " " +
-                    buyTokenObject.symbol: 
+                    <Badge className="text-xs" variant={"default"}>
+                        {
+                            "Affiliate Fee: " +
+                            Number(
+                                formatUnits(
+                                    BigInt(price.fees.integratorFee.amount),
+                                    buyTokenDecimals
+                                )
+                            ) +
+                            " " +
+                            buyTokenObject.symbol
+                        }
+                    </Badge>: 
                     null
             }
         </div>
