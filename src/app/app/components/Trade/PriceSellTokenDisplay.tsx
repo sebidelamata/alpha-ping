@@ -19,7 +19,7 @@ import { Input } from "@/components/components/ui/input";
 import { formatUnits } from "ethers";
 import tokenList from "../../../../../public/tokenList.json";
 import tokensByChain from "src/lib/tokensByChain";
-import SellTokenPriceUSD from "./SellTokenPriceUSD";
+import SellTokenPriceUSD from "./TokenPriceUSD";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 
 interface IPriceSellTokenDisplay {
@@ -103,7 +103,10 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
             </div>
             {
                 sellTokenObject.symbol !== undefined &&
-                <SellTokenPriceUSD sellTokenSymbol={sellTokenObject.symbol}/>
+                <SellTokenPriceUSD 
+                    tokenSymbol={sellTokenObject.symbol}
+                    amount={sellAmount}
+                />
             }
             <div className="flex flex-row w-full gap-2">
                 <Select

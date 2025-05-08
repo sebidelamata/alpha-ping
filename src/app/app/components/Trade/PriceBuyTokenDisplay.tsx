@@ -18,6 +18,7 @@ import { Input } from "@/components/components/ui/input";
 import tokenList from "../../../../../public/tokenList.json";
 import tokensByChain from "src/lib/tokensByChain";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
+import TokenPriceUSD from "./TokenPriceUSD";
 
 interface IPriceBuyTokenDisplay {
     setTradeDirection: (direction: string) => void;
@@ -126,6 +127,12 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
                     disabled={true}
                 >
                 </Input>
+            </div>
+            <div className="flex flex-row">
+                <TokenPriceUSD
+                    tokenSymbol={buyToken}
+                    amount={buyAmount}
+                />
             </div>
         </section>
     )

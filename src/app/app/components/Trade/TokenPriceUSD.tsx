@@ -7,18 +7,19 @@ import qs from "qs";
 import { Badge } from "@/components/components/ui/badge";
 import { Skeleton } from "@/components/components/ui/skeleton";
 
-interface ISellTokenPriceUSD {
-    sellTokenSymbol: string;
+interface ITokenPriceUSD {
+    tokenSymbol: string;
+    amount: string;
 }
 
-const SellTokenPriceUSD: React.FC<ISellTokenPriceUSD> = ({sellTokenSymbol}) => {
+const TokenPriceUSD: React.FC<ITokenPriceUSD> = ({tokenSymbol, amount}) => {
 
     // get latest quote in USD
-        const [sellTokenUSDPrice, setSellTokenUSDPrice] = useState<string>("");
+        const [tokenUSDPrice, setTokenUSDPrice] = useState<string>("");
         const [cmcError, setCmcError] = useState<string | null>(null);
         useEffect(() => {
             const params = {
-                symbol: sellTokenSymbol,
+                symbol: tokenSymbol,
             }
             async function main() {
                 const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
@@ -31,22 +32,22 @@ const SellTokenPriceUSD: React.FC<ISellTokenPriceUSD> = ({sellTokenSymbol}) => {
             
                 const usdPrice = tokenDataArray[0].quote.USD.price;
                 console.log("usdPrice", usdPrice);
-                setSellTokenUSDPrice(usdPrice.toString());
+                setTokenUSDPrice(usdPrice.toString());
                 setCmcError(null);
             }
             main();
-        },[sellTokenSymbol])
+        },[tokenSymbol])
 
     return(
-        sellTokenUSDPrice !== "" && !cmcError ? (
+        tokenUSDPrice !== "" && !cmcError ? (
             <Badge variant={"default"}>
                 {
                     // if its is less than a penny extend to 10 decimal places
-                    `1 ${sellTokenSymbol} = $${
-                        Number(Number(sellTokenUSDPrice).toFixed(2)) === 0 ?
-                        (Number(sellTokenUSDPrice).toFixed(10)).toString() :
-                        (Number(sellTokenUSDPrice).toFixed(2)).toString()
-                    } USD`
+                    `$${
+                        Number((Number(tokenUSDPrice) * Number(amount)).toFixed(2)) === 0 ?
+                        (Number(Number(tokenUSDPrice) * Number(amount)).toFixed(10)).toString() :
+                        (Number(Number(tokenUSDPrice) * Number(amount)).toFixed(2)).toString()
+                    }`
                 }
             </Badge>
         ) : (
@@ -55,4 +56,4 @@ const SellTokenPriceUSD: React.FC<ISellTokenPriceUSD> = ({sellTokenSymbol}) => {
     )
 }
 
-export default SellTokenPriceUSD;
+export default TokenPriceUSD;
