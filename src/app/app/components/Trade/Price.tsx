@@ -53,7 +53,7 @@ const Price:React.FC<IPrice> = ({
 }) => {
 
     const { account } = useUserProviderContext()
-    const { chainId, signer } = useEtherProviderContext()
+    const { chainId, signer, provider } = useEtherProviderContext()
     const { currentChannel } = useChannelProviderContext()
 
     const [sellToken, setSellToken] = useState("weth");
@@ -167,19 +167,35 @@ const Price:React.FC<IPrice> = ({
     // Hook for fetching balance information for specified token for a specific taker address
     const [ userBalance, setUserBalance ] = useState<string | null>(null)
     useEffect(() => {
-    const getUserBalance = async () => {
-        if(sellTokenObject.address !== null){
-            const token = new ethers.Contract(
-                sellTokenObject.address,
-                ERC20Faucet.abi,
-                signer
-            )
-            const userBalance = await token.balanceOf(account)
-            setUserBalance(userBalance.toString())
-        }
-    }
+        const getUserBalance = async () => {
+            if (!provider || !account) {
+                setUserBalance(null);
+                return;
+            }
+
+            try {
+                // Check if the token is ETH (native token)
+                if (sellToken.toLowerCase() === 'eth' || sellTokenObject?.address === null) {
+                    // Fetch native ETH balance
+                    const balance = await provider.getBalance(account);
+                    setUserBalance(balance.toString());
+                } else {
+                    // Fetch ERC-20 token balance
+                    const token = new ethers.Contract(
+                        sellTokenObject.address,
+                        ERC20Faucet.abi,
+                        signer
+                    );
+                    const userBalance = await token.balanceOf(account);
+                    setUserBalance(userBalance.toString());
+                }
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+                setUserBalance(null);
+            }
+        };
     getUserBalance()
-}, [ sellTokenObject.address, signer, account])
+}, [ sellTokenObject.address, signer, account, provider, sellToken])
 
   const inSufficientBalance =
   userBalance && sellAmount
