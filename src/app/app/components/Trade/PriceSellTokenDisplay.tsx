@@ -19,13 +19,14 @@ import { Input } from "@/components/components/ui/input";
 import { formatUnits } from "ethers";
 import tokenList from "../../../../../public/tokenList.json";
 import tokensByChain from "src/lib/tokensByChain";
-import SellTokenPriceUSD from "./TokenPriceUSD";
+import TokenPriceUSD from "./TokenPriceUSD";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 
 interface IPriceSellTokenDisplay {
     setTradeDirection: (value: string) => void;
     setSellToken: (value: string) => void;
     setSellAmount: (value: string) => void;
+    setSellTokenValueUSD: (value: string) => void;
     userBalance: string | null;
     sellAmount: string;
     sellToken: string;
@@ -42,6 +43,7 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
     setTradeDirection,
     setSellToken,
     setSellAmount,
+    setSellTokenValueUSD,
     userBalance,
     sellAmount,
     sellToken,
@@ -103,9 +105,12 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
             </div>
             {
                 sellTokenObject.symbol !== undefined &&
-                <SellTokenPriceUSD 
+                <TokenPriceUSD 
                     tokenSymbol={sellTokenObject.symbol}
                     amount={sellAmount}
+                    setSellTokenValueUSD={setSellTokenValueUSD}
+                    tradeSide="sell"
+                    sellTokenValueUSD={null}
                 />
             }
             <div className="flex flex-row w-full gap-2">

@@ -26,6 +26,7 @@ interface IPriceBuyTokenDisplay {
     setBuyAmount: (amount: string) => void;
     buyToken: string;
     buyAmount: string;
+    sellTokenValueUSD: string | null;
 }
 
 const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
@@ -34,6 +35,7 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
     setBuyAmount,
     buyToken,
     buyAmount,
+    sellTokenValueUSD
 }) => {
 
     const { chainId } = useEtherProviderContext()
@@ -132,6 +134,9 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
                 <TokenPriceUSD
                     tokenSymbol={buyToken}
                     amount={buyAmount}
+                    setSellTokenValueUSD={null}
+                    tradeSide={"buy"}
+                    sellTokenValueUSD={sellTokenValueUSD}
                 />
             </div>
         </section>

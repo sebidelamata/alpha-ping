@@ -57,6 +57,7 @@ const Price:React.FC<IPrice> = ({
     const { currentChannel } = useChannelProviderContext()
 
     const [sellToken, setSellToken] = useState("weth");
+    const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null);
     const [buyToken, setBuyToken] = useState<string>("usdc");
     const [sellAmount, setSellAmount] = useState("");
     const [buyAmount, setBuyAmount] = useState("");
@@ -203,6 +204,7 @@ const Price:React.FC<IPrice> = ({
                     setTradeDirection={setTradeDirection}
                     setSellToken={setSellToken}
                     setSellAmount={setSellAmount}
+                    setSellTokenValueUSD={setSellTokenValueUSD}
                     userBalance={userBalance}
                     sellToken={sellToken}
                     sellAmount={sellAmount}
@@ -218,6 +220,7 @@ const Price:React.FC<IPrice> = ({
                     setBuyAmount={setBuyAmount}
                     buyToken={buyToken}
                     buyAmount={buyAmount}
+                    sellTokenValueUSD={sellTokenValueUSD}
                 />
                 <Separator color="accent" className="h-4" />
                 <AffiliateFeeDisplay
