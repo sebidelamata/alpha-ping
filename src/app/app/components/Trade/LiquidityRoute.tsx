@@ -36,7 +36,6 @@ const LiquidityRoute: React.FC<ILiquidityRoute> = ({
     buyTokenObject,
     sellTokenObject
 }) => {
-    console.log("LiquidityRoute", route);
     return (
         <div className="flex flex-col w-full h-full">
             <Dialog>

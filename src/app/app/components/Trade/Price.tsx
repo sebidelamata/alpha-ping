@@ -35,6 +35,7 @@ import AffiliateFeeDisplay from "./AffiliateFeeDisplay";
 import TaxInfoDisplay from "./TaxInfoDisplay";
 import AlphaPingFee from "./AlphaPingFee";
 import LiquidityRoute from "./LiquidityRoute";
+import GasDisplay from "./GasDisplay";
 import PriceFooter from "./PriceFooter";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
@@ -74,8 +75,12 @@ const Price:React.FC<IPrice> = ({
       buyTaxBps: "0",
       sellTaxBps: "0",
     });
+    // trading fees
     const [zeroExFee, setZeroExFee] = useState<string>("0");
+    // liquidity route
     const [route, setRoute] = useState<string[]>([])
+    // gas estimate
+    const [gasEstimate, setGasEstimate] = useState<string | null>(null);
 
     // flip tokens and values
     const flipTokens = () => {
@@ -144,7 +149,6 @@ const Price:React.FC<IPrice> = ({
                 setError([]);
             }
             if (data.buyAmount) {
-                console.log(data)
                 setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
                 setPrice(data);
             }
@@ -161,6 +165,14 @@ const Price:React.FC<IPrice> = ({
             if (data?.route) {
                 const routeSources = data.route.fills.map((r: any) => r.source);
                 setRoute(routeSources);
+            }
+            // set gas estimate
+            if (data?.gas && data?.gasPrice) {
+                setGasEstimate(
+                    (
+                        Number(data.gas) * Number(data.gasPrice) / 1e18
+                    ).toString()
+                );
             }
         }
 
@@ -280,6 +292,8 @@ const Price:React.FC<IPrice> = ({
                     buyTokenObject={buyTokenObject}
                     sellTokenObject={sellTokenObject}
                 />
+                <Separator color="accent" className="h-2" />
+                <GasDisplay gasEstimate={gasEstimate}/>
                 <Separator color="accent" className="h-2" />
                 <ApproveOrReviewButton
                     onClick={() => {
