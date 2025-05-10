@@ -40,7 +40,6 @@ const TokenPriceUSD: React.FC<ITokenPriceUSD> = ({
             }
         
             const usdPrice = tokenDataArray[0].quote.USD.price;
-            console.log("usdPrice", usdPrice);
             setTokenUSDPrice(usdPrice.toString());
             // if this is a sell token, set the value in the parent component
             // this is so we can determine the usd difference in between the two tokens
@@ -53,7 +52,9 @@ const TokenPriceUSD: React.FC<ITokenPriceUSD> = ({
     },[tokenSymbol, amount, setSellTokenValueUSD, tradeSide, sellTokenValueUSD]);
 
     return(
-        tokenUSDPrice !== "" && !cmcError ? (
+        tokenUSDPrice !== "" && 
+        amount !== "" &&
+        !cmcError ? (
             <div>
                 <Badge variant={"default"}>
                     {
@@ -68,7 +69,18 @@ const TokenPriceUSD: React.FC<ITokenPriceUSD> = ({
                 {
                     sellTokenValueUSD !== null && 
                     tradeSide === "buy" ? (
-                        <Badge variant={"default"}>
+                        <Badge 
+                            variant={"default"}
+                            // if we have more than 5% slippage make it red
+                            className={
+                                (
+                                    ((Number(tokenUSDPrice) * Number(amount)) - Number(sellTokenValueUSD)) /
+                                    Number(sellTokenValueUSD)
+                                ) * 100 <= -5 ?
+                                "text-red-500" :
+                                "text-gray-400"
+                            }
+                        >
                             {
                                 // percent difference between usd value of token sold vs received
                                 // if its is less than a penny extend to 10 decimal places
