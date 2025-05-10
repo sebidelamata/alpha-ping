@@ -30,8 +30,10 @@ import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import PriceFlipTokens from "./PriceFlipTokens";
 import PriceSellTokenDisplay from "./PriceSellTokenDisplay";
 import PriceBuyTokenDisplay from "./PriceBuyTokenDisplay";
+import ZeroXFee from "./ZeroXFee";
 import AffiliateFeeDisplay from "./AffiliateFeeDisplay";
 import TaxInfoDisplay from "./TaxInfoDisplay";
+import AlphaPingFee from "./AlphaPingFee";
 import PriceFooter from "./PriceFooter";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
@@ -71,6 +73,7 @@ const Price:React.FC<IPrice> = ({
       buyTaxBps: "0",
       sellTaxBps: "0",
     });
+    const [zeroExFee, setZeroExFee] = useState("0");
 
     // flip tokens and values
     const flipTokens = () => {
@@ -129,24 +132,29 @@ const Price:React.FC<IPrice> = ({
         };
 
         async function main() {
-        const response = await fetch(`/api/price?${qs.stringify(params)}`);
-        const data = await response.json();
+            const response = await fetch(`/api/price?${qs.stringify(params)}`);
+            const data = await response.json();
 
-        if (data?.validationErrors?.length > 0) {
-            // error for sellAmount too low
-            setError(data.validationErrors);
-        } else {
-            setError([]);
-        }
-        if (data.buyAmount) {
-            setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
-            setPrice(data);
-        }
-        // Set token tax information
-        if (data?.tokenMetadata) {
-            setBuyTokenTax(data.tokenMetadata.buyToken);
-            setSellTokenTax(data.tokenMetadata.sellToken);
-        }
+            if (data?.validationErrors?.length > 0) {
+                // error for sellAmount too low
+                setError(data.validationErrors);
+            } else {
+                setError([]);
+            }
+            if (data.buyAmount) {
+                console.log(data)
+                setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
+                setPrice(data);
+            }
+            // Set token tax information
+            if (data?.tokenMetadata) {
+                setBuyTokenTax(data.tokenMetadata.buyToken);
+                setSellTokenTax(data.tokenMetadata.sellToken);
+            }
+            // set zero ex trade fee info
+            if(data?.fees.zeroExFee) {
+                setZeroExFee(data.fees.zeroExFee.amount);
+            }
         }
 
         if (sellAmount !== "") {
@@ -239,6 +247,13 @@ const Price:React.FC<IPrice> = ({
                     sellTokenValueUSD={sellTokenValueUSD}
                 />
                 <Separator color="accent" className="h-4" />
+                <ZeroXFee
+                    zeroExFee={zeroExFee}
+                    sellTokenObject={sellTokenObject}
+                    sellTokenDecimals={sellTokenDecimals}
+                    sellTokenPriceUSD={(Number(sellTokenValueUSD) / Number(sellAmount)).toString()}
+                />
+                <AlphaPingFee/>
                 <AffiliateFeeDisplay
                     price={price}
                     buyTokenObject={buyTokenObject}
