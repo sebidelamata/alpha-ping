@@ -34,6 +34,7 @@ import ZeroXFee from "./ZeroXFee";
 import AffiliateFeeDisplay from "./AffiliateFeeDisplay";
 import TaxInfoDisplay from "./TaxInfoDisplay";
 import AlphaPingFee from "./AlphaPingFee";
+import LiquidityRoute from "./LiquidityRoute";
 import PriceFooter from "./PriceFooter";
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
@@ -73,7 +74,8 @@ const Price:React.FC<IPrice> = ({
       buyTaxBps: "0",
       sellTaxBps: "0",
     });
-    const [zeroExFee, setZeroExFee] = useState("0");
+    const [zeroExFee, setZeroExFee] = useState<string>("0");
+    const [route, setRoute] = useState<string[]>([])
 
     // flip tokens and values
     const flipTokens = () => {
@@ -154,6 +156,11 @@ const Price:React.FC<IPrice> = ({
             // set zero ex trade fee info
             if(data?.fees.zeroExFee) {
                 setZeroExFee(data.fees.zeroExFee.amount);
+            }
+            // set liquidity route
+            if (data?.route) {
+                const routeSources = data.route.fills.map((r: any) => r.source);
+                setRoute(routeSources);
             }
         }
 
@@ -246,27 +253,34 @@ const Price:React.FC<IPrice> = ({
                     buyAmount={buyAmount}
                     sellTokenValueUSD={sellTokenValueUSD}
                 />
-                <Separator color="accent" className="h-4" />
+                <Separator color="accent" className="h-2" />
                 <ZeroXFee
                     zeroExFee={zeroExFee}
                     sellTokenObject={sellTokenObject}
                     sellTokenDecimals={sellTokenDecimals}
                     sellTokenPriceUSD={(Number(sellTokenValueUSD) / Number(sellAmount)).toString()}
                 />
+                <Separator color="accent" className="h-2" />
                 <AlphaPingFee/>
                 <AffiliateFeeDisplay
                     price={price}
                     buyTokenObject={buyTokenObject}
                     buyTokenDecimals={buyTokenDecimals}
                 />
-                <Separator color="accent" className="h-4" />
+                <Separator color="accent" className="h-2" />
                 <TaxInfoDisplay
                     buyTokenTax={buyTokenTax}
                     sellTokenTax={sellTokenTax}
                     buyTokenObject={buyTokenObject}
                     sellTokenObject={sellTokenObject}
                 />
-                <Separator color="accent" className="h-4" />
+                <Separator color="accent" className="h-2" />
+                <LiquidityRoute
+                    route={route}
+                    buyTokenObject={buyTokenObject}
+                    sellTokenObject={sellTokenObject}
+                />
+                <Separator color="accent" className="h-2" />
                 <ApproveOrReviewButton
                     onClick={() => {
                         setFinalize(true);

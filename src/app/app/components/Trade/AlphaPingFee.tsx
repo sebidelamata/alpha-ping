@@ -5,7 +5,7 @@ const AlphaPingFee: React.FC = () => {
 
     return(
         <div>
-            <Badge variant={"secondary"}>
+            <Badge variant={"default"}>
                 {
                     `AlphaPING Fee: FREE! ($0.00)`
                 }
