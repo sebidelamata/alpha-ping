@@ -3,24 +3,10 @@
 import React from "react";
 import { Label } from "@/components/components/ui/label";
 import { Button } from "@/components/components/ui/button";
-import { 
-    Select, 
-    SelectTrigger, 
-    SelectValue, 
-    SelectContent, 
-    SelectItem 
-} from "@/components/components/ui/select";
-import { 
-    Avatar, 
-    AvatarImage, 
-    AvatarFallback 
-} from "@/components/components/ui/avatar";
 import { Input } from "@/components/components/ui/input";
 import { formatUnits } from "ethers";
-import tokenList from "../../../../../public/tokenList.json";
-import tokensByChain from "src/lib/tokensByChain";
 import TokenPriceUSD from "./TokenPriceUSD";
-import { useEtherProviderContext } from "src/contexts/ProviderContext";
+import TokenSelector from "./TokenSelector";
 
 interface IPriceSellTokenDisplay {
     setTradeDirection: (value: string) => void;
@@ -29,12 +15,12 @@ interface IPriceSellTokenDisplay {
     setSellTokenValueUSD: (value: string) => void;
     userBalance: string | null;
     sellAmount: string;
-    sellToken: string;
     sellTokenObject: {
         address: string | null;
         symbol: string;
         decimals: number;
         logoURI: string | null;
+        name: string;
     };
     sellTokenDecimals: number | null;
 }
@@ -46,17 +32,9 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
     setSellTokenValueUSD,
     userBalance,
     sellAmount,
-    sellToken,
     sellTokenObject,
     sellTokenDecimals
 }) => {
-
-    const { chainId } = useEtherProviderContext()
-
-    // update token values for swap
-    const handleSellTokenChange = (value: string) => {
-        setSellToken(value);
-    };
 
     //function to enter max balance to sell
     const handleMaxSellAmount = () => {
@@ -114,52 +92,11 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
                 />
             }
             <div className="flex flex-row w-full gap-2">
-                <Select
-                    value={sellToken}
-                    name="sell-token-select"
-                    onValueChange={handleSellTokenChange}
-                >
-                    <SelectTrigger
-                        id="sell-token-select"
-                        className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
-                    >
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                    {
-                        tokensByChain(tokenList, Number(chainId))
-                            .map((token) => (
-                                <SelectItem
-                                    key={token.address}
-                                    value={token.symbol.toLowerCase()}
-                                >
-                                    <div className="flex flex-row items-center justify-start gap-4">
-                                        <Avatar>
-                                            <AvatarImage 
-                                                alt={token.symbol}
-                                                src={
-                                                    (
-                                                        token !== null && 
-                                                        token.logoURI !== null
-                                                    ) ? 
-                                                    token.logoURI : 
-                                                    ""
-                                                } 
-                                                className="h-12 w-12"
-                                            />
-                                            <AvatarFallback>
-                                                {token.symbol}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            {token.symbol}
-                                        </div>
-                                    </div>
-                                </SelectItem>
-                        ))
-                    }
-                    </SelectContent>
-                </Select>
+                <TokenSelector
+                    tokenObject={sellTokenObject}
+                    setToken={setSellToken}
+                    tradeSide="sell"
+                />
                 <Label htmlFor="sell-amount"/>
                 <Input
                     className="h-16 rounded-md text-3xl"

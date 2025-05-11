@@ -274,7 +274,6 @@ const Price:React.FC<IPrice> = ({
                     setSellAmount={setSellAmount}
                     setSellTokenValueUSD={setSellTokenValueUSD}
                     userBalance={userBalance}
-                    sellToken={sellToken}
                     sellAmount={sellAmount}
                     sellTokenObject={sellTokenObject}
                     sellTokenDecimals={sellTokenDecimals}
@@ -286,7 +285,7 @@ const Price:React.FC<IPrice> = ({
                     setTradeDirection={setTradeDirection}
                     setBuyToken={setBuyToken}
                     setBuyAmount={setBuyAmount}
-                    buyToken={buyToken}
+                    buyTokenObject={buyTokenObject}
                     buyAmount={buyAmount}
                     sellTokenValueUSD={sellTokenValueUSD}
                 />

@@ -2,29 +2,21 @@
 
 import React from "react";
 import { Label } from "@/components/components/ui/label";
-import { 
-    Select, 
-    SelectTrigger, 
-    SelectValue, 
-    SelectContent, 
-    SelectItem 
-} from "@/components/components/ui/select";
-import { 
-    Avatar, 
-    AvatarImage, 
-    AvatarFallback 
-} from "@/components/components/ui/avatar";
 import { Input } from "@/components/components/ui/input";
-import tokenList from "../../../../../public/tokenList.json";
-import tokensByChain from "src/lib/tokensByChain";
-import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import TokenPriceUSD from "./TokenPriceUSD";
+import TokenSelector from "./TokenSelector";
 
 interface IPriceBuyTokenDisplay {
     setTradeDirection: (direction: string) => void;
     setBuyToken: (token: string) => void;
     setBuyAmount: (amount: string) => void;
-    buyToken: string;
+    buyTokenObject: {
+        address: string | null;
+        symbol: string;
+        decimals: number;
+        logoURI: string | null;
+        name: string;
+    };
     buyAmount: string;
     sellTokenValueUSD: string | null;
 }
@@ -33,16 +25,10 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
     setTradeDirection,
     setBuyToken,
     setBuyAmount,
-    buyToken,
+    buyTokenObject,
     buyAmount,
     sellTokenValueUSD
 }) => {
-
-    const { chainId } = useEtherProviderContext()
-
-    const handleBuyTokenChange = (value: string) => {
-        setBuyToken(value);
-    }
 
     return(
         <section className="mt-4 flex flex-col items-start justify-center gap-4">
@@ -57,52 +43,11 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
                 </Label>
             </div>
             <div className="flex flex-row w-full gap-2">
-                <Select
-                    value={buyToken}
-                    name="buy-token-select"
-                    onValueChange={handleBuyTokenChange}
-                >
-                    <SelectTrigger
-                        id="buy-token-select"
-                        className="mr-2 w-50 sm:w-full h-16 rounded-md text-3xl"
-                    >
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                    {
-                        tokensByChain(tokenList, Number(chainId))
-                            .map((token) => (
-                                <SelectItem
-                                    key={token.address}
-                                    value={token.symbol.toLowerCase()}
-                                >
-                                    <div className="flex flex-row items-center justify-start gap-4">
-                                        <Avatar>
-                                            <AvatarImage 
-                                                alt={token.symbol}
-                                                src={
-                                                    (
-                                                        token !== null && 
-                                                        token.logoURI !== null
-                                                    ) ? 
-                                                    token.logoURI : 
-                                                    ""
-                                                } 
-                                                className="h-12 w-12"
-                                            />
-                                            <AvatarFallback>
-                                                {token.symbol}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            {token.symbol}
-                                        </div>
-                                    </div>
-                                </SelectItem>
-                        ))
-                    }
-                    </SelectContent>
-                </Select>
+                <TokenSelector
+                    tokenObject={buyTokenObject}
+                    setToken={setBuyToken}
+                    tradeSide="buy"
+                />
                 <Label htmlFor="buy-amount"/>
                 <Input
                     id="buy-amount"
@@ -132,7 +77,7 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
             </div>
             <div className="flex flex-row">
                 <TokenPriceUSD
-                    tokenSymbol={buyToken}
+                    tokenSymbol={buyTokenObject.symbol}
                     amount={buyAmount}
                     setSellTokenValueUSD={null}
                     tradeSide={"buy"}
