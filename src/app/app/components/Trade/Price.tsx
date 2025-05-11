@@ -23,9 +23,12 @@ import tokenList from "../../../../../public/tokenList.json";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { 
+    Avatar, 
+    AvatarFallback, 
+    AvatarImage 
+} from "@radix-ui/react-avatar";
 import tokensByChain from "src/lib/tokensByChain";
-import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import PriceFlipTokens from "./PriceFlipTokens";
 import SlippageSettings from "./SlippageSettings";
