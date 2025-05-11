@@ -28,6 +28,7 @@ import tokensByChain from "src/lib/tokensByChain";
 import { Separator } from "@/components/components/ui/separator";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import PriceFlipTokens from "./PriceFlipTokens";
+import SlippageSettings from "./SlippageSettings";
 import PriceSellTokenDisplay from "./PriceSellTokenDisplay";
 import PriceBuyTokenDisplay from "./PriceBuyTokenDisplay";
 import ZeroXFee from "./ZeroXFee";
@@ -81,6 +82,8 @@ const Price:React.FC<IPrice> = ({
     const [route, setRoute] = useState<string[]>([])
     // gas estimate
     const [gasEstimate, setGasEstimate] = useState<string | null>(null);
+    // slippage settings
+    const [slippage, setSlippage] = useState<string>("1.00");
 
     // flip tokens and values
     const flipTokens = () => {
@@ -122,9 +125,23 @@ const Price:React.FC<IPrice> = ({
         buyAmount && tradeDirection === "buy"
         ? parseUnits(buyAmount, buyTokenDecimals).toString()
         : undefined;
+
+    // we are going to use this timer to refetch a new price every 30 seconds
+    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+    // Timer to update lastUpdated every 30 seconds
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+        setLastUpdated(new Date());
+        }, 30 * 1000); // 30 seconds in milliseconds
+    
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []); // Empty dependency array to run once on mount
     
     // Fetch price data and set the buyAmount whenever the sellAmount changes
     useEffect(() => {
+        console.log('slippage', slippage)
         const params = {
         chainId: chainId,
         sellToken: sellTokenObject.address,
@@ -136,11 +153,13 @@ const Price:React.FC<IPrice> = ({
         swapFeeBps: process.env.NEXT_PUBLIC_AFFILIATE_FEE,
         swapFeeToken: buyTokenObject.address,
         tradeSurplusRecipient: process.env.NEXT_PUBLIC_FEE_RECIPIENT,
+        slippageBps: (Number(slippage) * 100).toFixed(0),
         };
 
         async function main() {
             const response = await fetch(`/api/price?${qs.stringify(params)}`);
             const data = await response.json();
+            console.log('price data', data);
 
             if (data?.validationErrors?.length > 0) {
                 // error for sellAmount too low
@@ -188,7 +207,9 @@ const Price:React.FC<IPrice> = ({
         sellAmount,
         setPrice,
         buyTokenDecimals,
-        signer
+        signer,
+        slippage,
+        lastUpdated
     ]);
 
     // Hook for fetching balance information for specified token for a specific taker address
@@ -230,8 +251,8 @@ const Price:React.FC<IPrice> = ({
       : true;
 
     return(
-        <Card className="flex flex-col h-full w-[100%] bg-primary text-secondary">
-            <CardHeader className="w-[100%] flex flex-row justify-start items-center">
+        <Card className="flex flex-col w-full h-full bg-primary text-secondary">
+            <CardHeader className="w-full flex flex-row justify-start items-center">
                 <CardTitle className="text-5xl">
                     Trade with
                 </CardTitle>
@@ -242,7 +263,11 @@ const Price:React.FC<IPrice> = ({
                     </AvatarFallback>
                    </Avatar>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-1 w-full flex flex-col gap-4">
+                <SlippageSettings
+                    slippage={slippage}
+                    setSlippage={setSlippage}
+                />
                 <PriceSellTokenDisplay
                     setTradeDirection={setTradeDirection}
                     setSellToken={setSellToken}
@@ -265,36 +290,30 @@ const Price:React.FC<IPrice> = ({
                     buyAmount={buyAmount}
                     sellTokenValueUSD={sellTokenValueUSD}
                 />
-                <Separator color="accent" className="h-2" />
                 <ZeroXFee
                     zeroExFee={zeroExFee}
                     sellTokenObject={sellTokenObject}
                     sellTokenDecimals={sellTokenDecimals}
                     sellTokenPriceUSD={(Number(sellTokenValueUSD) / Number(sellAmount)).toString()}
                 />
-                <Separator color="accent" className="h-2" />
                 <AlphaPingFee/>
                 <AffiliateFeeDisplay
                     price={price}
                     buyTokenObject={buyTokenObject}
                     buyTokenDecimals={buyTokenDecimals}
                 />
-                <Separator color="accent" className="h-2" />
                 <TaxInfoDisplay
                     buyTokenTax={buyTokenTax}
                     sellTokenTax={sellTokenTax}
                     buyTokenObject={buyTokenObject}
                     sellTokenObject={sellTokenObject}
                 />
-                <Separator color="accent" className="h-2" />
                 <LiquidityRoute
                     route={route}
                     buyTokenObject={buyTokenObject}
                     sellTokenObject={sellTokenObject}
                 />
-                <Separator color="accent" className="h-2" />
                 <GasDisplay gasEstimate={gasEstimate}/>
-                <Separator color="accent" className="h-2" />
                 <ApproveOrReviewButton
                     onClick={() => {
                         setFinalize(true);

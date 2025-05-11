@@ -98,7 +98,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             if(error !== null && (error as ErrorType).reason !== undefined){
                 toast({
                     title: "Transaction Error!",
-                    description: `Aprove ${sellTokenSymbol} failed!`,
+                    description: `Approve ${sellTokenSymbol} failed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-col gap-1 justify-center items-center">

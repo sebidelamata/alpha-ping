@@ -19,13 +19,16 @@ const Trade:React.FC = () => {
     const [quote, setQuote] = useState();
 
     return(
-        <Card className="flex flex-col h-full w-[100%] bg-primary text-secondary">
-            <CardHeader className="w-[100%]">
+        <Card className="flex flex-col w-full h-full bg-primary text-secondary">
+            <CardHeader className="w-full">
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-1 w-full">
                 {
                     finalize && price ?
-                    <div>Quote</div> :
+                    <div
+                    className="w-full h-full flex items-center justify-center"
+                    >
+                        Quote</div> :
                     <Price
                         price={price}
                         setPrice={setPrice}
