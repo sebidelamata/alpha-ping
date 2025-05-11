@@ -21,7 +21,6 @@ import qs from 'qs'
 import ZeroExLogo from "../../../../../public/dark-0x-logo.png";
 import tokenList from "../../../../../public/tokenList.json";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import { 
     Avatar, 
@@ -31,7 +30,6 @@ import {
 import tokensByChain from "src/lib/tokensByChain";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import PriceFlipTokens from "./PriceFlipTokens";
-import SlippageSettings from "./SlippageSettings";
 import PriceSellTokenDisplay from "./PriceSellTokenDisplay";
 import PriceBuyTokenDisplay from "./PriceBuyTokenDisplay";
 import ZeroXFee from "./ZeroXFee";
@@ -62,7 +60,6 @@ const Price:React.FC<IPrice> = ({
 
     const { account } = useUserProviderContext()
     const { chainId, signer, provider } = useEtherProviderContext()
-    const { currentChannel } = useChannelProviderContext()
 
     const [sellToken, setSellToken] = useState("weth");
     const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null);
