@@ -20,8 +20,6 @@ const Trade:React.FC = () => {
 
     return(
         <Card className="flex flex-col w-full h-full bg-primary text-secondary">
-            <CardHeader className="w-full">
-            </CardHeader>
             <CardContent className="flex-1 w-full">
                 {
                     finalize && price ?
