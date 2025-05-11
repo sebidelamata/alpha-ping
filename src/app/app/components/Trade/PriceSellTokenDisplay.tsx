@@ -7,6 +7,7 @@ import { Input } from "@/components/components/ui/input";
 import { formatUnits } from "ethers";
 import TokenPriceUSD from "./TokenPriceUSD";
 import TokenSelector from "./TokenSelector";
+import SlippageSettings from "./SlippageSettings";
 
 interface IPriceSellTokenDisplay {
     setTradeDirection: (value: string) => void;
@@ -23,6 +24,9 @@ interface IPriceSellTokenDisplay {
         name: string;
     };
     sellTokenDecimals: number | null;
+    slippage: string;
+    setSlippage: React.Dispatch<React.SetStateAction<string>>;
+
 }
 
 const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
@@ -33,7 +37,9 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
     userBalance,
     sellAmount,
     sellTokenObject,
-    sellTokenDecimals
+    sellTokenDecimals,
+    slippage,
+    setSlippage
 }) => {
 
     //function to enter max balance to sell
@@ -53,11 +59,15 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
             <div className="flex flex-row">
                 <Label
                     htmlFor="sell-select"
-                    className="w-36"
+                    className="flex flex-row w-[100%] justify-between items-baseline gap-4"
                 >
                     <div className="text-3xl">
                         Sell
                     </div>
+                    <SlippageSettings
+                        slippage={slippage}
+                        setSlippage={setSlippage}
+                    />
                 </Label>
             </div>
             <div className="flex flex-row w-full justify-between items-baseline">

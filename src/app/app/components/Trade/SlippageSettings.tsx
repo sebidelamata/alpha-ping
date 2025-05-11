@@ -91,8 +91,8 @@ const SlippageSettings: React.FC<ISlippageSettings> = ({ slippage, setSlippage }
     <div className="flex w-full h-full justify-end">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="default">
-            <Settings className="text-secondary" />
+          <Button variant="default" className="w-64">
+            <Settings className="text-accent" />
           </Button>
         </DialogTrigger>
         <DialogContent>

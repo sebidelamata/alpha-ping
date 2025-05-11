@@ -267,10 +267,6 @@ const Price:React.FC<IPrice> = ({
                    </Avatar>
             </CardHeader>
             <CardContent className="flex-1 w-full flex flex-col gap-4">
-                <SlippageSettings
-                    slippage={slippage}
-                    setSlippage={setSlippage}
-                />
                 <PriceSellTokenDisplay
                     setTradeDirection={setTradeDirection}
                     setSellToken={setSellToken}
@@ -280,6 +276,8 @@ const Price:React.FC<IPrice> = ({
                     sellAmount={sellAmount}
                     sellTokenObject={sellTokenObject}
                     sellTokenDecimals={sellTokenDecimals}
+                    slippage={slippage}
+                    setSlippage={setSlippage}
                 />
                 <PriceFlipTokens
                     flipTokens={flipTokens}
@@ -292,6 +290,11 @@ const Price:React.FC<IPrice> = ({
                     buyAmount={buyAmount}
                     sellTokenValueUSD={sellTokenValueUSD}
                 />
+                <div>
+                    {
+                        `Max Slippage: ${slippage}%`
+                    }
+                </div>
                 <ZeroXFee
                     zeroExFee={zeroExFee}
                     sellTokenObject={sellTokenObject}
