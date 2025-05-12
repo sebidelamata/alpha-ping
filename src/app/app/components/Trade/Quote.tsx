@@ -48,14 +48,15 @@ const Quote:React.FC<IQuote> = ({
     const [isPending, setIsPending] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
     const [isConfirmed, setIsConfirmed] = useState(false);
-
     // Get token objects
-    const sellTokenObject = tokensByChain(tokenList, Number(chainId)).find(
-        (token) => token.symbol.toLowerCase() === price.sellToken.toLowerCase()
-    );
-    const buyTokenObject = tokensByChain(tokenList, Number(chainId)).find(
-        (token) => token.symbol.toLowerCase() === price.buyToken.toLowerCase()
-    );
+    const sellTokenObject = tokensByChain(tokenList, Number(chainId))
+        .filter((token) => token.address.toLowerCase() === price.sellToken.toLowerCase()
+        )[0];
+    console.log(sellTokenObject)
+    const buyTokenObject = tokensByChain(tokenList, Number(chainId))
+        .filter(
+        (token) => token.address.toLowerCase() === price.buyToken.toLowerCase()
+        )[0];
 
     // Fetch quote data
     useEffect(() => {
