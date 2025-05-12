@@ -23,6 +23,10 @@ import { ArrowLeft } from "lucide-react";
 import QuoteSellTokenDisplay from "./QuoteSellTokenDisplay"
 import QuoteBuyTokenDisplay from "./QuoteBuyTokenDisplay";
 import { CircleArrowRight } from "lucide-react";
+import AffiliateFeeDisplay from "./AffiliateFeeDisplay";
+import TaxInfoDisplay from "./TaxInfoDisplay";
+import LiquidityRoute from "./LiquidityRoute";
+import GasDisplay from "./GasDisplay";
 
 interface IQuote{
     price: any;
@@ -82,7 +86,6 @@ const Quote:React.FC<IQuote> = ({
             try {
                 console.log('Quote: Fetching quote with params', params);
                 const response = await fetch(`/api/quote?${qs.stringify(params)}`);
-                console.log(response)
                 const data = await response.json();
                 console.log('Quote: Quote data', data);
                 if (data.validationErrors?.length > 0) {
@@ -240,23 +243,36 @@ const Quote:React.FC<IQuote> = ({
                 </div>
                 {/* Fees and Taxes */}
                 <div className="p-4 rounded-sm">
-                {quote.fees?.integratorFee?.amount && (
-                    <div className="text-slate-400">
-                    Affiliate Fee: {formatUnits(quote.fees.integratorFee.amount, buyTokenObject.decimals)} {buyTokenObject.symbol}
-                    </div>
-                )}
-                {quote.tokenMetadata.buyToken.buyTaxBps !== "0" && (
-                    <div>
-                    {buyTokenObject.symbol} Buy Tax: {formatTax(quote.tokenMetadata.buyToken.buyTaxBps)}%
-                    </div>
-                )}
-                {quote.tokenMetadata.sellToken.sellTaxBps !== "0" && (
-                    <div>
-                    {sellTokenObject.symbol} Sell Tax: {formatTax(quote.tokenMetadata.sellToken.sellTaxBps)}%
-                    </div>
-                )}
+                    {
+                        quote.fees?.integratorFee?.amount &&
+                        <AffiliateFeeDisplay
+                            price={quote}
+                            buyTokenObject={buyTokenObject}
+                            buyTokenDecimals={buyTokenObject.decimals}
+                        />
+                    }
+                    {
+                        quote.tokenMetadata.buyToken.buyTaxBps !== "0" || 
+                        quote.tokenMetadata.sellToken.sellTaxBps !== "0" &&
+                        (
+                            <TaxInfoDisplay
+                                buyTokenTax={quote.tokenMetadata.buyToken.buyTaxBps}
+                                sellTokenTax={quote.tokenMetadata.sellToken.sellTaxBps}
+                                buyTokenObject={buyTokenObject}
+                                sellTokenObject={sellTokenObject}
+                            />
+                        )
+                    }
                 </div>
-
+                <LiquidityRoute
+                    route={quote.route.fills.map((r: any) => r.source)}
+                    buyTokenObject={buyTokenObject}
+                    sellTokenObject={sellTokenObject}
+                />
+                {
+                    quote?.totalNetworkFee &&
+                    <GasDisplay gasEstimate={(Number(quote.totalNetworkFee) / 1e18).toString()}/>
+                }
                 {/* Place Order Button */}
                 <Button
                 className="font-bold py-2 px-4 rounded w-full"

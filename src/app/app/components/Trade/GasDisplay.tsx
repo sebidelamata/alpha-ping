@@ -11,7 +11,7 @@ interface IGasDisplay {
 }
 
 const GasDisplay: React.FC<IGasDisplay> = ({gasEstimate}) => {
-
+console.log(gasEstimate)
     // get latest quote in USD
     const [ethUSDPrice, setEthUSDPrice] = useState<string>("");
     const [cmcError, setCmcError] = useState<string | null>(null);
