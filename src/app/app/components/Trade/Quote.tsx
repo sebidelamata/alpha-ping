@@ -18,14 +18,11 @@ import {
     CardTitle, 
     CardContent
 } from "@/components/components/ui/card";
-import { 
-    Avatar, 
-    AvatarImage, 
-    AvatarFallback 
-} from "@/components/components/ui/avatar";
 import { Button } from "@/components/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import TokenPriceUSD from "./TokenPriceUSD";
+import QuoteSellTokenDisplay from "./QuoteSellTokenDisplay"
+import QuoteBuyTokenDisplay from "./QuoteBuyTokenDisplay";
+import { CircleArrowRight } from "lucide-react";
 
 interface IQuote{
     price: any;
@@ -224,54 +221,23 @@ const Quote:React.FC<IQuote> = ({
                 }
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-                {/* You Pay */}
-                <div className="p-4 rounded-sm gap-2">
-                <div className="text-xl mb-2">You pay</div>
-                <div className="flex items-center text-lg sm:text-3xl">
-                    <Avatar>
-                    <AvatarImage
-                        alt={sellTokenObject.symbol}
-                        src={sellTokenObject.logoURI || ""}
-                        className="h-9 w-9 mr-2"
-                    />
-                    <AvatarFallback>{sellTokenObject.symbol}</AvatarFallback>
-                    </Avatar>
-                    <span>{formatUnits(quote.sellAmount, sellTokenObject.decimals)}</span>
-                    <div className="ml-2">{sellTokenObject.symbol}</div>
-                    <TokenPriceUSD
-                        tokenSymbol={sellTokenObject.symbol}
-                        amount={formatUnits(quote.sellAmount, sellTokenObject.decimals)}
+                <div className="flex flew-wrap w-full gap-4 items-center">
+                    <QuoteSellTokenDisplay
+                        sellTokenObject={sellTokenObject}
+                        sellAmount={quote.sellAmount}
                         sellTokenValueUSD={sellTokenValueUSD}
                         setSellTokenValueUSD={setSellTokenValueUSD}
-                        tradeSide="sell"
                     />
-                </div>
-                </div>
-
-                {/* You Receive */}
-                <div className="p-4 rounded-sm gap-2">
-                <div className="text-xl mb-2">You receive</div>
-                <div className="flex items-center text-lg sm:text-3xl">
-                    <Avatar>
-                    <AvatarImage
-                        alt={buyTokenObject.symbol}
-                        src={buyTokenObject.logoURI || ""}
-                        className="h-9 w-9 mr-2"
-                    />
-                    <AvatarFallback>{buyTokenObject.symbol}</AvatarFallback>
-                    </Avatar>
-                    <span>{formatUnits(quote.buyAmount, buyTokenObject.decimals)}</span>
-                    <div className="ml-2">{buyTokenObject.symbol}</div>
-                    <TokenPriceUSD
-                        tokenSymbol={buyTokenObject.symbol}
-                        amount={formatUnits(quote.buyAmount, buyTokenObject.decimals)}
+                    <div className="flex h-full justify-center items-center">
+                        <CircleArrowRight className="text-accent size-20"/>
+                    </div>
+                    <QuoteBuyTokenDisplay
+                        buyTokenObject={buyTokenObject}
+                        buyAmount={quote.buyAmount}
                         sellTokenValueUSD={sellTokenValueUSD}
                         setSellTokenValueUSD={setSellTokenValueUSD}
-                        tradeSide="buy"
                     />
                 </div>
-                </div>
-
                 {/* Fees and Taxes */}
                 <div className="p-4 rounded-sm">
                 {quote.fees?.integratorFee?.amount && (
