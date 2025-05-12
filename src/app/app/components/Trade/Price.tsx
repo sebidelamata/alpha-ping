@@ -50,12 +50,16 @@ interface IPrice {
     price: any;
     setPrice: (price: any) => void;
     setFinalize: (finalize: boolean) => void;
+    slippage: string;
+    setSlippage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Price:React.FC<IPrice> = ({
     price,
     setPrice,
     setFinalize,
+    slippage,
+    setSlippage
 }) => {
 
     const { account } = useUserProviderContext()
@@ -82,8 +86,6 @@ const Price:React.FC<IPrice> = ({
     const [route, setRoute] = useState<string[]>([])
     // gas estimate
     const [gasEstimate, setGasEstimate] = useState<string | null>(null);
-    // slippage settings
-    const [slippage, setSlippage] = useState<string>("1.00");
 
     // flip tokens and values
     const flipTokens = () => {
@@ -148,7 +150,7 @@ const Price:React.FC<IPrice> = ({
         buyToken: buyTokenObject.address,
         sellAmount: parsedSellAmount,
         buyAmount: parsedBuyAmount,
-        signer: signer,
+        taker: signer,
         swapFeeRecipient: process.env.NEXT_PUBLIC_FEE_RECIPIENT,
         swapFeeBps: process.env.NEXT_PUBLIC_AFFILIATE_FEE,
         swapFeeToken: buyTokenObject.address,
@@ -177,7 +179,7 @@ const Price:React.FC<IPrice> = ({
                 setSellTokenTax(data.tokenMetadata.sellToken);
             }
             // set zero ex trade fee info
-            if(data?.fees.zeroExFee) {
+            if(data?.fees && data?.fees.zeroExFee) {
                 setZeroExFee(data.fees.zeroExFee.amount);
             }
             // set liquidity route

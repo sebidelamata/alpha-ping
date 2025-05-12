@@ -1,0 +1,259 @@
+'use client';
+
+import React, {
+    useState,
+    useEffect
+} from "react";
+import tokensByChain from "src/lib/tokensByChain";
+import tokenList from "../../../../../public/tokenList.json";
+import { useUserProviderContext } from "src/contexts/UserContext";
+import { useEtherProviderContext } from "src/contexts/ProviderContext";
+import qs from 'qs'
+import { ethers, formatUnits } from 'ethers'
+import formatTax from "src/lib/formatTax";
+import Loading from "../Loading";
+import { 
+    Card, 
+    CardHeader, 
+    CardTitle, 
+    CardContent
+} from "@/components/components/ui/card";
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@/components/components/ui/avatar";
+import { Button } from "@/components/components/ui/button";
+
+interface IQuote{
+    price: any;
+    quote: any;
+    setQuote: (price: any) => void;
+    slippage: string;
+}
+
+const Quote:React.FC<IQuote> = ({
+  price,
+  quote,
+  setQuote,
+  slippage
+}) => {
+    console.log("price", price);
+
+    const { account } = useUserProviderContext()
+    const { chainId, signer, provider } = useEtherProviderContext()
+
+    const [error, setError] = useState<string | null>(null);
+    const [txHash, setTxHash] = useState<string | null>(null);
+    const [isPending, setIsPending] = useState(false);
+    const [isConfirming, setIsConfirming] = useState(false);
+    const [isConfirmed, setIsConfirmed] = useState(false);
+
+    // Get token objects
+    const sellTokenObject = tokensByChain(tokenList, Number(chainId)).find(
+        (token) => token.symbol.toLowerCase() === price.sellToken.toLowerCase()
+    );
+    const buyTokenObject = tokensByChain(tokenList, Number(chainId)).find(
+        (token) => token.symbol.toLowerCase() === price.buyToken.toLowerCase()
+    );
+
+    // Fetch quote data
+    useEffect(() => {
+        const params = {
+        chainId: chainId,
+        sellToken: price.sellToken,
+        buyToken: price.buyToken,
+        sellAmount: price.sellAmount,
+        taker: signer,
+        swapFeeRecipient: process.env.NEXT_PUBLIC_FEE_RECIPIENT,
+        swapFeeBps: process.env.NEXT_PUBLIC_AFFILIATE_FEE,
+        swapFeeToken: price.buyToken,
+        tradeSurplusRecipient: process.env.NEXT_PUBLIC_FEE_RECIPIENT,
+        slippageBps: (Number(slippage) * 100).toFixed(0),
+        };
+
+        async function main() {
+            try {
+                console.log('Quote: Fetching quote with params', params);
+                const response = await fetch(`/api/quote?${qs.stringify(params)}`);
+                const data = await response.json();
+                console.log('Quote: Quote data', data);
+                if (data.validationErrors?.length > 0) {
+                  setError(data.validationErrors.join(", "));
+                  setQuote(null);
+                } else {
+                  setQuote(data);
+                  setError(null);
+                }
+            } catch (err) {
+                console.error('Quote: Error fetching quote', err);
+                setError("Failed to fetch quote");
+                setQuote(null);
+            }
+        }
+        main();
+    }, [
+        chainId,
+        price.sellToken,
+        price.buyToken,
+        price.sellAmount,
+        signer,
+        setQuote,
+        slippage
+    ]);
+
+    const handlePlaceOrder = async () => {
+        if (!quote || !signer || !provider) {
+          setError("Missing quote, signer, or provider");
+          return;
+        }
+        setIsPending(true);
+        setError(null);
+        try {
+          let txData = quote.transaction.data;
+          // Sign Permit2 EIP-712 if provided
+          if (quote.permit2?.eip712) {
+            try {
+              console.log('Quote: Signing Permit2 EIP-712', quote.permit2.eip712);
+              const signature = await signer.signTypedData(
+                quote.permit2.eip712.domain,
+                quote.permit2.eip712.types,
+                quote.permit2.eip712.message
+              );
+              console.log('Quote: Permit2 signature', signature);
+              // Append signature length and signature to calldata
+              const signatureLengthHex = ethers.toBeHex(signature.length / 2, 32);
+              txData = ethers.concat([txData, signatureLengthHex, signature]);
+            } catch (err) {
+              console.error('Quote: Error signing Permit2', err);
+              setError("Failed to sign Permit2");
+              setIsPending(false);
+              return;
+            }
+          }
+          // Prepare transaction
+          const tx = {
+            to: quote.transaction.to,
+            data: txData,
+            value: quote.transaction.value ? BigInt(quote.transaction.value) : undefined,
+            gasLimit: quote.transaction.gas ? BigInt(quote.transaction.gas) : undefined,
+          };
+          console.log('Quote: Sending transaction', tx);
+          // Send transaction
+          const txResponse = await signer.sendTransaction(tx);
+          setTxHash(txResponse.hash);
+          setIsConfirming(true);
+          console.log('Quote: Transaction sent', txResponse.hash);
+          // Wait for confirmation
+          const receipt = await txResponse.wait();
+          setIsConfirming(false);
+          setIsConfirmed(true);
+          console.log('Quote: Transaction confirmed', receipt);
+        } catch (err: any) {
+          console.error('Quote: Transaction error', err);
+          setError(err.message || "Transaction failed");
+          setIsPending(false);
+        }
+    };
+
+
+  if (!quote || !sellTokenObject || !buyTokenObject) {
+    return (
+      <Loading/>
+    );
+  }
+    
+
+    return(
+        <Card className="flex flex-col w-full h-full bg-primary text-secondary">
+            <CardHeader>
+                <CardTitle>Quote</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+                {/* You Pay */}
+                <div className="bg-slate-800 p-4 rounded-sm">
+                <div className="text-xl mb-2">You pay</div>
+                <div className="flex items-center text-lg sm:text-3xl">
+                    <Avatar>
+                    <AvatarImage
+                        alt={sellTokenObject.symbol}
+                        src={sellTokenObject.logoURI || ""}
+                        className="h-9 w-9 mr-2"
+                    />
+                    <AvatarFallback>{sellTokenObject.symbol}</AvatarFallback>
+                    </Avatar>
+                    <span>{formatUnits(quote.sellAmount, sellTokenObject.decimals)}</span>
+                    <div className="ml-2">{sellTokenObject.symbol}</div>
+                </div>
+                </div>
+
+                {/* You Receive */}
+                <div className="bg-slate-800 p-4 rounded-sm">
+                <div className="text-xl mb-2">You receive</div>
+                <div className="flex items-center text-lg sm:text-3xl">
+                    <Avatar>
+                    <AvatarImage
+                        alt={buyTokenObject.symbol}
+                        src={buyTokenObject.logoURI || ""}
+                        className="h-9 w-9 mr-2"
+                    />
+                    <AvatarFallback>{buyTokenObject.symbol}</AvatarFallback>
+                    </Avatar>
+                    <span>{formatUnits(quote.buyAmount, buyTokenObject.decimals)}</span>
+                    <div className="ml-2">{buyTokenObject.symbol}</div>
+                </div>
+                </div>
+
+                {/* Fees and Taxes */}
+                <div className="bg-slate-800 p-4 rounded-sm">
+                {quote.fees?.integratorFee?.amount && (
+                    <div className="text-slate-400">
+                    Affiliate Fee: {formatUnits(quote.fees.integratorFee.amount, buyTokenObject.decimals)} {buyTokenObject.symbol}
+                    </div>
+                )}
+                {quote.tokenMetadata.buyToken.buyTaxBps !== "0" && (
+                    <div className="text-slate-400">
+                    {buyTokenObject.symbol} Buy Tax: {formatTax(quote.tokenMetadata.buyToken.buyTaxBps)}%
+                    </div>
+                )}
+                {quote.tokenMetadata.sellToken.sellTaxBps !== "0" && (
+                    <div className="text-slate-400">
+                    {sellTokenObject.symbol} Sell Tax: {formatTax(quote.tokenMetadata.sellToken.sellTaxBps)}%
+                    </div>
+                )}
+                </div>
+
+                {/* Place Order Button */}
+                <Button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                disabled={isPending || isConfirming}
+                onClick={handlePlaceOrder}
+                >
+                {isPending || isConfirming ? "Confirming..." : "Place Order"}
+                </Button>
+
+                {/* Transaction Status */}
+                {isConfirming && (
+                <div className="text-center">Waiting for confirmation ⏳ ...</div>
+                )}
+                {isConfirmed && (
+                <div className="text-center">
+                    Transaction Confirmed! 🎉{" "}
+                    <a
+                    href={`https://arbiscan.io/tx/${txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >
+                    Check Arbiscan
+                    </a>
+                </div>
+                )}
+                {error && (
+                <div className="text-red-500 text-center">Error: {error}</div>
+                )}
+            </CardContent>
+            </Card>
+    )
+}
+
+export default Quote;

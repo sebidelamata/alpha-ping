@@ -15,7 +15,6 @@ import {
     CircleX 
 } from "lucide-react";
 import Link from "next/link";
-import qs from "qs";
 
 interface IApproveOrReviewButton {
     onClick: () => void;
@@ -148,7 +147,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             <div className="flex flex-col w-full">
                 <Button
                     variant="ghost"
-                    className="w-[400px]"
+                    className="w-full"
                     disabled={disabled}
                     onClick={() => {
                     // fetch data, when finished, show quote view
@@ -169,6 +168,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                     <Button
                         variant="ghost"
                         onClick={handleApprove}
+                        className="w-full"
                     >
                         <div className="flex flex-row items-center gap-2">
                             <div>
