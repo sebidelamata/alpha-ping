@@ -24,19 +24,22 @@ import {
     AvatarFallback 
 } from "@/components/components/ui/avatar";
 import { Button } from "@/components/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 interface IQuote{
     price: any;
     quote: any;
     setQuote: (price: any) => void;
     slippage: string;
+    setFinalize: (finalize: boolean) => void;
 }
 
 const Quote:React.FC<IQuote> = ({
   price,
   quote,
   setQuote,
-  slippage
+  slippage,
+  setFinalize
 }) => {
     console.log("price", price);
 
@@ -48,6 +51,7 @@ const Quote:React.FC<IQuote> = ({
     const [isPending, setIsPending] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
     const [isConfirmed, setIsConfirmed] = useState(false);
+
     // Get token objects
     const sellTokenObject = tokensByChain(tokenList, Number(chainId))
         .filter((token) => token.address.toLowerCase() === price.sellToken.toLowerCase()
@@ -158,6 +162,24 @@ const Quote:React.FC<IQuote> = ({
         }
     };
 
+    // our quote is no good after 30 seconds
+    const [quoteSecondsLeft, setQuoteSecondsLeft] = useState<number>(30)
+    const [quoteExpired, setQuoteExpired] = useState<boolean>(false)
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setQuoteSecondsLeft((prev) => {
+              if (prev <= 1) {
+                clearInterval(intervalId);
+                setQuoteExpired(true);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+        
+          return () => clearInterval(intervalId);
+    }, [])
+
 
   if (!quote) {
     return (
@@ -169,11 +191,28 @@ const Quote:React.FC<IQuote> = ({
     return(
         <Card className="flex flex-col w-full h-full bg-primary text-secondary">
             <CardHeader>
-                <CardTitle>Quote</CardTitle>
+                {
+                    quoteExpired === false ?
+                    <CardTitle className="flex justify-center">
+                        Quote expires in {quoteSecondsLeft.toString()} seconds
+                    </CardTitle> :
+                    <CardTitle className="text-red-500 flex justify-center w-full">
+                        <Button 
+                            variant={"destructive"}
+                            onClick={() => setFinalize(false)}  
+                            className="flex flex-row w-96 gap-4 justify-center"  
+                        >
+                            <ArrowLeft/>
+                            <div>
+                                Quote Expired
+                            </div>
+                        </Button>
+                    </CardTitle>
+                }
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
                 {/* You Pay */}
-                <div className="bg-slate-800 p-4 rounded-sm">
+                <div className="p-4 rounded-sm">
                 <div className="text-xl mb-2">You pay</div>
                 <div className="flex items-center text-lg sm:text-3xl">
                     <Avatar>
@@ -190,7 +229,7 @@ const Quote:React.FC<IQuote> = ({
                 </div>
 
                 {/* You Receive */}
-                <div className="bg-slate-800 p-4 rounded-sm">
+                <div className="p-4 rounded-sm">
                 <div className="text-xl mb-2">You receive</div>
                 <div className="flex items-center text-lg sm:text-3xl">
                     <Avatar>
@@ -207,19 +246,19 @@ const Quote:React.FC<IQuote> = ({
                 </div>
 
                 {/* Fees and Taxes */}
-                <div className="bg-slate-800 p-4 rounded-sm">
+                <div className="p-4 rounded-sm">
                 {quote.fees?.integratorFee?.amount && (
                     <div className="text-slate-400">
                     Affiliate Fee: {formatUnits(quote.fees.integratorFee.amount, buyTokenObject.decimals)} {buyTokenObject.symbol}
                     </div>
                 )}
                 {quote.tokenMetadata.buyToken.buyTaxBps !== "0" && (
-                    <div className="text-slate-400">
+                    <div>
                     {buyTokenObject.symbol} Buy Tax: {formatTax(quote.tokenMetadata.buyToken.buyTaxBps)}%
                     </div>
                 )}
                 {quote.tokenMetadata.sellToken.sellTaxBps !== "0" && (
-                    <div className="text-slate-400">
+                    <div>
                     {sellTokenObject.symbol} Sell Tax: {formatTax(quote.tokenMetadata.sellToken.sellTaxBps)}%
                     </div>
                 )}
@@ -227,9 +266,10 @@ const Quote:React.FC<IQuote> = ({
 
                 {/* Place Order Button */}
                 <Button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-                disabled={isPending || isConfirming}
+                className="font-bold py-2 px-4 rounded w-full"
+                disabled={isPending || isConfirming || quoteExpired}
                 onClick={handlePlaceOrder}
+                variant={"default"}
                 >
                 {isPending || isConfirming ? "Confirming..." : "Place Order"}
                 </Button>

@@ -31,6 +31,7 @@ const Trade:React.FC = () => {
                         quote={quote}
                         setQuote={setQuote}
                         slippage={slippage}
+                        setFinalize={setFinalize}
                     /> :
                     <Price
                         price={price}
