@@ -64,7 +64,7 @@ const Quote:React.FC<IQuote> = ({
         sellToken: price.sellToken,
         buyToken: price.buyToken,
         sellAmount: price.sellAmount,
-        taker: signer,
+        taker: account,
         swapFeeRecipient: process.env.NEXT_PUBLIC_FEE_RECIPIENT,
         swapFeeBps: process.env.NEXT_PUBLIC_AFFILIATE_FEE,
         swapFeeToken: price.buyToken,
@@ -76,6 +76,7 @@ const Quote:React.FC<IQuote> = ({
             try {
                 console.log('Quote: Fetching quote with params', params);
                 const response = await fetch(`/api/quote?${qs.stringify(params)}`);
+                console.log(response)
                 const data = await response.json();
                 console.log('Quote: Quote data', data);
                 if (data.validationErrors?.length > 0) {
@@ -97,7 +98,7 @@ const Quote:React.FC<IQuote> = ({
         price.sellToken,
         price.buyToken,
         price.sellAmount,
-        signer,
+        account,
         setQuote,
         slippage
     ]);
@@ -157,7 +158,7 @@ const Quote:React.FC<IQuote> = ({
     };
 
 
-  if (!quote || !sellTokenObject || !buyTokenObject) {
+  if (!quote) {
     return (
       <Loading/>
     );

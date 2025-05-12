@@ -143,7 +143,6 @@ const Price:React.FC<IPrice> = ({
     
     // Fetch price data and set the buyAmount whenever the sellAmount changes
     useEffect(() => {
-        console.log('slippage', slippage)
         const params = {
         chainId: chainId,
         sellToken: sellTokenObject.address,
@@ -161,7 +160,6 @@ const Price:React.FC<IPrice> = ({
         async function main() {
             const response = await fetch(`/api/price?${qs.stringify(params)}`);
             const data = await response.json();
-            console.log('price data', data);
 
             if (data?.validationErrors?.length > 0) {
                 // error for sellAmount too low
