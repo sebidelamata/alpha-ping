@@ -25,6 +25,7 @@ import {
 } from "@/components/components/ui/avatar";
 import { Button } from "@/components/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import TokenPriceUSD from "./TokenPriceUSD";
 
 interface IQuote{
     price: any;
@@ -45,6 +46,9 @@ const Quote:React.FC<IQuote> = ({
 
     const { account } = useUserProviderContext()
     const { chainId, signer, provider } = useEtherProviderContext()
+
+    //for buy value percent difference
+    const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null)
 
     const [error, setError] = useState<string | null>(null);
     const [txHash, setTxHash] = useState<string | null>(null);
@@ -193,8 +197,17 @@ const Quote:React.FC<IQuote> = ({
             <CardHeader>
                 {
                     quoteExpired === false ?
-                    <CardTitle className="flex justify-center">
-                        Quote expires in {quoteSecondsLeft.toString()} seconds
+                    <CardTitle className="flex justify-center gap-4">
+                        <Button 
+                            variant={"outline"}
+                            onClick={() => setFinalize(false)}  
+                            className="flex flex-row w-96 gap-4 justify-center"  
+                        >
+                            <ArrowLeft/>
+                        </Button>
+                        <div className="flex justify-center">
+                            Quote expires in {quoteSecondsLeft.toString()} seconds
+                        </div>
                     </CardTitle> :
                     <CardTitle className="text-red-500 flex justify-center w-full">
                         <Button 
@@ -212,7 +225,7 @@ const Quote:React.FC<IQuote> = ({
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
                 {/* You Pay */}
-                <div className="p-4 rounded-sm">
+                <div className="p-4 rounded-sm gap-2">
                 <div className="text-xl mb-2">You pay</div>
                 <div className="flex items-center text-lg sm:text-3xl">
                     <Avatar>
@@ -225,11 +238,18 @@ const Quote:React.FC<IQuote> = ({
                     </Avatar>
                     <span>{formatUnits(quote.sellAmount, sellTokenObject.decimals)}</span>
                     <div className="ml-2">{sellTokenObject.symbol}</div>
+                    <TokenPriceUSD
+                        tokenSymbol={sellTokenObject.symbol}
+                        amount={formatUnits(quote.sellAmount, sellTokenObject.decimals)}
+                        sellTokenValueUSD={sellTokenValueUSD}
+                        setSellTokenValueUSD={setSellTokenValueUSD}
+                        tradeSide="sell"
+                    />
                 </div>
                 </div>
 
                 {/* You Receive */}
-                <div className="p-4 rounded-sm">
+                <div className="p-4 rounded-sm gap-2">
                 <div className="text-xl mb-2">You receive</div>
                 <div className="flex items-center text-lg sm:text-3xl">
                     <Avatar>
@@ -242,6 +262,13 @@ const Quote:React.FC<IQuote> = ({
                     </Avatar>
                     <span>{formatUnits(quote.buyAmount, buyTokenObject.decimals)}</span>
                     <div className="ml-2">{buyTokenObject.symbol}</div>
+                    <TokenPriceUSD
+                        tokenSymbol={buyTokenObject.symbol}
+                        amount={formatUnits(quote.buyAmount, buyTokenObject.decimals)}
+                        sellTokenValueUSD={sellTokenValueUSD}
+                        setSellTokenValueUSD={setSellTokenValueUSD}
+                        tradeSide="buy"
+                    />
                 </div>
                 </div>
 
