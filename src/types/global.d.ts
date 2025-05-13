@@ -1,5 +1,9 @@
 // src/types/global.d.ts
-import { Address, Hex } from "viem";
+import { 
+  Address, 
+  Hex, 
+  Eip1193Provider 
+} from "ethers";
 
 interface Channel {
     id: number;
@@ -8,8 +12,13 @@ interface Channel {
     tokenType: string;
 }
 
+interface ExtendedEip1193Provider extends Eip1193Provider {
+  on?: (event: string, listener: (...args: unknown[]) => void) => void;
+  removeListener?: (event: string, listener: (...args: unknown[]) => void) => void;
+}
+
 interface Window {
-    ethereum?: typeof window.ethereum;
+    ethereum?: ExtendedEip1193Provider;
 }
 
 interface Message {
