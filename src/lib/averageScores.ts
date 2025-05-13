@@ -1,3 +1,5 @@
+import { SentimentScore } from "src/types/global"
+
 const averageScores = (weights: number[], scores: SentimentScore[]):SentimentScore | null => {
     if(weights.length > 0 && scores.length > 0){
         // get weighted scores

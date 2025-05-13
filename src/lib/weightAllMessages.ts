@@ -1,3 +1,8 @@
+import { 
+    Message,
+    Weighting
+ } from "src/types/global"
+
 const weightAllMessages = (
     messages:Message[], 
     messageWeighting: Weighting,

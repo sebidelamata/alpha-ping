@@ -1,3 +1,8 @@
+import { 
+    Message, 
+    TimeFrame 
+} from "src/types/global"
+
 const timeFilterMessages = (
     messages: Message[], 
     timeRange: TimeFrame

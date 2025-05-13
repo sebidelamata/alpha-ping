@@ -1,3 +1,7 @@
+import { 
+    Message,
+    Weighting 
+} from "src/types/global"
 
 const weightChannelMessages = (
     messages:Message[], 
