@@ -11,17 +11,17 @@ const PriceFooter: React.FC = () => {
         <CardFooter>
             <div className="flex flex-col gap-1 text-accent text-sm justify-center w-full">
                 <Badge
-                    variant={"secondary"}
+                    variant={"outline"}
                     className="flex flex-row justify-center gap-4"
                 >
                     <Link
                         href={'https://0x.org/'}
                         target="_blank"
-                        className="text-primary"
+                        className="text-secondary"
                     >
                         Swap at the best prices using 0x protocol market aggregation from over 130 exchanges
                     </Link>
-                    <ChartCandlestick className="text-primary"/>
+                    <ChartCandlestick className="text-secondary"/>
                 </Badge>
                 <div>
                     0x collects a fee of 0.15% on each swap,

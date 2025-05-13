@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
     useState,
     useEffect
@@ -145,7 +147,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
         return (
             <div className="flex flex-col w-full">
                 <Button
-                    variant="ghost"
+                    variant="secondary"
                     className="w-full"
                     disabled={disabled}
                     onClick={() => {

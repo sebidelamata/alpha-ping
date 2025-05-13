@@ -39,6 +39,7 @@ import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
 import PriceFooter from "./PriceFooter";
 import { PriceResponse } from "src/types/global";
+import SlippageSettings from "./SlippageSettings";
 
 interface Fills{
     from: string;
@@ -65,12 +66,12 @@ const Price:React.FC<IPrice> = ({
     const { account } = useUserProviderContext()
     const { chainId, signer, provider } = useEtherProviderContext()
 
-    const [sellToken, setSellToken] = useState("weth");
+    const [sellToken, setSellToken] = useState<string>("weth");
     const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null);
     const [buyToken, setBuyToken] = useState<string>("usdc");
-    const [sellAmount, setSellAmount] = useState("");
-    const [buyAmount, setBuyAmount] = useState("");
-    const [tradeDirection, setTradeDirection] = useState("sell");
+    const [sellAmount, setSellAmount] = useState<string>("");
+    const [buyAmount, setBuyAmount] = useState<string>("");
+    const [tradeDirection, setTradeDirection] = useState<string>("sell");
     const [buyTokenTax, setBuyTokenTax] = useState<string>("0");
     const [sellTokenTax, setSellTokenTax] = useState<string>("0");
     // trading fees
@@ -259,8 +260,6 @@ const Price:React.FC<IPrice> = ({
                     sellAmount={sellAmount}
                     sellTokenObject={sellTokenObject}
                     sellTokenDecimals={sellTokenDecimals}
-                    slippage={slippage}
-                    setSlippage={setSlippage}
                 />
                 <PriceFlipTokens
                     flipTokens={flipTokens}
@@ -273,10 +272,16 @@ const Price:React.FC<IPrice> = ({
                     buyAmount={buyAmount}
                     sellTokenValueUSD={sellTokenValueUSD}
                 />
-                <div>
-                    {
-                        `Max Slippage: ${slippage}%`
-                    }
+                <div className="flex flex-row w-full justify-start items-center">
+                    <div className="flex flex-row w-1/2 justify-start">
+                        {
+                            `Max Slippage: ${slippage}%`
+                        }
+                    </div>
+                    <SlippageSettings
+                        slippage={slippage}
+                        setSlippage={setSlippage}
+                    />
                 </div>
                 <ZeroXFee
                     zeroExFee={zeroExFee}

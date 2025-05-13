@@ -31,8 +31,8 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
 
     const [txHash, setTxHash] = useState<string | null>(null);
     const [txMessage, setTxMessage] = useState<string | null>(null)
-    const [loading, setLoading] = useState(false);
-    const [isConfirming, setIsConfirming] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [isConfirming, setIsConfirming] = useState<boolean>(false);
 
     const handlePlaceOrder = async () => {
         if (!quote || !signer || !provider) {
@@ -137,7 +137,7 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
             className="font-bold py-2 px-4 rounded w-full"
             disabled={loading || isConfirming || quoteExpired}
             onClick={handlePlaceOrder}
-            variant={"default"}
+            variant={"secondary"}
             >
             {loading || isConfirming ? "Confirming..." : "Place Order"}
         </Button>

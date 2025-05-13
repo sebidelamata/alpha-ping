@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useMemo } from "react";
 import { Settings } from "lucide-react";
 import {
@@ -88,11 +90,11 @@ const SlippageSettings: React.FC<ISlippageSettings> = ({ slippage, setSlippage }
   };
 
   return (
-    <div className="flex w-full h-full justify-end">
+    <div className="flex w-full h-full justify-start">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="default" className="w-64">
-            <Settings className="text-accent" />
+          <Button variant="outline" className="size-12">
+            <Settings className="text-secondary" />
           </Button>
         </DialogTrigger>
         <DialogContent>
