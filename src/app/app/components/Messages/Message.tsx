@@ -34,6 +34,7 @@ import Image from "next/image";
 import { Button } from "@/components/components/ui/button";
 import { SmilePlus, UserPlus } from "lucide-react";
 import PfpPopover from "./PfpPopover";
+import { type Message } from "src/types/global";
 
 
 interface MessageProps {

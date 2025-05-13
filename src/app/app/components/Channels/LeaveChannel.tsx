@@ -32,6 +32,7 @@ import {
     ShieldCheck, 
     CircleX 
 } from "lucide-react";
+import { tokenMetadata } from "src/types/global";
 
 interface ErrorType{
     message: string;

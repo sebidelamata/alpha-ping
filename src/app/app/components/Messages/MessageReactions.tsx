@@ -17,6 +17,7 @@ import {
     AvatarImage, 
     AvatarFallback 
 } from "@/components/components/ui/avatar";
+import { Message } from "src/types/global";
 
 interface IMessageReactions{
     reaction: string;

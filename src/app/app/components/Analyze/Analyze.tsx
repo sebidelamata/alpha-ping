@@ -37,6 +37,13 @@ import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
 import averageScores from "src/lib/averageScores";
 import weightTimeseries from "src/lib/weightTimeseries";
+import { 
+    TimeFrame, 
+    Message,
+    SentimentScore,
+    Weighting,
+    SentimentScoresTimeseries 
+} from "src/types/global";
 
 const Analyze:React.FC = () => {
 

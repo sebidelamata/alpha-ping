@@ -30,6 +30,7 @@ import {
     AccordionTrigger,
 } from "@/components/components/ui/accordion"
 import { ScrollArea } from "@/components/components/ui/scroll-area";
+import { tokenMetadata } from "src/types/global";
   
 
 interface ChannelProps{
