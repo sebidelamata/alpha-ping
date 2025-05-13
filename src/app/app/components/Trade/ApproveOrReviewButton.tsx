@@ -50,27 +50,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     const { toast } = useToast()
     const { signer } = useEtherProviderContext()
     const { account } = useUserProviderContext()
-  
-    const [ userAllowance, setUserAllowance ] = useState<string | null>(null)
-    useEffect(() => {
-        const getUserAllowance = async () => {
-            if(
-                sellTokenAddress &&
-                signer &&
-                account &&
-                price?.issues?.allowance?.spender
-            ){
-                const token = new ethers.Contract(
-                    sellTokenAddress,
-                    ERC20Faucet.abi,
-                    signer
-                )
-            const userAllowance = await token.allowance(account, price.issues.allowance.spender)
-            setUserAllowance(userAllowance.toString())
-          }
-      }
-      getUserAllowance()
-    }, [ sellTokenAddress, signer, account, price])
 
     // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const [loading, setLoading] = useState<boolean>(false)
@@ -91,6 +70,30 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             const tx = await tokenContract.approve(price.issues.allowance.spender, maxApproval);
             await tx.wait();
             if(tx !== undefined && tx.hash !== undefined){
+                const txHash = tx?.hash;
+            if (txHash) {
+                setTxMessage(txHash); // optional, if you use it elsewhere
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: `Approve ${sellTokenSymbol} Completed!`,
+                    duration: 5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80} />
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link
+                                    href={`https://arbiscan.io/tx/${txHash}`}
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                });
+            }
                 setTxMessage(tx?.hash)
             }
             setUserAllowance(maxApproval.toString()); // optimistically update
@@ -141,13 +144,33 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             }
         }
     }
+    const [ userAllowance, setUserAllowance ] = useState<string | null>(null)
+    useEffect(() => {
+        const getUserAllowance = async () => {
+            if(
+                sellTokenAddress &&
+                signer &&
+                account &&
+                price?.issues?.allowance?.spender
+            ){
+                const token = new ethers.Contract(
+                    sellTokenAddress,
+                    ERC20Faucet.abi,
+                    signer
+                )
+            const userAllowance = await token.allowance(account, price.issues.allowance.spender)
+            setUserAllowance(userAllowance.toString())
+          }
+      }
+      getUserAllowance()
+    }, [ sellTokenAddress, signer, account, price, txMessage])
 
     // If price.issues.allowance is null, show the Review Trade button
     if (price?.issues.allowance === null) {
         return (
             <div className="flex flex-col w-full">
                 <Button
-                    variant="secondary"
+                    variant="ghost"
                     className="w-full"
                     disabled={disabled}
                     onClick={() => {

@@ -29,7 +29,6 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
     const { toast } = useToast()
     const { signer, provider } = useEtherProviderContext()
 
-    const [txHash, setTxHash] = useState<string | null>(null);
     const [txMessage, setTxMessage] = useState<string | null>(null)
     const [loading, setLoading] = useState<boolean>(false);
     const [isConfirming, setIsConfirming] = useState<boolean>(false);
@@ -70,11 +69,34 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
             console.log('Quote: Sending transaction', tx);
             // Send transaction
             const txResponse = await signer.sendTransaction(tx);
-            setTxHash(txResponse.hash);
             setIsConfirming(true);
             console.log('Quote: Transaction sent', txResponse.hash);
             // Wait for confirmation
             const receipt = await txResponse.wait();
+            const receiptHash = receipt?.hash;
+            if(receiptHash) {
+                setTxMessage(receiptHash); // optional
+                toast({
+                    title: "Transaction Confirmed!",
+                    description: `Swap Completed!`,
+                    duration: 5000,
+                    action: (
+                        <div className="flex flex-row gap-1">
+                            <ShieldCheck size={80} />
+                            <div className="flex flex-col gap-1">
+                                <p>View Transaction on</p>
+                                <Link
+                                    href={`https://arbiscan.io/tx/${receiptHash}`}
+                                    target="_blank"
+                                    className="text-accent"
+                                >
+                                    Arbiscan
+                                </Link>
+                            </div>
+                        </div>
+                    )
+                });
+            }
             if(
                 receipt !== undefined && 
                 receipt !== null && 
@@ -118,7 +140,7 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                             <div className="flex flex-col gap-1">
                                 <p>View Transaction on</p>
                                 <Link 
-                                    href={`https://arbiscan.io/tx/${txHash}`} 
+                                    href={`https://arbiscan.io/tx/${txMessage}`} 
                                     target="_blank"
                                     className="text-accent"
                                 >
