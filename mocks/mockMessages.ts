@@ -1,3 +1,5 @@
+import { Message } from "src/types/global"
+
 export const mockMessages: Message[] = [{
     "_id": "673bf6e71c0f288dadad39fa",
     "channel": "1",
