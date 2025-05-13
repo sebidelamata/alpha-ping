@@ -15,7 +15,6 @@ import {
     CardTitle, 
     CardContent
 } from "@/components/components/ui/card";
-import { permit2Abi } from "src/lib/permit2abi";
 import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import qs from 'qs'
 import ZeroExLogo from "../../../../../public/dark-0x-logo.png";
@@ -39,16 +38,17 @@ import AlphaPingFee from "./AlphaPingFee";
 import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
 import PriceFooter from "./PriceFooter";
+import { PriceResponse } from "src/types/global";
 
-export const DEFAULT_BUY_TOKEN = (chainId: number) => {
-    if (chainId === 42161) {
-      return "weth";
-    }
-  };
-
-interface IPrice {
-    price: any;
-    setPrice: (price: any) => void;
+interface Fills{
+    from: string;
+    to: string;
+    source: string;
+    proportionBps: string;
+}
+  interface IPrice {
+    price: PriceResponse | null | undefined;
+    setPrice: (price: PriceResponse | null | undefined) => void;
     setFinalize: (finalize: boolean) => void;
     slippage: string;
     setSlippage: React.Dispatch<React.SetStateAction<string>>;
@@ -71,15 +71,8 @@ const Price:React.FC<IPrice> = ({
     const [sellAmount, setSellAmount] = useState("");
     const [buyAmount, setBuyAmount] = useState("");
     const [tradeDirection, setTradeDirection] = useState("sell");
-    const [error, setError] = useState([]);
-    const [buyTokenTax, setBuyTokenTax] = useState({
-      buyTaxBps: "0",
-      sellTaxBps: "0",
-    });
-    const [sellTokenTax, setSellTokenTax] = useState({
-      buyTaxBps: "0",
-      sellTaxBps: "0",
-    });
+    const [buyTokenTax, setBuyTokenTax] = useState<string>("0");
+    const [sellTokenTax, setSellTokenTax] = useState<string>("0");
     // trading fees
     const [zeroExFee, setZeroExFee] = useState<string>("0");
     // liquidity route
@@ -160,21 +153,14 @@ const Price:React.FC<IPrice> = ({
         async function main() {
             const response = await fetch(`/api/price?${qs.stringify(params)}`);
             const data = await response.json();
-
-            if (data?.validationErrors?.length > 0) {
-                // error for sellAmount too low
-                setError(data.validationErrors);
-            } else {
-                setError([]);
-            }
             if (data.buyAmount) {
                 setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
                 setPrice(data);
             }
             // Set token tax information
             if (data?.tokenMetadata) {
-                setBuyTokenTax(data.tokenMetadata.buyToken);
-                setSellTokenTax(data.tokenMetadata.sellToken);
+                setBuyTokenTax(data.tokenMetadata.buyToken.buyTaxBps);
+                setSellTokenTax(data.tokenMetadata.sellToken.sellTaxBps);
             }
             // set zero ex trade fee info
             if(data?.fees && data?.fees.zeroExFee) {
@@ -182,7 +168,7 @@ const Price:React.FC<IPrice> = ({
             }
             // set liquidity route
             if (data?.route) {
-                const routeSources = data.route.fills.map((r: any) => r.source);
+                const routeSources = data.route.fills.map((r: Fills) => r.source);
                 setRoute(routeSources);
             }
             // set gas estimate

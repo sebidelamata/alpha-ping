@@ -9,8 +9,6 @@ import tokenList from "../../../../../public/tokenList.json";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import qs from 'qs'
-import { ethers, formatUnits } from 'ethers'
-import formatTax from "src/lib/formatTax";
 import Loading from "../Loading";
 import { 
     Card, 
@@ -27,13 +25,25 @@ import AffiliateFeeDisplay from "./AffiliateFeeDisplay";
 import TaxInfoDisplay from "./TaxInfoDisplay";
 import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
+import PlaceOrderButton from "./PlaceOrderButton";
+import { 
+    PriceResponse, 
+    QuoteResponse 
+} from "src/types/global";
 
 interface IQuote{
-    price: any;
-    quote: any;
-    setQuote: (price: any) => void;
+    price: PriceResponse;
+    quote: QuoteResponse | null | undefined;
+    setQuote: (price: QuoteResponse | null) => void;
     slippage: string;
     setFinalize: (finalize: boolean) => void;
+}
+
+interface Fills{
+    from: string;
+    to: string;
+    source: string;
+    proportionBps: string;
 }
 
 const Quote:React.FC<IQuote> = ({
@@ -43,19 +53,12 @@ const Quote:React.FC<IQuote> = ({
   slippage,
   setFinalize
 }) => {
-    console.log("price", price);
 
     const { account } = useUserProviderContext()
-    const { chainId, signer, provider } = useEtherProviderContext()
+    const { chainId } = useEtherProviderContext()
 
     //for buy value percent difference
     const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null)
-
-    const [error, setError] = useState<string | null>(null);
-    const [txHash, setTxHash] = useState<string | null>(null);
-    const [isPending, setIsPending] = useState(false);
-    const [isConfirming, setIsConfirming] = useState(false);
-    const [isConfirmed, setIsConfirmed] = useState(false);
 
     // Get token objects
     const sellTokenObject = tokensByChain(tokenList, Number(chainId))
@@ -89,15 +92,12 @@ const Quote:React.FC<IQuote> = ({
                 const data = await response.json();
                 console.log('Quote: Quote data', data);
                 if (data.validationErrors?.length > 0) {
-                  setError(data.validationErrors.join(", "));
                   setQuote(null);
                 } else {
                   setQuote(data);
-                  setError(null);
                 }
             } catch (err) {
                 console.error('Quote: Error fetching quote', err);
-                setError("Failed to fetch quote");
                 setQuote(null);
             }
         }
@@ -111,60 +111,6 @@ const Quote:React.FC<IQuote> = ({
         setQuote,
         slippage
     ]);
-
-    const handlePlaceOrder = async () => {
-        if (!quote || !signer || !provider) {
-          setError("Missing quote, signer, or provider");
-          return;
-        }
-        setIsPending(true);
-        setError(null);
-        try {
-          let txData = quote.transaction.data;
-          // Sign Permit2 EIP-712 if provided
-          if (quote.permit2?.eip712) {
-            try {
-              console.log('Quote: Signing Permit2 EIP-712', quote.permit2.eip712);
-              const signature = await signer.signTypedData(
-                quote.permit2.eip712.domain,
-                quote.permit2.eip712.types,
-                quote.permit2.eip712.message
-              );
-              console.log('Quote: Permit2 signature', signature);
-              // Append signature length and signature to calldata
-              const signatureLengthHex = ethers.toBeHex(signature.length / 2, 32);
-              txData = ethers.concat([txData, signatureLengthHex, signature]);
-            } catch (err) {
-              console.error('Quote: Error signing Permit2', err);
-              setError("Failed to sign Permit2");
-              setIsPending(false);
-              return;
-            }
-          }
-          // Prepare transaction
-          const tx = {
-            to: quote.transaction.to,
-            data: txData,
-            value: quote.transaction.value ? BigInt(quote.transaction.value) : undefined,
-            gasLimit: quote.transaction.gas ? BigInt(quote.transaction.gas) : undefined,
-          };
-          console.log('Quote: Sending transaction', tx);
-          // Send transaction
-          const txResponse = await signer.sendTransaction(tx);
-          setTxHash(txResponse.hash);
-          setIsConfirming(true);
-          console.log('Quote: Transaction sent', txResponse.hash);
-          // Wait for confirmation
-          const receipt = await txResponse.wait();
-          setIsConfirming(false);
-          setIsConfirmed(true);
-          console.log('Quote: Transaction confirmed', receipt);
-        } catch (err: any) {
-          console.error('Quote: Transaction error', err);
-          setError(err.message || "Transaction failed");
-          setIsPending(false);
-        }
-    };
 
     // our quote is no good after 30 seconds
     const [quoteSecondsLeft, setQuoteSecondsLeft] = useState<number>(30)
@@ -252,8 +198,10 @@ const Quote:React.FC<IQuote> = ({
                         />
                     }
                     {
-                        quote.tokenMetadata.buyToken.buyTaxBps !== "0" || 
+                        quote.tokenMetadata.buyToken.buyTaxBps !== "0" &&
+                        quote.tokenMetadata.buyToken.buyTaxBps !== null &&
                         quote.tokenMetadata.sellToken.sellTaxBps !== "0" &&
+                        quote.tokenMetadata.sellToken.sellTaxBps !== null &&
                         (
                             <TaxInfoDisplay
                                 buyTokenTax={quote.tokenMetadata.buyToken.buyTaxBps}
@@ -265,7 +213,7 @@ const Quote:React.FC<IQuote> = ({
                     }
                 </div>
                 <LiquidityRoute
-                    route={quote.route.fills.map((r: any) => r.source)}
+                    route={quote.route.fills.map((r: Fills) => r.source)}
                     buyTokenObject={buyTokenObject}
                     sellTokenObject={sellTokenObject}
                 />
@@ -273,35 +221,10 @@ const Quote:React.FC<IQuote> = ({
                     quote?.totalNetworkFee &&
                     <GasDisplay gasEstimate={(Number(quote.totalNetworkFee) / 1e18).toString()}/>
                 }
-                {/* Place Order Button */}
-                <Button
-                className="font-bold py-2 px-4 rounded w-full"
-                disabled={isPending || isConfirming || quoteExpired}
-                onClick={handlePlaceOrder}
-                variant={"default"}
-                >
-                {isPending || isConfirming ? "Confirming..." : "Place Order"}
-                </Button>
-
-                {/* Transaction Status */}
-                {isConfirming && (
-                <div className="text-center">Waiting for confirmation ⏳ ...</div>
-                )}
-                {isConfirmed && (
-                <div className="text-center">
-                    Transaction Confirmed! 🎉{" "}
-                    <a
-                    href={`https://arbiscan.io/tx/${txHash}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >
-                    Check Arbiscan
-                    </a>
-                </div>
-                )}
-                {error && (
-                <div className="text-red-500 text-center">Error: {error}</div>
-                )}
+                <PlaceOrderButton
+                    quote={quote}
+                    quoteExpired={quoteExpired}
+                />
             </CardContent>
             </Card>
     )

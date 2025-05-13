@@ -1,16 +1,10 @@
 import React from "react";
 import { formatUnits } from "ethers";
 import { Badge } from "@/components/components/ui/badge";
+import { PriceResponse, QuoteResponse } from "src/types/global";
 
 interface IAffiliateFeeDisplay {
-    price: {
-        fees: {
-            integratorFee: {
-                amount: string | null;
-                token: string | null;
-            };
-        };
-    };
+    price: PriceResponse | QuoteResponse | null | undefined;
     buyTokenObject: {
         symbol: string;
     };
@@ -26,6 +20,7 @@ const AffiliateFeeDisplay: React.FC<IAffiliateFeeDisplay> = ({
         <div>
             {
                 price && 
+                price.fees &&
                 price.fees.integratorFee !== null 
                 && price.fees.integratorFee.amount ? 
                     <Badge className="text-xs" variant={"default"}>

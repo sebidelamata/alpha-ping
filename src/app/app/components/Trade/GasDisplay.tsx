@@ -6,6 +6,14 @@ import { Fuel } from "lucide-react";
 import { Skeleton } from "@/components/components/ui/skeleton";
 import qs from "qs";
 
+interface CMCQuoteUSD {
+    quote: {
+        USD: {
+            price: number;
+        };
+    }
+}
+
 interface IGasDisplay {
     gasEstimate: string | null;
 }
@@ -23,7 +31,7 @@ console.log(gasEstimate)
             const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
             const data = await response.json();
             // Get the first token's data dynamically
-            const tokenDataArray = Object.values(data.data)[0] as any[];
+            const tokenDataArray = Object.values(data.data)[0] as CMCQuoteUSD[];
             if (!tokenDataArray?.length || !tokenDataArray[0]?.quote?.USD?.price) {
                 throw new Error("USD price not found in response");
             }

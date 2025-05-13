@@ -8,13 +8,18 @@ import { useUserProviderContext } from "src/contexts/UserContext";
 import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { ethers } from 'ethers'
 import { Avatar } from "@radix-ui/react-avatar";
-import { AvatarFallback, AvatarImage } from "@/components/components/ui/avatar";
+import { 
+    AvatarFallback, 
+    AvatarImage 
+} from "@/components/components/ui/avatar";
 import { useToast } from "@/components/hooks/use-toast"
 import { 
     ShieldCheck, 
     CircleX 
 } from "lucide-react";
 import Link from "next/link";
+import { PriceResponse } from "src/types/global";
+import Loading from "../Loading";
 
 interface IApproveOrReviewButton {
     onClick: () => void;
@@ -23,7 +28,7 @@ interface IApproveOrReviewButton {
     sellTokenSymbol: string;
     sellTokenURI: string | null;
     disabled?: boolean;
-    price: any;
+    price: PriceResponse | null | undefined;
 }
 
 interface ErrorType {
@@ -66,9 +71,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     }, [ sellTokenAddress, signer, account, price])
 
     // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
-    const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<string | null>(null)
     const [txMessage, setTxMessage] = useState<string | null>(null)
     const handleApprove = async () => {
         if (!signer || !sellTokenAddress || !price?.issues?.allowance?.spender) {
@@ -76,7 +79,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             return;
         }
         try {
-            setError(null)
             setLoading(true)
             const tokenContract = new ethers.Contract(
                 sellTokenAddress,
@@ -91,9 +93,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             }
             setUserAllowance(maxApproval.toString()); // optimistically update
           } catch (error: unknown) {
-            if((error as ErrorType).reason){
-                setError((error as ErrorType).reason)
-            }
             if(error !== null && (error as ErrorType).reason !== undefined){
                 toast({
                     title: "Transaction Error!",
@@ -119,7 +118,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             if(txMessage !== null){
                 toast({
                     title: "Transaction Confirmed!",
-                    description: `Aprrove ${sellTokenSymbol} Completed!`,
+                    description: `Approve ${sellTokenSymbol} Completed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-row gap-1">
@@ -158,6 +157,12 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                 </Button>
             </div>
         );
+    }
+
+    if(loading){
+        return(
+            <Loading/>
+        )
     }
 
     return (

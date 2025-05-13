@@ -3,12 +3,8 @@ import { Badge } from "@/components/components/ui/badge";
 import formatTax from "src/lib/formatTax"
 
 interface ITaxInfoDisplay {
-    buyTokenTax: {
-        buyTaxBps: string;
-    };
-    sellTokenTax: {
-        sellTaxBps: string;
-    };
+    buyTokenTax: string;
+    sellTokenTax: string;
     buyTokenObject: {
         symbol: string;
     };
@@ -25,19 +21,19 @@ const TaxInfoDisplay: React.FC<ITaxInfoDisplay> = ({
 }) => {
     return(
         <div>
-            {buyTokenTax.buyTaxBps !== "0" &&
+            {buyTokenTax !== "0" &&
                 <Badge variant={"destructive"}>
                     {
                     buyTokenObject.symbol +
-                    ` Buy Tax: ${formatTax(buyTokenTax.buyTaxBps)}%`
+                    ` Buy Tax: ${formatTax(buyTokenTax)}%`
                     }
                 </Badge>
             }
-            {sellTokenTax.sellTaxBps !== "0" && (
+            {sellTokenTax !== "0" && (
             <Badge variant={"destructive"}>
                 {
                 sellTokenObject.symbol +
-                ` Sell Tax: ${formatTax(sellTokenTax.sellTaxBps)}%`
+                ` Sell Tax: ${formatTax(sellTokenTax)}%`
                 }
             </Badge>
             )}

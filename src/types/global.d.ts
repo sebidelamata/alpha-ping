@@ -142,6 +142,19 @@ interface PriceResponse {
       };
       gasFee: null;
     } | null;
+    issues: {
+      allowance: {
+        actual: string;
+        spender: string;
+      };
+      balance: {
+        token: string;
+        actual: string;
+        expected: string;
+      };
+      simulationIncomplete: boolean;
+      invalidSourcesPassed: string[];
+    }
     gas: string;
     gasPrice: string;
     auxiliaryChainData?: {
@@ -151,16 +164,10 @@ interface PriceResponse {
   
   // This interface is subject to change as the API V2 endpoints aren't finalized.
   interface QuoteResponse {
-    sellToken: Address;
-    buyToken: Address;
-    sellAmount: string;
-    buyAmount: string;
-    grossSellAmount: string;
-    grossBuyAmount: string;
-    gasPrice: string;
-    allowanceTarget: Address;
-    route: [];
-    fees: {
+  blockNumber: string;
+  buyAmount: string;
+  buyToken: string;
+  fees: {
       integratorFee: {
         amount: string;
         token: string;
@@ -174,28 +181,91 @@ interface PriceResponse {
       };
       gasFee: null;
     } | null;
-    auxiliaryChainData: {};
-    to: Address;
-    data: Hex;
-    value: string;
+  issues: {
+    allowance: {
+      actual: string;
+      spender: string;
+    };
+    balance: {
+      token: string;
+      actual: string;
+      expected: string;
+    };
+    simulationIncomplete: boolean;
+    invalidSourcesPassed: string[];
+  };
+  liquidityAvailable: boolean;
+  minBuyAmount: string;
+  permit2: {
+    type: "Permit2";
+    hash: string;
+    eip712: {
+      types: {
+        PermitTransferFrom: {
+          name: string;
+          type: string;
+        }[];
+        TokenPermissions: {
+          name: string;
+          type: string;
+        }[];
+        EIP712Domain: {
+          name: string;
+          type: string;
+        }[];
+      };
+      domain: {
+        name: string;
+        chainId: number;
+        verifyingContract: string;
+      };
+      message: {
+        permitted: {
+          token: string;
+          amount: string;
+        };
+        spender: string;
+        nonce: string;
+        deadline: string;
+      };
+      primaryType: "PermitTransferFrom";
+    };
+  };
+  route: {
+    fills: {
+      from: string;
+      to: string;
+      source: string;
+      proportionBps: string;
+    }[];
+    tokens: {
+      address: string;
+      symbol: string;
+    }[];
+  };
+  sellAmount: string;
+  sellToken: string;
+  tokenMetadata: {
+    buyToken: {
+      buyTaxBps: string;
+      sellTaxBps: string;
+    };
+    sellToken: {
+      buyTaxBps: string;
+      sellTaxBps: string;
+    };
+  };
+  totalNetworkFee: string;
+  transaction: {
+    to: string;
+    data: string;
     gas: string;
-    permit2: {
-      type: "Permit2";
-      hash: Hex;
-      eip712: EIP712TypedData;
-    };
-    transaction: V2QuoteTransaction;
-    tokenMetadata: {
-      buyToken: {
-        buyTaxBps: string | null;
-        sellTaxBps: string | null;
-      };
-      sellToken: {
-        buyTaxBps: string | null;
-        sellTaxBps: string | null;
-      };
-    };
-  }
+    gasPrice: string;
+    value: string;
+  };
+  zid: string;
+}
+
   
   export interface V2QuoteTransaction {
     data: Hex;

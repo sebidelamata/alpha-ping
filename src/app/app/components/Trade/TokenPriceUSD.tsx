@@ -7,6 +7,14 @@ import qs from "qs";
 import { Badge } from "@/components/components/ui/badge";
 import { Skeleton } from "@/components/components/ui/skeleton";
 
+interface CMCQuoteUSD {
+    quote: {
+        USD: {
+            price: number;
+        };
+    }
+}
+
 interface ITokenPriceUSD {
     tokenSymbol: string;
     amount: string;
@@ -34,7 +42,7 @@ const TokenPriceUSD: React.FC<ITokenPriceUSD> = ({
             const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
             const data = await response.json();
             // Get the first token's data dynamically
-            const tokenDataArray = Object.values(data.data)[0] as any[];
+            const tokenDataArray = Object.values(data.data)[0] as CMCQuoteUSD[];
             if (!tokenDataArray?.length || !tokenDataArray[0]?.quote?.USD?.price) {
                 throw new Error("USD price not found in response");
             }
