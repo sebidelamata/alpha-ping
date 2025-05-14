@@ -14,7 +14,6 @@ import { useUserProviderContext } from "../../../../contexts/UserContext"
 import DeleteMessage from "./DeleteMessage"
 import { Button } from "@/components/components/ui/button";
 import { Reply } from "lucide-react";
-import { Message } from "src/types/global";
 
 interface Emoji {
     native: string

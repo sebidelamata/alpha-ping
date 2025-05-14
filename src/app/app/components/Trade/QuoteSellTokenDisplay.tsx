@@ -4,7 +4,6 @@ import {
     AvatarImage, 
     AvatarFallback 
 } from "@/components/components/ui/avatar";
-import { Token } from "src/types/global";
 import { formatUnits } from "ethers";
 import TokenPriceUSD from "./TokenPriceUSD";
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { formatUnits } from "ethers";
 import { Badge } from "@/components/components/ui/badge";
-import { PriceResponse, QuoteResponse } from "src/types/global";
 
 interface IAffiliateFeeDisplay {
     price: PriceResponse | QuoteResponse | null | undefined;

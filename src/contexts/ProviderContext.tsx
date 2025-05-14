@@ -21,7 +21,6 @@ import config from '../blockChainConfigs.json';
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { EtherProviderType } from '../types/EtherProviderType';
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
-import { Window } from 'src/types/global';
 
 interface BlockChainConfig {
   [key: string]: {

@@ -20,7 +20,6 @@ import {
     CircleX 
 } from "lucide-react";
 import Link from "next/link";
-import { PriceResponse } from "src/types/global";
 import Loading from "../Loading";
 
 interface IApproveOrReviewButton {

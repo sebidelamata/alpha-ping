@@ -10,7 +10,6 @@ import {
     CircleX 
 } from "lucide-react";
 import Link from "next/link";
-import { QuoteResponse } from "src/types/global";
 
 interface IPlaceOrderButton{
     quote: QuoteResponse;

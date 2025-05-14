@@ -30,14 +30,13 @@ import {
     AccordionTrigger,
 } from "@/components/components/ui/accordion"
 import { ScrollArea } from "@/components/components/ui/scroll-area";
-import { tokenMetadata } from "src/types/global";
   
 
-interface ChannelProps{
+interface IChannel{
     channel: AlphaPING.ChannelStructOutput;
 }
 
-const Channel:React.FC<ChannelProps> = ({
+const Channel:React.FC<IChannel> = ({
     channel
 }) => {
 

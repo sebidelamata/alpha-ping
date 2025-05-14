@@ -21,7 +21,6 @@ import FollowUser from "./FollowUser";
 import UnfollowUser from "./UnfollowUser";
 import BlockUser from "./BlockUser";
 import { useUserProviderContext } from "src/contexts/UserContext";
-import { Message } from "src/types/global";
 
 
 interface IPfpPopover{

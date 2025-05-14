@@ -38,7 +38,6 @@ import AlphaPingFee from "./AlphaPingFee";
 import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
 import PriceFooter from "./PriceFooter";
-import { PriceResponse } from "src/types/global";
 import SlippageSettings from "./SlippageSettings";
 
 interface Fills{

@@ -26,13 +26,6 @@ import {
     ChartTooltipContent, 
 } from "@/components/components/ui/chart"
 
-type SentimentScore = {
-    compound: number;
-    pos: number;
-    neu: number;
-    neg: number;
-};
-
 interface IChannelScoreBarChartPosNeutNeg{
     currentChannelMessagesScore: null | SentimentScore;
     allMessagesScore: null | SentimentScore;

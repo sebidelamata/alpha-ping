@@ -26,10 +26,6 @@ import TaxInfoDisplay from "./TaxInfoDisplay";
 import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
 import PlaceOrderButton from "./PlaceOrderButton";
-import { 
-    PriceResponse, 
-    QuoteResponse 
-} from "src/types/global";
 
 interface IQuote{
     price: PriceResponse;

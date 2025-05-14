@@ -37,13 +37,7 @@ import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
 import averageScores from "src/lib/averageScores";
 import weightTimeseries from "src/lib/weightTimeseries";
-import { 
-    TimeFrame, 
-    Message,
-    SentimentScore,
-    Weighting,
-    SentimentScoresTimeseries 
-} from "src/types/global";
+import { mockMessages } from "mocks/mockMessages";
 
 const Analyze:React.FC = () => {
 
@@ -53,8 +47,8 @@ const Analyze:React.FC = () => {
     // filter for date range before weighting
     const [timeRange, setTimeRange] = useState<TimeFrame>("all")
     const timeFilteredData = useMemo(() => {
-        return messages !== null ?
-        timeFilterMessages(messages, timeRange) : 
+        return mockMessages !== null ?
+        timeFilterMessages(mockMessages, timeRange) : 
         null
     },[messages, timeRange])
 

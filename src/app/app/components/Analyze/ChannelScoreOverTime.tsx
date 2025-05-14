@@ -26,7 +26,6 @@ import {
     ChartContainer,
     ChartTooltip,
 } from "@/components/components/ui/chart"
-import { SentimentScoresTimeseries } from "src/types/global";
 
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
 

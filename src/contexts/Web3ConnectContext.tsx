@@ -53,15 +53,16 @@ const Web3WalletConnectProvider: React.FC<{ children: ReactNode }> = ({children}
     // 3. Create a metadata object - optional
     const metadata = {
     name: 'AlphaPING',
-    description: 'Web3 message board',
+    description: 'Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place',
     url: 'https://www.alphaping.xyz/', // origin must match your domain & subdomain
-    icons: ['https://assets.reown.com/reown-profile-pic.png']
+    icons: ['https://www.alphaping.xyz/Apes.svg']
     }
 
     // 4. Create a AppKit instance
     createAppKit({
     adapters: [new EthersAdapter()],
     networks,
+    defaultNetwork: arbitrum,
     metadata,
     projectId,
     features: {

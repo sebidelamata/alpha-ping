@@ -36,13 +36,13 @@ interface ErrorType {
     reason: string
 }
 
-interface BlacklistUserProps{
+interface IBlacklistUser{
     user: string;
     username: string | null;
     profilePic: string | null;
 }
 
-const BlacklistUser:React.FC<BlacklistUserProps> = ({
+const BlacklistUser:React.FC<IBlacklistUser> = ({
     user,
     username,
     profilePic

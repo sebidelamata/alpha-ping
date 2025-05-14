@@ -8,7 +8,6 @@ import {
     CardContent 
 } from "@/components/components/ui/card";
 import Price from "./Price";
-import { QuoteResponse, PriceResponse } from "src/types/global";
 import Quote from "./Quote";
 
 const Trade:React.FC = () => {

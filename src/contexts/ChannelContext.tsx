@@ -8,7 +8,6 @@ import React, {
     useState
 } from "react"
 import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
-import { tokenMetadata } from "src/types/global";
 
 interface ChannelProviderType{
     currentChannel: AlphaPING.ChannelStructOutput | null;

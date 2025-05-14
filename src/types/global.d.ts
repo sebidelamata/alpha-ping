@@ -5,7 +5,9 @@ import {
   Eip1193Provider 
 } from "ethers";
 
-interface Channel {
+declare global {
+
+  interface Channel {
     id: number;
     tokenAddress: string;
     name: string;
@@ -16,12 +18,11 @@ interface ExtendedEip1193Provider extends Eip1193Provider {
   on?: (event: string, listener: (...args: unknown[]) => void) => void;
   removeListener?: (event: string, listener: (...args: unknown[]) => void) => void;
 }
+  interface Window {
+    ethereum?: ethers.Eip1193Provider;
+  }
 
-interface Window {
-    ethereum?: ExtendedEip1193Provider;
-}
-
-interface Message {
+  interface Message {
     _id: string; // Use string to align with MongoDB ObjectId type
     channel: string;
     account: string;
@@ -276,10 +277,22 @@ interface PriceResponse {
 }
 
   
-  export interface V2QuoteTransaction {
+  interface V2QuoteTransaction {
     data: Hex;
     gas: string | null;
     gasPrice: string;
     to: Address;
     value: string;
   }
+
+  type SentimentScore = {
+    compound: number;
+    pos: number;
+    neu: number;
+    neg: number;
+};
+
+
+}
+
+

@@ -11,7 +11,6 @@ import { useSocketProviderContext } from "./SocketContext"
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from "./ProviderContext";
 import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
-import { Message } from "src/types/global";
 
 interface MessagesProviderType{
     messages: Message[];

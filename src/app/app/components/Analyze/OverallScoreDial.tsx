@@ -20,13 +20,6 @@ import {
     ChartTooltip,
     ChartTooltipContent, 
 } from "@/components/components/ui/chart"
-
-type SentimentScore = {
-    compound: number;
-    pos: number;
-    neu: number;
-    neg: number;
-};
 interface IOverallScoreDial{
     allMessagesScore: null | SentimentScore;
 }
