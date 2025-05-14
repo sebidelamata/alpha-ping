@@ -100,9 +100,13 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setHasJoined(hasJoinedChannel);
 
         // ✅ Safely use window.ethereum
-        ((window as Window).ethereum)?.on?.('accountsChanged', async () => {
-          window.location.reload();
-        });
+        if (typeof window !== 'undefined') {
+          const eth = window.ethereum as ExtendedEip1193Provider | undefined;
+          eth?.on?.('accountsChanged', async () => {
+            window.location.reload();
+          });
+        }
+
 
       } catch (error) {
         console.error("Error loading blockchain data:", error);
