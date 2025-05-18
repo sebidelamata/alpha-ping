@@ -100,8 +100,10 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setHasJoined(hasJoinedChannel);
 
         // Listen for account changes
-        if (typeof window !== 'undefined' && window.ethereum?.on) {
-          window.ethereum.on('accountsChanged', () => window.location.reload());
+        if (typeof window !== 'undefined') {
+          const eth = window.ethereum;
+
+          (eth as unknown as ExtendedEip1193Provider)?.on?.('accountsChanged', () => window.location.reload());
         }
 
 

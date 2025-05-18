@@ -13,7 +13,6 @@ declare global {
     name: string;
     tokenType: string;
 }
-
 interface ExtendedEip1193Provider extends Eip1193Provider {
   on?: (event: string, listener: (...args: unknown[]) => void) => void;
   removeListener?: (event: string, listener: (...args: unknown[]) => void) => void;
