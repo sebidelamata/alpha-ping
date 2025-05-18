@@ -37,8 +37,6 @@ import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
 import averageScores from "src/lib/averageScores";
 import weightTimeseries from "src/lib/weightTimeseries";
-import { mockMessages } from "mocks/mockMessages"
-import { mockCurrentTokenBalances } from "mocks/mockUserCurrentBalancesMap";
 
 const Analyze:React.FC = () => {
 
@@ -48,8 +46,8 @@ const Analyze:React.FC = () => {
     // filter for date range before weighting
     const [timeRange, setTimeRange] = useState<TimeFrame>("all")
     const timeFilteredData = useMemo(() => {
-        return mockMessages !== null ?
-        timeFilterMessages(mockMessages, timeRange) : 
+        return messages !== null ?
+        timeFilterMessages(messages, timeRange) : 
         null
     },[messages, timeRange])
 
@@ -113,7 +111,7 @@ const Analyze:React.FC = () => {
             weightAllMessages(
                 timeFilteredData, 
                 messageWeighting, 
-                mockCurrentTokenBalances
+                authorCurrentTokenBalances
             ) :
             []
         setWeights(weights)
@@ -126,7 +124,7 @@ const Analyze:React.FC = () => {
             weightChannelMessages(
                 currentChanneltimeFilteredData, 
                 messageWeighting,
-                mockCurrentTokenBalances
+                authorCurrentTokenBalances
             ) :
             []
         setChannelWeights(weights)
