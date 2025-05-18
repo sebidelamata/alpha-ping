@@ -19,7 +19,7 @@ import {
     Avatar, 
     AvatarImage, 
     AvatarFallback 
-} from "@radix-ui/react-avatar";
+} from "@/components/components/ui/avatar";
 import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
 import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
@@ -37,7 +37,8 @@ import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
 import averageScores from "src/lib/averageScores";
 import weightTimeseries from "src/lib/weightTimeseries";
-import { mockMessages } from "mocks/mockMessages";
+import { mockMessages } from "mocks/mockMessages"
+import { mockCurrentTokenBalances } from "mocks/mockUserCurrentBalancesMap";
 
 const Analyze:React.FC = () => {
 
@@ -112,7 +113,7 @@ const Analyze:React.FC = () => {
             weightAllMessages(
                 timeFilteredData, 
                 messageWeighting, 
-                authorCurrentTokenBalances
+                mockCurrentTokenBalances
             ) :
             []
         setWeights(weights)
@@ -125,7 +126,7 @@ const Analyze:React.FC = () => {
             weightChannelMessages(
                 currentChanneltimeFilteredData, 
                 messageWeighting,
-                authorCurrentTokenBalances
+                mockCurrentTokenBalances
             ) :
             []
         setChannelWeights(weights)

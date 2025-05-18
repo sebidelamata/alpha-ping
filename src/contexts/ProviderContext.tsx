@@ -99,12 +99,9 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
         setHasJoined(hasJoinedChannel);
 
-        // ✅ Safely use window.ethereum
-        if (typeof window !== 'undefined') {
-          const eth = window.ethereum as ExtendedEip1193Provider | undefined;
-          eth?.on?.('accountsChanged', async () => {
-            window.location.reload();
-          });
+        // Listen for account changes
+        if (typeof window !== 'undefined' && window.ethereum?.on) {
+          window.ethereum.on('accountsChanged', () => window.location.reload());
         }
 
 

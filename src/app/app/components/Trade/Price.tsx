@@ -151,6 +151,20 @@ const Price:React.FC<IPrice> = ({
         };
 
         async function main() {
+
+            // console.log(
+            //     Number(new Date(2025,4,1).getTime()) / 1000
+            // )
+            // const testparams = {
+            //     cursor: null,
+            //     // start on may 1st 2025 (4 = may)
+            //     // Unix timestamp, not milliseconds
+            //     startTimestamp: Math.floor(new Date(2025,4,1).getTime() / 1000),
+            //     endTimestamp: Math.floor(Date.now() / 1000)
+            // }
+            // let testResponse = await fetch(`/api/totalSwapVolumeUSD?${qs.stringify(testparams)}`)
+            // testResponse = await testResponse.json()
+            // console.log("total volume usd ", testResponse)
             const response = await fetch(`/api/price?${qs.stringify(params)}`);
             const data = await response.json();
             if (data.buyAmount) {
