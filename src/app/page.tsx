@@ -1,20 +1,20 @@
 import React from "react";
 import HomeNav from "./components/HomeNav";
 import Footer from "./components/Footer";
+import TotalVolumeUSDCard from "./components/TotalVolumeUSDCard";
 
 const Home:React.FC = () => {
+
     return(
         <div className="flex h-screen flex-col bg-primary text-secondary">
             <HomeNav/>
-            <h1 className="flex h-[16vh] justify-center align-middle text-2xl">
+            <h1 className="flex h-[16svh] justify-center align-middle text-2xl">
                 AlphaPING
             </h1>
-            <h2 className="flex h-[10vh] justify-center align-middle text-xl">
+            <h2 className="flex h-[10svh] justify-center align-middle text-xl">
                 Chat | Analyze | Trade
             </h2>
-            <p className="relative left-10 z-30 flex w-[90%] grow justify-end pt-96 text-right md:text-sm lg:text-lg">
-                Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place.
-            </p>
+            <TotalVolumeUSDCard/>
             <img 
                 src="/bananaPeeled.svg" 
                 alt="banana" 

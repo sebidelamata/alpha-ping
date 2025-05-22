@@ -291,6 +291,44 @@ interface PriceResponse {
     neg: number;
 };
 
+type TokenInfo = {
+  address: string;
+  symbol: string;
+};
+
+type ZeroExFee = {
+  token: string;
+  amount: string;
+  amountUsd: string;
+};
+
+type Fees = {
+  integratorFee: null | string; // could also be unknown type if not always null
+  zeroExFee: ZeroExFee;
+};
+
+type AlphaPingSwapRecord = {
+  appName: string;
+  blockNumber: string;
+  buyToken: string;
+  buyAmount: string;
+  chainId: number;
+  chainName: string;
+  fees: Fees;
+  gasUsed: string;
+  protocolVersion: string;
+  sellToken: string;
+  sellAmount: string;
+  slippageBps: string;
+  taker: string;
+  timestamp: number;
+  tokens: TokenInfo[];
+  transactionHash: string;
+  volumeUsd: string;
+  zid: string;
+  service: string;
+};
+
 
 }
 
