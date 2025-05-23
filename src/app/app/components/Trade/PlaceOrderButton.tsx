@@ -41,23 +41,35 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
             let txData = quote.transaction.data;
             // Sign Permit2 EIP-712 if provided
             if (quote.permit2?.eip712) {
-            try {
-                console.log('Quote: Signing Permit2 EIP-712', quote.permit2.eip712);
-                const signature = await signer.signTypedData(
-                quote.permit2.eip712.domain,
-                quote.permit2.eip712.types,
-                quote.permit2.eip712.message
-                );
-                console.log('Quote: Permit2 signature', signature);
-                // Append signature length and signature to calldata
-                const signatureLengthHex = ethers.toBeHex(signature.length / 2, 32);
-                txData = ethers.concat([txData, signatureLengthHex, signature]);
-            } catch (error) {
-                console.error('Quote: Error signing Permit2', error);
-                setLoading(false);
-                return;
+                try {
+                    console.log('Quote: Signing Permit2 EIP-712', quote.permit2.eip712);
+                    
+                    // Create types object without EIP712Domain for ethers v6
+                    const cleanTypes = Object.fromEntries(
+                        Object.entries(quote.permit2.eip712.types).filter(([key]) => key !== 'EIP712Domain')
+                    );
+                    
+                    const signature = await signer.signTypedData(
+                        quote.permit2.eip712.domain,
+                        cleanTypes,
+                        quote.permit2.eip712.message
+                    );
+                    console.log('Quote: Permit2 signature', signature);
+                    
+                    // Calculate signature byte length correctly
+                    // Remove '0x' prefix and divide by 2 to get byte length
+                    const signatureBytes = (signature.length - 2) / 2;
+                    const signatureLengthHex = ethers.toBeHex(signatureBytes, 32);
+                    
+                    // Append signature length and signature to calldata
+                    txData = ethers.concat([txData, signatureLengthHex, signature]);
+                } catch (error) {
+                    console.error('Quote: Error signing Permit2', error);
+                    setLoading(false);
+                    return;
+                }
             }
-            }
+            
             // Prepare transaction
             const tx = {
                 to: quote.transaction.to,
@@ -66,15 +78,17 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                 gasLimit: quote.transaction.gas ? BigInt(quote.transaction.gas) : undefined,
             };
             console.log('Quote: Sending transaction', tx);
+            
             // Send transaction
             const txResponse = await signer.sendTransaction(tx);
             setIsConfirming(true);
             console.log('Quote: Transaction sent', txResponse.hash);
+            
             // Wait for confirmation
             const receipt = await txResponse.wait();
             const receiptHash = receipt?.hash;
             if(receiptHash) {
-                setTxMessage(receiptHash); // optional
+                setTxMessage(receiptHash);
                 toast({
                     title: "Transaction Confirmed!",
                     description: `Swap Completed!`,
