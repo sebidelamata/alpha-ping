@@ -38,6 +38,8 @@ import {
     ShieldCheck, 
     CircleX 
 } from "lucide-react";
+import { type AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
+import JoinChannelDialog from "./JoinChannelModal"
 
 const formSchema = z.object({
     tokenAddress: z.string().min(42).max(42),
@@ -77,6 +79,8 @@ const AddChannelModal:React.FC<IAddChannelModal> = ({ setOpen }) => {
     const [loading, setLoading] = useState<boolean>(false)
     const[error, setError] = useState<string | null>(null)
     const [txMessage, setTxMessage] = useState<null | string>(null)
+    const [showJoinDialog, setShowJoinDialog] = useState<boolean>(false)
+    const [createdChannel, setCreatedChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
     
 
     const onSubmit = async (values: FormValues) => {
@@ -100,13 +104,19 @@ const AddChannelModal:React.FC<IAddChannelModal> = ({ setOpen }) => {
                 const totalChannels: bigint = await alphaPING.totalChannels();
                 const channels = [];
     
-            for (let i = 1; i <= Number(totalChannels); i++) {
-              const channel = await alphaPING.getChannel(i);
-              channels.push(channel);
-            }
+                for (let i = 1; i <= Number(totalChannels); i++) {
+                    const channel = await alphaPING.getChannel(i);
+                    channels.push(channel);
+                }
     
-            setChannels(channels);
-          }
+                setChannels(channels);
+                
+                // Get the newly created channel and show join dialog
+                const newChannel = channels[channels.length - 1];
+                console.log("new channel: ", newChannel.name)
+                setCreatedChannel(newChannel);
+                setShowJoinDialog(true);
+            }
         }
         catch(error:unknown){
             if((error as ErrorType).message){
@@ -165,6 +175,22 @@ const AddChannelModal:React.FC<IAddChannelModal> = ({ setOpen }) => {
     const handleCancel = (e:MouseEvent) => {
         e.preventDefault()
         setOpen(false)
+    }
+
+    const handleJoinDialogClose = () => {
+        setShowJoinDialog(false);
+        setOpen(false);
+    };
+
+    // Show join dialog after successful channel creation
+    if (showJoinDialog && createdChannel) {
+        return (
+            <JoinChannelDialog 
+                channel={createdChannel}
+                txHash={txMessage}
+                onClose={handleJoinDialogClose}
+            />
+        );
     }
 
     return(
