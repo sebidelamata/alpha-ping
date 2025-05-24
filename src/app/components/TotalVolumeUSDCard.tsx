@@ -10,10 +10,12 @@ import {
     CardContent 
 } from "@/components/components/ui/card";
 import qs from 'qs'
+import humanReadableNumbers from "src/lib/humanReadableNumbers";
+import { Skeleton } from "@/components/components/ui/skeleton";
 
 const TotalVolumeUSDCard:React.FC = () => {
 
-    const [totalVolumeUSD, setTotalVolumeUSD] = useState<string>("")
+    const [totalVolumeUSD, setTotalVolumeUSD] = useState<string | null>(null)
     useEffect(() => {
     const loadVolumeTotal = async () => {
         const appStart = Math.floor(new Date(2025,4,1).getTime() / 1000)
@@ -53,7 +55,11 @@ const TotalVolumeUSDCard:React.FC = () => {
         <Card className="flex flex-col h-full w-full bg-primary text-secondary justify-end">
             <CardHeader>
                 <CardTitle className="flex text-accent justify-end">
-                    {`$${totalVolumeUSD} of Digital Assets Swapped`}
+                    {
+                        totalVolumeUSD === null ?
+                        <Skeleton className="w-96 h-8"/>:
+                        `$${humanReadableNumbers(totalVolumeUSD)} of Digital Assets Swapped`
+                    }
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex justify-end">
