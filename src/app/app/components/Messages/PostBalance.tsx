@@ -46,21 +46,23 @@ const PostBalance:React.FC<PostBalanceProps> = ({
             </div>
             <div className='current-token-amount-value'>
                 {
-                tokenDecimals !== null &&
-                // round to 8 decimals
-                (
-                    Math.round(
-                        parseFloat(
-                            ethers.formatUnits(
-                                message.messageTimestampTokenAmount.toString(), 
-                                tokenDecimals
+
+                    tokenDecimals !== null ? (
+                    `${
+                        (
+                        Math.round(
+                            parseFloat(
+                                ethers.formatUnits(
+                                    message.messageTimestampTokenAmount.toString(), 
+                                    tokenDecimals
                                 )
-                        ) * 1e8
-                    ) / 1e8
-                ).toString()
-                }
-                {
-                    ` ${tokenSymbol}`
+                            ) * 1e8
+                        ) / 1e8
+                        ).toString()
+                    } ${tokenSymbol ?? ''}`
+                    ) : (
+                    `${message.messageTimestampTokenAmount.toString().toString()} ${tokenSymbol ?? 'NFT'}${message.messageTimestampTokenAmount.toString().toString() === '1' ? '' : 's'}`
+                    )
                 }
             </div>
         </div>

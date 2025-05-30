@@ -62,21 +62,21 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
             </div>
             <div className='current-token-amount-value'>
               {
-                tokenDecimals !== null &&
-                userBalance !== null &&
-                // round to 8 decimals
+                userBalance !== null && (
+                    tokenDecimals !== null ? (
                     `${
                         (
-                            Math.round(
-                                parseFloat(
-                                    ethers.formatUnits(
-                                        userBalance.toString(), 
-                                        tokenDecimals
-                                    )   
-                                ) * 1e8
-                            ) / 1e8   
+                        Math.round(
+                            parseFloat(
+                            ethers.formatUnits(userBalance.toString(), tokenDecimals)
+                            ) * 1e8
+                        ) / 1e8
                         ).toString()
-                    } ${tokenSymbol}`
+                    } ${tokenSymbol ?? ''}`
+                    ) : (
+                    `${userBalance.toString()} ${tokenSymbol ?? ''}${userBalance.toString() === '1' ? '' : 's'}`
+                    )
+                )
                 }
             </div>
         </div>

@@ -90,11 +90,19 @@ const Messages:React.FC = () => {
 
   useEffect(() => {
     const fetchTokenDecimals = async () => {
-      if(token !== null){
-        const tokenDecimals = await token.decimals()
-        setTokenDecimals(tokenDecimals as number)
+      if (token !== null) {
+        try {
+          const tokenDecimals = await token.decimals()
+          setTokenDecimals(tokenDecimals as number)
+        } catch (error) {
+          console.warn('Failed to fetch token decimals:', error)
+          setTokenDecimals(null)  // ⬅️ explicitly reset on failure
+        }
+      } else {
+        setTokenDecimals(null) // ⬅️ also reset if token is null
       }
     }
+
     fetchTokenDecimals()
   }, [token])
 
