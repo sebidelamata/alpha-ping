@@ -49,7 +49,7 @@ const TotalVolumeUSDCard: React.FC = () => {
                 )
             } catch (error) {
                 console.error('Error loading volume data:', error)
-                setTotalVolumeUSD('0.00')
+                setTotalVolumeUSD(null)
             }
         }
         loadVolumeTotal()
