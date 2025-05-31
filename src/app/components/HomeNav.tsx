@@ -1,12 +1,12 @@
+'use client';
+
 import React from "react";
 import Link from "next/link";
 import {
     NavigationMenu,
-    NavigationMenuContent,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    NavigationMenuTrigger,
     navigationMenuTriggerStyle
   } from "@/components/components/ui/navigation-menu"
   
@@ -65,66 +65,6 @@ const HomeNav:React.FC = () => {
                                 Docs
                             </NavigationMenuLink>
                         </Link>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>
-                            Socials
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <ul className="grid justify-center gap-1 bg-primary p-2 align-middle md:w-[200px] lg:w-[300px] lg:grid-cols-[33%_33%_33%]">
-                                <li className="grid justify-center align-middle">
-                                    <Link 
-                                        href={'https://x.com/__AlphaPING__'} 
-                                        target="_blank"
-                                        legacyBehavior 
-                                        passHref
-                                    >
-                                        <NavigationMenuLink target="_blank" className="flex size-12 items-center justify-center">
-                                            <img 
-                                                src="/x.svg" 
-                                                alt="X Link" 
-                                                className="size-6"
-                                                loading="lazy"
-                                            />
-                                        </NavigationMenuLink>
-                                    </Link>
-                                </li>
-                                <li className="grid justify-center align-middle">
-                                    <Link 
-                                        href={'https://discord.com/channels/1309709451397431346/1310010641259434156'} 
-                                        target="_blank"
-                                        legacyBehavior 
-                                        passHref
-                                    >
-                                        <NavigationMenuLink target="_blank" className="flex size-12 items-center justify-center">
-                                            <img 
-                                                src="/discord.svg" 
-                                                alt="Discord Link" 
-                                                className="size-6"
-                                                loading="lazy"
-                                            />
-                                        </NavigationMenuLink>
-                                    </Link>
-                                </li>
-                                <li className="grid justify-center align-middle">
-                                    <Link 
-                                        href={'https://t.me/+c-zi1QU486RiNDNh'} 
-                                        target="_blank"
-                                        legacyBehavior 
-                                        passHref
-                                    >
-                                        <NavigationMenuLink target="_blank" className="flex size-12 items-center justify-center">
-                                            <img 
-                                                src="/Telegram_logo.svg" 
-                                                alt="Telegram Link" 
-                                                className="size-6"
-                                                loading="lazy"
-                                            />
-                                        </NavigationMenuLink>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </NavigationMenuContent>
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
