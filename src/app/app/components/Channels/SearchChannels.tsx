@@ -16,20 +16,28 @@ import {
     CommandItem,
     CommandList,
   } from "@/components/components/ui/command"
+  import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@/components/components/ui/avatar";
   import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-  } from "@/components/components/ui/popover"
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+  } from "@/components/components/ui/dialog"
   import { Button } from "@/components/components/ui/button.tsx";
-  import { ChevronsUpDown } from "lucide-react";
+  import { ChevronsUpDown, SearchCode } from "lucide-react";
+  import tokenList from "../../../../../public/tokenList.json";
+  import tokensByChain from "src/lib/tokensByChain";
 
 const SearchChannels: React.FC = () => {
 
     const { 
         channels, 
         alphaPING, 
-        signer 
+        signer,
+        chainId 
     } = useEtherProviderContext()
     const { 
         setCurrentChannel,
@@ -56,24 +64,25 @@ const SearchChannels: React.FC = () => {
             setCurrentChannel(channel)
             setJoinChannelLoading(false)
         }
+        setOpenSearch(false)
     }
 
     return(
         <div className='flex justify-center align-middle'>
-            <Popover open={openSearch} onOpenChange={setOpenSearch}>
-                <PopoverTrigger asChild>
+            <Dialog open={openSearch} onOpenChange={setOpenSearch}>
+                <DialogTrigger asChild>
                     <Button
-                    variant="outline"
+                    variant="ghost"
                     role="combobox"
                     aria-expanded={openSearch === true ? "true" : "false"}
-                    className="w-[200px] justify-between"
+                    className="flex flex-row gap-24 justify-between h-16"
                     >
-                    Search Token or NFT...
-                    <ChevronsUpDown className="opacity-50" />
+                    <SearchCode size={18}/>
+                    <ChevronsUpDown size={18}/>
                     </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                    <Command>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                    <Command className="bg-primary text-secondary">
                         <CommandInput placeholder="Search Token or NFT..." className="h-9" />
                         <CommandList>
                             <CommandEmpty>No token found.</CommandEmpty>
@@ -83,16 +92,38 @@ const SearchChannels: React.FC = () => {
                                 value={channel.name}
                                 onSelect={() => {
                                     handleChannelClick(channel)
-                                    setOpenSearch(false)
                                 }}
                                 >
                                 <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
+                                <Avatar>
+                                    <AvatarImage 
+                                        alt={channel.name}
+                                        src={
+                                                // Check if the token exists in the tokenList and has a logoURI//   
+                                                ( 
+                                                    tokensByChain(tokenList, Number(chainId)).filter((token) => {
+                                                        return token.address.toLowerCase() === channel.tokenAddress.toLowerCase()
+                                                    }).length > 0 && 
+                                                    tokensByChain(tokenList, Number(chainId)).filter((token) => {
+                                                        return token.address.toLowerCase() === channel.tokenAddress.toLowerCase()
+                                                    })[0].logoURI !== null 
+                                                ) ? 
+                                                tokensByChain(tokenList, Number(chainId)).filter((token) => {
+                                                    return token.address.toLowerCase() === channel.tokenAddress.toLowerCase()
+                                                }).find(token => token.logoURI !== null)?.logoURI ?? "" :
+                                                ""
+                                            } 
+                                    />
+                                    <AvatarFallback>
+                                        {channel.tokenAddress.slice(0, 2).toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
                                 </CommandItem>
                             ))}
                         </CommandList>
                     </Command>
-                </PopoverContent>
-            </Popover>
+                </DialogContent>
+            </Dialog>
             {
                 joinChannelLoading === true &&
                     <Loading/>
