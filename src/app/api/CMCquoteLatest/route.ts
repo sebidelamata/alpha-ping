@@ -15,8 +15,6 @@ export async function GET(request: NextRequest) {
     );
     const data = await res.json();
 
-    console.log("price data", data);
-
     return Response.json(data);
   } catch (error) {
     console.log(error);

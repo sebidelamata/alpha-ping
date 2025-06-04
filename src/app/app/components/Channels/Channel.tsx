@@ -30,6 +30,7 @@ import {
     AccordionTrigger,
 } from "@/components/components/ui/accordion"
 import { ScrollArea } from "@/components/components/ui/scroll-area";
+import qs from 'qs';
   
 
 interface IChannel{
@@ -129,9 +130,11 @@ const Channel:React.FC<IChannel> = ({
     useEffect(() => {
         const fetchTokenMetadata = async (tokenAddress:string) => {
             let response
-            const url=`https://alpha-ping-proxy-server-670fa5485762.herokuapp.com/token-metadata/${tokenAddress}`
+            const params = {
+                address: tokenAddress,
+            }
             try{
-                response = await fetch(url)
+                response = await fetch(`/api/tokenMetadataCMC?${qs.stringify(params)}`)
     
                 if (!response.ok) {
                     throw new Error('Failed to fetch');

@@ -1,15 +1,15 @@
+import { console } from "inspector";
 import { type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-console.log(`https://api.0x.org/trade-analytics/swap?${searchParams}`)
   try {
     const res = await fetch(
-      `https://api.0x.org/trade-analytics/swap?${searchParams}`,
+      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?${searchParams}`,
       {
         headers: {
-          "0x-api-key": process.env.NEXT_PUBLIC_ZEROEX_API_KEY as string,
-          "0x-version": "v2",
+        'Accepts': 'application/json',
+        "X-CMC_PRO_API_KEY": process.env.NEXT_PUBLIC_COINMARKETCAP_API_KEY as string
         },
       }
     );
