@@ -26,6 +26,7 @@ import TaxInfoDisplay from "./TaxInfoDisplay";
 import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
 import PlaceOrderButton from "./PlaceOrderButton";
+import BroadcastTrade from "./BroadcastTrade";
 
 interface IQuote{
     price: PriceResponse;
@@ -217,6 +218,7 @@ const Quote:React.FC<IQuote> = ({
                     quote?.totalNetworkFee &&
                     <GasDisplay gasEstimate={(Number(quote.totalNetworkFee) / 1e18).toString()}/>
                 }
+                <BroadcastTrade/>
                 <PlaceOrderButton
                     quote={quote}
                     quoteExpired={quoteExpired}
