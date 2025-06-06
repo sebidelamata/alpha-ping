@@ -209,7 +209,7 @@ const Quote:React.FC<IQuote> = ({
                         )
                     }
                 </div>
-                <BroadcastTrade/>
+                <BroadcastTrade buyTokenAddress={quote.buyToken}/>
                 <LiquidityRoute
                     route={quote.route.fills.map((r: Fills) => r.source)}
                     buyTokenObject={buyTokenObject}
