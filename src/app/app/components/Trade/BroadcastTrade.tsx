@@ -1,12 +1,22 @@
-import React from "react";
+import React, {
+    useState
+} from "react";
+import { Switch } from "@/components/components/ui/switch";
+import { Label } from "@/components/components/ui/label";
 
 const BroadcastTrade: React.FC = () => {
-  return (
-    <div>
-      <h1>Broadcast Trade</h1>
-      <p>This component will handle broadcasting trades.</p>
-      {/* Additional functionality can be added here */}
-    </div>
-  );
+
+    const [isBroadcasting, setIsBroadcasting] = useState(false);
+
+    return (
+        <div className="flex items-center space-x-2 justify-end">
+            <Switch 
+                className="data-[state=checked]:bg-accent"
+                checked={isBroadcasting} 
+                onCheckedChange={() => setIsBroadcasting(!isBroadcasting)}
+            />
+            <Label htmlFor="airplane-mode">Broadcast Trade</Label>
+        </div>
+    );
 }
 export default BroadcastTrade;
