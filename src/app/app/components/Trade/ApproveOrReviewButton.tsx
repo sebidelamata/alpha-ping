@@ -1,12 +1,10 @@
 'use client';
 
 import React, {
-    useState,
-    useEffect
+    useState
 } from "react";
 import { Button } from "@/components/components/ui/button";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
-import { useUserProviderContext } from "src/contexts/UserContext";
 import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { ethers } from 'ethers'
 import { Avatar } from "@radix-ui/react-avatar";
@@ -48,7 +46,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
 
     const { toast } = useToast()
     const { signer } = useEtherProviderContext()
-    const { account } = useUserProviderContext()
 
     // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const [loading, setLoading] = useState<boolean>(false)
@@ -95,7 +92,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             }
                 setTxMessage(tx?.hash)
             }
-            setUserAllowance(maxApproval.toString()); // optimistically update
           } catch (error: unknown) {
             if(error !== null && (error as ErrorType).reason !== undefined){
                 toast({
@@ -143,33 +139,18 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
             }
         }
     }
-    const [ userAllowance, setUserAllowance ] = useState<string | null>(null)
-    useEffect(() => {
-        const getUserAllowance = async () => {
-            if(
-                sellTokenAddress &&
-                signer &&
-                account &&
-                price?.issues?.allowance?.spender
-            ){
-                const token = new ethers.Contract(
-                    sellTokenAddress,
-                    ERC20Faucet.abi,
-                    signer
-                )
-            const userAllowance = await token.allowance(account, price.issues.allowance.spender)
-            setUserAllowance(userAllowance.toString())
-          }
-      }
-      getUserAllowance()
-    }, [ sellTokenAddress, signer, account, price, txMessage])
 
+    if(loading){
+        return(
+            <Loading/>
+        )
+    }
     // If price.issues.allowance is null, show the Review Trade button
     if (price?.issues.allowance === null) {
         return (
             <div className="flex flex-col w-full">
                 <Button
-                    variant="ghost"
+                    variant="secondary"
                     className="w-full"
                     disabled={disabled}
                     onClick={() => {
@@ -177,52 +158,49 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                     onClick();
                     }}
                 >
-                    {disabled ? "Insufficient Balance" : "Review Trade"}
+                    {
+                        disabled ? 
+                        "Insufficient Balance" : 
+                        "Review Trade"
+                    }
                 </Button>
             </div>
         );
-    }
-
-    if(loading){
-        return(
-            <Loading/>
-        )
-    }
-
-    return (
-        <div className="flex flex-col w-full">
-            {
-                userAllowance && 
-                BigInt(userAllowance) < parsedSellAmount && (
-                    <Button
-                        variant="ghost"
-                        onClick={handleApprove}
-                        className="w-full"
-                    >
-                        <div className="flex flex-row items-center gap-2">
-                            <div>
-                                {`Approve ${sellTokenSymbol}`}
+    }else if(price?.issues.allowance !== null){
+        return (
+            <div className="flex flex-col w-full">
+                {
+                    BigInt(price?.issues.allowance.actual || 0) < parsedSellAmount && (
+                        <Button
+                            variant="secondary"
+                            onClick={handleApprove}
+                            className="w-full"
+                        >
+                            <div className="flex flex-row items-center gap-2">
+                                <div>
+                                    {`Approve ${sellTokenSymbol}`}
+                                </div>
+                                {
+                                    sellTokenURI && 
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={sellTokenURI}
+                                            alt="Token Image"
+                                            className="w-4 h-4"
+                                        />
+                                        <AvatarFallback>
+                                            {
+                                                sellTokenSymbol || "0x"
+                                            }
+                                        </AvatarFallback>
+                                    </Avatar>
+                                }
                             </div>
-                            {
-                                sellTokenURI && 
-                                <Avatar>
-                                    <AvatarImage
-                                        src={sellTokenURI}
-                                        alt="Token Image"
-                                        className="w-4 h-4"
-                                    />
-                                    <AvatarFallback>
-                                        {
-                                            sellTokenSymbol || "0x"
-                                        }
-                                    </AvatarFallback>
-                                </Avatar>
-                            }
-                        </div>
-                    </Button>
-                ) 
-            }
-        </div>
-    );
+                        </Button>
+                    ) 
+                }
+            </div>
+        );
+    }
 }
 export default ApproveOrReviewButton;
