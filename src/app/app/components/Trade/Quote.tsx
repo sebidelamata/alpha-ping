@@ -209,6 +209,7 @@ const Quote:React.FC<IQuote> = ({
                         )
                     }
                 </div>
+                <BroadcastTrade/>
                 <LiquidityRoute
                     route={quote.route.fills.map((r: Fills) => r.source)}
                     buyTokenObject={buyTokenObject}
@@ -218,7 +219,6 @@ const Quote:React.FC<IQuote> = ({
                     quote?.totalNetworkFee &&
                     <GasDisplay gasEstimate={(Number(quote.totalNetworkFee) / 1e18).toString()}/>
                 }
-                <BroadcastTrade/>
                 <PlaceOrderButton
                     quote={quote}
                     quoteExpired={quoteExpired}
