@@ -22,7 +22,7 @@ interface IPlaceOrderButton{
     quote: QuoteResponse;
     quoteExpired: boolean;
     isBroadcasting: boolean;
-    buyTokenChannel: AlphaPING.ChannelStructOutput;
+    buyTokenChannel: AlphaPING.ChannelStructOutput | null;
 }
 
 interface ErrorType {
@@ -63,10 +63,13 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
 
     // function to post message to chat if broadcasting
     const sendMessage = async (userBalance:string) => {
+        if(!buyTokenChannel || !signer || !socket){
+            return;
+        }
         // post timestamp
         const now: Date = new Date
         // Format the buy amount with proper decimals
-        const formattedBuyAmount = (BigInt(quote.buyAmount) / BigInt(10 ** (buyTokenObject?.decimals || 18))).toString();
+        const formattedBuyAmount = (BigInt(quote.buyAmount) / BigInt(10 ** (buyTokenObject?.decimals || 18))).toString() || "0";
         // create message object
         const messageObj = {
           channel: buyTokenChannel.id,
