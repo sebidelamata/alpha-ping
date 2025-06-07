@@ -27,6 +27,7 @@ import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
 import PlaceOrderButton from "./PlaceOrderButton";
 import BroadcastTrade from "./BroadcastTrade";
+import { AlphaPING } from "typechain-types";
 
 interface IQuote{
     price: PriceResponse;
@@ -109,8 +110,8 @@ const Quote:React.FC<IQuote> = ({
         slippage
     ]);
 
-    // our quote is no good after 30 seconds
-    const [quoteSecondsLeft, setQuoteSecondsLeft] = useState<number>(30)
+    // our quote is no good after 60 seconds
+    const [quoteSecondsLeft, setQuoteSecondsLeft] = useState<number>(60)
     const [quoteExpired, setQuoteExpired] = useState<boolean>(false)
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -126,6 +127,11 @@ const Quote:React.FC<IQuote> = ({
         
           return () => clearInterval(intervalId);
     }, [])
+
+    // whether we should broadcast the trade to chat
+    const [isBroadcasting, setIsBroadcasting] = useState(true);
+    // set the channel to broadcast to
+    const [buyTokenChannel, setBuyTokenChannel] = useState<AlphaPING.ChannelStructOutput | null>(null);
 
 
   if (!quote) {
@@ -209,7 +215,12 @@ const Quote:React.FC<IQuote> = ({
                         )
                     }
                 </div>
-                <BroadcastTrade buyTokenAddress={quote.buyToken}/>
+                <BroadcastTrade 
+                    buyTokenAddress={quote.buyToken}
+                    isBroadcasting={isBroadcasting}
+                    setIsBroadcasting={setIsBroadcasting}
+                    setBuyTokenChannel={setBuyTokenChannel}
+                />
                 <LiquidityRoute
                     route={quote.route.fills.map((r: Fills) => r.source)}
                     buyTokenObject={buyTokenObject}
@@ -222,6 +233,8 @@ const Quote:React.FC<IQuote> = ({
                 <PlaceOrderButton
                     quote={quote}
                     quoteExpired={quoteExpired}
+                    isBroadcasting={isBroadcasting} 
+                    buyTokenChannel={buyTokenChannel}
                 />
             </CardContent>
             </Card>

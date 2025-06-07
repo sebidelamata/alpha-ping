@@ -7,12 +7,21 @@ import { Label } from "@/components/components/ui/label";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { useUserProviderContext } from "src/contexts/UserContext";
+import { Skeleton } from "@/components/components/ui/skeleton";
 
 interface IBroadcastTrade {
     buyTokenAddress: string;
+    isBroadcasting: boolean;
+    setIsBroadcasting: (isBroadcasting: boolean) => void;
+    setBuyTokenChannel: (channel: AlphaPING.ChannelStructOutput) => void;
 }
 
-const BroadcastTrade: React.FC<IBroadcastTrade> = ({buyTokenAddress}) => {console.log(buyTokenAddress);
+const BroadcastTrade: React.FC<IBroadcastTrade> = ({
+    buyTokenAddress,
+    isBroadcasting,
+    setIsBroadcasting,
+    setBuyTokenChannel
+}) => {
     const { alphaPING } = useEtherProviderContext()
     const { account } = useUserProviderContext()
     const [userChannels, setUserChannels] = useState<AlphaPING.ChannelStructOutput[]>([]);
@@ -34,13 +43,17 @@ const BroadcastTrade: React.FC<IBroadcastTrade> = ({buyTokenAddress}) => {consol
         fetchChannels();
     }, [alphaPING, account]);
 
-    const [isBroadcasting, setIsBroadcasting] = useState(false);
     if(
         userChannels.filter((channel) => {
-            return channel.tokenAddress.toString() === buyTokenAddress
+            return channel.tokenAddress.toLowerCase() === buyTokenAddress.toLowerCase()
         }).length !== 0
     ){
-        console.log('hi')
+        // set the channel id to broadcast to
+        setBuyTokenChannel(
+            userChannels.filter((channel) => {
+                return channel.tokenAddress.toLowerCase() === buyTokenAddress.toLowerCase()
+            })[0]
+        );
         return (
             <div className="flex items-center space-x-2 justify-end">
                 <Switch 
@@ -51,6 +64,12 @@ const BroadcastTrade: React.FC<IBroadcastTrade> = ({buyTokenAddress}) => {consol
                 <Label htmlFor="airplane-mode">Broadcast Trade</Label>
             </div>
         );
+    } else {
+        return(
+            <div className="flex items-center space-x-2 justify-end">
+                <Skeleton className="w-64 h-6" />
+            </div>
+        )
     }
 }
 export default BroadcastTrade;

@@ -68,7 +68,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
         setMessage("")
         setReplyId(null)
         inputRef.current?.focus()
-      }
+    }
 
     // send a message if we click send
     const sendMessageMouse: MouseEventHandler<HTMLFormElement> = (e) => {

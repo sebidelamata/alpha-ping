@@ -10,10 +10,19 @@ import {
     CircleX 
 } from "lucide-react";
 import Link from "next/link";
+import {confetti} from "tsparticles-confetti"
+import tokenList from "../../../../../public/tokenList.json";
+import tokensByChain from "src/lib/tokensByChain";
+import { useSocketProviderContext } from "../../../../contexts/SocketContext"
+import { useUserProviderContext } from "src/contexts/UserContext";
+import { AlphaPING } from "typechain-types";
+import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 
 interface IPlaceOrderButton{
     quote: QuoteResponse;
     quoteExpired: boolean;
+    isBroadcasting: boolean;
+    buyTokenChannel: AlphaPING.ChannelStructOutput | null;
 }
 
 interface ErrorType {
@@ -23,14 +32,57 @@ interface ErrorType {
 const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
     quote,
     quoteExpired,
+    isBroadcasting,
+    buyTokenChannel
 }) => {
 
     const { toast } = useToast()
-    const { signer, provider } = useEtherProviderContext()
+    const { 
+        signer, 
+        provider, 
+        chainId 
+    } = useEtherProviderContext()
+    const { account } = useUserProviderContext()
+    const { socket } = useSocketProviderContext()
 
     const [txMessage, setTxMessage] = useState<string | null>(null)
     const [loading, setLoading] = useState<boolean>(false);
     const [isConfirming, setIsConfirming] = useState<boolean>(false);
+
+    //buy token balance after transaction to attach to message
+    const [userBalance, setUserBalance] = useState<string | null>(null);
+
+    // buy token image for our confetti
+    const buyTokenImage = tokensByChain(tokenList, Number(chainId)).find(
+        (token) => token.address.toLowerCase() === quote.buyToken.toLowerCase()
+    )?.logoURI || "erc20Icon.svg";
+    // buy token image for our confetti
+    const buyTokenObject = tokensByChain(tokenList, Number(chainId)).find(
+        (token) => token.address.toLowerCase() === quote.buyToken.toLowerCase()
+    );
+
+    // function to post message to chat if broadcasting
+    const sendMessage = async (userBalance:string) => {
+        if(!buyTokenChannel || !signer || !socket){
+            return;
+        }
+        // post timestamp
+        const now: Date = new Date
+        // create message object
+        const messageObj = {
+          channel: buyTokenChannel.id,
+          account: await signer?.getAddress(),
+          text: `I just bought ${quote.buyAmount} ${buyTokenChannel.name} on AlphaPING!`,
+          timestamp: now,
+          messageTimestampTokenAmount: userBalance?.toString(),
+          reactions: {},
+          replyId: null
+        }
+        // prevent blanks and only if there is a connection
+        if (socket !== null) {
+          socket.emit('new message', messageObj)
+        }
+    }
 
     const handlePlaceOrder = async () => {
         if (!quote || !signer || !provider) {
@@ -142,30 +194,76 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
             }
         }finally{
             setLoading(false)
-            if(txMessage !== null){
-                toast({
-                    title: "Transaction Confirmed!",
-                    description: `Swap Completed!`,
-                    duration:5000,
-                    action: (
-                        <div className="flex flex-row gap-1">
-                            <ShieldCheck size={80}/>
-                            <div className="flex flex-col gap-1">
-                                <p>View Transaction on</p>
-                                <Link 
-                                    href={`https://arbiscan.io/tx/${txMessage}`} 
-                                    target="_blank"
-                                    className="text-accent"
-                                >
-                                    Arbiscan
-                                </Link>
-                            </div>
-                        </div>
-                    )
-                })
+            try {
+                if(buyTokenObject !== undefined && buyTokenObject !== null){
+                    // Check if the token is ETH (native token)
+                    if (buyTokenObject?.symbol.toLowerCase() === 'eth' || buyTokenObject?.address === null) {
+                        // Fetch native ETH balance
+                        const balance = await provider.getBalance(account);
+                        setUserBalance(balance.toString());
+                    } else {
+                        // Fetch ERC-20 token balance
+                        const token = new ethers.Contract(
+                            buyTokenObject?.address,
+                            ERC20Faucet.abi,
+                            signer
+                        );
+                        const userBalance = await token.balanceOf(account);
+                        setUserBalance(userBalance.toString());
+                    }
+                    if(txMessage !== null){
+                        toast({
+                            title: "Transaction Confirmed!",
+                            description: `Swap Completed!`,
+                            duration:5000,
+                            action: (
+                                <div className="flex flex-row gap-1">
+                                    <ShieldCheck size={80}/>
+                                    <div className="flex flex-col gap-1">
+                                        <p>View Transaction on</p>
+                                        <Link 
+                                            href={`https://arbiscan.io/tx/${txMessage}`} 
+                                            target="_blank"
+                                            className="text-accent"
+                                        >
+                                            Arbiscan
+                                        </Link>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                    if(isBroadcasting === true){
+                        await sendMessage(userBalance || "0");
+                    }
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 1 },
+                        shapes: ["image"],
+                        scalar: 6, 
+                        disableForReducedMotion: true,
+                        shapeOptions: {
+                            image: [
+                                {
+                                    src: "Apes.svg",
+                                    width: 32, 
+                                    height: 32, 
+                                },
+                                {
+                                    src: buyTokenImage,
+                                    width: 32, 
+                                    height: 32, 
+                                },
+                            ]
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error in finally block:', error);
             }
         }
-    };
+    }
 
     return(
         <Button
