@@ -72,11 +72,11 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
         const formattedBuyAmount = (BigInt(quote.buyAmount) / BigInt(10 ** (buyTokenObject?.decimals || 18))).toString() || "0";
         // create message object
         const messageObj = {
-          channel: buyTokenChannel.id,
-          account: await signer?.getAddress(),
+          channel: buyTokenChannel.id.toString(),
+          account: account.toString(),
           text: `I just bought ${formattedBuyAmount} ${buyTokenChannel.name} on AlphaPING!`,
           timestamp: now.toISOString(),
-          messageTimestampTokenAmount: userBalance,
+          messageTimestampTokenAmount: userBalance.toString(),
           reactions: {},
           replyId: null
         }
