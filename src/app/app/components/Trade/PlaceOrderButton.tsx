@@ -22,7 +22,7 @@ interface IPlaceOrderButton{
     quote: QuoteResponse;
     quoteExpired: boolean;
     isBroadcasting: boolean;
-    buyTokenChannel: AlphaPING.ChannelStructOutput | null;
+    buyTokenChannel: AlphaPING.ChannelStructOutput;
 }
 
 interface ErrorType {
@@ -63,18 +63,17 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
 
     // function to post message to chat if broadcasting
     const sendMessage = async (userBalance:string) => {
-        if(!buyTokenChannel || !signer || !socket){
-            return;
-        }
         // post timestamp
         const now: Date = new Date
+        // Format the buy amount with proper decimals
+        const formattedBuyAmount = (BigInt(quote.buyAmount) / BigInt(10 ** (buyTokenObject?.decimals || 18))).toString();
         // create message object
         const messageObj = {
           channel: buyTokenChannel.id,
           account: await signer?.getAddress(),
-          text: `I just bought ${quote.buyAmount} ${buyTokenChannel.name} on AlphaPING!`,
-          timestamp: now,
-          messageTimestampTokenAmount: userBalance?.toString(),
+          text: `I just bought ${formattedBuyAmount} ${buyTokenChannel.name} on AlphaPING!`,
+          timestamp: now.toISOString(),
+          messageTimestampTokenAmount: userBalance,
           reactions: {},
           replyId: null
         }
@@ -208,8 +207,8 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                             ERC20Faucet.abi,
                             signer
                         );
-                        const userBalance = await token.balanceOf(account);
-                        setUserBalance(userBalance.toString());
+                        const tokenBalance = await token.balanceOf(account);
+                        setUserBalance(tokenBalance.toString());
                     }
                     if(txMessage !== null){
                         toast({
