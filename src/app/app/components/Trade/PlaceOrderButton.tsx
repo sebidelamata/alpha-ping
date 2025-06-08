@@ -58,20 +58,21 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
         (token) => token.address.toLowerCase() === quote.buyToken.toLowerCase()
     );
 
+    console.log((BigInt(quote.buyAmount) / BigInt(10 ** (buyTokenObject?.decimals || 18))).toString());
+
     // function to post message to chat if broadcasting
-    const sendMessage = async (userBalance:string) => {
+    const sendMessage = async (userBalance:string, buyAmount:string) => {
         if(!buyTokenChannel || !signer || !socket){
             return;
         }
+
         // post timestamp
         const now: Date = new Date
-        // Format the buy amount with proper decimals
-        const formattedBuyAmount = (BigInt(quote.buyAmount) / BigInt(10 ** (buyTokenObject?.decimals || 18))).toString() || "0";
         // create message object
         const messageObj = {
           channel: buyTokenChannel.id.toString(),
           account: account.toString(),
-          text: `I just bought ${formattedBuyAmount} ${buyTokenChannel.name} on AlphaPING!`,
+          text: `I just bought ${buyAmount} ${buyTokenChannel.name} on AlphaPING!`,
           timestamp: now.toISOString(),
           messageTimestampTokenAmount: userBalance.toString(),
           reactions: {},
@@ -88,6 +89,14 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
             return;
         }
         setLoading(true);
+
+        let formattedBuyAmount = "0";
+        if (buyTokenObject && quote.buyAmount) {
+            const decimals = buyTokenObject.decimals || 18;
+            formattedBuyAmount = ethers.formatUnits(quote.buyAmount, decimals);
+            console.log('Formatted buy amount:', formattedBuyAmount); // Debug log
+        }
+
         try {
             let txData = quote.transaction.data;
             // Sign Permit2 EIP-712 if provided
@@ -217,7 +226,7 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                             )
                         })
                     }
-                    if(isBroadcasting === true){
+                    if(isBroadcasting === true && formattedBuyAmount !== null){
                         let userBalance = null;
                         console.log(buyTokenObject)
                         // Check if the token is ETH (native token)
@@ -235,7 +244,7 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                             userBalance = await token.balanceOf(account);
                             console.log('ERC-20 Token Balance:', userBalance.toString());
                         }
-                        await sendMessage(userBalance || "0");
+                        await sendMessage(userBalance, formattedBuyAmount);
                     }
                     if(txMessage === null){
                         confetti({

@@ -62,7 +62,6 @@ const Quote:React.FC<IQuote> = ({
     const sellTokenObject = tokensByChain(tokenList, Number(chainId))
         .filter((token) => token.address.toLowerCase() === price.sellToken.toLowerCase()
         )[0];
-    console.log(sellTokenObject)
     const buyTokenObject = tokensByChain(tokenList, Number(chainId))
         .filter(
         (token) => token.address.toLowerCase() === price.buyToken.toLowerCase()
