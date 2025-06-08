@@ -49,9 +49,6 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
     const [loading, setLoading] = useState<boolean>(false);
     const [isConfirming, setIsConfirming] = useState<boolean>(false);
 
-    //buy token balance after transaction to attach to message
-    const [userBalance, setUserBalance] = useState<string | null>(null);
-
     // buy token image for our confetti
     const buyTokenImage = tokensByChain(tokenList, Number(chainId)).find(
         (token) => token.address.toLowerCase() === quote.buyToken.toLowerCase()
@@ -198,21 +195,6 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
             setLoading(false)
             try {
                 if(buyTokenObject !== undefined && buyTokenObject !== null){
-                    // Check if the token is ETH (native token)
-                    if (buyTokenObject?.symbol.toLowerCase() === 'eth' || buyTokenObject?.address === null) {
-                        // Fetch native ETH balance
-                        const balance = await provider.getBalance(account);
-                        setUserBalance(balance.toString());
-                    } else {
-                        // Fetch ERC-20 token balance
-                        const token = new ethers.Contract(
-                            buyTokenObject?.address,
-                            ERC20Faucet.abi,
-                            signer
-                        );
-                        const tokenBalance = await token.balanceOf(account);
-                        setUserBalance(tokenBalance.toString());
-                    }
                     if(txMessage !== null){
                         toast({
                             title: "Transaction Confirmed!",
@@ -236,6 +218,20 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                         })
                     }
                     if(isBroadcasting === true){
+                        let userBalance = null;
+                        // Check if the token is ETH (native token)
+                        if (buyTokenObject?.symbol.toLowerCase() === 'eth' || buyTokenObject?.address === null) {
+                            // Fetch native ETH balance
+                            userBalance = await provider.getBalance(account);
+                        } else {
+                            // Fetch ERC-20 token balance
+                            const token = new ethers.Contract(
+                                buyTokenObject?.address,
+                                ERC20Faucet.abi,
+                                signer
+                            );
+                            userBalance = await token.balanceOf(account);
+                        }
                         await sendMessage(userBalance || "0");
                     }
                     confetti({
