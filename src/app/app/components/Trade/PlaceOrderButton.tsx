@@ -219,10 +219,12 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                     }
                     if(isBroadcasting === true){
                         let userBalance = null;
+                        console.log(buyTokenObject)
                         // Check if the token is ETH (native token)
                         if (buyTokenObject?.symbol.toLowerCase() === 'eth' || buyTokenObject?.address === null) {
                             // Fetch native ETH balance
                             userBalance = await provider.getBalance(account);
+                            console.log('ETH Balance:', userBalance.toString());
                         } else {
                             // Fetch ERC-20 token balance
                             const token = new ethers.Contract(
@@ -231,31 +233,34 @@ const PlaceOrderButton:React.FC<IPlaceOrderButton> = ({
                                 signer
                             );
                             userBalance = await token.balanceOf(account);
+                            console.log('ERC-20 Token Balance:', userBalance.toString());
                         }
                         await sendMessage(userBalance || "0");
                     }
-                    confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 1 },
-                        shapes: ["image"],
-                        scalar: 6, 
-                        disableForReducedMotion: true,
-                        shapeOptions: {
-                            image: [
-                                {
-                                    src: "Apes.svg",
-                                    width: 32, 
-                                    height: 32, 
-                                },
-                                {
-                                    src: buyTokenImage,
-                                    width: 32, 
-                                    height: 32, 
-                                },
-                            ]
-                        }
-                    });
+                    if(txMessage === null){
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 1 },
+                            shapes: ["image"],
+                            scalar: 6, 
+                            disableForReducedMotion: true,
+                            shapeOptions: {
+                                image: [
+                                    {
+                                        src: "Apes.svg",
+                                        width: 32, 
+                                        height: 32, 
+                                    },
+                                    {
+                                        src: buyTokenImage,
+                                        width: 32, 
+                                        height: 32, 
+                                    },
+                                ]
+                            }
+                        });
+                    }
                 }
             } catch (error) {
                 console.error('Error in finally block:', error);
