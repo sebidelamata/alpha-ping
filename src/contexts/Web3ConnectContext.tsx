@@ -29,7 +29,9 @@ export const modal = createAppKit({
   metadata: metadata,
   projectId: projectId,
   features: {
-      analytics: true
+      analytics: true,
+      email: false,
+      socials: []
       },
   themeMode: 'dark',
   themeVariables: {
