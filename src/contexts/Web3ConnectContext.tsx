@@ -25,13 +25,13 @@ const metadata = {
 // 4. Create a AppKit instance
 export const modal = createAppKit({
   adapters: [ethersAdapter],
-  networks,
-  defaultNetwork: networks[0],
-  metadata,
-  projectId,
+  networks: networks,
+  metadata: metadata,
+  projectId: projectId,
   features: {
-      analytics: true // Optional - defaults to your Cloud configuration
+      analytics: true
       },
+  themeMode: 'dark',
   themeVariables: {
     '--w3m-color-mix': 'rgb(188, 146, 222, 0.8)',
     '--w3m-color-mix-strength': 30,
