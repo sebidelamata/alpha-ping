@@ -37,6 +37,7 @@ import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
 import averageScores from "src/lib/averageScores";
 import weightTimeseries from "src/lib/weightTimeseries";
+import NewUserNoChannels from "../Channels/NewUserNoChannels";
 
 const Analyze:React.FC = () => {
 
@@ -292,6 +293,10 @@ const Analyze:React.FC = () => {
             <CardContent
                 className='flex flex-row flex-wrap h-full w-full overflow-y-auto'
             >
+                {
+                    currentChannel === null &&
+                    <NewUserNoChannels/>
+                }
                 <ChannelScoreDial  
                     currentChannelMessagesScore={currentChannelMessagesScore}
                 />

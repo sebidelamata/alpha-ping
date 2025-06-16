@@ -24,6 +24,7 @@ import {
   import {
     Dialog,
     DialogContent,
+    DialogTitle,
     DialogTrigger,
   } from "@/components/components/ui/dialog"
   import { Button } from "@/components/components/ui/button.tsx";
@@ -75,13 +76,17 @@ const SearchChannels: React.FC = () => {
                     variant="ghost"
                     role="combobox"
                     aria-expanded={openSearch === true ? "true" : "false"}
-                    className="flex flex-row gap-24 justify-between h-16"
+                    className="flex flex-row gap-4 justify-between h-16"
                     >
                     <SearchCode size={18}/>
+                    Search Channels
                     <ChevronsUpDown size={18}/>
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
+                    <DialogTitle>
+                        Search Channels
+                    </DialogTitle>
                     <Command className="bg-primary text-secondary">
                         <CommandInput placeholder="Search Token or NFT..." className="h-9" />
                         <CommandList>

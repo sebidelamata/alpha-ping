@@ -24,6 +24,7 @@ import {
   CardFooter
 } from '@/components/components/ui/card';
 import { ScrollArea } from '@/components/components/ui/scroll-area';
+import NewUserNoChannels from '../Channels/NewUserNoChannels';
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -266,6 +267,7 @@ const Messages:React.FC = () => {
           ) &&
           <ScrollArea className='h-full overflow-y-auto w-full'>
             <SkeletonMessageFeed/>
+            <NewUserNoChannels/>
           </ScrollArea>
         }
         {
