@@ -4,7 +4,6 @@ import type { AppKitNetwork } from '@reown/appkit/networks'
 
 // Get projectId from https://cloud.reown.com
 export const projectId = process.env.NEXT_PUBLIC_WALLECTCONNECT_PROJECT_ID
-console.log('Current origin:', window.location.origin);
 
 if (!projectId) {
   throw new Error('Project ID is not defined')

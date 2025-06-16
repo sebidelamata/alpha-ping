@@ -26,6 +26,7 @@ const App:React.FC = () => {
 
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
+  console.log('Current origin:', window.location.origin);
 
   useEffect(() => {
     const findIsMember = async () => {
