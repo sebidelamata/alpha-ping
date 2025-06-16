@@ -8,6 +8,7 @@ import Messages from './components/Messages/Messages'
 import Analyze from './components/Analyze/Analyze';
 // trade
 import Trade from './components/Trade/Trade';
+import Loading from './components/Loading';
 
 // join alpha ping modal
 import JoinAlphaPING from './components/JoinAlphaPING'
@@ -26,6 +27,7 @@ const App:React.FC = () => {
 
   // is this user a member of the app
   const [isMember, setIsMember] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const findIsMember = async () => {
@@ -33,9 +35,16 @@ const App:React.FC = () => {
         console.log("Not ready to check membership:", { signer: !!signer, alphaPING: !!alphaPING, isInitialized });
         return;
       }
-      const isMember = await alphaPING?.isMember(signer)
-      if(isMember){
-        setIsMember(isMember)
+      try{
+        setLoading(true)
+        const isMember = await alphaPING?.isMember(signer)
+          if(isMember){
+          setIsMember(isMember)
+        }
+      } catch (error) {
+        console.error("Error checking membership:", error);
+      } finally{
+        setLoading(false)
       }
     }
     findIsMember()
@@ -50,6 +59,12 @@ const App:React.FC = () => {
       case 'trade':
         return  <Trade/>
     }
+  }
+
+  if(loading === true){
+    return (
+      <Loading/>
+    )
   }
 
   return (
