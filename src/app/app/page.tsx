@@ -61,7 +61,10 @@ const App:React.FC = () => {
     }
   }
 
-  if(loading === true){
+  if(
+    loading === true &&
+    isConnected === true
+  ){
     return (
       <Loading/>
     )
