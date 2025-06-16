@@ -18,7 +18,7 @@ if (!projectId) {
 const metadata = {
   name: 'AlphaPING',
   description: 'Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place',
-  url: 'https://www.alphaping.xyz/', // origin must match your domain & subdomain
+  url: 'https://www.alphaping.xyz',
   icons: ['https://www.alphaping.xyz/Apes.svg']
 }
 
