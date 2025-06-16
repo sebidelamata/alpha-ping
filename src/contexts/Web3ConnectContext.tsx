@@ -15,7 +15,6 @@ if (!projectId) {
 }
 
 // 3. Create a metadata object - optional
-console.log('Current origin:', window.location.origin);
 const metadata = {
   name: 'AlphaPING',
   description: 'Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place',
