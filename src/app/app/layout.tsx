@@ -40,32 +40,32 @@ const Layout = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return(
+      <Web3WalletConnectProvider>
         <ProviderProvider>
-          <Web3WalletConnectProvider>
-            <SocketProvider>
-              <ChannelProvider>
-                <MessagesProvider>
-                  <UserProvider>
-                    <SidebarProvider>
-                        <Navbar/>
-                        <div className="top-24 flex">
-                            <AppSidebar/>
-                            <main>
-                                {
-                                isMobile === true &&
-                                <SidebarTrigger className="fixed top-24"/>
-                                }
-                                {children}
-                            </main>
-                            <Toaster/>
-                        </div>
-                    </SidebarProvider>
-                    </UserProvider>
-                </MessagesProvider>
-              </ChannelProvider>
-            </SocketProvider>
-          </Web3WalletConnectProvider>
+          <SocketProvider>
+            <ChannelProvider>
+              <MessagesProvider>
+                <UserProvider>
+                  <SidebarProvider>
+                      <Navbar/>
+                      <div className="top-24 flex">
+                          <AppSidebar/>
+                          <main>
+                              {
+                              isMobile === true &&
+                              <SidebarTrigger className="fixed top-24"/>
+                              }
+                              {children}
+                          </main>
+                          <Toaster/>
+                      </div>
+                  </SidebarProvider>
+                  </UserProvider>
+              </MessagesProvider>
+            </ChannelProvider>
+          </SocketProvider>
         </ProviderProvider>
+      </Web3WalletConnectProvider>
     )
 }
 

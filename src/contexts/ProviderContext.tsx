@@ -51,21 +51,39 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [alphaPING, setAlphaPING] = useState<AlphaPING | null>(null);
   const [channels, setChannels] = useState<AlphaPING.ChannelStructOutput[]>([]);
   const [hasJoined, setHasJoined] = useState<boolean[]>([]);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     const loadBlockchainData = async () => {
       try {
-        if (!walletProvider) {
-          console.error("No wallet provider found.");
+        // Reset state when disconnected
+        if (!isConnected || !walletProvider) {
+          console.log("Wallet not connected, clearing state");
+          setProvider(null);
+          setChainId(null);
+          setSigner(null);
+          setAlphaPING(null);
+          setChannels([]);
+          setHasJoined([]);
+          setIsInitialized(false);
           return;
         }
 
+        console.log("Wallet connected, initializing blockchain data...");
+        
         const provider = new ethers.BrowserProvider(walletProvider);
         setProvider(provider);
 
         const network = await provider.getNetwork();
         const chainId = network.chainId.toString();
         setChainId(chainId);
+
+        // Check if we have config for this chain
+        if (!(config as BlockChainConfig)[chainId]) {
+          console.error(`No configuration found for chain ID: ${chainId}`);
+          setIsInitialized(false);
+          return;
+        }
 
         const alphaPING = new ethers.Contract(
           (config as BlockChainConfig)[chainId].AlphaPING.address,
@@ -98,17 +116,19 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
 
         setHasJoined(hasJoinedChannel);
+        setIsInitialized(true);
 
         // Listen for account changes
         if (typeof window !== 'undefined') {
           const eth = window.ethereum;
-
           (eth as unknown as ExtendedEip1193Provider)?.on?.('accountsChanged', () => window.location.reload());
         }
 
+        console.log("Blockchain data loaded successfully");
 
       } catch (error) {
         console.error("Error loading blockchain data:", error);
+        setIsInitialized(false);
       }
     };
 
@@ -124,7 +144,8 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       channels,
       setChannels,
       hasJoined,
-      setHasJoined
+      setHasJoined,
+      isInitialized  
     }}>
       {children}
     </ProviderContext.Provider>

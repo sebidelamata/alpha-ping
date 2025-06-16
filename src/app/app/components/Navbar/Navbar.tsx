@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
       </div>
       <SearchChannels/>
       <div className='grid justify-end align-middle' >
-        <w3m-button 
+        <appkit-button 
           size='sm' 
           balance='hide'
         />

@@ -19,7 +19,7 @@ import BlacklistedScreen from './components/BlacklistedScreen';
 
 const App:React.FC = () => {
 
-  const { alphaPING, signer } = useEtherProviderContext()
+  const { alphaPING, signer, isInitialized } = useEtherProviderContext()
   const { blacklisted } = useUserProviderContext()
   const { isConnected } = useAppKitAccount()
   const { channelAction } = useChannelProviderContext()
@@ -29,15 +29,17 @@ const App:React.FC = () => {
 
   useEffect(() => {
     const findIsMember = async () => {
-      if(signer){
-        const isMember = await alphaPING?.isMember(signer)
-        if(isMember){
-          setIsMember(isMember)
-        }
+       if (!signer || !alphaPING || !isInitialized) {
+        console.log("Not ready to check membership:", { signer: !!signer, alphaPING: !!alphaPING, isInitialized });
+        return;
+      }
+      const isMember = await alphaPING?.isMember(signer)
+      if(isMember){
+        setIsMember(isMember)
       }
     }
     findIsMember()
-  }, [signer, isConnected, alphaPING])
+  }, [signer, isConnected, alphaPING, isInitialized])
 
   const renderChannelAction = () => {
     switch(channelAction){

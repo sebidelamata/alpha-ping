@@ -145,10 +145,7 @@ const JoinAlphaPING:React.FC<JoinAlphaPINGProps> = ({
                                     Join
                                 </Button>
                             ) : (
-                                <w3m-button 
-                                    balance='hide'
-                                    label="Connect to Join"
-                                />
+                                <appkit-button/>
                             )
 
                         }
