@@ -7,7 +7,7 @@ import {
   ethersAdapter, 
   projectId, 
   networks 
-} from 'src/app/config'
+} from '../app/config'
 import { createAppKit } from '@reown/appkit/react'
 
 if (!projectId) {
