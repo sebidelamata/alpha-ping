@@ -38,17 +38,25 @@ import weightChannelMessages from "src/lib/weightChannelMessages";
 import averageScores from "src/lib/averageScores";
 import weightTimeseries from "src/lib/weightTimeseries";
 import NewUserNoChannels from "../Channels/NewUserNoChannels";
+import { mockMessages } from "mocks/mockMessages";
+import { Switch } from "@/components/components/ui/switch";
+import { Label } from "@/components/components/ui/label";
 
 const Analyze:React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
     const {messages, authorCurrentTokenBalances} = useMessagesProviderContext()
 
+    // filter for follows and blocks
+    const [followsFilter, setFollowsFilter] = useState<boolean>(false)
+    const [blocksFilter, setBlockssFilter] = useState<boolean>(true)
+
     // filter for date range before weighting
+    // toggle mock messages here
     const [timeRange, setTimeRange] = useState<TimeFrame>("all")
     const timeFilteredData = useMemo(() => {
-        return messages !== null ?
-        timeFilterMessages(messages, timeRange) : 
+        return mockMessages !== null ?
+        timeFilterMessages(mockMessages, timeRange) : 
         null
     },[messages, timeRange])
 
@@ -227,6 +235,26 @@ const Analyze:React.FC = () => {
                     <CardDescription>
                         Dive into user sentiments, drill down to your follow list.
                     </CardDescription>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                    <div className="flex items-center space-x-2">
+                        <Switch 
+                            id="follows-filter" 
+                            className="data-[state=checked]:bg-accent"
+                            checked={followsFilter} 
+                            onCheckedChange={() => setFollowsFilter(!followsFilter)}
+                        />
+                        <Label htmlFor="follows-filter">Follows</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Switch 
+                            id="blocks-filter" 
+                            className="data-[state=checked]:bg-accent"
+                            checked={blocksFilter} 
+                            onCheckedChange={() => setBlockssFilter(!blocksFilter)}
+                        />
+                        <Label htmlFor="blocks-filter">Blocks</Label>
+                    </div>
                 </div>
                 <div className="flex flex-row justify-start gap-4">
                     <Select 
