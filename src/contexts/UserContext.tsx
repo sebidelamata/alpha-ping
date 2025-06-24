@@ -36,6 +36,8 @@ interface UserProviderType{
     setUserProfilePic: React.Dispatch<React.SetStateAction<string | null>>;
     followFilter: boolean;
     setFollowFilter: React.Dispatch<React.SetStateAction<boolean>>;
+    followingList: string[];
+    blockedList: string[];
 }
 
 interface ErrorType{
@@ -88,6 +90,10 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [userProfilePic, setUserProfilePic] = useState<string | null>(null)
     // is the follow filter on
     const [followFilter, setFollowFilter] = useState(false);
+    // followingLise is the user's list of followed users
+    const [followingList, setFollowingList] = useState<string[]>([])
+    // blocked list similar
+    const [blockedList, setBlockedList] = useState<string[]>([])
 
     // loadstates
     const [userAttributesLoading, setUserAttributesLoading] = useState<boolean>(false)
@@ -171,6 +177,27 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                     }
                 }
 
+                // grab user following list and block list
+                const totalUserCount = (await alphaPING?.totalSupply() || 0).toString()
+                const allUsers = await Promise.all(
+                    Array.from({ length: Number(totalUserCount) }, (_, i) => i + 1)
+                        .map( async (numbah) => {
+                            return alphaPING?.ownerOf(numbah)
+                        }) 
+                )
+                const followingList: string[] = await Promise.all(
+                    allUsers.map((user) => {
+                        return alphaPING?.personalFollowList(account, user || '').toString()
+                    })
+                )
+                setFollowingList(followingList)
+                const blockedList: string[] = await Promise.all(
+                    allUsers.map((user) => {
+                        return alphaPING?.personalBlockList(account, user || '').toString()
+                    })
+                )
+                setBlockedList(blockedList)
+
             }catch(err: unknown){
                 console.error(err as string)
                 setUserAttributesError((err as ErrorType).message)
@@ -220,7 +247,9 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             userProfilePic,
             setUserProfilePic,
             followFilter,
-            setFollowFilter
+            setFollowFilter,
+            followingList,
+            blockedList
         }}>
             {children}
         </UserContext.Provider>

@@ -41,16 +41,28 @@ import NewUserNoChannels from "../Channels/NewUserNoChannels";
 import { mockMessages } from "mocks/mockMessages";
 import { Switch } from "@/components/components/ui/switch";
 import { Label } from "@/components/components/ui/label";
+import { useUserProviderContext } from "src/contexts/UserContext";
 
 const Analyze:React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
     const {messages, authorCurrentTokenBalances} = useMessagesProviderContext()
+    const { account, followingList } = useUserProviderContext()
 
     // filter for follows and blocks
     const [followsFilter, setFollowsFilter] = useState<boolean>(false)
     const [blocksFilter, setBlockssFilter] = useState<boolean>(true)
-
+    const followBlockFilteredMessages = useMemo(() => {
+        return mockMessages !== null ?
+            mockMessages.filter((message) => {
+                return(
+                    message.account.toString() === account.toString() ||
+                    message.account.toString() === '
+                )
+            }:
+            null
+        }
+    , [messages, followsFilter, blocksFilter])
     // filter for date range before weighting
     // toggle mock messages here
     const [timeRange, setTimeRange] = useState<TimeFrame>("all")
