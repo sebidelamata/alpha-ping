@@ -189,7 +189,7 @@ export const mockMessages: Message[] = [{
   {
     "_id":"683a094ee86029cffbdd6698",
     "channel":"8",
-    "account":"0x366bF4C8A1517E2eA6cB5085679742fF92F14B54",
+    "account":"0xc911660EecD0822E4C545c174E7D5438Fb57BF3C",
     "text":"I bought my first GBC back in 2022. Price has definitely fallen a lot (I think it was ~700 USD). I got a second with winnings from the GBC Club trading competition one month and put it up for collateral on DeFrag finance (still there). Still holding my originl, but not much hope in the way of price appreciation",
     "timestamp": new Date("2025-01-24T16:02:09.523Z"),
     "messageTimestampTokenAmount":"1",
