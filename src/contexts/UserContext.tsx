@@ -185,15 +185,23 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                             return alphaPING?.ownerOf(numbah)
                         }) 
                 )
-                const followingList: string[] = await Promise.all(
-                    allUsers.map((user) => {
-                        return alphaPING?.personalFollowList(account, user || '').toString()
+                const followingList: string[] = []
+                await Promise.all(
+                    allUsers.map(async (user) => {
+                        const result = await alphaPING?.personalFollowList(account, user)
+                        if(result.toString() === 'true'){
+                            followingList.push(user.toString())
+                        }
                     })
                 )
                 setFollowingList(followingList)
-                const blockedList: string[] = await Promise.all(
-                    allUsers.map((user) => {
-                        return alphaPING?.personalBlockList(account, user || '').toString()
+                const blockedList: string[] = []
+                await Promise.all(
+                    allUsers.map(async (user) => {
+                        const result = await alphaPING?.personalFollowList(account, user)
+                        if(result.toString() === 'true'){
+                            followingList.push(user.toString())
+                        }
                     })
                 )
                 setBlockedList(blockedList)

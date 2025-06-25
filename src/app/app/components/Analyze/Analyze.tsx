@@ -47,11 +47,16 @@ const Analyze:React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
     const {messages, authorCurrentTokenBalances} = useMessagesProviderContext()
-    const { account, followingList } = useUserProviderContext()
+    const { 
+        account, 
+        followingList, 
+        blockedList 
+    } = useUserProviderContext()
 
     // filter for follows and blocks
     const [followsFilter, setFollowsFilter] = useState<boolean>(false)
     const [blocksFilter, setBlockssFilter] = useState<boolean>(true)
+    console.log(followingList)
     const followBlockFilteredMessages = useMemo(() => {
         return mockMessages !== null ?
             mockMessages.filter((message) => {
