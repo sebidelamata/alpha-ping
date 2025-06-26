@@ -46,7 +46,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
     username,
     profilePic
 }) => {
-console.log("accout ", username)
+
     const { toast } = useToast()
     const { alphaPING, signer } = useEtherProviderContext()
 
