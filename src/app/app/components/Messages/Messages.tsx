@@ -97,10 +97,10 @@ const Messages:React.FC = () => {
           setTokenDecimals(tokenDecimals as number)
         } catch (error) {
           console.warn('Failed to fetch token decimals:', error)
-          setTokenDecimals(null)  // ⬅️ explicitly reset on failure
+          setTokenDecimals(null) 
         }
       } else {
-        setTokenDecimals(null) // ⬅️ also reset if token is null
+        setTokenDecimals(null) 
       }
     }
 

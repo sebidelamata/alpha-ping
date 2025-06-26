@@ -156,7 +156,7 @@ const PfpPopover:React.FC<IPfpPopover> = ({
                         following === false &&
                         <li>
                             <FollowUser 
-                                account={account}
+                                account={message.account}
                                 username={username}
                                 profilePic={profilePic}
                             />
@@ -166,7 +166,7 @@ const PfpPopover:React.FC<IPfpPopover> = ({
                         following === true &&
                         <li>
                             <UnfollowUser 
-                                account={account}
+                                account={message.account}
                                 username={username}
                                 profilePic={profilePic}
                             /> 
@@ -176,7 +176,7 @@ const PfpPopover:React.FC<IPfpPopover> = ({
                         blocked === false &&
                         <li>
                             <BlockUser 
-                                user={account}
+                                user={message.account}
                                 username={username}
                                 profilePic={profilePic}
                             /> 

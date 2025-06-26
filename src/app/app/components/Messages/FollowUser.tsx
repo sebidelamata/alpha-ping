@@ -46,7 +46,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
     username,
     profilePic
 }) => {
-
+console.log("accout ", username)
     const { toast } = useToast()
     const { alphaPING, signer } = useEtherProviderContext()
 
@@ -159,7 +159,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
                                             </span> : 
                                             <span 
                                                 className="text-accent">
-                                                    {account.slice(0,4)}...${account.slice(37,41)}
+                                                    {account.slice(0,4)}...{account.slice(37,42)}
                                             </span>
                                         }
                                         {"?"}
