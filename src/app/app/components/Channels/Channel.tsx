@@ -31,7 +31,12 @@ import {
 } from "@/components/components/ui/accordion"
 import { ScrollArea } from "@/components/components/ui/scroll-area";
 import qs from 'qs';
-  
+import { 
+    ScrollText, 
+    Globe 
+} from "lucide-react";  
+import Link from "next/link";
+import Image from "next/image";
 
 interface IChannel{
     channel: AlphaPING.ChannelStructOutput;
@@ -165,6 +170,7 @@ const Channel:React.FC<IChannel> = ({
             (channel.tokenAddress !== null)
         ){
             fetchTokenMetadata(channel.tokenAddress)
+            console.log(tokenMetada)
         }     
     }, [channel, channel?.tokenAddress, defaultTokenMetadata])
 
@@ -231,66 +237,136 @@ const Channel:React.FC<IChannel> = ({
                     className="flex justify-between space-x-4"
                 >
                     <div className="flex flex-row gap-2">
-                        <Avatar>
-                            <AvatarImage
-                                src={
-                                    tokenMetada.logo !== '' ? 
-                                    tokenMetada.logo : 
-                                    (
-                                        channel.tokenType === 'ERC20' ?
-                                        '/erc20Icon.svg' :
-                                        '/blank_nft.svg'
-                                    )
-                                }
-                                loading="lazy"
-                                alt="AlphaPING Logo"
-                            />
-                            <AvatarFallback>AP</AvatarFallback>
-                        </Avatar>
-                        <h5>{channel.name}</h5>
-                        {
-                            tokenMetada.tags.length > 0 ?
-                            <Accordion type="single" collapsible>
-                                <AccordionItem value="item-1">
-                                    <AccordionTrigger>
-                                        <Badge
-                                            variant="secondary"
-                                        >
-                                            {channel.tokenType}
-                                        </Badge>
-                                    </AccordionTrigger>
-                                    <AccordionContent className="max-h-[10svh] overflow-scroll">
-                                        {
-                                            tokenMetada.tags.length > 0 &&
-                                            <ScrollArea>
-                                                <ul>
+                        <Accordion type="single" collapsible>
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger className="flex items-center justify-start gap-2">
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={
+                                                tokenMetada.logo !== '' ? 
+                                                tokenMetada.logo : 
+                                                (
+                                                    channel.tokenType === 'ERC20' ?
+                                                    '/erc20Icon.svg' :
+                                                    '/blank_nft.svg'
+                                                )
+                                            }
+                                            loading="lazy"
+                                            alt="AlphaPING Logo"
+                                        />
+                                        <AvatarFallback>AP</AvatarFallback>
+                                    </Avatar>
+                                    <h5>{channel.name}</h5>
+                                    <Badge
+                                        variant="secondary"
+                                    >
+                                        {channel.tokenType}
+                                    </Badge>
+                                </AccordionTrigger>
+                                <AccordionContent className="max-h-48 overflow-scroll">
+                                    <ScrollArea>
+                                        <div className="flex flex-col justify-start">
+                                            <ul className="flex flex-row flex-wrap">
+                                                {
+                                                    tokenMetada.urls.technical_doc.length > 0 &&
+                                                    <li>
+                                                        <Badge variant="secondary" className="m-1 items-center">
+                                                            <Link
+                                                                href={tokenMetada.urls.technical_doc[0]}
+                                                                target="_blank"
+                                                                className="flex items-center"
+                                                            >
+                                                                <ScrollText className="h-4 w-4" />
+                                                            </Link>
+                                                        </Badge>
+                                                    </li>
+                                                }
+                                                {
+                                                    tokenMetada.urls.website.length > 0 &&
+                                                    <li>
+                                                        <Badge variant="secondary" className="m-1 items-center">
+                                                            <Link
+                                                                href={tokenMetada.urls.website[0]}
+                                                                target="_blank"
+                                                                className="flex items-center"
+                                                            >
+                                                                <Globe className="h-4 w-4" />
+                                                            </Link>
+                                                        </Badge>
+                                                    </li>
+                                                }
+                                                {
+                                                    tokenMetada.urls.source_code.length > 0 &&
+                                                    <li>
+                                                        <Badge variant="secondary" className="m-1 items-center">
+                                                            <Link
+                                                                href={tokenMetada.urls.source_code[0]}
+                                                                target="_blank"
+                                                                className="flex items-center"
+                                                            >
+                                                                <Image 
+                                                                    src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" 
+                                                                    alt="Github Icon"
+                                                                    loading="lazy"
+                                                                    width={18}
+                                                                    height={18}
+                                                                />
+                                                            </Link>
+                                                        </Badge>
+                                                    </li>
+                                                }
+                                                {
+                                                    tokenMetada.urls.twitter.length > 0 &&
+                                                    <li>
+                                                        <Badge variant="secondary" className="m-1 items-center">
+                                                            <Link
+                                                                href={tokenMetada.urls.twitter[0]}
+                                                                target="_blank"
+                                                                className="flex items-center"
+                                                            >
+                                                                <Image 
+                                                                    src="x.svg" 
+                                                                    alt="X Icon"
+                                                                    loading="lazy"
+                                                                    width={18}
+                                                                    height={18}
+                                                                />
+                                                            </Link>
+                                                        </Badge>
+                                                    </li>
+                                                }
+                                            </ul>
+                                            {
+                                                tokenMetada.description &&
+                                                <p className="text-sm text-secondary flex flex-wrap flex-row">
                                                     {
-                                                        tokenMetada.tags.map((tag, index) => {
-                                                            return(
-                                                                <li key={index}>
-                                                                    <Badge variant="outline" className="m-1 border-accent">
-                                                                        {
-                                                                            tag.length > 20 ?
-                                                                            `${tag.slice(0,20)}...` :
-                                                                            tag
-                                                                        }
-                                                                    </Badge>
-                                                                </li>
-                                                            )
-                                                        })
+                                                        tokenMetada.description
                                                     }
-                                                </ul>
-                                            </ScrollArea>
-                                        }
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion> :
-                            <Badge
-                                variant="secondary"
-                            >
-                                {channel.tokenType}
-                            </Badge>
-                        }
+                                                </p>
+                                            }
+                                            <ul className="flex flex-row flex-wrap">
+                                                {
+                                                    tokenMetada.tags.length > 0 &&
+                                                    tokenMetada.tags.map((tag, index) => {
+                                                        return(
+                                                            <li key={index}>
+                                                                <Badge variant="outline" className="m-1 border-accent">
+                                                                    {
+                                                                        tag.length > 20 ?
+                                                                        `${tag.slice(0,20)}...` :
+                                                                        tag
+                                                                    }
+                                                                </Badge>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
+                                            </ul>
+                                        </div>
+                                    </ScrollArea>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
                 </div>
             </HoverCardContent>
