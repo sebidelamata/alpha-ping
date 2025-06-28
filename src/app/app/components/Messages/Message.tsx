@@ -52,8 +52,6 @@ interface MessageProps {
     bansArrayLoading: boolean;
     userBlacklist: boolean;
     blacklistArrayLoading: boolean;
-    followsArrayLoading: boolean;
-    blocksArrayLoading: boolean;
 }
 
 const Message: React.FC<MessageProps> = ({
@@ -72,8 +70,6 @@ const Message: React.FC<MessageProps> = ({
   bansArrayLoading,
   userBlacklist,
   blacklistArrayLoading,
-  followsArrayLoading,
-  blocksArrayLoading
 }) => {
 
     const { 
@@ -240,11 +236,7 @@ const Message: React.FC<MessageProps> = ({
           </Badge>
         }
         {
-          (
-            blacklistArrayLoading === true ||
-            followsArrayLoading === true ||
-            blocksArrayLoading == true
-          ) &&
+          blacklistArrayLoading === true &&
           <Skeleton className="h-6 w-16 rounded-md" />
         }
         {

@@ -42,14 +42,6 @@ interface Blacklists {
   [account: string]: boolean;
 }
 
-interface Follows {
-  [account: string]: boolean;
-}
-
-interface Blocks {
-  [account: string]: boolean;
-}
-
 interface ErrorType{
   message: string;
 }
@@ -68,7 +60,9 @@ const Messages:React.FC = () => {
     account, 
     txMessageFollow, 
     txMessageBlock, 
-    followFilter 
+    followFilter,
+    followingList,
+    blockedList 
   } = useUserProviderContext()
 
   const [token, setToken] = useState<Contract | null>(null)
@@ -124,10 +118,6 @@ const Messages:React.FC = () => {
   const [bansArrayLoading, setBansArrayLoading] = useState<boolean>(false)
   const [blacklistArray, setBlacklistArray] = useState<Blacklists>({})
   const [blacklistArrayLoading, setBlacklistArrayLoading] = useState<boolean>(false)
-  const [followsArray, setFollowsArray] = useState<Follows>({})
-  const [followsArrayLoading, setFollowsArrayLoading] = useState<boolean>(false)
-  const [blocksArray, setBlocksArray] = useState<Blocks>({})
-  const [blocksArrayLoading, setBlocksArrayLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -184,28 +174,6 @@ const Messages:React.FC = () => {
               })
             )
           setBlacklistArray(blacklistData)
-  
-          // grab all the users you are following
-          setFollowsArrayLoading(true)
-          const followsData: Follows = {}
-          await Promise.all(
-            Array.from(uniqueProfiles).map( async (profile) => {
-              const follow = await alphaPING?.personalFollowList(account, profile) || false
-              followsData[profile] = follow
-            })
-          )
-          setFollowsArray(followsData)
-  
-          // grab all the users you have blocked
-          setBlocksArrayLoading(true)
-          const blocksData: Blocks = {}
-          await Promise.all(
-            Array.from(uniqueProfiles).map( async (profile) => {
-              const follow = await alphaPING?.personalBlockList(account, profile) || false
-              blocksData[profile] = follow
-            })
-          )
-          setBlocksArray(blocksData)
         }
       }catch(error){
         setError((error as ErrorType).message)
@@ -213,8 +181,6 @@ const Messages:React.FC = () => {
         setUsernameArrayLoading(false)
         setBansArrayLoading(false)
         setBlacklistArrayLoading(false)
-        setFollowsArrayLoading(false)
-        setBlocksArrayLoading(false)
       }
     }
     if (currentChannel) {
@@ -295,13 +261,11 @@ const Messages:React.FC = () => {
                       username={usernameArray[message.account]}
                       usernameArrayLoading={usernameArrayLoading}
                       userBan={bansArray[message.account]}
-                      following={followsArray[message.account]}
-                      blocked={blocksArray[message.account]}
+                      blocked={blockedList.includes(message.account)}
+                      following={followingList.includes(message.account)}
                       bansArrayLoading={bansArrayLoading}
                       userBlacklist={blacklistArray[message.account]}
                       blacklistArrayLoading={blacklistArrayLoading}
-                      followsArrayLoading={followsArrayLoading}
-                      blocksArrayLoading={blocksArrayLoading}
                     />
                 ))
               }
@@ -313,7 +277,7 @@ const Messages:React.FC = () => {
           followFilter === true &&
           // if length of messages from follow array is > 0 we will display
           messages
-            .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+            .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account)) || message.account === account))
             .length === 0 &&
           <ScrollArea className='h-full overflow-y-auto w-full'>
             <SkeletonMessageFeed/>
@@ -324,13 +288,13 @@ const Messages:React.FC = () => {
           followFilter === true &&
           // if length of messages from follow array is > 0 we will display
           messages
-            .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+            .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
             .length > 0 &&
           <ScrollArea className='h-full overflow-y-auto w-full'>
             <ul>
               {
                 messages
-                  .filter(message => (message.channel === currentChannel.id.toString() && followsArray[message.account] === true))
+                  .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
                   .map((message, index) => (
                     <Message
                       key={message._id}
@@ -349,13 +313,11 @@ const Messages:React.FC = () => {
                       username={usernameArray[message.account]}
                       usernameArrayLoading={usernameArrayLoading}
                       userBan={bansArray[message.account]}
-                      following={followsArray[message.account]}
-                      blocked={blocksArray[message.account]}
+                      blocked={blockedList.includes(message.account)}
+                      following={followingList.includes(message.account)}
                       bansArrayLoading={bansArrayLoading}
                       userBlacklist={blacklistArray[message.account]}
                       blacklistArrayLoading={blacklistArrayLoading}
-                      followsArrayLoading={followsArrayLoading}
-                      blocksArrayLoading={blocksArrayLoading}
                     />
                 ))
               }
