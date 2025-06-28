@@ -1,6 +1,7 @@
 'use client';
 
 import React, {
+    useEffect,
     useState
 } from "react";
 import { Button } from "@/components/components/ui/button";
@@ -43,13 +44,47 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     disabled,
     price,
   }) => {
+    
+    console.log(price)
 
     const { toast } = useToast()
     const { signer } = useEtherProviderContext()
-
-    // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
+    
     const [loading, setLoading] = useState<boolean>(false)
     const [txMessage, setTxMessage] = useState<string | null>(null)
+    const [tokenAllowance, setTokenAllowance] = useState<string>("0")
+    useEffect(() => {
+        const tokenContract = new ethers.Contract(
+            sellTokenAddress,
+            ERC20Faucet.abi,
+            signer
+        )
+        const fetchAllowance = async (spender: string) => {
+        if (!signer || !sellTokenAddress) {
+            console.error("Signer or sellTokenAddress is not available");
+            return null;
+        }
+        try {
+            const allowance = await tokenContract.allowance(
+                await signer.getAddress(),
+                spender
+            );
+            setTokenAllowance(allowance.toString());
+            return;
+        } catch (error) {
+            console.error("Error fetching allowance:", error);
+            return null;
+        }
+    }
+        // Fetch the allowance when the component mounts or when sellTokenAddress changes
+        if (price?.issues?.allowance?.spender) {
+            fetchAllowance(price.issues.allowance.spender);
+        } else {
+            console.warn("No spender address available in price issues allowance");
+        }
+    }, [signer, sellTokenAddress, price?.issues?.allowance?.spender, txMessage]);
+
+    // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const handleApprove = async () => {
         if (!signer || !sellTokenAddress || !price?.issues?.allowance?.spender) {
             console.error("Signer or sellTokenAddress is not available");
@@ -170,7 +205,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
         return (
             <div className="flex flex-col w-full">
                 {
-                    BigInt(price?.issues.allowance.actual || 0) < parsedSellAmount && (
+                    BigInt(tokenAllowance || 0) < parsedSellAmount ? (
                         <Button
                             variant="secondary"
                             onClick={handleApprove}
@@ -197,7 +232,23 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                                 }
                             </div>
                         </Button>
-                    ) 
+                    ) : (
+                         <Button
+                            variant="secondary"
+                            className="w-full"
+                            disabled={disabled}
+                            onClick={() => {
+                            // fetch data, when finished, show quote view
+                            onClick();
+                            }}
+                        >
+                            {
+                                disabled ? 
+                                "Insufficient Balance" : 
+                                "Review Trade"
+                            }
+                        </Button>
+                    )
                 }
             </div>
         );
