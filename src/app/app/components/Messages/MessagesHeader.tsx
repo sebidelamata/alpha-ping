@@ -9,6 +9,7 @@ import { CardTitle } from "@/components/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/components/ui/avatar";
 import qs from "qs";
 import { Skeleton } from "@/components/components/ui/skeleton";
+import { Badge } from "@/components/components/ui/badge";
 
 const MessagesHeader: React.FC = () => {
 
@@ -23,6 +24,7 @@ console.log(selectedChannelMetadata)
     // get latest quote in USD
         const [tokenUSDPrice, setTokenUSDPrice] = useState<string>("");
         const [twentyFourHourChange, setTwentyFourHourChange] = useState<string>("");
+        const [marketCap, setMarketCap] = useState<string>("");
         const [loading, setLoading] = useState<boolean>(false);
         const [cmcError, setCmcError] = useState<string | null>(null);
         useEffect(() => {
@@ -30,6 +32,7 @@ console.log(selectedChannelMetadata)
                 setLoading(true)
                 setTokenUSDPrice("");
                 setTwentyFourHourChange("");
+                setMarketCap("");
                 setCmcError("No token symbol available for price fetch");
                 setLoading(false);
                 return;
@@ -67,6 +70,8 @@ console.log(selectedChannelMetadata)
                     setTokenUSDPrice(usdPrice.toString());
                     const change24h = tokenDataArray[0].quote.USD.percent_change_24h
                     setTwentyFourHourChange(change24h.toString());
+                    const marketCapValue = tokenDataArray[0].quote.USD.market_cap
+                    setMarketCap(marketCapValue.toString());
                 } catch (error) {
                     setCmcError("An error occurred while fetching the token price: " + error);
                 }finally{
@@ -151,6 +156,25 @@ console.log(selectedChannelMetadata)
                         <Skeleton className="w-24 h-6" />
                     }
                 </div>
+            }
+            {
+                marketCap !== "" &&
+                <Badge variant={"secondary"}>
+                    {
+                        loading === false ?
+                        // if its is less than a dollar extend to 6 decimal places, 
+                        // less thann a penny 10
+                        `Market Cap $${
+                            Number(marketCap).toLocaleString('en-US', {
+                                minimumFractionDigits: Number(marketCap) <= 0.01 ? 10 : 
+                                                    Number(marketCap) <= 1 ? 6 : 2,
+                                maximumFractionDigits: Number(marketCap) <= 0.01 ? 10 : 
+                                                    Number(marketCap) <= 1 ? 6 : 2
+                            })
+                        }` :
+                        <Skeleton className="w-24 h-6" />
+                    }
+                </Badge>
             }
         </CardTitle>
     );

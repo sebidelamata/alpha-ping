@@ -107,6 +107,7 @@ interface CMCQuoteUSD {
         USD: {
             price: number;
             percent_change_24h: number;
+            market_cap: number;
         };
     }
 }
