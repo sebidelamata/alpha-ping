@@ -27,8 +27,11 @@ console.log(selectedChannelMetadata)
         const [cmcError, setCmcError] = useState<string | null>(null);
         useEffect(() => {
             if (!selectedChannelMetadata || !selectedChannelMetadata.slug) {
+                setLoading(true)
                 setTokenUSDPrice("");
+                setTwentyFourHourChange("");
                 setCmcError("No token symbol available for price fetch");
+                setLoading(false);
                 return;
             }
             const params = {
