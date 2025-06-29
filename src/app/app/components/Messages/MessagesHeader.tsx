@@ -78,12 +78,6 @@ const MessagesHeader: React.FC = () => {
         <CardTitle className="flex flex-row flex-wrap w-full bg-primary text-secondary gap-4 items-center justify-start p-4">
             {
                 currentChannel &&
-                <div className="text-3xl">
-                    {currentChannel.name}
-                </div>
-            }
-            {
-                currentChannel &&
                 selectedChannelMetadata &&
                 <div className="flex flex-row gap-2">
                     <Avatar className="size-8">
@@ -105,8 +99,14 @@ const MessagesHeader: React.FC = () => {
                 </div>
             }
             {
+                currentChannel &&
+                <div className="text-3xl">
+                    {currentChannel.name}
+                </div>
+            }
+            {
                 tokenUSDPrice !== "" &&
-                <div>
+                <div className="text-3xl text-secondary">
                     {
                         loading === false ?
                         // if its is less than a dollar extend to 6 decimal places, 
