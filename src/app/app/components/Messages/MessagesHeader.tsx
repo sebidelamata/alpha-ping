@@ -18,18 +18,21 @@ const MessagesHeader: React.FC = () => {
     console.log('MessagesHeader re-rendered, selectedChannelMetadata changed:', selectedChannelMetadata);
 }, [selectedChannelMetadata]);
 
+console.log(selectedChannelMetadata)
+
     // get latest quote in USD
         const [tokenUSDPrice, setTokenUSDPrice] = useState<string>("");
+        const [twentyFourHourChange, setTwentyFourHourChange] = useState<string>("");
         const [loading, setLoading] = useState<boolean>(false);
         const [cmcError, setCmcError] = useState<string | null>(null);
         useEffect(() => {
-            if (!selectedChannelMetadata || !selectedChannelMetadata.symbol) {
+            if (!selectedChannelMetadata || !selectedChannelMetadata.slug) {
                 setTokenUSDPrice("");
                 setCmcError("No token symbol available for price fetch");
                 return;
             }
             const params = {
-                symbol: selectedChannelMetadata?.symbol,
+                slug: selectedChannelMetadata?.slug,
             }
             async function main() {
                 try{
@@ -51,14 +54,16 @@ const MessagesHeader: React.FC = () => {
                         setTokenUSDPrice("");
                     }
                     // Get the first token's data dynamically
-                    const tokenDataArray = Object.values(data.data)[0] as CMCQuoteUSD[];
-                    if (!tokenDataArray?.length || !tokenDataArray[0]?.quote?.USD?.price) {
+                    const tokenDataArray = Object.values(data.data) as CMCQuoteUSD[];
+                    console.log('tokenDataArray:', tokenDataArray);
+                    if (!tokenDataArray?.length || !tokenDataArray?.[0].quote?.USD?.price) {
                         setCmcError("USD price not found in response");
                         setTokenUSDPrice("");
                     }
                     const usdPrice = tokenDataArray[0].quote.USD.price;
-                    console.log('USD Price:', usdPrice);
                     setTokenUSDPrice(usdPrice.toString());
+                    const change24h = tokenDataArray[0].quote.USD.percent_change_24h
+                    setTwentyFourHourChange(change24h.toString());
                 } catch (error) {
                     setCmcError("An error occurred while fetching the token price: " + error);
                 }finally{
@@ -119,6 +124,25 @@ const MessagesHeader: React.FC = () => {
                                                     Number(tokenUSDPrice) <= 1 ? 6 : 2
                             })
                         }` :
+                        <Skeleton className="w-24 h-6" />
+                    }
+                </div>
+            }
+            {
+                twentyFourHourChange !== "" &&
+                <div className={
+                        Number(twentyFourHourChange) < 0 ? 
+                        `text-xl text-red-500` :
+                        `text-xl text-green-500`
+                    }
+                >
+                    {
+                        loading === false ?
+                        // if its is less than a dollar extend to 6 decimal places, 
+                        // less thann a penny 10
+                        `${
+                            Number(twentyFourHourChange).toFixed(2)
+                        }% (24h)` :
                         <Skeleton className="w-24 h-6" />
                     }
                 </div>

@@ -106,6 +106,7 @@ interface CMCQuoteUSD {
     quote: {
         USD: {
             price: number;
+            percent_change_24h: number;
         };
     }
 }
