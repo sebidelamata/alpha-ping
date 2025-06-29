@@ -77,8 +77,10 @@ const App:React.FC = () => {
           isMember === true &&
           isConnected === true
         ) &&
-        <div className='flex flex-row w-[100%] gap-1 relative top-24'>
-          {renderChannelAction()}
+        <div className='flex flex-row w-full h-screen pt-24 overflow-hidden'>
+          <div className='flex-1 h-full'>
+            {renderChannelAction()}
+          </div>
         </div>
       }
       {

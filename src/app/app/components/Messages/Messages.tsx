@@ -21,10 +21,12 @@ import { useMessagesProviderContext } from '../../../../contexts/MessagesContext
 import { 
   Card, 
   CardContent,
-  CardFooter
+  CardFooter,
+  CardHeader
 } from '@/components/components/ui/card';
 import { ScrollArea } from '@/components/components/ui/scroll-area';
 import NewUserNoChannels from '../Channels/NewUserNoChannels';
+import MessagesHeader from './MessagesHeader';
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -200,140 +202,165 @@ const Messages:React.FC = () => {
   // scroll to end
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
-
   const scrollHandler = () => {
     setTimeout(() => {
         if(messageEndRef.current){
             (messageEndRef.current as HTMLDivElement)?.scrollIntoView({ behavior: 'smooth' })
         }
-    }, 500)
+    }, 100)
   }
 
+  // Scroll on mount
   useEffect(() => {
     scrollHandler()
   }, [])
 
+  // Scroll when messages change or channel
+  useEffect(() => {
+    if (messages && currentChannel) {
+      scrollHandler()
+    }
+  }, [messages, currentChannel])
+
+  // Scroll when metadata loading completes
+  useEffect(() => {
+    if (!usernameArrayLoading && !bansArrayLoading && !blacklistArrayLoading) {
+      scrollHandler()
+    }
+  }, [usernameArrayLoading, bansArrayLoading, blacklistArrayLoading])
+
   return (
     <Card 
-      className="flex flex-col w-full h-full bg-primary text-secondary overflow-clip"
+      className="flex flex-col w-full h-full bg-primary text-secondary"
       onWheel={(e) => {
         e.stopPropagation(); 
       }}
     >
-      <CardContent className='flex-1 h-full w-full'>
-        { 
-          (
-            messages === undefined || 
-            messages === null || 
-            messages.length === 0 ||
-            currentChannel === null ||
+      <CardHeader className="flex flex-col items-start justify-start p-4">
+        <MessagesHeader/>
+      </CardHeader>
+      <CardContent className='flex-1 flex flex-col overflow-hidden p-0'>
+        <div className="flex-1 overflow-hidden">
+          { 
+            (
+              messages === undefined || 
+              messages === null || 
+              messages.length === 0 ||
+              currentChannel === null ||
+              messages
+                .filter(message => message.channel === currentChannel.id.toString())
+                .length === 0
+            ) &&
+            <ScrollArea className='h-full overflow-y-auto w-full p-4'>
+              <SkeletonMessageFeed/>
+              <NewUserNoChannels/>
+              <div ref={messageEndRef} />
+            </ScrollArea>
+          }
+          {
+            currentChannel && 
+            followFilter === false &&
             messages
               .filter(message => message.channel === currentChannel.id.toString())
-              .length === 0
-          ) &&
-          <ScrollArea className='h-full overflow-y-auto w-full'>
-            <SkeletonMessageFeed/>
-            <NewUserNoChannels/>
-          </ScrollArea>
-        }
-        {
-          currentChannel && 
-          followFilter === false &&
-          <ScrollArea className='h-full overflow-y-auto w-[100%]'>
-            <ul>
-              {
-                messages
-                  .filter(message => message.channel === currentChannel.id.toString())
-                  .map((message, index) => (
-                    <Message
-                      key={message._id}
-                      message={message}
-                      index={index}
-                      tokenDecimals={tokenDecimals}
-                      tokenAddress={currentChannel?.tokenAddress}
-                      setReplyId={setReplyId}
-                      reply={
-                        message.replyId !== null && message.replyId ? 
-                        messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
-                        null
-                      }
-                      profilePic={profilePics[message.account]}
-                      username={usernameArray[message.account]}
-                      usernameArrayLoading={usernameArrayLoading}
-                      userBan={bansArray[message.account]}
-                      blocked={blockedList.includes(message.account)}
-                      following={followingList.includes(message.account)}
-                      bansArrayLoading={bansArrayLoading}
-                      userBlacklist={blacklistArray[message.account]}
-                      blacklistArrayLoading={blacklistArrayLoading}
-                    />
-                ))
-              }
-            </ul>
-          </ScrollArea>
-        }
-        {
-          currentChannel && 
-          followFilter === true &&
-          // if length of messages from follow array is > 0 we will display
-          messages
-            .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account)) || message.account === account))
-            .length === 0 &&
-          <ScrollArea className='h-full overflow-y-auto w-full'>
-            <SkeletonMessageFeed/>
-          </ScrollArea>
-        }
-        {
-          currentChannel && 
-          followFilter === true &&
-          // if length of messages from follow array is > 0 we will display
-          messages
-            .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
-            .length > 0 &&
-          <ScrollArea className='h-full overflow-y-auto w-full'>
-            <ul>
-              {
-                messages
-                  .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
-                  .map((message, index) => (
-                    <Message
-                      key={message._id}
-                      message={message}
-                      index={index}
-                      tokenDecimals={tokenDecimals}
-                      tokenAddress={currentChannel?.tokenAddress}
-                      setReplyId={setReplyId}
-                      reply={
-                        message.replyId !== null && message.replyId ? 
-                        // swp this
-                        messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
-                        null
-                      }
-                      profilePic={profilePics[message.account]}
-                      username={usernameArray[message.account]}
-                      usernameArrayLoading={usernameArrayLoading}
-                      userBan={bansArray[message.account]}
-                      blocked={blockedList.includes(message.account)}
-                      following={followingList.includes(message.account)}
-                      bansArrayLoading={bansArrayLoading}
-                      userBlacklist={blacklistArray[message.account]}
-                      blacklistArrayLoading={blacklistArrayLoading}
-                    />
-                ))
-              }
-            </ul>
-          </ScrollArea>
-        }
-        <div ref={messageEndRef} />
-        { error !== null && <p>{error}</p>}
-          <CardFooter className="sticky bottom-0 bg-primary py-3 w-full h-full">
-            <SubmitMessage
-              userBalance={userBalance}
-              replyId={replyId}
-              setReplyId={setReplyId}
-            />
-        </CardFooter>
+              .length > 0 &&
+            <ScrollArea className='h-full overflow-y-auto w-full p-4'>
+              <ul className="space-y-2">
+                {
+                  messages
+                    .filter(message => message.channel === currentChannel.id.toString())
+                    .map((message, index) => (
+                      <Message
+                        key={message._id}
+                        message={message}
+                        index={index}
+                        tokenDecimals={tokenDecimals}
+                        tokenAddress={currentChannel?.tokenAddress}
+                        setReplyId={setReplyId}
+                        reply={
+                          message.replyId !== null && message.replyId ? 
+                          messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                          null
+                        }
+                        profilePic={profilePics[message.account]}
+                        username={usernameArray[message.account]}
+                        usernameArrayLoading={usernameArrayLoading}
+                        userBan={bansArray[message.account]}
+                        blocked={blockedList.includes(message.account)}
+                        following={followingList.includes(message.account)}
+                        bansArrayLoading={bansArrayLoading}
+                        userBlacklist={blacklistArray[message.account]}
+                        blacklistArrayLoading={blacklistArrayLoading}
+                      />
+                  ))
+                }
+              </ul>
+              <div ref={messageEndRef} />
+            </ScrollArea>
+          }
+          {
+            currentChannel && 
+            followFilter === true &&
+            // if length of messages from follow array is > 0 we will display
+            messages
+              .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account)) || message.account === account))
+              .length === 0 &&
+            <ScrollArea className='h-full overflow-y-auto w-full p-4'>
+              <SkeletonMessageFeed/>
+              <div ref={messageEndRef} />
+            </ScrollArea>
+          }
+          {
+            currentChannel && 
+            followFilter === true &&
+            // if length of messages from follow array is > 0 we will display
+            messages
+              .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
+              .length > 0 &&
+            <ScrollArea className='h-full overflow-y-auto w-full p-4'>
+              <ul className="space-y-2">
+                {
+                  messages
+                    .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
+                    .map((message, index) => (
+                      <Message
+                        key={message._id}
+                        message={message}
+                        index={index}
+                        tokenDecimals={tokenDecimals}
+                        tokenAddress={currentChannel?.tokenAddress}
+                        setReplyId={setReplyId}
+                        reply={
+                          message.replyId !== null && message.replyId ? 
+                          // swp this
+                          messages.find((targetMessage) => { return targetMessage._id === message.replyId }) || null :
+                          null
+                        }
+                        profilePic={profilePics[message.account]}
+                        username={usernameArray[message.account]}
+                        usernameArrayLoading={usernameArrayLoading}
+                        userBan={bansArray[message.account]}
+                        blocked={blockedList.includes(message.account)}
+                        following={followingList.includes(message.account)}
+                        bansArrayLoading={bansArrayLoading}
+                        userBlacklist={blacklistArray[message.account]}
+                        blacklistArrayLoading={blacklistArrayLoading}
+                      />
+                  ))
+                }
+              </ul>
+              <div ref={messageEndRef} />
+            </ScrollArea>
+          }
+        </div>
+        { error !== null && <p className="p-4">{error}</p>}
       </CardContent>
+      <CardFooter className="sticky bottom-0 bg-primary py-3 w-full border-t">
+        <SubmitMessage
+          userBalance={userBalance}
+          replyId={replyId}
+          setReplyId={setReplyId}
+        />
+      </CardFooter>
     </Card>
   );
 }
