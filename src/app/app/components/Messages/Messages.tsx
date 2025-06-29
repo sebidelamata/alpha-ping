@@ -99,9 +99,11 @@ const Messages:React.FC = () => {
         setTokenDecimals(null) 
       }
     }
-
-    fetchTokenDecimals()
-  }, [token])
+    // only grab decimals if it is a erc20
+    if(currentChannel?.tokenType.toLowerCase() === 'erc20' && currentChannel?.tokenAddress !== undefined){
+      fetchTokenDecimals()
+    }
+  }, [token, currentChannel])
 
   useEffect(() => {
     const getUserBalance = async () => {

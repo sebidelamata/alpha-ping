@@ -40,10 +40,10 @@ interface ErrorType{
 interface LeaveConnectProps{
     isHovered: boolean;
     channel: AlphaPING.ChannelStructOutput;
-    tokenMetada: tokenMetadata;
+    tokenMetadata: tokenMetadata;
 }
 
-const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channel, tokenMetada }) => {
+const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channel, tokenMetadata }) => {
 
     const { setCurrentChannel } = useChannelProviderContext()
     const { 
@@ -155,11 +155,11 @@ const LeaveChannel:React.FC<LeaveConnectProps> = ({ isHovered, channel, tokenMet
                                             <AvatarImage 
                                                 src={
                                                     (
-                                                        tokenMetada.logo !== '' && 
-                                                        tokenMetada.logo !== undefined && 
-                                                        tokenMetada.logo !== null
+                                                        tokenMetadata.logo !== '' && 
+                                                        tokenMetadata.logo !== undefined && 
+                                                        tokenMetadata.logo !== null
                                                     ) ? 
-                                                    tokenMetada.logo : 
+                                                    tokenMetadata.logo : 
                                                     (
                                                         channel.tokenType === 'ERC20' ?
                                                         '/erc20Icon.svg' :

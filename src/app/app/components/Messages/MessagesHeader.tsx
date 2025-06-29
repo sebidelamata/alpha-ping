@@ -12,6 +12,10 @@ import qs from "qs";
 const MessagesHeader: React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext();
+    
+    useEffect(() => {
+    console.log('MessagesHeader re-rendered, selectedChannelMetadata changed:', selectedChannelMetadata);
+}, [selectedChannelMetadata]);
 
     // get latest quote in USD
         const [tokenUSDPrice, setTokenUSDPrice] = useState<string>("");
@@ -24,14 +28,14 @@ const MessagesHeader: React.FC = () => {
                 try{
                     const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
                     // check response
-                    if(response.status !== 200) {
+                    if(!response.ok){
                         setCmcError("Failed to fetch token price from CoinMarketCap");
                     }
                     const data = await response.json();
+                    console.log('CMC API Response:', data);
                     // check data structure
                     if(
-                        response.status === 200 && 
-                        (!data?.data || typeof data.data !== 'object')
+                        !data?.data || typeof data.data !== 'object'
                     ){
                         setCmcError('Invalid response structure from API')
                     }
@@ -84,6 +88,14 @@ const MessagesHeader: React.FC = () => {
                         />
                         <AvatarFallback>AP</AvatarFallback>
                     </Avatar>
+                </div>
+            }
+            {
+                tokenUSDPrice !== "" &&
+                <div>
+                    {
+                        `$${parseFloat(tokenUSDPrice).toFixed(2).toLocaleString()}`
+                    }
                 </div>
             }
         </CardTitle>

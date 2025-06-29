@@ -104,7 +104,7 @@ const Channel:React.FC<IChannel> = ({
       }), 
       []
     );
-    const [tokenMetada, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
+    const [tokenMetadata, setTokenMetaData] = useState<tokenMetadata>(defaultTokenMetadata)
     const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
     
     // handles clicking on channel names from channels list
@@ -118,12 +118,14 @@ const Channel:React.FC<IChannel> = ({
   
       if (hasJoined === true) {
         setCurrentChannel(channel)
+        setSelectedChannelMetadata(tokenMetadata)
         // document.title = `AlphaPING | ${channel.name}`;
       } else {
         setJoinChannelLoading(true)
         const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
         await transaction?.wait()
         setCurrentChannel(channel)
+        setSelectedChannelMetadata(tokenMetadata)
         // document.title = `AlphaPING | ${channel.name}`;
         setJoinChannelLoading(false)
       }
@@ -167,18 +169,29 @@ const Channel:React.FC<IChannel> = ({
             (channel !== undefined) && 
             (channel !== null) && 
             (channel.tokenAddress !== undefined) && 
-            (channel.tokenAddress !== null)
+            (channel.tokenAddress !== null) &&
+            (channel.tokenAddress !== undefined) &&
+            (channel.tokenAddress !== null) &&
+            (channel.tokenType.toLowerCase() === 'erc20')
         ){
             fetchTokenMetadata(channel.tokenAddress)
-            console.log(tokenMetada)
-        }     
-    }, [channel, channel?.tokenAddress, defaultTokenMetadata])
-
-    useEffect(() => {
-        if(currentChannel && currentChannel.id.toString() === channel.id.toString()){
-            setSelectedChannelMetadata(tokenMetada)
         }
-    },[currentChannel, setSelectedChannelMetadata, tokenMetada, channel])
+        if(
+            (channel !== undefined) && 
+            (channel !== null) && 
+            (channel.tokenAddress !== undefined) && 
+            (channel.tokenAddress !== null) &&
+            (channel.tokenAddress !== undefined) &&
+            (channel.tokenAddress !== null) &&
+            channel?.tokenType.toLowerCase() === 'erc721'
+        ){
+            setTokenMetaData(defaultTokenMetadata)
+        }
+    }, [
+        channel, 
+        defaultTokenMetadata,
+        channel?.tokenAddress
+    ])
 
     return(
         <HoverCard>
@@ -198,16 +211,16 @@ const Channel:React.FC<IChannel> = ({
                             <AvatarImage 
                                 src={
                                         isHovered === true ?
-                                            tokenMetada.logo !== '' ? 
-                                            tokenMetada.logo : 
+                                            tokenMetadata.logo !== '' ? 
+                                            tokenMetadata.logo : 
                                             (
                                                 channel.tokenType === 'ERC20' ?
                                                 '/erc20IconAlt.svg' :
                                                 '/blank_nft.svg'
                                             )
                                         :
-                                            tokenMetada.logo !== '' ? 
-                                            tokenMetada.logo : 
+                                            tokenMetadata.logo !== '' ? 
+                                            tokenMetadata.logo : 
                                             (
                                                 channel.tokenType === 'ERC20' ?
                                                 '/erc20Icon.svg' :
@@ -225,7 +238,7 @@ const Channel:React.FC<IChannel> = ({
                             {channel.name}
                         </p>
                     </div>
-                    <LeaveChannel isHovered={isHovered} channel={channel} tokenMetada={tokenMetada}/>
+                    <LeaveChannel isHovered={isHovered} channel={channel} tokenMetadata={tokenMetadata}/>
                     {
                         joinChannelLoading === true &&
                             <Loading/>
@@ -243,8 +256,8 @@ const Channel:React.FC<IChannel> = ({
                                     <Avatar>
                                         <AvatarImage
                                             src={
-                                                tokenMetada.logo !== '' ? 
-                                                tokenMetada.logo : 
+                                                tokenMetadata.logo !== '' ? 
+                                                tokenMetadata.logo : 
                                                 (
                                                     channel.tokenType === 'ERC20' ?
                                                     '/erc20Icon.svg' :
@@ -268,11 +281,11 @@ const Channel:React.FC<IChannel> = ({
                                         <div className="flex flex-col justify-start">
                                             <ul className="flex flex-row flex-wrap">
                                                 {
-                                                    tokenMetada.urls.technical_doc.length > 0 &&
+                                                    tokenMetadata.urls.technical_doc.length > 0 &&
                                                     <li>
                                                         <Badge variant="secondary" className="m-1 items-center">
                                                             <Link
-                                                                href={tokenMetada.urls.technical_doc[0]}
+                                                                href={tokenMetadata.urls.technical_doc[0]}
                                                                 target="_blank"
                                                                 className="flex items-center"
                                                             >
@@ -282,11 +295,11 @@ const Channel:React.FC<IChannel> = ({
                                                     </li>
                                                 }
                                                 {
-                                                    tokenMetada.urls.website.length > 0 &&
+                                                    tokenMetadata.urls.website.length > 0 &&
                                                     <li>
                                                         <Badge variant="secondary" className="m-1 items-center">
                                                             <Link
-                                                                href={tokenMetada.urls.website[0]}
+                                                                href={tokenMetadata.urls.website[0]}
                                                                 target="_blank"
                                                                 className="flex items-center"
                                                             >
@@ -296,11 +309,11 @@ const Channel:React.FC<IChannel> = ({
                                                     </li>
                                                 }
                                                 {
-                                                    tokenMetada.urls.source_code.length > 0 &&
+                                                    tokenMetadata.urls.source_code.length > 0 &&
                                                     <li>
                                                         <Badge variant="secondary" className="m-1 items-center">
                                                             <Link
-                                                                href={tokenMetada.urls.source_code[0]}
+                                                                href={tokenMetadata.urls.source_code[0]}
                                                                 target="_blank"
                                                                 className="flex items-center"
                                                             >
@@ -316,11 +329,11 @@ const Channel:React.FC<IChannel> = ({
                                                     </li>
                                                 }
                                                 {
-                                                    tokenMetada.urls.twitter.length > 0 &&
+                                                    tokenMetadata.urls.twitter.length > 0 &&
                                                     <li>
                                                         <Badge variant="secondary" className="m-1 items-center">
                                                             <Link
-                                                                href={tokenMetada.urls.twitter[0]}
+                                                                href={tokenMetadata.urls.twitter[0]}
                                                                 target="_blank"
                                                                 className="flex items-center"
                                                             >
@@ -337,17 +350,17 @@ const Channel:React.FC<IChannel> = ({
                                                 }
                                             </ul>
                                             {
-                                                tokenMetada.description &&
+                                                tokenMetadata.description &&
                                                 <p className="text-sm text-secondary flex flex-wrap flex-row">
                                                     {
-                                                        tokenMetada.description
+                                                        tokenMetadata.description
                                                     }
                                                 </p>
                                             }
                                             <ul className="flex flex-row flex-wrap">
                                                 {
-                                                    tokenMetada.tags.length > 0 &&
-                                                    tokenMetada.tags.map((tag, index) => {
+                                                    tokenMetadata.tags.length > 0 &&
+                                                    tokenMetadata.tags.map((tag, index) => {
                                                         return(
                                                             <li key={index}>
                                                                 <Badge variant="outline" className="m-1 border-accent">
