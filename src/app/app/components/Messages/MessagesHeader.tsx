@@ -138,11 +138,13 @@ console.log(selectedChannelMetadata)
                 >
                     {
                         loading === false ?
-                        // if its is less than a dollar extend to 6 decimal places, 
-                        // less thann a penny 10
-                        `${
-                            Number(twentyFourHourChange).toFixed(2)
-                        }% (24h)` :
+                            Number(twentyFourHourChange) < 0 ? 
+                            `▼ ${
+                                Number(twentyFourHourChange).toFixed(2)
+                            }% (24h)` :
+                            `▲ ${
+                                Number(twentyFourHourChange).toFixed(2)
+                            }% (24h)` :
                         <Skeleton className="w-24 h-6" />
                     }
                 </div>
