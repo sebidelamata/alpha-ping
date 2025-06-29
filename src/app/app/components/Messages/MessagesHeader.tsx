@@ -8,6 +8,7 @@ import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { CardTitle } from "@/components/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/components/ui/avatar";
 import qs from "qs";
+import { Skeleton } from "@/components/components/ui/skeleton";
 
 const MessagesHeader: React.FC = () => {
 
@@ -19,17 +20,26 @@ const MessagesHeader: React.FC = () => {
 
     // get latest quote in USD
         const [tokenUSDPrice, setTokenUSDPrice] = useState<string>("");
+        const [loading, setLoading] = useState<boolean>(false);
         const [cmcError, setCmcError] = useState<string | null>(null);
         useEffect(() => {
+            if (!selectedChannelMetadata || !selectedChannelMetadata.symbol) {
+                setTokenUSDPrice("");
+                setCmcError("No token symbol available for price fetch");
+                return;
+            }
             const params = {
-                symbol: selectedChannelMetadata?.symbol || '',
+                symbol: selectedChannelMetadata?.symbol,
             }
             async function main() {
                 try{
+                    setLoading(true);
+                    setCmcError(null);
                     const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
                     // check response
                     if(!response.ok){
                         setCmcError("Failed to fetch token price from CoinMarketCap");
+                        setTokenUSDPrice("");
                     }
                     const data = await response.json();
                     console.log('CMC API Response:', data);
@@ -38,17 +48,21 @@ const MessagesHeader: React.FC = () => {
                         !data?.data || typeof data.data !== 'object'
                     ){
                         setCmcError('Invalid response structure from API')
+                        setTokenUSDPrice("");
                     }
                     // Get the first token's data dynamically
                     const tokenDataArray = Object.values(data.data)[0] as CMCQuoteUSD[];
                     if (!tokenDataArray?.length || !tokenDataArray[0]?.quote?.USD?.price) {
                         setCmcError("USD price not found in response");
+                        setTokenUSDPrice("");
                     }
                     const usdPrice = tokenDataArray[0].quote.USD.price;
                     console.log('USD Price:', usdPrice);
                     setTokenUSDPrice(usdPrice.toString());
                 } catch (error) {
                     setCmcError("An error occurred while fetching the token price: " + error);
+                }finally{
+                    setLoading(false);
                 }
             }
             main();
@@ -94,7 +108,18 @@ const MessagesHeader: React.FC = () => {
                 tokenUSDPrice !== "" &&
                 <div>
                     {
-                        `$${parseFloat(tokenUSDPrice).toFixed(2).toLocaleString()}`
+                        loading === false ?
+                        // if its is less than a dollar extend to 6 decimal places, 
+                        // less thann a penny 10
+                        `$${
+                            Number(tokenUSDPrice).toLocaleString('en-US', {
+                                minimumFractionDigits: Number(tokenUSDPrice) <= 0.01 ? 10 : 
+                                                    Number(tokenUSDPrice) <= 1 ? 6 : 2,
+                                maximumFractionDigits: Number(tokenUSDPrice) <= 0.01 ? 10 : 
+                                                    Number(tokenUSDPrice) <= 1 ? 6 : 2
+                            })
+                        }` :
+                        <Skeleton className="w-24 h-6" />
                     }
                 </div>
             }
