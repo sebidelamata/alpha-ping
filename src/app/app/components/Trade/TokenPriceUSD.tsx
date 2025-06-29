@@ -9,14 +9,6 @@ import qs from "qs";
 import { Badge } from "@/components/components/ui/badge";
 import { Skeleton } from "@/components/components/ui/skeleton";
 
-interface CMCQuoteUSD {
-    quote: {
-        USD: {
-            price: number;
-        };
-    }
-}
-
 interface ITokenPriceUSD {
     tokenSymbol: string;
     amount: string;

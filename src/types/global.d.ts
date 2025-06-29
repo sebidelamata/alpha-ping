@@ -101,6 +101,15 @@ interface tokenMetadata {
     };
 }
 
+
+interface CMCQuoteUSD {
+    quote: {
+        USD: {
+            price: number;
+        };
+    }
+}
+
 type Weighting = 'unweighted' | 'post' | 'current' | 'delta' | 'inverse';
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
 
