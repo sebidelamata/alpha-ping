@@ -24,6 +24,10 @@ import {
     SelectTrigger,
     SelectValue, 
 } from "@/components/components/ui/select";
+import { Button } from "@/components/components/ui/button";
+import Link from "next/link";
+import { ScrollText, Globe } from "lucide-react";
+import Image from "next/image";
 
 interface cmcPriceData{
     twentyFourHourChange: string;
@@ -41,7 +45,11 @@ type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
 const MessagesHeader: React.FC = () => {
 
-    const { currentChannel, selectedChannelMetadata } = useChannelProviderContext();
+    const { 
+        currentChannel, 
+        selectedChannelMetadata, 
+        setChannelAction 
+    } = useChannelProviderContext();
     const { signer } = useEtherProviderContext()
     const { account } = useUserProviderContext();
     
@@ -398,6 +406,85 @@ console.log(selectedChannelMetadata)
                     </div>
                 </Badge>
             }
+            {
+                selectedChannelMetadata &&
+                <ul className="flex flex-row flex-wrap">
+                    {
+                        selectedChannelMetadata.urls.technical_doc.length > 0 &&
+                        <li>
+                            <Badge variant="secondary" className="m-1 items-center">
+                                <Link
+                                    href={selectedChannelMetadata.urls.technical_doc[0]}
+                                    target="_blank"
+                                    className="flex items-center"
+                                >
+                                    <ScrollText className="h-4 w-4" />
+                                </Link>
+                            </Badge>
+                        </li>
+                    }
+                    {
+                        selectedChannelMetadata.urls.website.length > 0 &&
+                        <li>
+                            <Badge variant="secondary" className="m-1 items-center">
+                                <Link
+                                    href={selectedChannelMetadata.urls.website[0]}
+                                    target="_blank"
+                                    className="flex items-center"
+                                >
+                                    <Globe className="h-4 w-4" />
+                                </Link>
+                            </Badge>
+                        </li>
+                    }
+                    {
+                        selectedChannelMetadata.urls.source_code.length > 0 &&
+                        <li>
+                            <Badge variant="secondary" className="m-1 items-center">
+                                <Link
+                                    href={selectedChannelMetadata.urls.source_code[0]}
+                                    target="_blank"
+                                    className="flex items-center"
+                                >
+                                    <Image 
+                                        src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" 
+                                        alt="Github Icon"
+                                        loading="lazy"
+                                        width={18}
+                                        height={18}
+                                    />
+                                </Link>
+                            </Badge>
+                        </li>
+                    }
+                    {
+                        selectedChannelMetadata.urls.twitter.length > 0 &&
+                        <li>
+                            <Badge variant="secondary" className="m-1 items-center">
+                                <Link
+                                    href={selectedChannelMetadata.urls.twitter[0]}
+                                    target="_blank"
+                                    className="flex items-center"
+                                >
+                                    <Image 
+                                        src="x.svg" 
+                                        alt="X Icon"
+                                        loading="lazy"
+                                        width={18}
+                                        height={18}
+                                    />
+                                </Link>
+                            </Badge>
+                        </li>
+                    }
+                </ul>
+            }
+            <Button
+                variant="ghost"
+                onClick={() => setChannelAction('trade')}
+            >
+                Trade
+            </Button>
         </CardTitle>
     );
 }

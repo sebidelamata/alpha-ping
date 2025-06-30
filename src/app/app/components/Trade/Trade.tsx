@@ -9,6 +9,7 @@ import {
 } from "@/components/components/ui/card";
 import Price from "./Price";
 import Quote from "./Quote";
+import { ScrollArea } from "@/components/components/ui/scroll-area";
 
 const Trade:React.FC = () => {
 
@@ -19,25 +20,30 @@ const Trade:React.FC = () => {
     const [slippage, setSlippage] = useState<string>("1.00");
 
     return(
-        <Card className="flex flex-col w-full h-full bg-primary text-secondary">
-            <CardContent className="flex-1 w-full">
-                {
-                    finalize && price ?
-                    <Quote
+        <Card 
+            className="flex flex-col w-full h-full bg-primary text-secondary"
+            onWheel={(e) => e.stopPropagation()}
+        >
+            <CardContent className="flex-1 flex flex-col overflow-hidden p-0">
+                <ScrollArea className="h-full w-full overflow-y-auto p-4">
+                    {finalize && price ? (
+                        <Quote
                         price={price}
                         quote={quote}
                         setQuote={setQuote}
                         slippage={slippage}
                         setFinalize={setFinalize}
-                    /> :
-                    <Price
+                        />
+                    ) : (
+                        <Price
                         price={price}
                         setPrice={setPrice}
                         setFinalize={setFinalize}
                         slippage={slippage}
                         setSlippage={setSlippage}
-                    />
-                }
+                        />
+                    )}
+                </ScrollArea>
             </CardContent>
         </Card>
     )
