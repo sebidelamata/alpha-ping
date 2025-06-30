@@ -26,9 +26,21 @@ import {
 } from "@/components/components/ui/select";
 import { Button } from "@/components/components/ui/button";
 import Link from "next/link";
-import { ScrollText, Globe } from "lucide-react";
+import { 
+    ScrollText, 
+    Globe,
+    Telescope 
+} from "lucide-react";
 import Image from "next/image";
 import ToggleFollowFilter from "../Profile/ToggleFollowFilter";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/components/ui/dropdown-menu"
+import CopyTextBlock from "./CopyTextBlock";
 
 interface cmcPriceData{
     twentyFourHourChange: string;
@@ -412,7 +424,7 @@ console.log(selectedChannelMetadata)
                 <ul className="flex flex-row flex-wrap">
                     {
                         selectedChannelMetadata.urls.technical_doc.length > 0 &&
-                        <li>
+                        <li key={"technical_doc"}>
                             <Badge variant="secondary" className="m-1 items-center">
                                 <Link
                                     href={selectedChannelMetadata.urls.technical_doc[0]}
@@ -426,7 +438,7 @@ console.log(selectedChannelMetadata)
                     }
                     {
                         selectedChannelMetadata.urls.website.length > 0 &&
-                        <li>
+                        <li key={"website"}>
                             <Badge variant="secondary" className="m-1 items-center">
                                 <Link
                                     href={selectedChannelMetadata.urls.website[0]}
@@ -440,7 +452,7 @@ console.log(selectedChannelMetadata)
                     }
                     {
                         selectedChannelMetadata.urls.source_code.length > 0 &&
-                        <li>
+                        <li key={"source_code"}>
                             <Badge variant="secondary" className="m-1 items-center">
                                 <Link
                                     href={selectedChannelMetadata.urls.source_code[0]}
@@ -460,7 +472,7 @@ console.log(selectedChannelMetadata)
                     }
                     {
                         selectedChannelMetadata.urls.twitter.length > 0 &&
-                        <li>
+                        <li key={"x"}>
                             <Badge variant="secondary" className="m-1 items-center">
                                 <Link
                                     href={selectedChannelMetadata.urls.twitter[0]}
@@ -480,13 +492,45 @@ console.log(selectedChannelMetadata)
                     }
                 </ul>
             }
+            {
+                selectedChannelMetadata &&
+                selectedChannelMetadata.contract_address &&
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant={"ghost"} className="h-8 w-8 p-0">
+                            <Telescope className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-primary text-secondary max-h-64">
+                        <DropdownMenuGroup>
+                            {
+                                selectedChannelMetadata.contract_address.map((address) => {
+                                    return(
+                                    <DropdownMenuItem key={address.contract_address}>
+                                        <div className="flex flex-row gap-2 items-center">
+                                            <div>
+                                                {
+                                                    `${address.platform.name}`
+                                                }
+                                            </div>
+                                            <CopyTextBlock text={address.contract_address}/>
+                                        </div>
+                                    </DropdownMenuItem>
+                                    )
+                                })
+                            }
+                        </DropdownMenuGroup>    
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            }
+            <ToggleFollowFilter/>
             <Button
                 variant="ghost"
                 onClick={() => setChannelAction('trade')}
             >
                 Trade
             </Button>
-            <ToggleFollowFilter/>
+            
         </CardTitle>
     );
 }
