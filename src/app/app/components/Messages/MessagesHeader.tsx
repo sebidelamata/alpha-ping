@@ -165,7 +165,7 @@ console.log(selectedChannelMetadata)
                         loading === false ?
                         // if its is less than a dollar extend to 6 decimal places, 
                         // less thann a penny 10
-                        `Market Cap $${
+                        `MCap $${
                             humanReadableNumbers(marketCap)
                         }
                         ` :
