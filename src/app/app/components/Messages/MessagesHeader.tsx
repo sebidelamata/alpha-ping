@@ -11,31 +11,77 @@ import qs from "qs";
 import { Skeleton } from "@/components/components/ui/skeleton";
 import { Badge } from "@/components/components/ui/badge";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
+import { 
+    Select, 
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue, 
+} from "@/components/components/ui/select";
+
+interface cmcPriceData{
+    twentyFourHourChange: string;
+    tokenUSDPrice: string;
+    marketCap: string;
+    percent_change_1h: string;
+    percent_change_7d: string;
+    percent_change_30d: string;
+    percent_change_60d: string;
+    volume_24h: string;
+    volume_change_24h: string;
+}
+
+type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
 const MessagesHeader: React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext();
-    
-    useEffect(() => {
-    console.log('MessagesHeader re-rendered, selectedChannelMetadata changed:', selectedChannelMetadata);
-}, [selectedChannelMetadata]);
+
+    // hold time range from selector
+    const [timeRange, setTimeRange] = useState<TimeRange>("24h")
+    // key values o lookup pct change input
+    const FIELD_BY_RANGE = {
+        "1h":   "percent_change_1h",      // 1‑hour pct change
+        "24h":  "twentyFourHourChange",   // 24‑hour pct change
+        "7d":   "percent_change_7d",         // 7‑day pct change
+        "30d":  "percent_change_30d",        // 30‑day pct change
+        "60d":  "percent_change_60d"
+    } as const satisfies Record<TimeRange, keyof cmcPriceData>;
 
 console.log(selectedChannelMetadata)
 
     // get latest quote in USD
-        const [tokenUSDPrice, setTokenUSDPrice] = useState<string>("");
-        const [twentyFourHourChange, setTwentyFourHourChange] = useState<string>("");
-        const [marketCap, setMarketCap] = useState<string>("");
+        const [cmcFetch, setCmcFetch] = useState<cmcPriceData>({
+            twentyFourHourChange: "",
+            tokenUSDPrice: "",
+            marketCap: "",
+            percent_change_1h: "",
+            percent_change_7d: "",
+            percent_change_30d: "",
+            percent_change_60d: "",
+            volume_24h: "",
+            volume_change_24h: ""
+        } as cmcPriceData);
         const [loading, setLoading] = useState<boolean>(false);
         const [cmcError, setCmcError] = useState<string | null>(null);
         useEffect(() => {
             if (!selectedChannelMetadata || !selectedChannelMetadata.slug) {
                 setLoading(true)
-                setTokenUSDPrice("");
-                setTwentyFourHourChange("");
-                setMarketCap("");
-                setCmcError("No token symbol available for price fetch");
-                setLoading(false);
+                setCmcFetch({
+                    twentyFourHourChange: "",
+                    tokenUSDPrice: "",
+                    marketCap: "",
+                    percent_change_1h: "",
+                    percent_change_7d: "",
+                    percent_change_30d: "",
+                    percent_change_60d: "",
+                    volume_24h: "",
+                    volume_change_24h: ""
+                } as cmcPriceData)
+                setCmcError("No token symbol available for price fetch")
+                setLoading(false)
                 return;
             }
             const params = {
@@ -49,7 +95,17 @@ console.log(selectedChannelMetadata)
                     // check response
                     if(!response.ok){
                         setCmcError("Failed to fetch token price from CoinMarketCap");
-                        setTokenUSDPrice("");
+                        setCmcFetch({
+                            twentyFourHourChange: "",
+                            tokenUSDPrice: "",
+                            marketCap: "",
+                            percent_change_1h: "",
+                            percent_change_7d: "",
+                            percent_change_30d: "",
+                            percent_change_60d: "",
+                            volume_24h: "",
+                            volume_change_24h: ""
+                        } as cmcPriceData)
                     }
                     const data = await response.json();
                     console.log('CMC API Response:', data);
@@ -58,21 +114,55 @@ console.log(selectedChannelMetadata)
                         !data?.data || typeof data.data !== 'object'
                     ){
                         setCmcError('Invalid response structure from API')
-                        setTokenUSDPrice("");
+                        setCmcFetch({
+                            twentyFourHourChange: "",
+                            tokenUSDPrice: "",
+                            marketCap: "",
+                            percent_change_1h: "",
+                            percent_change_7d: "",
+                            percent_change_30d: "",
+                            percent_change_60d: "",
+                            volume_24h: "",
+                            volume_change_24h: ""
+                        } as cmcPriceData)
                     }
                     // Get the first token's data dynamically
                     const tokenDataArray = Object.values(data.data) as CMCQuoteUSD[];
                     console.log('tokenDataArray:', tokenDataArray);
                     if (!tokenDataArray?.length || !tokenDataArray?.[0].quote?.USD?.price) {
                         setCmcError("USD price not found in response");
-                        setTokenUSDPrice("");
+                        setCmcFetch({
+                            twentyFourHourChange: "",
+                            tokenUSDPrice: "",
+                            marketCap: "",
+                            percent_change_1h: "",
+                            percent_change_7d: "",
+                            percent_change_30d: "",
+                            percent_change_60d: "",
+                            volume_24h: "",
+                            volume_change_24h: ""
+                        } as cmcPriceData)
                     }
                     const usdPrice = tokenDataArray[0].quote.USD.price;
-                    setTokenUSDPrice(usdPrice.toString());
                     const change24h = tokenDataArray[0].quote.USD.percent_change_24h
-                    setTwentyFourHourChange(change24h.toString());
+                    const percent_change_1h = tokenDataArray[0].quote.USD.percent_change_1h
+                    const percent_change_7d = tokenDataArray[0].quote.USD.percent_change_7d
+                    const percent_change_30d = tokenDataArray[0].quote.USD.percent_change_30d
+                    const percent_change_60d = tokenDataArray[0].quote.USD.percent_change_60d
+                    const volume_24h = tokenDataArray[0].quote.USD.volume_24h
+                    const volume_change_24h = tokenDataArray[0].quote.USD.volume_change_24h
                     const marketCapValue = tokenDataArray[0].quote.USD.market_cap
-                    setMarketCap(marketCapValue.toString());
+                    setCmcFetch({
+                        twentyFourHourChange: change24h.toString(),
+                        tokenUSDPrice: usdPrice.toString(),
+                        marketCap: marketCapValue.toString(),
+                        percent_change_1h: percent_change_1h.toString(),
+                        percent_change_7d: percent_change_7d.toString(),
+                        percent_change_30d: percent_change_30d.toString(),
+                        percent_change_60d: percent_change_60d.toString(),
+                        volume_24h: volume_24h.toString(),
+                        volume_change_24h: volume_change_24h.toString()
+                    })
                 } catch (error) {
                     setCmcError("An error occurred while fetching the token price: " + error);
                 }finally{
@@ -119,18 +209,18 @@ console.log(selectedChannelMetadata)
                 </div>
             }
             {
-                tokenUSDPrice !== "" &&
+                cmcFetch.tokenUSDPrice !== "" &&
                 <div className="text-3xl text-secondary">
                     {
                         loading === false ?
                         // if its is less than a dollar extend to 6 decimal places, 
                         // less thann a penny 10
                         `$${
-                            Number(tokenUSDPrice).toLocaleString('en-US', {
-                                minimumFractionDigits: Number(tokenUSDPrice) <= 0.01 ? 10 : 
-                                                    Number(tokenUSDPrice) <= 1 ? 6 : 2,
-                                maximumFractionDigits: Number(tokenUSDPrice) <= 0.01 ? 10 : 
-                                                    Number(tokenUSDPrice) <= 1 ? 6 : 2
+                            Number(cmcFetch.tokenUSDPrice).toLocaleString('en-US', {
+                                minimumFractionDigits: Number(cmcFetch.tokenUSDPrice) <= 0.01 ? 10 : 
+                                                    Number(cmcFetch.tokenUSDPrice) <= 1 ? 6 : 2,
+                                maximumFractionDigits: Number(cmcFetch.tokenUSDPrice) <= 0.01 ? 10 : 
+                                                    Number(cmcFetch.tokenUSDPrice) <= 1 ? 6 : 2
                             })
                         }` :
                         <Skeleton className="w-24 h-6" />
@@ -138,35 +228,81 @@ console.log(selectedChannelMetadata)
                 </div>
             }
             {
-                twentyFourHourChange !== "" &&
+                cmcFetch.twentyFourHourChange !== "" &&
                 <div className={
-                        Number(twentyFourHourChange) < 0 ? 
-                        `text-xl text-red-500` :
-                        `text-xl text-green-500`
+                        Number(cmcFetch[FIELD_BY_RANGE[timeRange]]) < 0 ? 
+                        `text-xl text-red-500 w-24` :
+                        `text-xl text-green-500 w-24`
                     }
                 >
                     {
                         loading === false ?
-                            Number(twentyFourHourChange) < 0 ? 
+                            Number(cmcFetch[FIELD_BY_RANGE[timeRange]]) < 0 ? 
                             `▼ ${
-                                Number(twentyFourHourChange).toFixed(2)
-                            }% (24h)` :
+                                Number(cmcFetch[FIELD_BY_RANGE[timeRange]]).toFixed(2)
+                            }%` :
                             `▲ ${
-                                Number(twentyFourHourChange).toFixed(2)
-                            }% (24h)` :
+                                Number(cmcFetch[FIELD_BY_RANGE[timeRange]]).toFixed(2)
+                            }%` :
                         <Skeleton className="w-24 h-6" />
                     }
                 </div>
             }
             {
-                marketCap !== "" &&
+                cmcFetch.twentyFourHourChange !== "" &&
+                <Select
+                    value={timeRange}
+                    onValueChange={(val) => setTimeRange(val as TimeRange)}
+                >
+                    <SelectTrigger className="w-24">
+                        <SelectValue placeholder={timeRange}/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                        <SelectLabel>Time Select</SelectLabel>
+                        {
+                            cmcFetch.percent_change_1h !== "" &&
+                            <SelectItem value="1h">
+                                1h
+                            </SelectItem>
+                        }
+                        {
+                            cmcFetch.twentyFourHourChange !== "" &&
+                            <SelectItem value="24h">
+                                24h
+                            </SelectItem>
+                        }
+                        {
+                            cmcFetch.percent_change_7d !== "" &&
+                            <SelectItem value="7d">
+                                7d
+                            </SelectItem>
+                        }
+                        {
+                            cmcFetch.percent_change_30d !== "" &&
+                            <SelectItem value="30d">
+                                30d
+                            </SelectItem>
+                        }
+                        {
+                            cmcFetch.percent_change_60d !== "" &&
+                            <SelectItem value="60d">
+                                60d
+                            </SelectItem>
+                        }
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>   
+            }
+            {
+                cmcFetch.marketCap !== "" &&
                 <Badge variant={"secondary"}>
                     {
                         loading === false ?
                         // if its is less than a dollar extend to 6 decimal places, 
                         // less thann a penny 10
                         `MCap $${
-                            humanReadableNumbers(marketCap)
+                            humanReadableNumbers(cmcFetch.marketCap)
                         }
                         ` :
                         <Skeleton className="w-24 h-6" />
