@@ -171,7 +171,7 @@ const UnbanUser:React.FC<UnbanUserProps> = ({
                                             </span> : 
                                             <span 
                                                 className="text-accent">
-                                                    {user.slice(0,4)}...${user.slice(37,41)}
+                                                    {`${user.slice(0,4)}...${user.slice(38,42)}`}
                                             </span>
                                         }
                                         {"?"}

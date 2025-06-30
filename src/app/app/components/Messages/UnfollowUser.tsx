@@ -158,7 +158,7 @@ const UnfollowUser:React.FC<UnfollowUserProps> = ({
                                             </span> : 
                                             <span 
                                                 className="text-accent">
-                                                    {account.slice(0,4)}...${account.slice(37,41)}
+                                                    {`${account.slice(0,4)}...${account.slice(38,42)}`}
                                             </span>
                                         }
                                         {"?"}

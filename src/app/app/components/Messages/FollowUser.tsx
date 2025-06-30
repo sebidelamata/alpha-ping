@@ -159,7 +159,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
                                             </span> : 
                                             <span 
                                                 className="text-accent">
-                                                    {account.slice(0,4)}...{account.slice(37,42)}
+                                                    {`${account.slice(0,4)}...${account.slice(38,42)}`}
                                             </span>
                                         }
                                         {"?"}
