@@ -168,7 +168,7 @@ console.log(selectedChannelMetadata)
                         `Market Cap $${
                             humanReadableNumbers(marketCap)
                         }
-                        }` :
+                        ` :
                         <Skeleton className="w-24 h-6" />
                     }
                 </Badge>
