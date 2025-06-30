@@ -10,6 +10,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/components/ui/
 import qs from "qs";
 import { Skeleton } from "@/components/components/ui/skeleton";
 import { Badge } from "@/components/components/ui/badge";
+import humanReadableNumbers from "src/lib/humanReadableNumbers";
 
 const MessagesHeader: React.FC = () => {
 
@@ -165,12 +166,8 @@ console.log(selectedChannelMetadata)
                         // if its is less than a dollar extend to 6 decimal places, 
                         // less thann a penny 10
                         `Market Cap $${
-                            Number(marketCap).toLocaleString('en-US', {
-                                minimumFractionDigits: Number(marketCap) <= 0.01 ? 10 : 
-                                                    Number(marketCap) <= 1 ? 6 : 2,
-                                maximumFractionDigits: Number(marketCap) <= 0.01 ? 10 : 
-                                                    Number(marketCap) <= 1 ? 6 : 2
-                            })
+                            humanReadableNumbers(marketCap)
+                        }
                         }` :
                         <Skeleton className="w-24 h-6" />
                     }
