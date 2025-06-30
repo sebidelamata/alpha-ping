@@ -5,6 +5,10 @@ import React, {
     useEffect
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import { useEtherProviderContext } from "src/contexts/ProviderContext";
+import { useUserProviderContext } from "src/contexts/UserContext";
+import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import { ethers } from 'ethers';
 import { CardTitle } from "@/components/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/components/ui/avatar";
 import qs from "qs";
@@ -38,6 +42,28 @@ type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 const MessagesHeader: React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext();
+    const { signer } = useEtherProviderContext()
+    const { account } = useUserProviderContext();
+    
+    const [userBalance, setUserBalance] = useState<string | null>(null)
+    const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
+
+    useEffect(() => {
+        const getUserBalance = async () => {
+            if(currentChannel != null && currentChannel?.tokenAddress !== null){
+                const token = new ethers.Contract(
+                    currentChannel.tokenAddress,
+                    ERC20Faucet.abi,
+                    signer
+                )
+                const userBalance = await token.balanceOf(account)
+                setUserBalance(userBalance.toString())
+                const tokenDecimals = await token.decimals()
+                setTokenDecimals(tokenDecimals)
+            }
+        }
+        getUserBalance()
+    }, [account, signer, currentChannel])
 
     // hold time range from selector
     const [timeRange, setTimeRange] = useState<TimeRange>("24h")
@@ -336,6 +362,40 @@ console.log(selectedChannelMetadata)
                             }%` :
                         <Skeleton className="w-24 h-6" />
                     }
+                </Badge>
+            } 
+            {
+                userBalance !== null &&
+                <Badge variant={"secondary"} className="flex flex-row gap-1">
+                    <div className="flex flex-row gap-1">
+                        <div className="current-token-amount-title">
+                            <strong>Current Balance:</strong>
+                        </div>
+                        <div className="current-token-amount-value">
+                            {
+                                    `${
+                                    (Math.round(
+                                        parseFloat(
+                                            ethers.formatUnits(userBalance.toString(), tokenDecimals || 0)
+                                        ) * 1e8
+                                    ) / 1e8
+                                    ).toString()
+                                } ${selectedChannelMetadata?.name ?? ''} 
+                                 ($${
+                                    humanReadableNumbers(
+                                        (
+                                            Number(cmcFetch.tokenUSDPrice) * 
+                                            Number(Math.round(
+                                                parseFloat(
+                                                    ethers.formatUnits(userBalance.toString(), tokenDecimals || 0)
+                                                ) * 1e8
+                                            ) / 1e8)
+                                        ).toString()
+                                    )
+                                })`
+                            }
+                        </div>
+                    </div>
                 </Badge>
             }
         </CardTitle>
