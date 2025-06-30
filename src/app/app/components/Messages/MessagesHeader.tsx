@@ -309,6 +309,35 @@ console.log(selectedChannelMetadata)
                     }
                 </Badge>
             }
+            {
+                cmcFetch.volume_24h !== "" &&
+                cmcFetch.volume_change_24h !== "" &&
+                <Badge 
+                    variant={"default"} 
+                    className={
+                        Number(cmcFetch.volume_change_24h) < 0 ? 
+                        `text-red-500` :
+                        `text-green-500`
+                    }>
+                    {
+                        loading === false ?
+                        Number(cmcFetch.volume_change_24h) < 0 ?
+                            `Vol (24h) $${
+                                humanReadableNumbers(cmcFetch.volume_24h)
+                            }
+                            ▼ ${
+                                Number(cmcFetch.volume_change_24h).toFixed(2)
+                            }%` : 
+                            `Vol (24h) $${
+                                humanReadableNumbers(cmcFetch.volume_24h)
+                            }
+                            ▲ ${
+                                Number(cmcFetch.volume_change_24h).toFixed(2)
+                            }%` :
+                        <Skeleton className="w-24 h-6" />
+                    }
+                </Badge>
+            }
         </CardTitle>
     );
 }
