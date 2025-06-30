@@ -28,6 +28,7 @@ import { Button } from "@/components/components/ui/button";
 import Link from "next/link";
 import { ScrollText, Globe } from "lucide-react";
 import Image from "next/image";
+import ToggleFollowFilter from "../Profile/ToggleFollowFilter";
 
 interface cmcPriceData{
     twentyFourHourChange: string;
@@ -485,6 +486,7 @@ console.log(selectedChannelMetadata)
             >
                 Trade
             </Button>
+            <ToggleFollowFilter/>
         </CardTitle>
     );
 }

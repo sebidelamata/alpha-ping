@@ -104,14 +104,14 @@ const Channels:React.FC = () => {
   )
   
   return (
-    <SidebarGroup className="gap-14 pt-4">
+    <SidebarGroup className="gap-4 pt-4 flex-1 overflow-hidden h-full">
       <SidebarGroupLabel>
           <h1 className="text-xl text-secondary">
               Channels
           </h1>
       </SidebarGroupLabel>
-      <SidebarGroupContent>
-          <ScrollArea className="max-h-[45svh]">
+      <SidebarGroupContent className="h-full">
+          <ScrollArea className="h-full pr-2 overflow-y-auto">
               <SidebarMenu>
                   {
                       userChannels.map((channel, index) => (

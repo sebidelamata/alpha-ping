@@ -4,7 +4,6 @@ import React from "react";
 import Channels from "./Channels/Channels";
 import AddChannel from "./Channels/AddChannel";
 import ChannelActions from "./Channels/ChannelActions";
-import ToggleFollowFilter from "./Profile/ToggleFollowFilter";
 import {
     Sidebar,
     SidebarContent,
@@ -21,7 +20,7 @@ const AppSidebar = () => {
             className="mt-24 pb-24"
         >
             <SidebarContent 
-                className="bg-primary text-secondary"
+                className="flex flex-col h-full bg-primary text-secondary"
             >
                 <SidebarTrigger 
                     className="m-2"
@@ -35,7 +34,6 @@ const AppSidebar = () => {
                     className="border border-accent"
                 />
                 <ChannelActions/>
-                <ToggleFollowFilter/>
             </SidebarContent>
             <Separator 
                     className="border border-accent"
