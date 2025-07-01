@@ -493,8 +493,7 @@ console.log(selectedChannelMetadata)
                 </ul>
             }
             {
-                selectedChannelMetadata &&
-                selectedChannelMetadata.contract_address &&
+                currentChannel &&
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant={"ghost"} className="h-8 w-8 p-0">
@@ -502,24 +501,40 @@ console.log(selectedChannelMetadata)
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-primary text-secondary max-h-64">
-                        <DropdownMenuGroup>
-                            {
-                                selectedChannelMetadata.contract_address.map((address) => {
-                                    return(
-                                    <DropdownMenuItem key={address.contract_address}>
-                                        <div className="flex flex-row gap-2 items-center">
-                                            <div>
-                                                {
-                                                    `${address.platform.name}`
-                                                }
+                        {
+                            (
+                                selectedChannelMetadata &&
+                                selectedChannelMetadata.contract_address
+                            ) ?
+                            <DropdownMenuGroup>
+                                {
+                                    selectedChannelMetadata.contract_address.map((address) => {
+                                        return(
+                                        <DropdownMenuItem key={address.contract_address}>
+                                            <div className="flex flex-row gap-2 items-center">
+                                                <div>
+                                                    {
+                                                        `${address.platform.name}`
+                                                    }
+                                                </div>
+                                                <CopyTextBlock text={address.contract_address}/>
                                             </div>
-                                            <CopyTextBlock text={address.contract_address}/>
+                                        </DropdownMenuItem>
+                                        )
+                                    })
+                                }
+                            </DropdownMenuGroup> :
+                             <DropdownMenuGroup>
+                                <DropdownMenuItem key={currentChannel.tokenAddress}>
+                                    <div className="flex flex-row gap-2 items-center">
+                                        <div>
+                                            Arbitrum
                                         </div>
-                                    </DropdownMenuItem>
-                                    )
-                                })
-                            }
-                        </DropdownMenuGroup>    
+                                        <CopyTextBlock text={currentChannel.tokenAddress}/>
+                                    </div>
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup> 
+                        }   
                     </DropdownMenuContent>
                 </DropdownMenu>
             }
