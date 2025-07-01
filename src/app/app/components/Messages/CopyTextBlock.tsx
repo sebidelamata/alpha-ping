@@ -64,8 +64,9 @@ const CopyTextBlock: React.FC<ICopyTextBlockProps> = ({ text }) => {
   return (
       <div className='flex items-center gap-2'>
             <Button
-            onClick={handleCopy}
-            variant={"default"}
+                onClick={handleCopy}
+                variant={"default"}
+                className="h-6 w-6 p-0"
             >
                 <Copy className="w-4 h-4" />
             </Button>

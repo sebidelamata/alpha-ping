@@ -29,7 +29,8 @@ import Link from "next/link";
 import { 
     ScrollText, 
     Globe,
-    Telescope 
+    Telescope,
+    SquareArrowUpRight 
 } from "lucide-react";
 import Image from "next/image";
 import ToggleFollowFilter from "../Profile/ToggleFollowFilter";
@@ -530,6 +531,17 @@ console.log(selectedChannelMetadata)
                                         <div>
                                             Arbitrum
                                         </div>
+                                        <Button
+                                            variant="default"
+                                            className="h-6 w-6 p-0"
+                                            >
+                                                <Link
+                                                    href={`https://arbiscan.io/address/${currentChannel.tokenAddress}`}
+                                                    target="_blank"
+                                                >
+                                                    <SquareArrowUpRight className="w-4 h-4"/>
+                                                </Link>
+                                        </Button>
                                         <CopyTextBlock text={currentChannel.tokenAddress}/>
                                     </div>
                                 </DropdownMenuItem>
