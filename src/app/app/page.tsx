@@ -66,7 +66,7 @@ const App:React.FC = () => {
     isConnected === true
   ){
     return (
-      <Loading/>
+      <Loading text='Loading User Attributes...'/>
     )
   }
 

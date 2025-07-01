@@ -42,6 +42,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/components/ui/dropdown-menu"
 import CopyTextBlock from "./CopyTextBlock";
+import { CHAINS } from "src/lib/chainsInfo";
 
 interface cmcPriceData{
     twentyFourHourChange: string;
@@ -225,6 +226,8 @@ console.log(selectedChannelMetadata)
                 console.error('CMC API Error:', cmcError);
             }
         }, [cmcError]);
+
+        console.log(CHAINS.find(chain => chain.chainId?.toString() === (42161).toString()))
 
     return (
         <CardTitle className="flex flex-row flex-wrap w-full bg-primary text-secondary gap-4 items-center justify-start p-4">
@@ -513,6 +516,20 @@ console.log(selectedChannelMetadata)
                                         return(
                                         <DropdownMenuItem key={address.contract_address}>
                                             <div className="flex flex-row gap-2 items-center">
+                                                <Avatar>
+                                                <AvatarImage
+                                                        src={
+                                                            // find the chain icon based on the chainId in the metadata
+                                                            CHAINS.find(chain => chain.chainId?.toString() === (address.platform.coin.id).toString())?.icon ||
+                                                            '/erc20Icon.svg'
+                                                        }
+                                                        alt={'Arbitrum Icon'}
+                                                        loading="lazy"
+                                                    />
+                                                    <AvatarFallback>
+                                                        {address.platform.name.slice(0, 2)}
+                                                    </AvatarFallback>
+                                                </Avatar>
                                                 <div>
                                                     {
                                                         `${address.platform.name}`
@@ -528,6 +545,19 @@ console.log(selectedChannelMetadata)
                              <DropdownMenuGroup>
                                 <DropdownMenuItem key={currentChannel.tokenAddress}>
                                     <div className="flex flex-row gap-2 items-center">
+                                        <Avatar>
+                                            <AvatarImage
+                                                src={
+                                                    CHAINS.find(chain => chain.chainId?.toString() === (42161).toString())?.icon ||
+                                                    '/default_chain_icon.svg'
+                                                }
+                                                alt={'Arbitrum Icon'}
+                                                loading="lazy"
+                                            />
+                                            <AvatarFallback>
+                                                Arb
+                                            </AvatarFallback>
+                                        </Avatar>
                                         <div>
                                             Arbitrum
                                         </div>

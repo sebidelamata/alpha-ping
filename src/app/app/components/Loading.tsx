@@ -13,8 +13,11 @@ import {
   } from "@/components/components/ui/dialog"
   import { Progress } from "@/components/components/ui/progress"
 
+interface LoadingProps {
+    text?: string;
+}
 
-const Loading:React.FC = () => {
+const Loading:React.FC<LoadingProps> = ({text="NA"}) => {
 
     const [progress, setProgress] = useState<number>(13);
 
@@ -30,9 +33,17 @@ const Loading:React.FC = () => {
         <Dialog open={true}>
             <DialogContent className="items-center justify-center align-middle">
                 <DialogHeader className="items-center justify-center align-middle">
-                    <DialogTitle className="items-center justify-center align-middle">
-                        Waiting for transaction confirmation...
-                    </DialogTitle>
+                    {
+                        text !== "NA" ? (
+                            <DialogTitle className="items-center justify-center align-middle">
+                                {text}
+                            </DialogTitle>
+                        ) : (
+                            <DialogTitle className="items-center justify-center align-middle">
+                                Waiting for transaction confirmation...
+                            </DialogTitle>
+                        )
+                    }
                     <DialogDescription className="flex flex-col items-center justify-center space-y-4">
                         <img
                             src="/bananaPeeled.svg"
