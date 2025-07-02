@@ -12,12 +12,10 @@
 // Using more reliable and consistent icon sources
 const TRUSTWALLET_ICONS = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
 const WEB3_ICONS = 'https://raw.githubusercontent.com/0xa3k5/web3icons/main/raw-svgs/networks/branded';
-const CRYPTO_ICONS = 'https://cryptologos.cc/logos';
 
 // Helper functions for different icon sources
 const trustwallet = (slug: string) => `${TRUSTWALLET_ICONS}/${slug}/info/logo.png`;
 const web3icon = (slug: string) => `${WEB3_ICONS}/${slug}.svg`;
-const cryptologo = (slug: string, ext: string = 'svg') => `${CRYPTO_ICONS}/${slug}-logo.${ext}`;
 
 interface ChainInfo {
   chainId?: number;
@@ -74,19 +72,25 @@ export const CHAINS: ChainInfo[] = [
   { chainId: 1111,     name: 'Wemix',                 explorer: 'https://explorer.wemix.com/',                    icon: trustwallet('wemix'),   coinId: '7548' },
   { chainId: 8453,     name: 'Base',                  explorer: 'https://basescan.org',                       icon: web3icon('base'),            coinId: '27716' },
   { chainId: 59144,    name: 'Linea',                 explorer: 'https://lineascan.build',                    icon: 'https://lineascan.build/assets/linea/images/svg/logos/chain-light.svg?v=25.6.4.0',         coinId: '27657' },
-  { chainId: 534352,   name: 'Scroll',                explorer: 'https://scrollscan.com',                     icon: cryptologo('scroll'),        coinId: '26998' },
-  { chainId: 5000,     name: 'Mantle',                explorer: 'https://mantlescan.info',                    icon: cryptologo('mantle'),        coinId: '27075' },
-  { chainId: 81457,    name: 'Blast',                 explorer: 'https://blastscan.io',                       icon: cryptologo('blast'),         coinId: '28480' },
-  { chainId: 34443,    name: 'Mode',                  explorer: 'https://modescan.io',                        icon: cryptologo('mode'),          coinId: '31016' },
-  { chainId: 196,      name: 'X Layer',               explorer: 'https://www.okx.com/web3/explorer/xlayer',   icon: cryptologo('xlayer'),        coinId: '3897' },
-  { chainId: 167000,   name: 'Taiko',                 explorer: 'https://taikoscan.io',                       icon: cryptologo('taiko'),         coinId: '31525' },
-  {                    name: 'Sei v2',                explorer: 'https://seistream.app',                      icon: cryptologo('sei'),           coinId: '23149' },
-  { chainId: 480,      name: 'World Chain',           explorer: 'https://worldscan.org',                      icon: cryptologo('worldcoin-wld'), coinId: '13502' },
-  { chainId: 146,      name: 'Sonic',                 explorer: 'https://sonicscan.org',                      icon: cryptologo('sonic-soniclabs'), coinId: '32684' },
-  { chainId: 1301,     name: 'Unichain',              explorer: 'https://unichain-sepolia.blockscout.com',    icon: cryptologo('uniswap'),       coinId: '7083' },
+  { chainId: 534352,   name: 'Scroll',                explorer: 'https://scrollscan.com',                     icon: trustwallet('scroll'),        coinId: '26998' },
+  { chainId: 5000,     name: 'Mantle',                explorer: 'https://explorer.mantle.xyz/',                    icon: trustwallet('mantle'),        coinId: '27075' },
+  { chainId: 81457,    name: 'Blast',                 explorer: 'https://blastscan.io',                       icon: trustwallet('blast'),         coinId: '28480' },
+  { chainId: 34443,    name: 'Mode',                  explorer: 'https://modescan.io',                        icon: 'https://imgproxy-mainnet.routescan.io/4TiM8ysk8JCazvM9Ggn9ketf6l_UK9WTFTbE6SAHNLI/pr:thumb_32/aHR0cHM6Ly9jbXMtY2RuLmF2YXNjYW4uY29tL2NtczIvMzQ0NDNfbG9nby4yODU3YTI0NzdkNTQuc3Zn',          coinId: '31016' },
+  { chainId: 196,      name: 'X Layer',               explorer: 'https://www.okx.com/web3/explorer/xlayer',   icon: 'https://static.okx.com/cdn/assets/imgs/254/5678AFAB27871136.png',        coinId: '3897' },
+  { chainId: 167000,   name: 'Taiko',                 explorer: 'https://taikoscan.io',                       icon: web3icon('taiko'),         coinId: '31525' },
+  {                    name: 'Sei v2',                explorer: 'https://seistream.app',                      icon: trustwallet('sei'),           coinId: '23149' },
+  { chainId: 480,      name: 'World Chain',           explorer: 'https://worldscan.org',                      icon: web3icon('world'), coinId: '13502' },
+  { chainId: 146,      name: 'Sonic',                 explorer: 'https://sonicscan.org',                      icon: trustwallet('sonic'), coinId: '32684' },
+  { chainId: 1301,     name: 'Unichain',              explorer: 'https://unichain.blockscout.com',    icon: web3icon('unichain'),       coinId: '7083' },
   {                    name: 'Stacks',                explorer: 'https://explorer.hiro.so',                   icon: 'https://cdn.prod.website-files.com/618b0aafa4afde65f2fe38fe/6595cdc2f63c776b1447da57_favicon-32x32.png',        coinId: '4847' },
   { chainId: 324, name: 'zkSync Era', explorer: 'https://explorer.zksync.io', icon: trustwallet('zksync'), coinId: '24091' },
   { chainId: 4200, name: 'Merlin', explorer: 'https://scan.merlinchain.io', icon: trustwallet('merlin'), coinId: "30712" },
   {                    name: 'Sui',                   explorer: 'https://suiscan.xyz',                        icon: trustwallet('sui'),          coinId: '20947' },
   {                    name: 'Waves',                 explorer: 'https://wavesexplorer.com',                  icon: trustwallet('waves'),        coinId: '1274' },
+    { chainId: 128,     name: 'HECO Chain',            explorer: 'https://blockhead.info/explorer/heco',                      icon: 'https://imgs.search.brave.com/jb2QGq9AL4T4_FvbG-_tvvPYKWfatBYWXV1ryKIArU4/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvODk1MWRhZWY1/MzVjYTI0ZTc0MTI2/Y2ZlZDNjYzUwZjE3/OWY2NzVlYzYyMGE2/NjU2MDI2OTY5Mjlh/OGFhYTNjMS93d3cu/aGVjb2NoYWluLmNv/bS8',          coinId: '2502' },
+      {                   name: 'Sora',                 explorer: 'https://sora.subscan.io',                      icon: 'https://sora.subscan.io/_next/image?url=%2Fchains%2Fsora%2Ftokens%2FXOR.png&w=3840&q=75',          coinId: '5802' },
+        { chainId: 39797,   name: 'Energi',               explorer: 'https://explorer.energi.network',           icon: 'https://imgs.search.brave.com/sQM2QfnRR3sPWM8zpMcIt5jL6I1Oc-64g90UoaepR9Y/rs:fit:40:40:1:0/g:ce/aHR0cHM6Ly9jb2lu/LWltYWdlcy5jb2lu/Z2Vja28uY29tL2Nv/aW5zL2ltYWdlcy81/Nzk1L2xhcmdlLzMy/MTgucG5nPzE2OTY1/MDYyMzk',        coinId: '3218' },
+
+
+
 ];
