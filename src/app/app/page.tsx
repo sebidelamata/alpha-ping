@@ -49,6 +49,7 @@ const App:React.FC = () => {
     }
     findIsMember()
   }, [signer, isConnected, alphaPING, isInitialized])
+  
 
   const renderChannelAction = () => {
     switch(channelAction){

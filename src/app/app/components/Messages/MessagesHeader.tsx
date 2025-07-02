@@ -227,7 +227,7 @@ console.log(selectedChannelMetadata)
             }
         }, [cmcError]);
 
-        console.log(CHAINS.find(chain => chain.chainId?.toString() === (42161).toString()))
+        console.log(selectedChannelMetadata)
 
     return (
         <CardTitle className="flex flex-row flex-wrap w-full bg-primary text-secondary gap-4 items-center justify-start p-4">
@@ -514,13 +514,15 @@ console.log(selectedChannelMetadata)
                                 {
                                     selectedChannelMetadata.contract_address.map((address) => {
                                         return(
-                                        <DropdownMenuItem key={address.contract_address}>
+                                            // some tokens have same contract address on different chains so to
+                                            // maintain uniqueness we use contract address concatted with chain id
+                                        <DropdownMenuItem key={address.contract_address + address.platform.coin.id}>
                                             <div className="flex flex-row gap-2 items-center">
                                                 <Avatar>
                                                 <AvatarImage
                                                         src={
                                                             // find the chain icon based on the chainId in the metadata
-                                                            CHAINS.find(chain => chain.chainId?.toString() === (address.platform.coin.id).toString())?.icon ||
+                                                            CHAINS.find(chain => chain.coinId?.toString() === (address.platform.coin.id).toString())?.icon ||
                                                             '/erc20Icon.svg'
                                                         }
                                                         alt={'Arbitrum Icon'}
@@ -535,6 +537,19 @@ console.log(selectedChannelMetadata)
                                                         `${address.platform.name}`
                                                     }
                                                 </div>
+                                                <Button
+                                                    variant="default"
+                                                    className="h-6 w-6 p-0"
+                                                >
+                                                    <Link
+                                                        href={`${
+                                                            CHAINS.find(chain => chain.coinId?.toString() === (address.platform.coin.id).toString())?.explorer || ""
+                                                        }/address/${address.contract_address}`}
+                                                        target="_blank"
+                                                    >
+                                                        <SquareArrowUpRight className="w-4 h-4"/>
+                                                    </Link>
+                                                </Button>
                                                 <CopyTextBlock text={address.contract_address}/>
                                             </div>
                                         </DropdownMenuItem>
