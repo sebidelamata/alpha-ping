@@ -507,8 +507,10 @@ console.log(selectedChannelMetadata)
                     <DropdownMenuContent className="bg-primary text-secondary max-h-64">
                         {
                             (
-                                selectedChannelMetadata &&
-                                selectedChannelMetadata.contract_address
+                                (
+                                    selectedChannelMetadata &&
+                                    selectedChannelMetadata.contract_address.length > 0
+                                )
                             ) ?
                             <DropdownMenuGroup>
                                 {
