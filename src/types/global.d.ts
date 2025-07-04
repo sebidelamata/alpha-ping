@@ -99,6 +99,7 @@ interface tokenMetadata {
         twitter: string[];
         website: string[];
     };
+    protocol?: string; // optional field to show if token is deposited in a protocol
 }
 
 

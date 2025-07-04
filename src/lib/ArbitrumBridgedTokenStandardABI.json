@@ -1,0 +1,18 @@
+
+  {
+    "abi": [
+      {
+        "inputs": [],
+        "name": "l1Address",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ]
+  }
