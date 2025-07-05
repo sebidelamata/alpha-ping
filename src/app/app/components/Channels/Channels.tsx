@@ -22,6 +22,7 @@ import L1Address from '../../../../lib/ArbitrumBridgedTokenStandardABI.json'
 import aTokenUnderlyingAsset from '../../../../lib/aTokenAaveUnderlyingAsset.json'
 import { ethers } from 'ethers';
 import qs from 'qs';
+import { Skeleton } from "@/components/components/ui/skeleton";
 
 
 const Channels:React.FC = () => {
@@ -90,6 +91,7 @@ const Channels:React.FC = () => {
   );
 
   const [tokenMetaData, setTokenMetaData] = useState<tokenMetadata[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   // here we will grab metadata for each channel with a promise.all
   useEffect(() => {
     // this is the function that will fetch the token metadata from coinmarketcap
@@ -247,6 +249,7 @@ const Channels:React.FC = () => {
         
     // this will run through all the user channels and fetch the metadata for each token
     const fetchAllUserChannelsMetadata = async () => {
+      setLoading(true);
       const allUserChannelsMetadata = await Promise.all(
         userChannels.map(async (channel: AlphaPING.ChannelStructOutput) => {
           // skipp fetching metadata for ERC721 tokens
@@ -263,8 +266,11 @@ const Channels:React.FC = () => {
       );
       console.log('All user channels metadata fetched:', allUserChannelsMetadata);
       setTokenMetaData(allUserChannelsMetadata)
+      setLoading(false);
       return allUserChannelsMetadata
     }
+
+    // call our function to fetch all user channels metadata
     if(
         (userChannels !== undefined) && 
         (userChannels !== null) && 
@@ -292,7 +298,15 @@ const Channels:React.FC = () => {
           <ScrollArea className="h-full pr-2 overflow-y-auto">
               <SidebarMenu>
                   {
-                      userChannels.map((channel, index) => (
+                      loading === true ? (
+                        Array.from({ length: 10 }, (_, index) => (
+                          <SidebarMenuItem key={index} className="flex flex-row items-center justify-between w-full pb-2">
+                            <Skeleton className="h-6 w-6 rounded-full" />
+                            <Skeleton className="w-48 h-6"/>
+                          </SidebarMenuItem>
+                        ))
+                      ) : (
+                        userChannels.map((channel, index) => (
                           <SidebarMenuItem key={channel.tokenAddress}>
                             <Channel
                                 channel={channel}
@@ -301,7 +315,8 @@ const Channels:React.FC = () => {
                                 }
                             />
                           </SidebarMenuItem>
-                      ))
+                        ))
+                      )
                   }
               </SidebarMenu>
           </ScrollArea>
