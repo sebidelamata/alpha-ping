@@ -9,7 +9,6 @@ import {
     SidebarContent,
     SidebarTrigger
   } from "@/components/components/ui/sidebar"
-import { Separator } from "@/components/components/ui/separator";
 import SidebarProfileFooter from "./Profile/SidebarProfileFooter";
 
 
@@ -25,19 +24,10 @@ const AppSidebar = () => {
                 <SidebarTrigger 
                     className="m-2"
                 />
-                <Separator 
-                    className="border border-accent"
-                />
                 <Channels/>
                 <AddChannel/>
-                <Separator 
-                    className="border border-accent"
-                />
                 <ChannelActions/>
             </SidebarContent>
-            <Separator 
-                    className="border border-accent"
-            />
             <SidebarProfileFooter/>
         </Sidebar>
     )
