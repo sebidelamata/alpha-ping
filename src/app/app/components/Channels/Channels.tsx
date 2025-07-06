@@ -64,7 +64,14 @@ const Channels:React.FC = () => {
     setTokenMetadataLoading,
     setSelectedChannelMetadata
   } = useChannelProviderContext()
-  const { account } = useUserProviderContext()
+  const { 
+    account, 
+    aaveAccount, 
+    setAaveAccount 
+  } = useUserProviderContext()
+
+  // hover states for token and nft menu groups
+  const [hoverToken, setHoverToken] = useState<boolean>(false)
 
   const userChannels = useMemo(
   () =>
@@ -328,7 +335,6 @@ const Channels:React.FC = () => {
   ]); 
 
   // we need to find the user account details for aave if the user has any aave tokens
-  const [aaveAccount, setAaveAccount] = useState<null | AaveUserAccount>(null)
   useEffect(() => {
     const fetchAaveDetails = async (account: string) => {
       const aaveLendingPool = new ethers.Contract(
@@ -386,7 +392,8 @@ const Channels:React.FC = () => {
     tokenMetaData, 
     account, 
     signer, 
-    userChannels
+    userChannels,
+    setAaveAccount
   ])
 
   useEffect(() => {
@@ -429,8 +436,27 @@ const Channels:React.FC = () => {
                             <Collapsible defaultOpen className="group/collapsible">
                               <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
-                                  <SidebarMenuButton> 
-                                    Tokens 
+                                  <SidebarMenuButton 
+                                    onMouseEnter={() => setHoverToken(true)}
+                                    onMouseLeave={() => setHoverToken(false)}
+                                  > 
+                                    <div className="flex items-center justify-start gap-4">
+                                      <Avatar className="size-4">
+                                        <AvatarImage 
+                                            src={
+                                              hoverToken ? 'erc20IconAlt.svg' : 'erc20Icon.svg'
+                                            } 
+                                            alt="Token Logo"
+                                            loading="lazy"
+                                        />
+                                        <AvatarFallback>
+                                            Tokens
+                                        </AvatarFallback>
+                                      </Avatar>
+                                      <p>
+                                          Tokens
+                                      </p>
+                                    </div> 
                                   </SidebarMenuButton>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
@@ -485,10 +511,10 @@ const Channels:React.FC = () => {
                             }).length > 0 &&
                             <Collapsible defaultOpen className="group/collapsible">
                               <SidebarMenuItem>
+                                <HoverCard>
+                                  <HoverCardTrigger asChild>
                                 <CollapsibleTrigger asChild>
-                                  <HoverCard>
-                                     <HoverCardTrigger asChild>
-                                        <SidebarMenuButton>
+                                        <SidebarMenuButton >
                                           <div className="flex items-center justify-start gap-4">
                                             <Avatar className="size-4">
                                               <AvatarImage 
@@ -518,107 +544,107 @@ const Channels:React.FC = () => {
                                               }
                                             </div>
                                           </div>  
-                                      </SidebarMenuButton>
+                                      </SidebarMenuButton>    
+                                    </CollapsibleTrigger>
                                     </HoverCardTrigger>
-                                    <HoverCardContent className="bg-primary text-secondary">
-                                      <div className="w-full">
-                                        <div className="w-full justify-end flex text-xl text-accent">
-                                          Aave Stats
+                                      <HoverCardContent className="bg-primary text-secondary">
+                                        <div className="w-full">
+                                          <div className="w-full justify-end flex text-xl text-accent">
+                                            Aave Stats
+                                          </div>
+                                          <ul className="flex flex-col gap-2 justify-end">
+                                            <li
+                                              className={
+                                                // render color based on health factor
+                                                Number(aaveAccount?.healthFactor) <= 1.1 ?
+                                                "text-red-500 w-full justify-end flex" :
+                                                Number(aaveAccount?.healthFactor) <= 2.0 ?
+                                                "text-yellow-500 w-full justify-end flex" :
+                                                "text-green-500 w-full justify-end flex"
+                                              }
+                                            >
+                                              Health Factor: {
+                                                Number(aaveAccount?.healthFactor).toFixed(2)
+                                              }
+                                            </li>
+                                            <li className="w-full justify-end flex">
+                                              Assets: ${
+                                                humanReadableNumbers(Number(aaveAccount?.totalCollateral).toString())
+                                              }
+                                            </li>
+                                            <li className="w-full justify-end flex">
+                                              - Debt: ${
+                                                humanReadableNumbers(Number(aaveAccount?.totalDebt).toString())
+                                              }
+                                            </li>
+                                            <li className="w-full justify-end flex">
+                                              = Net Worth: ${ 
+                                                humanReadableNumbers(
+                                                  (
+                                                    Number(aaveAccount?.totalCollateral) -
+                                                    Number(aaveAccount?.totalDebt)
+                                                  ).toString()
+                                                )
+                                              }
+                                            </li>
+                                            <br/>
+                                            <li className="w-full justify-end flex">
+                                              Can Borrow: ${ 
+                                                humanReadableNumbers(Number(aaveAccount?.availableBorrows).toString()) 
+                                              }
+                                            </li>
+                                            <li className="w-full justify-end flex">
+                                              Current LTV: {
+                                                (Number(aaveAccount?.ltv) * 100).toFixed(2)
+                                              }%
+                                            </li>
+                                            <li className="w-full justify-end flex">
+                                              Liquidation LTV: {
+                                                (Number(aaveAccount?.currentLiquidationThreshold) * 100).toFixed(2)
+                                              }%
+                                            </li>
+                                          </ul>
                                         </div>
-                                        <ul className="flex flex-col gap-2 justify-end">
-                                          <li
-                                            className={
-                                              // render color based on health factor
-                                              Number(aaveAccount?.healthFactor) <= 1.1 ?
-                                              "text-red-500 w-full justify-end flex" :
-                                              Number(aaveAccount?.healthFactor) <= 2.0 ?
-                                              "text-yellow-500 w-full justify-end flex" :
-                                              "text-green-500 w-full justify-end flex"
-                                            }
-                                          >
-                                            Health Factor: {
-                                              Number(aaveAccount?.healthFactor).toFixed(2)
-                                            }
-                                          </li>
-                                          <li className="w-full justify-end flex">
-                                            Assets: ${
-                                              humanReadableNumbers(Number(aaveAccount?.totalCollateral).toString())
-                                            }
-                                          </li>
-                                          <li className="w-full justify-end flex">
-                                            - Debt: ${
-                                              humanReadableNumbers(Number(aaveAccount?.totalDebt).toString())
-                                            }
-                                          </li>
-                                          <li className="w-full justify-end flex">
-                                            = Net Worth: ${ 
-                                              humanReadableNumbers(
-                                                (
-                                                  Number(aaveAccount?.totalCollateral) -
-                                                  Number(aaveAccount?.totalDebt)
-                                                ).toString()
-                                              )
-                                            }
-                                          </li>
-                                          <br/>
-                                          <li className="w-full justify-end flex">
-                                            Can Borrow: ${ 
-                                              humanReadableNumbers(Number(aaveAccount?.availableBorrows).toString()) 
-                                            }
-                                          </li>
-                                          <li className="w-full justify-end flex">
-                                            Current LTV: {
-                                              (Number(aaveAccount?.ltv) * 100).toFixed(2)
-                                            }%
-                                          </li>
-                                          <li className="w-full justify-end flex">
-                                            Liquidation LTV: {
-                                              (Number(aaveAccount?.currentLiquidationThreshold) * 100).toFixed(2)
-                                            }%
-                                          </li>
-                                        </ul>
-                                      </div>
-                                    </HoverCardContent>
-                                  </HoverCard>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent>
-                                  <SidebarMenuSub>
-                                    {
-                                      // filter for aave protocol token channels
-                                      userChannels.filter((channel, index) => {
-                                        return (
-                                          channel.tokenType.toLowerCase() !== 'erc721' && 
-                                          (
-                                            tokenMetaData[index]?.protocol &&
-                                            tokenMetaData[index]?.protocol?.toLowerCase() === 'aave'
-                                          )
-                                        )
-                                      })
-                                        .map((channel, index) => {
-                                          // filter the token metadata we will pass to the channel
-                                          const filteredTokenMetadata = tokenMetaData.filter((_, index) => {
+                                      </HoverCardContent>
+                                    </HoverCard>
+                                    <CollapsibleContent>
+                                      <SidebarMenuSub>
+                                        {
+                                          // filter for aave protocol token channels
+                                          userChannels.filter((channel, index) => {
                                             return (
-                                              userChannels[index].tokenType.toLowerCase() !== 'erc721' &&
+                                              channel.tokenType.toLowerCase() !== 'erc721' && 
                                               (
                                                 tokenMetaData[index]?.protocol &&
                                                 tokenMetaData[index]?.protocol?.toLowerCase() === 'aave'
                                               )
                                             )
                                           })
-                                          return <SidebarMenuItem key={channel.tokenAddress}>
-                                                    <Channel
-                                                        channel={channel}
-                                                        tokenMetadata={
-                                                          filteredTokenMetadata[index] || defaultTokenMetadata
-                                                        }
-                                                    />
-                                                  </SidebarMenuItem>
-                                        })
-                                    }
-                                  </SidebarMenuSub>
-                                </CollapsibleContent>
-                              </SidebarMenuItem>
-                            </Collapsible>
+                                            .map((channel, index) => {
+                                              // filter the token metadata we will pass to the channel
+                                              const filteredTokenMetadata = tokenMetaData.filter((_, index) => {
+                                                return (
+                                                  userChannels[index].tokenType.toLowerCase() !== 'erc721' &&
+                                                  (
+                                                    tokenMetaData[index]?.protocol &&
+                                                    tokenMetaData[index]?.protocol?.toLowerCase() === 'aave'
+                                                  )
+                                                )
+                                              })
+                                              return <SidebarMenuItem key={channel.tokenAddress}>
+                                                        <Channel
+                                                            channel={channel}
+                                                            tokenMetadata={
+                                                              filteredTokenMetadata[index] || defaultTokenMetadata
+                                                            }
+                                                        />
+                                                      </SidebarMenuItem>
+                                            })
+                                        }
+                                      </SidebarMenuSub>
+                                    </CollapsibleContent>
+                                </SidebarMenuItem>
+                              </Collapsible>
                           }
                           {
                             userChannels.filter((channel) => {
@@ -629,8 +655,22 @@ const Channels:React.FC = () => {
                             <Collapsible defaultOpen className="group/collapsible">
                               <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
-                                  <SidebarMenuButton> 
-                                    NFTs 
+                                  <SidebarMenuButton>  
+                                    <div className="flex items-center justify-start gap-4">
+                                      <Avatar className="size-4">
+                                        <AvatarImage 
+                                            src='blank_nft.svg'
+                                            alt="NFT Logo"
+                                            loading="lazy"
+                                        />
+                                        <AvatarFallback>
+                                            NFTs
+                                        </AvatarFallback>
+                                      </Avatar>
+                                      <p>
+                                          NFTs
+                                      </p>
+                                    </div> 
                                   </SidebarMenuButton>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>

@@ -38,6 +38,8 @@ interface UserProviderType{
     setFollowFilter: React.Dispatch<React.SetStateAction<boolean>>;
     followingList: string[];
     blockedList: string[];
+    aaveAccount: AaveUserAccount | null;
+    setAaveAccount: React.Dispatch<React.SetStateAction<AaveUserAccount | null>>;
 }
 
 interface ErrorType{
@@ -98,6 +100,10 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     // loadstates
     const [userAttributesLoading, setUserAttributesLoading] = useState<boolean>(false)
     const [userAttributesError, setUserAttributesError] = useState<string>('')
+
+    // user aave details
+    // we need to find the user account details for aave if the user has any aave tokens
+    const [aaveAccount, setAaveAccount] = useState<null | AaveUserAccount>(null)
 
     useEffect(() => {
          // load up user attributes for this channel
@@ -257,7 +263,9 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             followFilter,
             setFollowFilter,
             followingList,
-            blockedList
+            blockedList,
+            aaveAccount,
+            setAaveAccount
         }}>
             {children}
         </UserContext.Provider>
