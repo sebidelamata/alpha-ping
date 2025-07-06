@@ -3,7 +3,8 @@
 import React,
 {
   useEffect,
-  useMemo
+  useMemo,
+  useState
 } from "react";
 import {
   SidebarGroup,
@@ -20,11 +21,20 @@ import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import L1Address from '../../../../lib/ArbitrumBridgedTokenStandardABI.json'
+import AaveL2LendingPool from '../../../../lib/aaveL2PoolABI.json'
 import aTokenUnderlyingAsset from '../../../../lib/aTokenAaveUnderlyingAsset.json'
-import { ethers } from 'ethers';
+import { 
+  ethers, 
+  formatUnits 
+} from 'ethers';
 import qs from 'qs';
 import { Skeleton } from "@/components/components/ui/skeleton";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/components/ui/collapsible";
+import { 
+  Collapsible, 
+  CollapsibleContent, 
+  CollapsibleTrigger 
+} from "@/components/components/ui/collapsible";
+import { useUserProviderContext } from "src/contexts/UserContext";
 
 
 const Channels:React.FC = () => {
@@ -43,6 +53,7 @@ const Channels:React.FC = () => {
     setTokenMetadataLoading,
     setSelectedChannelMetadata
   } = useChannelProviderContext()
+  const { account } = useUserProviderContext()
 
   const userChannels = useMemo(
   () =>
@@ -291,6 +302,7 @@ const Channels:React.FC = () => {
     setTokenMetaData
   ])
 
+  // set the default channel to the first in the list if one hasn't been selected yet
   useEffect(() => {
     if (!currentChannel && userChannels.length > 0 && tokenMetaData.length > 0) {
       setCurrentChannel(userChannels[0]);
@@ -304,7 +316,66 @@ const Channels:React.FC = () => {
     tokenMetaData
   ]); 
 
-  
+  // we need to find the user account details for aave if the user has any aave tokens
+  const [aaveAccount, setAaveAccount] = useState<null | AaveUserAccount>(null)
+  useEffect(() => {
+    const fetchAaveDetails = async (account: string) => {
+      const aaveLendingPool = new ethers.Contract(
+        // aave lending pool address
+        "0x794a61358d6845594f94dc1db02a252b5b4814ad",
+        AaveL2LendingPool.abi,
+        signer
+      );
+      try{
+        const accountData = await aaveLendingPool.getUserAccountData(account);
+        if (accountData) {
+          // Raw values are BigNumbers; convert them to human‑readable strings
+        const cleanedAccountData: AaveUserAccount = {
+          totalCollateral: formatUnits(accountData.totalCollateralBase, 8),
+          totalDebt: formatUnits(accountData.totalDebtBase, 8),
+          availableBorrows: formatUnits(accountData.availableBorrowsBase, 8),
+          currentLiquidationThreshold: accountData.currentLiquidationThreshold.toString(), 
+          ltv: accountData.ltv.toString(),
+          healthFactor: formatUnits(accountData.healthFactor, 18)
+        };
+          console.log('user aave data:', cleanedAccountData);
+          setAaveAccount(cleanedAccountData);
+        } else {
+            console.warn('No aave account data found for this user:', accountData);
+            return;
+        }
+      } catch(error: unknown){
+        if(error !== undefined || error !== null){
+            console.warn("Error unable to fetch aave user account details for: " + signer + ": " + (error as Error).toString())
+            return;
+        }
+      }
+    }
+
+    // only run this function if the user is part of an aave channel
+    if(
+      userChannels.filter((channel, index) => {
+        return (
+          channel.tokenType.toLowerCase() !== 'erc721' && 
+          (
+            tokenMetaData[index]?.protocol &&
+            tokenMetaData[index]?.protocol?.toLowerCase() === 'aave'
+          )
+        )
+      }).length > 0
+    ){
+      fetchAaveDetails(account)
+    }
+  }, [
+    tokenMetaData, 
+    account, 
+    signer, 
+    userChannels
+  ])
+
+  useEffect(() => {
+    console.log(aaveAccount)
+  },[aaveAccount])
   return (
     <SidebarGroup className="flex flex-col h-full min-h-0">
       <SidebarGroupLabel>

@@ -126,6 +126,16 @@ interface ChainInfo {
   chainId?: number; // present only for EVM‑compatible chains
 }
 
+// aave
+interface AaveUserAccount {
+  totalCollateral: string;
+  totalDebt: string;
+  availableBorrows: string;
+  currentLiquidationThreshold: number;
+  ltv: number;
+  healthFactor: string;
+}
+
 type Weighting = 'unweighted' | 'post' | 'current' | 'delta' | 'inverse';
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
 
