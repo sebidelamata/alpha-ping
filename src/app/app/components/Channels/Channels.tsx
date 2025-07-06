@@ -10,7 +10,9 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuItem
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuSub
 } from "@/components/components/ui/sidebar"
 import { ScrollArea } from "@/components/components/ui/scroll-area"
 import Channel from "../Channels/Channel";
@@ -22,6 +24,7 @@ import aTokenUnderlyingAsset from '../../../../lib/aTokenAaveUnderlyingAsset.jso
 import { ethers } from 'ethers';
 import qs from 'qs';
 import { Skeleton } from "@/components/components/ui/skeleton";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/components/ui/collapsible";
 
 
 const Channels:React.FC = () => {
@@ -321,16 +324,138 @@ const Channels:React.FC = () => {
                           </SidebarMenuItem>
                         ))
                       ) : (
-                        userChannels.map((channel, index) => (
-                          <SidebarMenuItem key={channel.tokenAddress}>
-                            <Channel
-                                channel={channel}
-                                tokenMetadata={
-                                  tokenMetaData[index] || defaultTokenMetadata
-                                }
-                            />
-                          </SidebarMenuItem>
-                        ))
+                        // when we render the channels, we want three groups:
+                        // spot tokens, tokens deposited in Aave (or other 
+                        // protocols in the future), and NFTs
+                        <>
+                          <Collapsible defaultOpen className="group/collapsible">
+                              <SidebarMenuItem>
+                                <CollapsibleTrigger asChild>
+                                  <SidebarMenuButton> 
+                                    Tokens 
+                                  </SidebarMenuButton>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <SidebarMenuSub>
+                                    {
+                                      // filter for spot token channels
+                                      userChannels.filter((channel, index) => {
+                                        return (
+                                          channel.tokenType.toLowerCase() !== 'erc721' && 
+                                          (
+                                            !tokenMetaData[index]?.protocol ||
+                                            tokenMetaData[index]?.protocol?.toLowerCase() !== 'aave'
+                                          )
+                                        )
+                                      })
+                                        .map((channel, index) => {
+                                          // filter the token metadata we will pass to the channel
+                                          const filteredTokenMetadata = tokenMetaData.filter((metadata, index) => {
+                                            return (
+                                              userChannels[index].tokenType.toLowerCase() !== 'erc721' &&
+                                              (
+                                                !tokenMetaData[index]?.protocol ||
+                                                tokenMetaData[index]?.protocol?.toLowerCase() !== 'aave'
+                                              )
+                                            )
+                                          })
+                                          return <SidebarMenuItem key={channel.tokenAddress}>
+                                                    <Channel
+                                                        channel={channel}
+                                                        tokenMetadata={
+                                                          filteredTokenMetadata[index] || defaultTokenMetadata
+                                                        }
+                                                    />
+                                                  </SidebarMenuItem>
+                                        })
+                                    }
+                                  </SidebarMenuSub>
+                                </CollapsibleContent>
+                              </SidebarMenuItem>
+                          </Collapsible>
+                            <Collapsible defaultOpen className="group/collapsible">
+                              <SidebarMenuItem>
+                                <CollapsibleTrigger asChild>
+                                  <SidebarMenuButton> 
+                                    Aave 
+                                  </SidebarMenuButton>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <SidebarMenuSub>
+                                    {
+                                      // filter for aave protocol token channels
+                                      userChannels.filter((channel, index) => {
+                                        return (
+                                          channel.tokenType.toLowerCase() !== 'erc721' && 
+                                          (
+                                            tokenMetaData[index]?.protocol &&
+                                            tokenMetaData[index]?.protocol?.toLowerCase() === 'aave'
+                                          )
+                                        )
+                                      })
+                                        .map((channel, index) => {
+                                          // filter the token metadata we will pass to the channel
+                                          const filteredTokenMetadata = tokenMetaData.filter((metadata, index) => {
+                                            return (
+                                              userChannels[index].tokenType.toLowerCase() !== 'erc721' &&
+                                              (
+                                                tokenMetaData[index]?.protocol &&
+                                                tokenMetaData[index]?.protocol?.toLowerCase() === 'aave'
+                                              )
+                                            )
+                                          })
+                                          return <SidebarMenuItem key={channel.tokenAddress}>
+                                                    <Channel
+                                                        channel={channel}
+                                                        tokenMetadata={
+                                                          filteredTokenMetadata[index] || defaultTokenMetadata
+                                                        }
+                                                    />
+                                                  </SidebarMenuItem>
+                                        })
+                                    }
+                                  </SidebarMenuSub>
+                                </CollapsibleContent>
+                              </SidebarMenuItem>
+                          </Collapsible>
+                            <Collapsible defaultOpen className="group/collapsible">
+                              <SidebarMenuItem>
+                                <CollapsibleTrigger asChild>
+                                  <SidebarMenuButton> 
+                                    NFTs 
+                                  </SidebarMenuButton>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <SidebarMenuSub>
+                                    {
+                                      // filter for spot token channels
+                                      userChannels.filter((channel) => {
+                                        return (
+                                          channel.tokenType.toLowerCase() === 'erc721'
+                                        )
+                                      })
+                                        .map((channel, index) => {
+                                          // filter the token metadata we will pass to the channel
+                                          const filteredTokenMetadata = tokenMetaData.filter((_, index) => {
+                                            return (
+                                              userChannels[index].tokenType.toLowerCase() === 'erc721'
+                                            )
+                                          })
+                                          return <SidebarMenuItem key={channel.tokenAddress}>
+                                                    <Channel
+                                                        channel={channel}
+                                                        tokenMetadata={
+                                                          filteredTokenMetadata[index] || defaultTokenMetadata
+                                                        }
+                                                    />
+                                                  </SidebarMenuItem>
+                                        })
+                                    }
+                                  </SidebarMenuSub>
+                                </CollapsibleContent>
+                              </SidebarMenuItem>
+                          </Collapsible>
+                        </>
                       )
                   }
               </SidebarMenu>
