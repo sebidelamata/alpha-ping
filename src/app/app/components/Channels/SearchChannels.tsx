@@ -29,8 +29,6 @@ import {
   } from "@/components/components/ui/dialog"
   import { Button } from "@/components/components/ui/button.tsx";
   import { ChevronsUpDown, SearchCode } from "lucide-react";
-  import tokenList from "../../../../../public/tokenList.json";
-  import tokensByChain from "src/lib/tokensByChain";
 
 const SearchChannels: React.FC = () => {
 
@@ -38,17 +36,23 @@ const SearchChannels: React.FC = () => {
         channels, 
         alphaPING, 
         signer,
-        chainId 
+        tokenMetaData 
     } = useEtherProviderContext()
     const { 
         setCurrentChannel,
         joinChannelLoading, 
-        setJoinChannelLoading 
+        setJoinChannelLoading ,
+        setSelectedChannelMetadata
     } = useChannelProviderContext()
+
+    console.log(
+        "search channels token metadata: ", 
+        tokenMetaData
+    )
 
     const [openSearch, setOpenSearch] = useState(false)
 
-    const handleChannelClick = async (channel: AlphaPING.ChannelStructOutput) => {
+    const handleChannelClick = async (channel: AlphaPING.ChannelStructOutput, index: number) => {
         const account = await signer?.getAddress()
         // Check if user has joined already
         const hasJoined = await alphaPING?.hasJoinedChannel(
@@ -58,11 +62,13 @@ const SearchChannels: React.FC = () => {
         // If they haven't allow them to mint.
         if (hasJoined) {
             setCurrentChannel(channel)
+            setSelectedChannelMetadata(tokenMetaData[index])
         } else {
             setJoinChannelLoading(true)
             const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
             await transaction?.wait()
             setCurrentChannel(channel)
+            setSelectedChannelMetadata(tokenMetaData[index])
             setJoinChannelLoading(false)
         }
         setOpenSearch(false)
@@ -91,12 +97,12 @@ const SearchChannels: React.FC = () => {
                         <CommandInput placeholder="Search Token or NFT..." className="h-9" />
                         <CommandList>
                             <CommandEmpty>No token found.</CommandEmpty>
-                            {channels.map((channel) => (
+                            {channels.map((channel, index) => (
                                 <CommandItem
                                 key={channel.tokenAddress}
                                 value={channel.name}
                                 onSelect={() => {
-                                    handleChannelClick(channel)
+                                    handleChannelClick(channel, index)
                                 }}
                                 >
                                 <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
@@ -105,18 +111,7 @@ const SearchChannels: React.FC = () => {
                                         alt={channel.name}
                                         src={
                                                 // Check if the token exists in the tokenList and has a logoURI//   
-                                                ( 
-                                                    tokensByChain(tokenList, Number(chainId)).filter((token) => {
-                                                        return token.address.toLowerCase() === channel.tokenAddress.toLowerCase()
-                                                    }).length > 0 && 
-                                                    tokensByChain(tokenList, Number(chainId)).filter((token) => {
-                                                        return token.address.toLowerCase() === channel.tokenAddress.toLowerCase()
-                                                    })[0].logoURI !== null 
-                                                ) ? 
-                                                tokensByChain(tokenList, Number(chainId)).filter((token) => {
-                                                    return token.address.toLowerCase() === channel.tokenAddress.toLowerCase()
-                                                }).find(token => token.logoURI !== null)?.logoURI ?? "" :
-                                                ""
+                                                tokenMetaData[index].logo
                                             } 
                                     />
                                     <AvatarFallback>

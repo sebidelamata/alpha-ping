@@ -27,6 +27,7 @@ import {
 import { ScrollArea } from '@/components/components/ui/scroll-area';
 import NewUserNoChannels from '../Channels/NewUserNoChannels';
 import MessagesHeader from './MessagesHeader';
+import { Skeleton } from '@/components/components/ui/skeleton'
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -54,7 +55,11 @@ const Messages:React.FC = () => {
     signer, 
     alphaPING 
   } = useEtherProviderContext()
-  const { currentChannel } = useChannelProviderContext()
+  const { 
+    currentChannel, 
+    tokenMetadataLoading,
+    selectedChannelMetadata 
+  } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()
   const { 
     txMessageBan, 
@@ -66,6 +71,7 @@ const Messages:React.FC = () => {
     followingList,
     blockedList 
   } = useUserProviderContext()
+  console.log('selectedChannelMetadata', selectedChannelMetadata)
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -238,9 +244,18 @@ const Messages:React.FC = () => {
         e.stopPropagation(); 
       }}
     >
-      <CardHeader className="flex flex-col items-start justify-start p-4">
-        <MessagesHeader/>
-      </CardHeader>
+      {
+        // we render the messages header only if token metadata has been fetched
+        (selectedChannelMetadata !== undefined || tokenMetadataLoading === false) ?
+        <CardHeader className="flex flex-col items-start justify-start p-4">
+          <MessagesHeader/>
+        </CardHeader> :
+        <CardHeader className="flex flex-col items-start justify-start p-4">
+          <Skeleton className='h-8 w-full justify-start'/>
+          <Skeleton className='h-8 w-full justify-start'/>
+          <Skeleton className='h-8 w-full justify-start'/>
+        </CardHeader>
+      }
       <CardContent className='flex-1 flex flex-col overflow-hidden p-0'>
         <div className="flex-1 overflow-hidden">
           { 

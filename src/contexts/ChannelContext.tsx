@@ -14,6 +14,8 @@ interface ChannelProviderType{
     setCurrentChannel: React.Dispatch<React.SetStateAction<AlphaPING.ChannelStructOutput | null>>;
     selectedChannelMetadata: tokenMetadata | null;
     setSelectedChannelMetadata: React.Dispatch<React.SetStateAction<tokenMetadata | null>>;
+    tokenMetadataLoading: boolean;
+    setTokenMetadataLoading: React.Dispatch<React.SetStateAction<boolean>>;
     joinChannelLoading: boolean;
     setJoinChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
     addChannelLoading: boolean;
@@ -35,39 +37,43 @@ export const useChannelProviderContext = (): ChannelProviderType => {
 
 const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     // selected channel
-  const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
-  // token metadata fetched from coinmarketcap
-  const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
-  // join channel loading state
-  const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
-  // add channel loading state
-  const [addChannelLoading, setAddChannelLoading] = useState<boolean>(false)
-  // selected channel's actions ("chat", "analyze", "trade")
-  const [channelAction, setChannelAction] = useState<string>("chat")
+    const [currentChannel, setCurrentChannel] = useState<AlphaPING.ChannelStructOutput | null>(null)
+    // token metadata fetched from coinmarketcap
+    const[selectedChannelMetadata, setSelectedChannelMetadata] = useState<tokenMetadata | null>(null)
+    // token metadata loading state
+    const [tokenMetadataLoading, setTokenMetadataLoading] = useState<boolean>(false)
+    // join channel loading state
+    const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
+    // add channel loading state
+    const [addChannelLoading, setAddChannelLoading] = useState<boolean>(false)
+    // selected channel's actions ("chat", "analyze", "trade")
+    const [channelAction, setChannelAction] = useState<string>("chat")
 
-  // set document title based on current Channel
-  useEffect(() => {
-    if(currentChannel !== null){
-        document.title = `AlphaPING | ${currentChannel.name}`;
-    }
-  }, [currentChannel])
+    // set document title based on current Channel
+    useEffect(() => {
+        if(currentChannel !== null){
+            document.title = `AlphaPING | ${currentChannel.name}`;
+        }
+    }, [currentChannel])
 
-  return (
-    <ChannelContext.Provider value={{ 
-        currentChannel,
-        setCurrentChannel,
-        selectedChannelMetadata,
-        setSelectedChannelMetadata,
-        joinChannelLoading,
-        setJoinChannelLoading,
-        addChannelLoading,
-        setAddChannelLoading,
-        channelAction,
-        setChannelAction
-    }}>
-        {children}
-    </ChannelContext.Provider>
-)
+    return (
+        <ChannelContext.Provider value={{ 
+            currentChannel,
+            setCurrentChannel,
+            selectedChannelMetadata,
+            setSelectedChannelMetadata,
+            tokenMetadataLoading,
+            setTokenMetadataLoading,
+            joinChannelLoading,
+            setJoinChannelLoading,
+            addChannelLoading,
+            setAddChannelLoading,
+            channelAction,
+            setChannelAction
+        }}>
+            {children}
+        </ChannelContext.Provider>
+    )
 }
 
 export default ChannelProvider

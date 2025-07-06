@@ -53,6 +53,9 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [hasJoined, setHasJoined] = useState<boolean[]>([]);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
+  // hold metadata for channels
+  const [tokenMetaData, setTokenMetaData] = useState<tokenMetadata[]>([]);
+
   useEffect(() => {
     const loadBlockchainData = async () => {
       try {
@@ -145,7 +148,9 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setChannels,
       hasJoined,
       setHasJoined,
-      isInitialized  
+      isInitialized,
+      tokenMetaData,
+      setTokenMetaData  
     }}>
       {children}
     </ProviderContext.Provider>

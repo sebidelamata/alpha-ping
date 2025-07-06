@@ -2,7 +2,6 @@
 
 import React,
 {
-  useState,
   useEffect,
   useMemo
 } from "react";
@@ -31,10 +30,15 @@ const Channels:React.FC = () => {
     channels, 
     hasJoined, 
     signer, 
+    tokenMetaData,
+    setTokenMetaData
   } = useEtherProviderContext()
   const { 
     currentChannel, 
     setCurrentChannel,
+    tokenMetadataLoading,
+    setTokenMetadataLoading,
+    setSelectedChannelMetadata
   } = useChannelProviderContext()
 
   const userChannels = useMemo(
@@ -90,8 +94,6 @@ const Channels:React.FC = () => {
     []
   );
 
-  const [tokenMetaData, setTokenMetaData] = useState<tokenMetadata[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   // here we will grab metadata for each channel with a promise.all
   useEffect(() => {
     // this is the function that will fetch the token metadata from coinmarketcap
@@ -249,7 +251,7 @@ const Channels:React.FC = () => {
         
     // this will run through all the user channels and fetch the metadata for each token
     const fetchAllUserChannelsMetadata = async () => {
-      setLoading(true);
+      setTokenMetadataLoading(true);
       const allUserChannelsMetadata = await Promise.all(
         userChannels.map(async (channel: AlphaPING.ChannelStructOutput) => {
           // skipp fetching metadata for ERC721 tokens
@@ -266,7 +268,7 @@ const Channels:React.FC = () => {
       );
       console.log('All user channels metadata fetched:', allUserChannelsMetadata);
       setTokenMetaData(allUserChannelsMetadata)
-      setLoading(false);
+      setTokenMetadataLoading(false);
       return allUserChannelsMetadata
     }
 
@@ -278,13 +280,26 @@ const Channels:React.FC = () => {
     ){
       fetchAllUserChannelsMetadata()
     }
-  }, [userChannels, signer, defaultTokenMetadata])
+  }, [
+    userChannels, 
+    signer, 
+    defaultTokenMetadata, 
+    setTokenMetadataLoading, 
+    setTokenMetaData
+  ])
 
   useEffect(() => {
-    if (!currentChannel && userChannels.length > 0) {
+    if (!currentChannel && userChannels.length > 0 && tokenMetaData.length > 0) {
       setCurrentChannel(userChannels[0]);
+      setSelectedChannelMetadata(tokenMetaData[0]);
     }
-  }, [userChannels, currentChannel, setCurrentChannel]); 
+  }, [
+    userChannels, 
+    currentChannel, 
+    setCurrentChannel, 
+    setSelectedChannelMetadata, 
+    tokenMetaData
+  ]); 
 
   
   return (
@@ -298,7 +313,7 @@ const Channels:React.FC = () => {
           <ScrollArea className="h-full pr-2 overflow-y-auto">
               <SidebarMenu>
                   {
-                      loading === true ? (
+                      tokenMetadataLoading === true ? (
                         Array.from({ length: 10 }, (_, index) => (
                           <SidebarMenuItem key={index} className="flex flex-row items-center justify-between w-full pb-2">
                             <Skeleton className="h-6 w-6 rounded-full" />

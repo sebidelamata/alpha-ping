@@ -70,6 +70,7 @@ const MessagesHeader: React.FC = () => {
     
     const [userBalance, setUserBalance] = useState<string | null>(null)
     const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
+    console.log("selectedChannelMetadata: ", selectedChannelMetadata)
 
     useEffect(() => {
         const getUserBalance = async () => {
@@ -177,7 +178,6 @@ console.log(selectedChannelMetadata)
                     }
                     // Get the first token's data dynamically
                     const tokenDataArray = Object.values(data.data) as CMCQuoteUSD[];
-                    console.log('tokenDataArray:', tokenDataArray);
                     if (!tokenDataArray?.length || !tokenDataArray?.[0].quote?.USD?.price) {
                         setCmcError("USD price not found in response");
                         setCmcFetch({
