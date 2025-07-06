@@ -328,7 +328,18 @@ const Channels:React.FC = () => {
                         // spot tokens, tokens deposited in Aave (or other 
                         // protocols in the future), and NFTs
                         <>
-                          <Collapsible defaultOpen className="group/collapsible">
+                          {
+                            // filter for spot token channels
+                            userChannels.filter((channel, index) => {
+                              return (
+                                channel.tokenType.toLowerCase() !== 'erc721' && 
+                                (
+                                  !tokenMetaData[index]?.protocol ||
+                                  tokenMetaData[index]?.protocol?.toLowerCase() !== 'aave'
+                                )
+                              )
+                            }).length > 0 &&
+                            <Collapsible defaultOpen className="group/collapsible">
                               <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
                                   <SidebarMenuButton> 
@@ -372,7 +383,19 @@ const Channels:React.FC = () => {
                                   </SidebarMenuSub>
                                 </CollapsibleContent>
                               </SidebarMenuItem>
-                          </Collapsible>
+                            </Collapsible>
+                          }
+                          {
+                            // filter for aave protocol token channels
+                            userChannels.filter((channel, index) => {
+                              return (
+                                channel.tokenType.toLowerCase() !== 'erc721' && 
+                                (
+                                  tokenMetaData[index]?.protocol &&
+                                  tokenMetaData[index]?.protocol?.toLowerCase() === 'aave'
+                                )
+                              )
+                            }).length > 0 &&
                             <Collapsible defaultOpen className="group/collapsible">
                               <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
@@ -417,7 +440,14 @@ const Channels:React.FC = () => {
                                   </SidebarMenuSub>
                                 </CollapsibleContent>
                               </SidebarMenuItem>
-                          </Collapsible>
+                            </Collapsible>
+                          }
+                          {
+                            userChannels.filter((channel) => {
+                                      return (
+                                        channel.tokenType.toLowerCase() === 'erc721'
+                                      )
+                                    }). length > 0 &&
                             <Collapsible defaultOpen className="group/collapsible">
                               <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
@@ -454,7 +484,8 @@ const Channels:React.FC = () => {
                                   </SidebarMenuSub>
                                 </CollapsibleContent>
                               </SidebarMenuItem>
-                          </Collapsible>
+                            </Collapsible>
+                          }
                         </>
                       )
                   }
