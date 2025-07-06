@@ -100,8 +100,6 @@ const MessagesHeader: React.FC = () => {
         "60d":  "percent_change_60d"
     } as const satisfies Record<TimeRange, keyof cmcPriceData>;
 
-console.log(selectedChannelMetadata)
-
     // get latest quote in USD
         const [cmcFetch, setCmcFetch] = useState<cmcPriceData>({
             twentyFourHourChange: "",
@@ -514,6 +512,43 @@ console.log(selectedChannelMetadata)
                             ) ?
                             <DropdownMenuGroup>
                                 {
+                                    selectedChannelMetadata.contract_address.filter((contract_address) => {
+                                        return contract_address.platform.coin.slug === 'arbitrum'
+                                    }).length === 0 &&
+                                    <DropdownMenuItem key={currentChannel.tokenAddress}>
+                                        <div className="flex flex-row gap-2 items-center">
+                                            <Avatar>
+                                                <AvatarImage
+                                                    src={
+                                                        CHAINS.find(chain => chain.chainId?.toString() === (42161).toString())?.icon ||
+                                                        '/default_chain_icon.svg'
+                                                    }
+                                                    alt={'Arbitrum Icon'}
+                                                    loading="lazy"
+                                                />
+                                                <AvatarFallback>
+                                                    Arb
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div>
+                                                Arbitrum
+                                            </div>
+                                            <Button
+                                                variant="default"
+                                                className="h-6 w-6 p-0"
+                                                >
+                                                    <Link
+                                                        href={`https://arbiscan.io/address/${currentChannel.tokenAddress}`}
+                                                        target="_blank"
+                                                    >
+                                                        <SquareArrowUpRight className="w-4 h-4"/>
+                                                    </Link>
+                                            </Button>
+                                            <CopyTextBlock text={currentChannel.tokenAddress}/>
+                                        </div>
+                                    </DropdownMenuItem>
+                                }
+                                {
                                     selectedChannelMetadata.contract_address.map((address) => {
                                         return(
                                             // some tokens have same contract address on different chains so to
@@ -527,7 +562,7 @@ console.log(selectedChannelMetadata)
                                                             CHAINS.find(chain => chain.coinId?.toString() === (address.platform.coin.id).toString())?.icon ||
                                                             '/erc20Icon.svg'
                                                         }
-                                                        alt={'Arbitrum Icon'}
+                                                        alt={`${address.platform.coin.name} Icon`}
                                                         loading="lazy"
                                                     />
                                                     <AvatarFallback>

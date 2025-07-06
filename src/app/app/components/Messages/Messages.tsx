@@ -53,12 +53,13 @@ const Messages:React.FC = () => {
 
   const { 
     signer, 
-    alphaPING 
+    alphaPING,
+    tokenMetaData 
   } = useEtherProviderContext()
   const { 
     currentChannel, 
     tokenMetadataLoading,
-    selectedChannelMetadata 
+    selectedChannelMetadata, 
   } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()
   const { 
@@ -268,6 +269,7 @@ const Messages:React.FC = () => {
                 .filter(message => message.channel === currentChannel.id.toString())
                 .length === 0
             ) &&
+            tokenMetaData.length > 0 &&
             <ScrollArea className='h-full overflow-y-auto w-full p-4'>
               <SkeletonMessageFeed/>
               <NewUserNoChannels/>

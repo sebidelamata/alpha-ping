@@ -1,6 +1,11 @@
+'use client';
+
 import SearchChannels from '../Channels/SearchChannels';
+import { useEtherProviderContext } from 'src/contexts/ProviderContext';
 
 const Navbar: React.FC = () => {
+
+  const { tokenMetaData } = useEtherProviderContext()
 
   return (
     <nav className='fixed z-50 flex h-24 w-full justify-between bg-primary p-4'>
@@ -17,7 +22,11 @@ const Navbar: React.FC = () => {
           A<span className='text-sm font-light italic'>lpha</span>PING
         </h1>
       </div>
-      <SearchChannels/>
+      {
+        // search channels relies on tokenmetadata
+        tokenMetaData.length > 0 &&
+        <SearchChannels/>
+      }
       <div className='grid justify-end align-middle' >
         <appkit-button 
           size='sm' 
