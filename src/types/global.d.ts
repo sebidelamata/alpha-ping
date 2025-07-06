@@ -131,8 +131,8 @@ interface AaveUserAccount {
   totalCollateral: string;
   totalDebt: string;
   availableBorrows: string;
-  currentLiquidationThreshold: number;
-  ltv: number;
+  currentLiquidationThreshold: string;
+  ltv: string;
   healthFactor: string;
 }
 

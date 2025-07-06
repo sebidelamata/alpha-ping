@@ -45,11 +45,6 @@ const SearchChannels: React.FC = () => {
         setSelectedChannelMetadata
     } = useChannelProviderContext()
 
-    console.log(
-        "search channels token metadata: ", 
-        tokenMetaData
-    )
-
     const [openSearch, setOpenSearch] = useState(false)
 
     const handleChannelClick = async (channel: AlphaPING.ChannelStructOutput, index: number) => {

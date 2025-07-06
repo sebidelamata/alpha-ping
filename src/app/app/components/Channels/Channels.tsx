@@ -35,6 +35,17 @@ import {
   CollapsibleTrigger 
 } from "@/components/components/ui/collapsible";
 import { useUserProviderContext } from "src/contexts/UserContext";
+import { 
+  Avatar, 
+  AvatarFallback, 
+  AvatarImage 
+} from "@/components/components/ui/avatar";
+import { 
+  HoverCard, 
+  HoverCardContent, 
+  HoverCardTrigger 
+} from "@/components/components/ui/hover-card";
+import humanReadableNumbers from "src/lib/humanReadableNumbers";
 
 
 const Channels:React.FC = () => {
@@ -327,17 +338,22 @@ const Channels:React.FC = () => {
         signer
       );
       try{
-        const accountData = await aaveLendingPool.getUserAccountData(account);
+        const accountData = await aaveLendingPool.getUserAccountData(account)
+        console.log('accountData: ', accountData)
         if (accountData) {
+          console.log('accountData: ', accountData)
+
           // Raw values are BigNumbers; convert them to human‑readable strings
-        const cleanedAccountData: AaveUserAccount = {
-          totalCollateral: formatUnits(accountData.totalCollateralBase, 8),
-          totalDebt: formatUnits(accountData.totalDebtBase, 8),
-          availableBorrows: formatUnits(accountData.availableBorrowsBase, 8),
-          currentLiquidationThreshold: accountData.currentLiquidationThreshold.toString(), 
-          ltv: accountData.ltv.toString(),
-          healthFactor: formatUnits(accountData.healthFactor, 18)
-        };
+          const cleanedAccountData: AaveUserAccount = {
+            totalCollateral: formatUnits(accountData.totalCollateralBase, 8),
+            totalDebt: formatUnits(accountData.totalDebtBase, 8),
+            availableBorrows: formatUnits(accountData.availableBorrowsBase, 8),
+            // liquidation threshhold in bps
+            currentLiquidationThreshold: (Number(accountData.currentLiquidationThreshold) / 10000).toString(), 
+            // ltv is in bps
+            ltv: (Number(accountData.ltv) / 10000).toString(),
+            healthFactor: formatUnits(accountData.healthFactor, 18)
+          };
           console.log('user aave data:', cleanedAccountData);
           setAaveAccount(cleanedAccountData);
         } else {
@@ -385,7 +401,7 @@ const Channels:React.FC = () => {
       </SidebarGroupLabel>
       <SidebarGroupContent className="h-full">
           <ScrollArea className="h-full pr-2 overflow-y-auto">
-              <SidebarMenu>
+              <SidebarMenu className="overflow-visible">
                   {
                       tokenMetadataLoading === true ? (
                         Array.from({ length: 10 }, (_, index) => (
@@ -470,9 +486,100 @@ const Channels:React.FC = () => {
                             <Collapsible defaultOpen className="group/collapsible">
                               <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
-                                  <SidebarMenuButton> 
-                                    Aave 
-                                  </SidebarMenuButton>
+                                  <HoverCard>
+                                     <HoverCardTrigger asChild>
+                                        <SidebarMenuButton>
+                                          <div className="flex items-center justify-start gap-4">
+                                            <Avatar className="size-4">
+                                              <AvatarImage 
+                                                  src='https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png' 
+                                                  alt="Token Logo"
+                                                  loading="lazy"
+                                              />
+                                              <AvatarFallback>
+                                                  Aave
+                                              </AvatarFallback>
+                                            </Avatar>
+                                            <p>
+                                                Aave
+                                            </p>
+                                            <div 
+                                            className={
+                                              // render color based on health factor
+                                              Number(aaveAccount?.healthFactor) <= 1.1 ?
+                                              "text-red-500" :
+                                              Number(aaveAccount?.healthFactor) <= 2.0 ?
+                                              "text-yellow-500" :
+                                              "text-green-500"
+                                            }
+                                            > 
+                                              {
+                                                Number(aaveAccount?.healthFactor).toFixed(2)
+                                              }
+                                            </div>
+                                          </div>  
+                                      </SidebarMenuButton>
+                                    </HoverCardTrigger>
+                                    <HoverCardContent className="bg-primary text-secondary">
+                                      <div className="w-full">
+                                        <div className="w-full justify-end flex text-xl text-accent">
+                                          Aave Stats
+                                        </div>
+                                        <ul className="flex flex-col gap-2 justify-end">
+                                          <li
+                                            className={
+                                              // render color based on health factor
+                                              Number(aaveAccount?.healthFactor) <= 1.1 ?
+                                              "text-red-500 w-full justify-end flex" :
+                                              Number(aaveAccount?.healthFactor) <= 2.0 ?
+                                              "text-yellow-500 w-full justify-end flex" :
+                                              "text-green-500 w-full justify-end flex"
+                                            }
+                                          >
+                                            Health Factor: {
+                                              Number(aaveAccount?.healthFactor).toFixed(2)
+                                            }
+                                          </li>
+                                          <li className="w-full justify-end flex">
+                                            Assets: ${
+                                              humanReadableNumbers(Number(aaveAccount?.totalCollateral).toString())
+                                            }
+                                          </li>
+                                          <li className="w-full justify-end flex">
+                                            - Debt: ${
+                                              humanReadableNumbers(Number(aaveAccount?.totalDebt).toString())
+                                            }
+                                          </li>
+                                          <li className="w-full justify-end flex">
+                                            = Net Worth: ${ 
+                                              humanReadableNumbers(
+                                                (
+                                                  Number(aaveAccount?.totalCollateral) -
+                                                  Number(aaveAccount?.totalDebt)
+                                                ).toString()
+                                              )
+                                            }
+                                          </li>
+                                          <br/>
+                                          <li className="w-full justify-end flex">
+                                            Can Borrow: ${ 
+                                              humanReadableNumbers(Number(aaveAccount?.availableBorrows).toString()) 
+                                            }
+                                          </li>
+                                          <li className="w-full justify-end flex">
+                                            Current LTV: {
+                                              (Number(aaveAccount?.ltv) * 100).toFixed(2)
+                                            }%
+                                          </li>
+                                          <li className="w-full justify-end flex">
+                                            Liquidation LTV: {
+                                              (Number(aaveAccount?.currentLiquidationThreshold) * 100).toFixed(2)
+                                            }%
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </HoverCardContent>
+                                  </HoverCard>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
                                   <SidebarMenuSub>
