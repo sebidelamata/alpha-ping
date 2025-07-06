@@ -46,6 +46,8 @@ import {
   HoverCardTrigger 
 } from "@/components/components/ui/hover-card";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 
 const Channels:React.FC = () => {
@@ -602,6 +604,14 @@ const Channels:React.FC = () => {
                                               Liquidation LTV: {
                                                 (Number(aaveAccount?.currentLiquidationThreshold) * 100).toFixed(2)
                                               }%
+                                            </li>
+                                            <li className="w-full justify-end flex text-xl">
+                                              <Link
+                                                href="https://app.aave.com/"
+                                                target="_blank"
+                                              >
+                                                <ExternalLink className="text-accent"/>
+                                              </Link>
                                             </li>
                                           </ul>
                                         </div>
