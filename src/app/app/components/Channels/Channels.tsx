@@ -361,7 +361,7 @@ const Channels:React.FC = () => {
                                       })
                                         .map((channel, index) => {
                                           // filter the token metadata we will pass to the channel
-                                          const filteredTokenMetadata = tokenMetaData.filter((metadata, index) => {
+                                          const filteredTokenMetadata = tokenMetaData.filter((_, index) => {
                                             return (
                                               userChannels[index].tokenType.toLowerCase() !== 'erc721' &&
                                               (
@@ -418,7 +418,7 @@ const Channels:React.FC = () => {
                                       })
                                         .map((channel, index) => {
                                           // filter the token metadata we will pass to the channel
-                                          const filteredTokenMetadata = tokenMetaData.filter((metadata, index) => {
+                                          const filteredTokenMetadata = tokenMetaData.filter((_, index) => {
                                             return (
                                               userChannels[index].tokenType.toLowerCase() !== 'erc721' &&
                                               (
