@@ -49,18 +49,6 @@ import { Popover, PopoverContent } from "@/components/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { ScrollArea } from "@/components/components/ui/scroll-area";
 
-interface cmcPriceData{
-    twentyFourHourChange: string;
-    tokenUSDPrice: string;
-    marketCap: string;
-    percent_change_1h: string;
-    percent_change_7d: string;
-    percent_change_30d: string;
-    percent_change_60d: string;
-    volume_24h: string;
-    volume_change_24h: string;
-}
-
 type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
 const MessagesHeader: React.FC = () => {
@@ -68,7 +56,9 @@ const MessagesHeader: React.FC = () => {
     const { 
         currentChannel, 
         selectedChannelMetadata, 
-        setChannelAction 
+        setChannelAction,
+        cmcFetch,
+        setCmcFetch 
     } = useChannelProviderContext();
     const { signer } = useEtherProviderContext()
     const { 
@@ -108,18 +98,19 @@ const MessagesHeader: React.FC = () => {
         "60d":  "percent_change_60d"
     } as const satisfies Record<TimeRange, keyof cmcPriceData>;
 
+    // we are going to use this timer to refetch a new price every 60 seconds
+    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+    // Timer to update lastUpdated every 30 seconds
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+        setLastUpdated(new Date());
+        }, 60 * 1000); // 60 seconds in milliseconds
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []); // Empty dependency array to run once on mount
+
     // get latest quote in USD
-        const [cmcFetch, setCmcFetch] = useState<cmcPriceData>({
-            twentyFourHourChange: "",
-            tokenUSDPrice: "",
-            marketCap: "",
-            percent_change_1h: "",
-            percent_change_7d: "",
-            percent_change_30d: "",
-            percent_change_60d: "",
-            volume_24h: "",
-            volume_change_24h: ""
-        } as cmcPriceData);
         const [loading, setLoading] = useState<boolean>(false);
         const [cmcError, setCmcError] = useState<string | null>(null);
         useEffect(() => {
@@ -225,7 +216,7 @@ const MessagesHeader: React.FC = () => {
                 }
             }
             main();
-        },[selectedChannelMetadata]);
+        },[selectedChannelMetadata, lastUpdated]);
         // Separate useEffect for error logging to avoid dependency issues
         useEffect(() => {
             if (cmcError) {

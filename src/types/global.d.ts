@@ -118,6 +118,17 @@ interface CMCQuoteUSD {
         };
     }
 }
+interface cmcPriceData{
+    twentyFourHourChange: string;
+    tokenUSDPrice: string;
+    marketCap: string;
+    percent_change_1h: string;
+    percent_change_7d: string;
+    percent_change_30d: string;
+    percent_change_60d: string;
+    volume_24h: string;
+    volume_change_24h: string;
+}
 
 interface ChainInfo {
   name: string;

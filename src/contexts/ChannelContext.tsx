@@ -22,6 +22,8 @@ interface ChannelProviderType{
     setAddChannelLoading: React.Dispatch<React.SetStateAction<boolean>>;
     channelAction: string;
     setChannelAction: React.Dispatch<React.SetStateAction<string>>;
+    cmcFetch: cmcPriceData;
+    setCmcFetch: React.Dispatch<React.SetStateAction<cmcPriceData>>;
 }
 
 // create context
@@ -48,6 +50,18 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [addChannelLoading, setAddChannelLoading] = useState<boolean>(false)
     // selected channel's actions ("chat", "analyze", "trade")
     const [channelAction, setChannelAction] = useState<string>("chat")
+    // channel price from cmc
+    const [cmcFetch, setCmcFetch] = useState<cmcPriceData>({
+                twentyFourHourChange: "",
+                tokenUSDPrice: "",
+                marketCap: "",
+                percent_change_1h: "",
+                percent_change_7d: "",
+                percent_change_30d: "",
+                percent_change_60d: "",
+                volume_24h: "",
+                volume_change_24h: ""
+    } as cmcPriceData);
 
     // set document title based on current Channel
     useEffect(() => {
@@ -69,7 +83,9 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             addChannelLoading,
             setAddChannelLoading,
             channelAction,
-            setChannelAction
+            setChannelAction,
+            cmcFetch,
+            setCmcFetch
         }}>
             {children}
         </ChannelContext.Provider>
