@@ -16,7 +16,7 @@ import {
   SidebarMenuSub
 } from "@/components/components/ui/sidebar"
 import { ScrollArea } from "@/components/components/ui/scroll-area"
-import Channel from "../Channels/Channel";
+import Channel from "./Channel";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';

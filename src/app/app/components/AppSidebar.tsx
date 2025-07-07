@@ -1,7 +1,7 @@
 'use client';
 
 import React from "react";
-import Channels from "./Channels/Channels";
+import Channels from "./Channels";
 import AddChannel from "./Channels/AddChannel";
 import ChannelActions from "./Channels/ChannelActions";
 import {

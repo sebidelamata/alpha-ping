@@ -1,14 +1,13 @@
 'use client';
 
-import React, {
-    useState,
-    FormEvent,
-    MouseEvent
-} from "react";
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import Loading from "../Loading";
-import { UserRoundPlus } from "lucide-react";
-import { Button } from "@/components/components/ui/button";
+import React, 
+    { 
+        useState,
+        FormEvent,
+        MouseEvent 
+    } from "react";
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext";
+import Loading from "../../Loading";
 import {
     Dialog,
     DialogContent,
@@ -23,26 +22,28 @@ import {
     AvatarImage, 
     AvatarFallback 
 } from "@/components/components/ui/avatar";
+import { Button } from "@/components/components/ui/button";
 import { Separator } from "@/components/components/ui/separator";
 import { useToast } from "@/components/hooks/use-toast"
 import { 
     ShieldCheck, 
-    CircleX 
+    CircleX,
+    UserX 
 } from "lucide-react";
 import Link from "next/link";
 
-interface ErrorType{
-    message: string;
+interface ErrorType {
+    reason: string
 }
 
-interface FollowUserProps{
-    account: string;
+interface BlockUserProps{
+    user: string;
     username: string | null;
     profilePic: string | null;
 }
 
-const FollowUser:React.FC<FollowUserProps> = ({
-    account,
+const BlockUser:React.FC<BlockUserProps> = ({
+    user,
     username,
     profilePic
 }) => {
@@ -60,30 +61,30 @@ const FollowUser:React.FC<FollowUserProps> = ({
         try{
             setError(null)
             setLoading(true)
-            const tx = await alphaPING?.connect(signer).addToPersonalFollowList(account)
+            const tx = await alphaPING?.connect(signer).addToPersonalBlockList(user)
             await tx?.wait()
             if(tx !== undefined && tx.hash !== undefined){
                 setTxMessage(tx?.hash)
             }
         }catch(error: unknown){
-            if((error as ErrorType).message){
-                setError((error as ErrorType).message)
+            if((error as ErrorType).reason){
+                setError((error as ErrorType).reason)
             }
-            if(error !== null && (error as ErrorType).message !== undefined){
+            if(error !== null && (error as ErrorType).reason !== undefined){
                 toast({
                     title: "Transaction Error!",
                     description: (username !== null && username !== '') ?
-                        `Follow ${username} Not Completed!` :
-                        `Follow ${account.slice(0, 4)}...${account.slice(38,42)} Not Completed!`,
+                        `Block ${username} Not Completed!` :
+                        `Block ${user.slice(0, 4)}...${user.slice(38,42)} Not Completed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-col gap-1 justify-center items-center">
                             <CircleX size={40}/>
                             <div className="flex flex-col gap-1 text-sm">
                             {
-                                (error as ErrorType).message.length > 100 ?
-                                `${(error as ErrorType).message.slice(0,100)}...` :
-                                (error as ErrorType).message
+                                (error as ErrorType).reason.length > 100 ?
+                                `${(error as ErrorType).reason.slice(0,100)}...` :
+                                (error as ErrorType).reason
                             }
                             </div>
                         </div>
@@ -97,8 +98,8 @@ const FollowUser:React.FC<FollowUserProps> = ({
                 toast({
                     title: "Transaction Confirmed!",
                     description: (username !== null && username !== '') ?
-                        `Follow ${username} Completed!` :
-                        `Follow ${account.slice(0, 4)}...${account.slice(38,42)} Completed!`,
+                        `Block ${username} Completed!` :
+                        `Block ${user.slice(0, 4)}...${user.slice(38,42)} Completed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-row gap-1">
@@ -125,7 +126,6 @@ const FollowUser:React.FC<FollowUserProps> = ({
         setOpen(false)
     }
 
-
     return(
         <Dialog
             open={open} 
@@ -133,24 +133,24 @@ const FollowUser:React.FC<FollowUserProps> = ({
         >
             <DialogTrigger
                 asChild 
-                className="flex justify-center items-center"
             >
                 <Button
-                    variant={"outline"}
+                    variant={"destructive"}
+                    className="flex justify-center items-center"
                 >
-                    <UserRoundPlus/>
+                    <UserX/>
                 </Button>
             </DialogTrigger>
             <DialogContent>
-            <DialogHeader>
+                <DialogHeader>
                     <DialogTitle>
                         <div className="flex flex-row items-center justify-center gap-4 text-3xl">
                                 <Link 
                                     className="flex flex-row gap-1"
-                                    href={`https://arbiscan.io/address/${account}`}
+                                    href={`https://arbiscan.io/address/${user}`}
                                     target="_blank"
                                 >
-                                        { "Follow " } 
+                                        { "Block " } 
                                         {
                                             username !== null ? 
                                             <span 
@@ -159,7 +159,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
                                             </span> : 
                                             <span 
                                                 className="text-accent">
-                                                    {`${account.slice(0,4)}...${account.slice(38,42)}`}
+                                                    {`${user.slice(0,4)}...${user.slice(37,41)}`}
                                             </span>
                                         }
                                         {"?"}
@@ -176,7 +176,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
                                             {
                                                 (username !== null && username !== '') ?
                                                 username.slice(0,2) :
-                                                account.slice(0, 2)
+                                                user.slice(0, 2)
                                             }
                                         </AvatarFallback>
                                     </Avatar> :
@@ -191,7 +191,7 @@ const FollowUser:React.FC<FollowUserProps> = ({
                             </div>
                     </DialogTitle>
                     <DialogDescription className="flex flex-col items-center justify-center gap-4">
-                        Their messages and input will appear when you turn your Follows Filter ON. 
+                        Their messages will no longer appear for you on AlphaPING. 
                     </DialogDescription>
                     <Separator/>
                     <form
@@ -200,10 +200,10 @@ const FollowUser:React.FC<FollowUserProps> = ({
                     >
                         <Button 
                             type="submit"
-                            variant="secondary" 
+                            variant="destructive" 
                             className="w-[200px]"
                         >
-                            Follow
+                            <UserX/>
                         </Button>
                         <Button
                             variant="outline"
@@ -229,8 +229,8 @@ const FollowUser:React.FC<FollowUserProps> = ({
                     </DialogFooter>
                 }
             </DialogContent>
-        </Dialog>  
+        </Dialog>
     )
 }
 
-export default FollowUser
+export default BlockUser;

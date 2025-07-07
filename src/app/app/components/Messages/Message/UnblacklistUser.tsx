@@ -6,9 +6,9 @@ import React,
         MouseEvent, 
         FormEvent
     } from "react";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import Loading from "../Loading";
+import { useUserProviderContext } from "../../../../../contexts/UserContext";
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext";
+import Loading from "../../Loading";
 import {
     Dialog,
     DialogContent,

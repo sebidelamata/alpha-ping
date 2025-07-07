@@ -3,11 +3,11 @@
 import React, {
     useState, 
 } from "react"
-import { AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
+import { AlphaPING } from '../../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { ethers } from 'ethers'
-import { useEtherProviderContext } from '../../../../contexts/ProviderContext';
-import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
-import Loading from "../Loading";
+import { useEtherProviderContext } from '../../../../../contexts/ProviderContext';
+import { useChannelProviderContext } from "../../../../../contexts/ChannelContext";
+import Loading from "../../Loading";
 import LeaveChannel from "./LeaveChannel";
 import { 
     Avatar, 

@@ -1,13 +1,15 @@
 'use client';
 
 import React, 
-    { 
-        useState,
-        FormEvent,
-        MouseEvent 
-    } from "react";
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import Loading from "../Loading";
+{ 
+    useState,
+    MouseEvent,
+    FormEvent 
+} from "react";
+import { useChannelProviderContext } from "../../../../../contexts/ChannelContext";
+import { useUserProviderContext } from "../../../../../contexts/UserContext";
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext";
+import Loading from "../../Loading";
 import {
     Dialog,
     DialogContent,
@@ -27,28 +29,30 @@ import { Separator } from "@/components/components/ui/separator";
 import { useToast } from "@/components/hooks/use-toast"
 import { 
     ShieldCheck, 
-    CircleX,
-    UserX 
+    CircleX 
 } from "lucide-react";
 import Link from "next/link";
+
 
 interface ErrorType {
     reason: string
 }
 
-interface BlockUserProps{
+interface BanUserProps{
     user: string;
     username: string | null;
     profilePic: string | null;
 }
 
-const BlockUser:React.FC<BlockUserProps> = ({
+const BanUser:React.FC<BanUserProps> = ({
     user,
     username,
     profilePic
 }) => {
 
     const { toast } = useToast()
+    const { currentChannel } = useChannelProviderContext()
+    const { currentChannelMod, owner } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [open, setOpen] = useState<boolean>(false)
@@ -56,26 +60,35 @@ const BlockUser:React.FC<BlockUserProps> = ({
     const [error, setError] = useState<string | null>(null)
     const [txMessage, setTxMessage] = useState<string | null>(null)
 
-    const handleClick = async (e:FormEvent) => {
+    const handleSubmit = async (e:FormEvent) => {
         e.preventDefault()
         try{
             setError(null)
             setLoading(true)
-            const tx = await alphaPING?.connect(signer).addToPersonalBlockList(user)
-            await tx?.wait()
-            if(tx !== undefined && tx.hash !== undefined){
-                setTxMessage(tx?.hash)
+            setTxMessage(null)
+            if(
+                currentChannel && 
+                currentChannel.id !== undefined &&
+                (
+                    currentChannelMod === true ||
+                    owner === true
+                )
+            ){
+                const tx = await alphaPING?.connect(signer).channelBan(user, currentChannel?.id)
+                await tx?.wait()
+                if(tx !== undefined && tx.hash !== undefined){
+                    setTxMessage(tx?.hash)
+                }
             }
         }catch(error: unknown){
-            if((error as ErrorType).reason){
-                setError((error as ErrorType).reason)
-            }
+            if((error as ErrorType).reason)
+            setError((error as ErrorType).reason)
             if(error !== null && (error as ErrorType).reason !== undefined){
                 toast({
                     title: "Transaction Error!",
                     description: (username !== null && username !== '') ?
-                        `Block ${username} Not Completed!` :
-                        `Block ${user.slice(0, 4)}...${user.slice(38,42)} Not Completed!`,
+                        `Ban ${username} Not Completed!` :
+                        `Ban ${user.slice(0, 4)}...${user.slice(38,42)} Not Completed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-col gap-1 justify-center items-center">
@@ -98,8 +111,8 @@ const BlockUser:React.FC<BlockUserProps> = ({
                 toast({
                     title: "Transaction Confirmed!",
                     description: (username !== null && username !== '') ?
-                        `Block ${username} Completed!` :
-                        `Block ${user.slice(0, 4)}...${user.slice(38,42)} Completed!`,
+                        `Ban ${username} Completed!` :
+                        `Ban ${user.slice(0, 4)}...${user.slice(38,42)} Completed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-row gap-1">
@@ -133,12 +146,13 @@ const BlockUser:React.FC<BlockUserProps> = ({
         >
             <DialogTrigger
                 asChild 
+                className="flex justify-center items-center"
             >
                 <Button
-                    variant={"destructive"}
-                    className="flex justify-center items-center"
+                    variant={"outline"}
+                    className="flex justify-center items-center w-[200px]"
                 >
-                    <UserX/>
+                    Ban
                 </Button>
             </DialogTrigger>
             <DialogContent>
@@ -150,7 +164,7 @@ const BlockUser:React.FC<BlockUserProps> = ({
                                     href={`https://arbiscan.io/address/${user}`}
                                     target="_blank"
                                 >
-                                        { "Block " } 
+                                        { "Ban " } 
                                         {
                                             username !== null ? 
                                             <span 
@@ -191,11 +205,11 @@ const BlockUser:React.FC<BlockUserProps> = ({
                             </div>
                     </DialogTitle>
                     <DialogDescription className="flex flex-col items-center justify-center gap-4">
-                        Their messages will no longer appear for you on AlphaPING. 
+                        They will no longer be able to post or interact with posts on this Channel. 
                     </DialogDescription>
                     <Separator/>
                     <form
-                        onSubmit={(e) => handleClick(e)}
+                        onSubmit={(e) => handleSubmit(e)}
                         className="flex flex-col items-center justify-center gap-4"
                     >
                         <Button 
@@ -203,7 +217,7 @@ const BlockUser:React.FC<BlockUserProps> = ({
                             variant="destructive" 
                             className="w-[200px]"
                         >
-                            <UserX/>
+                            Ban
                         </Button>
                         <Button
                             variant="outline"
@@ -233,4 +247,4 @@ const BlockUser:React.FC<BlockUserProps> = ({
     )
 }
 
-export default BlockUser;
+export default BanUser

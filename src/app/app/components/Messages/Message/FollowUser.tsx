@@ -1,15 +1,14 @@
 'use client';
 
-import React, 
-{ 
+import React, {
     useState,
-    MouseEvent,
-    FormEvent 
+    FormEvent,
+    MouseEvent
 } from "react";
-import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import Loading from "../Loading";
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext";
+import Loading from "../../Loading";
+import { UserRoundPlus } from "lucide-react";
+import { Button } from "@/components/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -24,7 +23,6 @@ import {
     AvatarImage, 
     AvatarFallback 
 } from "@/components/components/ui/avatar";
-import { Button } from "@/components/components/ui/button";
 import { Separator } from "@/components/components/ui/separator";
 import { useToast } from "@/components/hooks/use-toast"
 import { 
@@ -33,26 +31,23 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-
-interface ErrorType {
-    reason: string
+interface ErrorType{
+    message: string;
 }
 
-interface BanUserProps{
-    user: string;
+interface FollowUserProps{
+    account: string;
     username: string | null;
     profilePic: string | null;
 }
 
-const BanUser:React.FC<BanUserProps> = ({
-    user,
+const FollowUser:React.FC<FollowUserProps> = ({
+    account,
     username,
     profilePic
 }) => {
 
     const { toast } = useToast()
-    const { currentChannel } = useChannelProviderContext()
-    const { currentChannelMod, owner } = useUserProviderContext()
     const { alphaPING, signer } = useEtherProviderContext()
 
     const [open, setOpen] = useState<boolean>(false)
@@ -60,44 +55,35 @@ const BanUser:React.FC<BanUserProps> = ({
     const [error, setError] = useState<string | null>(null)
     const [txMessage, setTxMessage] = useState<string | null>(null)
 
-    const handleSubmit = async (e:FormEvent) => {
+    const handleClick = async (e:FormEvent) => {
         e.preventDefault()
         try{
             setError(null)
             setLoading(true)
-            setTxMessage(null)
-            if(
-                currentChannel && 
-                currentChannel.id !== undefined &&
-                (
-                    currentChannelMod === true ||
-                    owner === true
-                )
-            ){
-                const tx = await alphaPING?.connect(signer).channelBan(user, currentChannel?.id)
-                await tx?.wait()
-                if(tx !== undefined && tx.hash !== undefined){
-                    setTxMessage(tx?.hash)
-                }
+            const tx = await alphaPING?.connect(signer).addToPersonalFollowList(account)
+            await tx?.wait()
+            if(tx !== undefined && tx.hash !== undefined){
+                setTxMessage(tx?.hash)
             }
         }catch(error: unknown){
-            if((error as ErrorType).reason)
-            setError((error as ErrorType).reason)
-            if(error !== null && (error as ErrorType).reason !== undefined){
+            if((error as ErrorType).message){
+                setError((error as ErrorType).message)
+            }
+            if(error !== null && (error as ErrorType).message !== undefined){
                 toast({
                     title: "Transaction Error!",
                     description: (username !== null && username !== '') ?
-                        `Ban ${username} Not Completed!` :
-                        `Ban ${user.slice(0, 4)}...${user.slice(38,42)} Not Completed!`,
+                        `Follow ${username} Not Completed!` :
+                        `Follow ${account.slice(0, 4)}...${account.slice(38,42)} Not Completed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-col gap-1 justify-center items-center">
                             <CircleX size={40}/>
                             <div className="flex flex-col gap-1 text-sm">
                             {
-                                (error as ErrorType).reason.length > 100 ?
-                                `${(error as ErrorType).reason.slice(0,100)}...` :
-                                (error as ErrorType).reason
+                                (error as ErrorType).message.length > 100 ?
+                                `${(error as ErrorType).message.slice(0,100)}...` :
+                                (error as ErrorType).message
                             }
                             </div>
                         </div>
@@ -111,8 +97,8 @@ const BanUser:React.FC<BanUserProps> = ({
                 toast({
                     title: "Transaction Confirmed!",
                     description: (username !== null && username !== '') ?
-                        `Ban ${username} Completed!` :
-                        `Ban ${user.slice(0, 4)}...${user.slice(38,42)} Completed!`,
+                        `Follow ${username} Completed!` :
+                        `Follow ${account.slice(0, 4)}...${account.slice(38,42)} Completed!`,
                     duration:5000,
                     action: (
                         <div className="flex flex-row gap-1">
@@ -139,6 +125,7 @@ const BanUser:React.FC<BanUserProps> = ({
         setOpen(false)
     }
 
+
     return(
         <Dialog
             open={open} 
@@ -150,21 +137,20 @@ const BanUser:React.FC<BanUserProps> = ({
             >
                 <Button
                     variant={"outline"}
-                    className="flex justify-center items-center w-[200px]"
                 >
-                    Ban
+                    <UserRoundPlus/>
                 </Button>
             </DialogTrigger>
             <DialogContent>
-                <DialogHeader>
+            <DialogHeader>
                     <DialogTitle>
                         <div className="flex flex-row items-center justify-center gap-4 text-3xl">
                                 <Link 
                                     className="flex flex-row gap-1"
-                                    href={`https://arbiscan.io/address/${user}`}
+                                    href={`https://arbiscan.io/address/${account}`}
                                     target="_blank"
                                 >
-                                        { "Ban " } 
+                                        { "Follow " } 
                                         {
                                             username !== null ? 
                                             <span 
@@ -173,7 +159,7 @@ const BanUser:React.FC<BanUserProps> = ({
                                             </span> : 
                                             <span 
                                                 className="text-accent">
-                                                    {`${user.slice(0,4)}...${user.slice(37,41)}`}
+                                                    {`${account.slice(0,4)}...${account.slice(38,42)}`}
                                             </span>
                                         }
                                         {"?"}
@@ -190,7 +176,7 @@ const BanUser:React.FC<BanUserProps> = ({
                                             {
                                                 (username !== null && username !== '') ?
                                                 username.slice(0,2) :
-                                                user.slice(0, 2)
+                                                account.slice(0, 2)
                                             }
                                         </AvatarFallback>
                                     </Avatar> :
@@ -205,19 +191,19 @@ const BanUser:React.FC<BanUserProps> = ({
                             </div>
                     </DialogTitle>
                     <DialogDescription className="flex flex-col items-center justify-center gap-4">
-                        They will no longer be able to post or interact with posts on this Channel. 
+                        Their messages and input will appear when you turn your Follows Filter ON. 
                     </DialogDescription>
                     <Separator/>
                     <form
-                        onSubmit={(e) => handleSubmit(e)}
+                        onSubmit={(e) => handleClick(e)}
                         className="flex flex-col items-center justify-center gap-4"
                     >
                         <Button 
                             type="submit"
-                            variant="destructive" 
+                            variant="secondary" 
                             className="w-[200px]"
                         >
-                            Ban
+                            Follow
                         </Button>
                         <Button
                             variant="outline"
@@ -243,8 +229,8 @@ const BanUser:React.FC<BanUserProps> = ({
                     </DialogFooter>
                 }
             </DialogContent>
-        </Dialog>
+        </Dialog>  
     )
 }
 
-export default BanUser
+export default FollowUser

@@ -8,9 +8,9 @@ import React, {
 } from "react"
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext"
-import { useSocketProviderContext } from "../../../../contexts/SocketContext"
-import { useUserProviderContext } from "../../../../contexts/UserContext"
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext"
+import { useSocketProviderContext } from "../../../../../contexts/SocketContext"
+import { useUserProviderContext } from "../../../../../contexts/UserContext"
 import DeleteMessage from "./DeleteMessage"
 import { Button } from "@/components/components/ui/button";
 import { Reply } from "lucide-react";

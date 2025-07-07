@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react';
 
 // messages
-import Messages from './components/Messages/Messages'
+import Messages from './components/Messages'
 //analyze
-import Analyze from './components/Analyze/Analyze';
+import Analyze from './components/Analyze';
 // trade
 import Trade from './components/Trade/Trade';
 import Loading from './components/Loading';

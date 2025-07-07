@@ -7,7 +7,7 @@ import React, {
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
-import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import ERC20Faucet from '../../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { ethers } from 'ethers';
 import { CardTitle } from "@/components/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/components/ui/avatar";
@@ -33,7 +33,7 @@ import {
     SquareArrowUpRight 
 } from "lucide-react";
 import Image from "next/image";
-import ToggleFollowFilter from "../Profile/ToggleFollowFilter";
+import ToggleFollowFilter from "../../Profile/ToggleFollowFilter";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -238,7 +238,7 @@ const MessagesHeader: React.FC = () => {
                     selectedChannelMetadata !== null &&
                     selectedChannelMetadata.protocol &&
                     selectedChannelMetadata.protocol === 'aave' &&
-                    <div className="flex flex-row flex-wrap w-full gap-4 text-lg">
+                    <div className="flex flex-row flex-wrap w-full gap-4 text-xl">
                         <Link 
                             className="text-accent flex flex-wrap gap-2 justify-center"
                             href="https://app.aave.com/"

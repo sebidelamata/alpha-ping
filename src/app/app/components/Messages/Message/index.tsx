@@ -7,7 +7,7 @@ import React, {
 import Link from "next/link";
 import { DateTime } from 'luxon';
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
-import { useUserProviderContext } from "../../../../contexts/UserContext";
+import { useUserProviderContext } from "../../../../../contexts/UserContext";
 import PostBalance from "./PostBalance";
 import CurrentBalance from "./CurrentBalance";
 import MessageHoverOptions from "./MessageHoverOptions";

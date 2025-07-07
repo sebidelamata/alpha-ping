@@ -8,9 +8,9 @@ import React, {
     useEffect
 } from "react"
 import MessageAttachments from "./MessageAttachments"
-import { useSocketProviderContext } from "../../../../contexts/SocketContext"
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext"
-import { useUserProviderContext } from "../../../../contexts/UserContext"
+import { useSocketProviderContext } from "../../../../../contexts/SocketContext"
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext"
+import { useUserProviderContext } from "../../../../../contexts/UserContext"
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { Button } from "@/components/components/ui/button";
 import { Send, X } from "lucide-react";
