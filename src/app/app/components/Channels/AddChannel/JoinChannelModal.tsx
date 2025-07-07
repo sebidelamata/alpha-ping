@@ -11,9 +11,9 @@ import {
     DialogTitle,
 } from "@/components/components/ui/dialog"
 import { Button } from "@/components/components/ui/button"
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
-import Loading from "../Loading";
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext.tsx";
+import { useChannelProviderContext } from "../../../../../contexts/ChannelContext.tsx";
+import Loading from "../../Loading.tsx";
 import Link from "next/link";
 import { useToast } from "@/components/hooks/use-toast"
 import { 
@@ -21,16 +21,16 @@ import {
     Users,
     CheckCircle
 } from "lucide-react";
-import { type AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
+import { type AlphaPING } from '../../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
 import { ethers } from 'ethers'
 import { 
     Avatar, 
     AvatarImage, 
     AvatarFallback 
 } from "@/components/components/ui/avatar.tsx";
-import tokenList from "../../../../../public/tokenList.json";
+import tokenList from "../../../../../../public/tokenList.json";
 import tokensByChain from "src/lib/tokensByChain";
-import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
+import ERC20Faucet from '../../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 
 
 interface IJoinChannelDialog {

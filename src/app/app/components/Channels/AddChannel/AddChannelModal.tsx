@@ -30,16 +30,16 @@ import {
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
-import Loading from "../Loading";
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext";
+import Loading from "../../Loading";
 import Link from "next/link";
 import { useToast } from "@/components/hooks/use-toast"
 import { 
     ShieldCheck, 
     CircleX 
 } from "lucide-react";
-import { type AlphaPING } from '../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
-import JoinChannelDialog from "./JoinChannelModal"
+import { type AlphaPING } from '../../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING.ts'
+import JoinChannelDialog from "./JoinChannelModal.tsx"
 
 const formSchema = z.object({
     tokenAddress: z.string().min(42).max(42),

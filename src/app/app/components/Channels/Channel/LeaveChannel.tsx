@@ -6,10 +6,10 @@ import React, {
     FormEvent
 } from "react";
 import { AlphaPING } from "typechain-types";
-import { useChannelProviderContext } from "../../../../contexts/ChannelContext";
-import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
+import { useChannelProviderContext } from "../../../../../contexts/ChannelContext";
+import { useEtherProviderContext } from "../../../../../contexts/ProviderContext";
 import { LogOut } from "lucide-react";
-import Loading from "../Loading";
+import Loading from "../../Loading";
 import Link from "next/link";
 import {
     Dialog,

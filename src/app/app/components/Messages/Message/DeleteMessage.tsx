@@ -4,7 +4,7 @@ import React, {
     useState,
     MouseEvent
 } from "react";
-import { useSocketProviderContext } from "../../../../contexts/SocketContext";
+import { useSocketProviderContext } from "../../../../../contexts/SocketContext";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/components/ui/button";
 import { 

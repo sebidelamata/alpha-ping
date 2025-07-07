@@ -14,11 +14,11 @@ import {
     CardContent
 } from "@/components/components/ui/card";
 import BanUser from "./BanUser";
-import UnbanUser from "../UnbanUser";
+import UnbanUser from "./UnbanUser";
 import BlacklistUser from "./BlacklistUser";
 import UnblacklistUser from "./UnblacklistUser";
 import FollowUser from "./FollowUser";
-import UnfollowUser from "../UnfollowUser";
+import UnfollowUser from "./UnfollowUser";
 import BlockUser from "./BlockUser";
 import { useUserProviderContext } from "src/contexts/UserContext";
 
