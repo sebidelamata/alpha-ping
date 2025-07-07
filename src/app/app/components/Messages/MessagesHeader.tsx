@@ -239,7 +239,11 @@ const MessagesHeader: React.FC = () => {
                     selectedChannelMetadata.protocol &&
                     selectedChannelMetadata.protocol === 'aave' &&
                     <div className="flex flex-row flex-wrap w-full gap-4 text-lg">
-                        <h1 className="text-accent flex flex-wrap gap-2 justify-center">
+                        <Link 
+                            className="text-accent flex flex-wrap gap-2 justify-center"
+                            href="https://app.aave.com/"
+                            target="_blank"
+                        >
                             <Avatar className="size-6">
                                 <AvatarImage 
                                     src='https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png' 
@@ -253,7 +257,7 @@ const MessagesHeader: React.FC = () => {
                             <div>
                                 Aave Position
                             </div>
-                        </h1>
+                        </Link>
                         <div>
                             Supplied: {selectedChannelMetadata.name}
                         </div>
@@ -299,7 +303,7 @@ const MessagesHeader: React.FC = () => {
                                     humanReadableNumbers(Number(aaveAccount?.availableBorrows).toString()) 
                                     }
                             </div>
-                            <ul className="flex flex-col text-xs">
+                            <ul className="flex flex-col">
                                 <li className="w-full justify-end flex">
                                     Current LTV: {
                                     (Number(aaveAccount?.ltv) * 100).toFixed(2)
