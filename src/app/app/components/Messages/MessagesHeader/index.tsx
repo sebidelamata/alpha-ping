@@ -30,7 +30,8 @@ import {
     ScrollText, 
     Globe,
     Telescope,
-    SquareArrowUpRight 
+    SquareArrowUpRight,
+    Info 
 } from "lucide-react";
 import Image from "next/image";
 import ToggleFollowFilter from "../../Profile/ToggleFollowFilter";
@@ -44,6 +45,9 @@ import {
 import CopyTextBlock from "./CopyTextBlock";
 import { CHAINS } from "src/lib/chainsInfo";
 import { Separator } from "@/components/components/ui/separator";
+import { Popover, PopoverContent } from "@/components/components/ui/popover";
+import { PopoverTrigger } from "@radix-ui/react-popover";
+import { ScrollArea } from "@/components/components/ui/scroll-area";
 
 interface cmcPriceData{
     twentyFourHourChange: string;
@@ -512,7 +516,7 @@ const MessagesHeader: React.FC = () => {
                     }
                     {
                         selectedChannelMetadata &&
-                        <ul className="flex flex-row flex-wrap">
+                        <ul className="flex flex-row flex-wrap gap-2">
                             {
                                 selectedChannelMetadata.urls.technical_doc.length > 0 &&
                                 <li key={"technical_doc"}>
@@ -581,145 +585,163 @@ const MessagesHeader: React.FC = () => {
                                     </Badge>
                                 </li>
                             }
-                        </ul>
-                    }
-                    {
-                        currentChannel &&
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant={"ghost"} className="h-8 w-8 p-0">
-                                    <Telescope className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-primary text-secondary max-h-64">
-                                {
-                                    (
-                                        (
-                                            selectedChannelMetadata &&
-                                            selectedChannelMetadata.contract_address.length > 0
-                                        )
-                                    ) ?
-                                    <DropdownMenuGroup>
-                                        {
-                                            selectedChannelMetadata.contract_address.filter((contract_address) => {
-                                                return contract_address.platform.coin.slug === 'arbitrum'
-                                            }).length === 0 &&
-                                            <DropdownMenuItem key={currentChannel.tokenAddress}>
-                                                <div className="flex flex-row gap-2 items-center">
-                                                    <Avatar>
-                                                        <AvatarImage
-                                                            src={
-                                                                CHAINS.find(chain => chain.chainId?.toString() === (42161).toString())?.icon ||
-                                                                '/default_chain_icon.svg'
-                                                            }
-                                                            alt={'Arbitrum Icon'}
-                                                            loading="lazy"
-                                                        />
-                                                        <AvatarFallback>
-                                                            Arb
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        Arbitrum
-                                                    </div>
-                                                    <Button
-                                                        variant="default"
-                                                        className="h-6 w-6 p-0"
-                                                        >
-                                                            <Link
-                                                                href={`https://arbiscan.io/address/${currentChannel.tokenAddress}`}
-                                                                target="_blank"
-                                                            >
-                                                                <SquareArrowUpRight className="w-4 h-4"/>
-                                                            </Link>
-                                                    </Button>
-                                                    <CopyTextBlock text={currentChannel.tokenAddress}/>
-                                                </div>
-                                            </DropdownMenuItem>
-                                        }
-                                        {
-                                            selectedChannelMetadata.contract_address.map((address) => {
-                                                return(
-                                                    // some tokens have same contract address on different chains so to
-                                                    // maintain uniqueness we use contract address concatted with chain id
-                                                <DropdownMenuItem key={address.contract_address + address.platform.coin.id}>
-                                                    <div className="flex flex-row gap-2 items-center">
-                                                        <Avatar>
-                                                        <AvatarImage
-                                                                src={
-                                                                    // find the chain icon based on the chainId in the metadata
-                                                                    CHAINS.find(chain => chain.coinId?.toString() === (address.platform.coin.id).toString())?.icon ||
-                                                                    '/erc20Icon.svg'
-                                                                }
-                                                                alt={`${address.platform.coin.name} Icon`}
-                                                                loading="lazy"
-                                                            />
-                                                            <AvatarFallback>
-                                                                {address.platform.name.slice(0, 2)}
-                                                            </AvatarFallback>
-                                                        </Avatar>
-                                                        <div>
-                                                            {
-                                                                `${address.platform.name}`
-                                                            }
+                            {
+                                (
+                                    selectedChannelMetadata.description !== undefined ||
+                                    selectedChannelMetadata.description !== ""
+                                ) &&
+                                <Popover>
+                                    <PopoverTrigger>
+                                        <Info/>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="bg-primary text-secondary">
+                                        <ScrollArea>
+                                            {selectedChannelMetadata.description}
+                                        </ScrollArea>
+                                    </PopoverContent>
+                                </Popover>
+                            }
+                            {
+                                currentChannel &&
+                                <li>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant={"ghost"} className="h-8 w-8 p-0">
+                                                <Telescope className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="bg-primary text-secondary max-h-64">
+                                            {
+                                                (
+                                                    (
+                                                        selectedChannelMetadata &&
+                                                        selectedChannelMetadata.contract_address.length > 0
+                                                    )
+                                                ) ?
+                                                <DropdownMenuGroup>
+                                                    {
+                                                        selectedChannelMetadata.contract_address.filter((contract_address) => {
+                                                            return contract_address.platform.coin.slug === 'arbitrum'
+                                                        }).length === 0 &&
+                                                        <DropdownMenuItem key={currentChannel.tokenAddress}>
+                                                            <div className="flex flex-row gap-2 items-center">
+                                                                <Avatar>
+                                                                    <AvatarImage
+                                                                        src={
+                                                                            CHAINS.find(chain => chain.chainId?.toString() === (42161).toString())?.icon ||
+                                                                            '/default_chain_icon.svg'
+                                                                        }
+                                                                        alt={'Arbitrum Icon'}
+                                                                        loading="lazy"
+                                                                    />
+                                                                    <AvatarFallback>
+                                                                        Arb
+                                                                    </AvatarFallback>
+                                                                </Avatar>
+                                                                <div>
+                                                                    Arbitrum
+                                                                </div>
+                                                                <Button
+                                                                    variant="default"
+                                                                    className="h-6 w-6 p-0"
+                                                                    >
+                                                                        <Link
+                                                                            href={`https://arbiscan.io/address/${currentChannel.tokenAddress}`}
+                                                                            target="_blank"
+                                                                        >
+                                                                            <SquareArrowUpRight className="w-4 h-4"/>
+                                                                        </Link>
+                                                                </Button>
+                                                                <CopyTextBlock text={currentChannel.tokenAddress}/>
+                                                            </div>
+                                                        </DropdownMenuItem>
+                                                    }
+                                                    {
+                                                        selectedChannelMetadata.contract_address.map((address) => {
+                                                            return(
+                                                                // some tokens have same contract address on different chains so to
+                                                                // maintain uniqueness we use contract address concatted with chain id
+                                                            <DropdownMenuItem key={address.contract_address + address.platform.coin.id}>
+                                                                <div className="flex flex-row gap-2 items-center">
+                                                                    <Avatar>
+                                                                    <AvatarImage
+                                                                            src={
+                                                                                // find the chain icon based on the chainId in the metadata
+                                                                                CHAINS.find(chain => chain.coinId?.toString() === (address.platform.coin.id).toString())?.icon ||
+                                                                                '/erc20Icon.svg'
+                                                                            }
+                                                                            alt={`${address.platform.coin.name} Icon`}
+                                                                            loading="lazy"
+                                                                        />
+                                                                        <AvatarFallback>
+                                                                            {address.platform.name.slice(0, 2)}
+                                                                        </AvatarFallback>
+                                                                    </Avatar>
+                                                                    <div>
+                                                                        {
+                                                                            `${address.platform.name}`
+                                                                        }
+                                                                    </div>
+                                                                    <Button
+                                                                        variant="default"
+                                                                        className="h-6 w-6 p-0"
+                                                                    >
+                                                                        <Link
+                                                                            href={`${
+                                                                                CHAINS.find(chain => chain.coinId?.toString() === (address.platform.coin.id).toString())?.explorer || ""
+                                                                            }/address/${address.contract_address}`}
+                                                                            target="_blank"
+                                                                        >
+                                                                            <SquareArrowUpRight className="w-4 h-4"/>
+                                                                        </Link>
+                                                                    </Button>
+                                                                    <CopyTextBlock text={address.contract_address}/>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            )
+                                                        })
+                                                    }
+                                                </DropdownMenuGroup> :
+                                                <DropdownMenuGroup>
+                                                    <DropdownMenuItem key={currentChannel.tokenAddress}>
+                                                        <div className="flex flex-row gap-2 items-center">
+                                                            <Avatar>
+                                                                <AvatarImage
+                                                                    src={
+                                                                        CHAINS.find(chain => chain.chainId?.toString() === (42161).toString())?.icon ||
+                                                                        '/default_chain_icon.svg'
+                                                                    }
+                                                                    alt={'Arbitrum Icon'}
+                                                                    loading="lazy"
+                                                                />
+                                                                <AvatarFallback>
+                                                                    Arb
+                                                                </AvatarFallback>
+                                                            </Avatar>
+                                                            <div>
+                                                                Arbitrum
+                                                            </div>
+                                                            <Button
+                                                                variant="default"
+                                                                className="h-6 w-6 p-0"
+                                                                >
+                                                                    <Link
+                                                                        href={`https://arbiscan.io/address/${currentChannel.tokenAddress}`}
+                                                                        target="_blank"
+                                                                    >
+                                                                        <SquareArrowUpRight className="w-4 h-4"/>
+                                                                    </Link>
+                                                            </Button>
+                                                            <CopyTextBlock text={currentChannel.tokenAddress}/>
                                                         </div>
-                                                        <Button
-                                                            variant="default"
-                                                            className="h-6 w-6 p-0"
-                                                        >
-                                                            <Link
-                                                                href={`${
-                                                                    CHAINS.find(chain => chain.coinId?.toString() === (address.platform.coin.id).toString())?.explorer || ""
-                                                                }/address/${address.contract_address}`}
-                                                                target="_blank"
-                                                            >
-                                                                <SquareArrowUpRight className="w-4 h-4"/>
-                                                            </Link>
-                                                        </Button>
-                                                        <CopyTextBlock text={address.contract_address}/>
-                                                    </div>
-                                                </DropdownMenuItem>
-                                                )
-                                            })
-                                        }
-                                    </DropdownMenuGroup> :
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem key={currentChannel.tokenAddress}>
-                                            <div className="flex flex-row gap-2 items-center">
-                                                <Avatar>
-                                                    <AvatarImage
-                                                        src={
-                                                            CHAINS.find(chain => chain.chainId?.toString() === (42161).toString())?.icon ||
-                                                            '/default_chain_icon.svg'
-                                                        }
-                                                        alt={'Arbitrum Icon'}
-                                                        loading="lazy"
-                                                    />
-                                                    <AvatarFallback>
-                                                        Arb
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                                <div>
-                                                    Arbitrum
-                                                </div>
-                                                <Button
-                                                    variant="default"
-                                                    className="h-6 w-6 p-0"
-                                                    >
-                                                        <Link
-                                                            href={`https://arbiscan.io/address/${currentChannel.tokenAddress}`}
-                                                            target="_blank"
-                                                        >
-                                                            <SquareArrowUpRight className="w-4 h-4"/>
-                                                        </Link>
-                                                </Button>
-                                                <CopyTextBlock text={currentChannel.tokenAddress}/>
-                                            </div>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuGroup> 
-                                }   
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuGroup> 
+                                            }   
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </li>
+                            }
+                        </ul>
                     }
                     <ToggleFollowFilter/>
                     <Button

@@ -192,7 +192,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
                             />
                           </HoverCardTrigger>
                           <HoverCardContent
-                            className="bg-primary w-[8px] h-[8px] absolute bottom-24 right-12"
+                            className="bg-primary absolute bottom-24 right-12"
                           >
                             <Button 
                               onClick={() => removeImage(index)} 
