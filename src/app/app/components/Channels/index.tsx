@@ -397,10 +397,7 @@ const Channels:React.FC = () => {
     userChannels,
     setAaveAccount
   ])
-
-  useEffect(() => {
-    console.log(aaveAccount)
-  },[aaveAccount])
+  
   return (
     <SidebarGroup className="flex flex-col h-full min-h-0">
       <SidebarGroupLabel>

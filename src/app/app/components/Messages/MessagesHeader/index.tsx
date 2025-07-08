@@ -8,7 +8,7 @@ import MessagesHeaderTokenStats from "./MessagesHeaderTokenStats";
 const MessagesHeader: React.FC = () => {
 
     return (
-        <CardTitle className="flex flex-col w-full bg-primary text-secondary justify-start gap-2">
+        <CardTitle className="flex flex-col w-full bg-primary text-secondary justify-start">
                 <MessagesHeaderAaveStats/>
                 <MessagesHeaderTokenStats/>
         </CardTitle>

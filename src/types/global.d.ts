@@ -147,6 +147,11 @@ interface AaveUserAccount {
   healthFactor: string;
 }
 
+interface AaveSupplyBorrowRate{
+  supplyRate: string;
+  borrowRate: borrowRate;
+}
+
 type Weighting = 'unweighted' | 'post' | 'current' | 'delta' | 'inverse';
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
 
