@@ -123,15 +123,15 @@ const MessagesHeaderAaveStats:React.FC = () => {
                 </div>
                 {
                     aaveAssetDetails !== null &&
-                    <div className="flex flex-col justify-between gap-2">
-                        <Badge variant={"secondary"}>
+                    <div className="flex flex-col justify-between">
+                        <Badge className="text-lg">
                             Supply APY: { 
                                 Number(aaveAssetDetails.supplyRate) * 100 < 0.01 ?
                                 "< 0.01" :
                                 (Number(aaveAssetDetails.supplyRate) * 100).toFixed(2)
                             }%
                         </Badge>
-                        <Badge variant={"secondary"}>
+                        <Badge className="text-lg">
                             Borrow APY: { 
                                 (Number(aaveAssetDetails.borrowRate) * 100).toFixed(2) 
                             }%
