@@ -28,6 +28,7 @@ import { ScrollArea } from '@/components/components/ui/scroll-area';
 import NewUserNoChannels from '../Channels/NewUserNoChannels';
 import MessagesHeader from './MessagesHeader';
 import { Skeleton } from '@/components/components/ui/skeleton'
+import { mockMessages } from "mocks/mockMessages";
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -138,7 +139,7 @@ const Messages:React.FC = () => {
           setError(null)
           // store unique profiles for this message feed
           const uniqueProfiles = new Set<string>(
-            messages // switch this back to messages
+            mockMessages // switch this back to messages
               .filter(message => message.channel === currentChannel.id.toString())
               .map(message => message.account)
           );
@@ -265,11 +266,11 @@ const Messages:React.FC = () => {
         <div className="flex-1 overflow-hidden">
           { 
             (
-              messages === undefined || 
-              messages === null || 
-              messages.length === 0 ||
+              mockMessages === undefined || 
+              mockMessages === null || 
+              mockMessages.length === 0 ||
               currentChannel === null ||
-              messages
+              mockMessages
                 .filter(message => message.channel === currentChannel.id.toString())
                 .length === 0
             ) &&
@@ -283,13 +284,13 @@ const Messages:React.FC = () => {
           {
             currentChannel && 
             followFilter === false &&
-            messages
+            mockMessages
               .filter(message => message.channel === currentChannel.id.toString())
               .length > 0 &&
             <ScrollArea className='h-full overflow-y-auto w-full p-4'>
               <ul className="space-y-2">
                 {
-                  messages
+                  mockMessages
                     .filter(message => message.channel === currentChannel.id.toString())
                     .map((message, index) => (
                       <Message
@@ -324,7 +325,7 @@ const Messages:React.FC = () => {
             currentChannel && 
             followFilter === true &&
             // if length of messages from follow array is > 0 we will display
-            messages
+            mockMessages
               .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account)) || message.account === account))
               .length === 0 &&
             <ScrollArea className='h-full overflow-y-auto w-full p-4'>
@@ -336,13 +337,13 @@ const Messages:React.FC = () => {
             currentChannel && 
             followFilter === true &&
             // if length of messages from follow array is > 0 we will display
-            messages
+            mockMessages
               .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
               .length > 0 &&
             <ScrollArea className='h-full overflow-y-auto w-full p-4'>
               <ul className="space-y-2">
                 {
-                  messages
+                  mockMessages
                     .filter(message => (message.channel === currentChannel.id.toString() && (followingList.includes(message.account) || message.account === account)))
                     .map((message, index) => (
                       <Message
