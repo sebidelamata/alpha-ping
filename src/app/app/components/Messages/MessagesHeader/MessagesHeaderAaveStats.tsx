@@ -96,8 +96,8 @@ const MessagesHeaderAaveStats:React.FC = () => {
         selectedChannelMetadata.protocol === 'aave'
     ){
         return(
-            <div className="flex flex-row flex-wrap w-full gap-8 text-xl">
-                <div className="flex flex-col h-full gap-2">
+            <div className="flex flex-row flex-wrap w-full gap-4 text-xl">
+                <div className="flex flex-col h-full justify-evenly">
                     <Link 
                         className="text-accent flex flex-wrap gap-2 justify-center"
                         href="https://app.aave.com/"
@@ -123,7 +123,7 @@ const MessagesHeaderAaveStats:React.FC = () => {
                 </div>
                 {
                     aaveAssetDetails !== null &&
-                    <div className="flex flex-col justify-between">
+                    <div className="flex flex-col justify-evenly">
                         <Badge className="text-lg">
                             Supply APY: { 
                                 Number(aaveAssetDetails.supplyRate) * 100 < 0.01 ?
@@ -160,7 +160,7 @@ const MessagesHeaderAaveStats:React.FC = () => {
                                 }
                         </div>
                     </div>
-                    <ul className="flex flex-col text-xs">
+                    <ul className="flex flex-col text-sm justify-evenly">
                         <li className="w-full justify-end flex">
                             Assets: ${
                             humanReadableNumbers(Number(aaveAccount?.totalCollateral).toString())
@@ -183,7 +183,7 @@ const MessagesHeaderAaveStats:React.FC = () => {
                             }
                         </li>
                     </ul>
-                    <ul className="flex flex-col">
+                    <ul className="flex flex-col h-full justify-evenly">
                         <li className="w-full justify-end flex">
                             Current LTV: {
                             (Number(aaveAccount?.ltv) * 100).toFixed(2)
