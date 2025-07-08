@@ -381,7 +381,11 @@ const MessagesHeaderTokenStats = () => {
                                         ) * 1e8
                                     ) / 1e8).toString()
                                     )
-                                } ${currentChannel?.name ?? ''} 
+                                } ${
+                                    selectedChannelMetadata?.symbol || 
+                                    currentChannel?.name || 
+                                    ''
+                                } 
                                 ($${
                                     humanReadableNumbers(
                                         (

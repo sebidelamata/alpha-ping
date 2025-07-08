@@ -208,6 +208,10 @@ const Messages:React.FC = () => {
     alphaPING
   ])
 
+  if(error){
+    console.warn(error)
+  }
+
   // scroll to end
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
@@ -248,10 +252,10 @@ const Messages:React.FC = () => {
       {
         // we render the messages header only if token metadata has been fetched
         (selectedChannelMetadata !== undefined || tokenMetadataLoading === false) ?
-        <CardHeader className="flex flex-col items-start justify-start p-4">
+        <CardHeader className="flex flex-col items-start justify-start p-0">
           <MessagesHeader/>
         </CardHeader> :
-        <CardHeader className="flex flex-col items-start justify-start p-4">
+        <CardHeader className="flex flex-col items-start justify-start p-0">
           <Skeleton className='h-8 w-full justify-start'/>
           <Skeleton className='h-8 w-full justify-start'/>
           <Skeleton className='h-8 w-full justify-start'/>
@@ -371,7 +375,6 @@ const Messages:React.FC = () => {
             </ScrollArea>
           }
         </div>
-        { error !== null && <p className="p-4">{error}</p>}
       </CardContent>
       <CardFooter className="sticky bottom-0 bg-primary py-3 w-full border-t">
         <SubmitMessage

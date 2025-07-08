@@ -139,7 +139,7 @@ const MessagesHeaderAaveStats:React.FC = () => {
                     </div>
 
                 }
-                    <div className="flex flex-col h-full gap-2">
+                    <div className="flex flex-col h-full justify-evenly">
                         <div 
                             className={
                                 // render color based on health factor
