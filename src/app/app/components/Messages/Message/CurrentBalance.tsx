@@ -91,7 +91,7 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
                     </div>
                 </div>
             </HoverCardTrigger>
-            <HoverCardContent className="bg-primary text-accent">
+            <HoverCardContent className="bg-primary text-secondary">
                 <div>
                     {
                         userBalance !== null && 
