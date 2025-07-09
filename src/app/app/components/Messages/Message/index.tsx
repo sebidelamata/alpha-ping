@@ -34,6 +34,8 @@ import Image from "next/image";
 import { Button } from "@/components/components/ui/button";
 import { SmilePlus, UserPlus } from "lucide-react";
 import PfpPopover from "./PfpPopover";
+import MessageAaveHealthFactor from "./MessageAaveHealthFactor";
+import { useChannelProviderContext } from "src/contexts/ChannelContext";
 
 
 interface MessageProps {
@@ -77,6 +79,7 @@ const Message: React.FC<MessageProps> = ({
       owner 
     } = useUserProviderContext()
     const { alphaPING } = useEtherProviderContext()
+    const { selectedChannelMetadata } = useChannelProviderContext()
 
     const [hoverOptions, sethoverOptions] = useState<boolean>(false)
     const [replyPFP, setReplyPFP] = useState<string | null>(null)
@@ -260,6 +263,12 @@ const Message: React.FC<MessageProps> = ({
           <div className="flex justify-start items-center lg:gap-16 med:gap-8 sm:gap-4 flex-wrap">
             <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
             <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
+            {
+              selectedChannelMetadata &&
+              selectedChannelMetadata.protocol &&
+              selectedChannelMetadata.protocol === 'aave' &&
+              <MessageAaveHealthFactor account={message.account}/>
+            }
             <div className='message-timestamp'>
               {DateTime.fromISO(message.timestamp.toString()).toLocaleString(DateTime.DATETIME_MED)}
             </div>
