@@ -533,7 +533,7 @@ const Channels:React.FC = () => {
                                               // render color based on health factor
                                               Number(aaveAccount?.healthFactor) <= 1.1 ?
                                               "text-red-500" :
-                                              Number(aaveAccount?.healthFactor) <= 2.0 ?
+                                              Number(aaveAccount?.healthFactor) <= 5.0 ?
                                               "text-yellow-500" :
                                               "text-green-500"
                                             }

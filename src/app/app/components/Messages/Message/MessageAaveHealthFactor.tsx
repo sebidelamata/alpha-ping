@@ -76,7 +76,7 @@ const MessageAaveHealthFactor: React.FC<IMessageAaveHealthFactor> = ({ account }
                     // render color based on health factor
                     Number(aaveDetails?.healthFactor) <= 1.1 ?
                     "text-red-500" :
-                    Number(aaveDetails?.healthFactor) <= 2.0 ?
+                    Number(aaveDetails?.healthFactor) <= 5.0 ?
                     "text-yellow-500" :
                     "text-green-500"
                 }
