@@ -151,7 +151,9 @@ const MessagesHeaderAaveStats:React.FC = () => {
                             }
                             > 
                                 Health Factor: {
-                                Number(aaveAccount?.healthFactor).toFixed(2)
+                                    aaveAccount?.healthFactor === "115792089237316195423570985008687907853.269984665640564039457584007913129639935" ? 
+                                    "∞" :
+                                    Number(aaveAccount?.healthFactor).toFixed(2)
                                 }
                         </div>
                         <div className="justify-end flex">

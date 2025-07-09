@@ -82,7 +82,9 @@ const MessageAaveHealthFactor: React.FC<IMessageAaveHealthFactor> = ({ account }
                 }
             > 
                 Health Factor: {
-                Number(aaveDetails?.healthFactor).toFixed(2)
+                    aaveDetails?.healthFactor === "115792089237316195423570985008687907853.269984665640564039457584007913129639935" ? 
+                    "∞" :
+                    Number(aaveDetails?.healthFactor).toFixed(2)
                 }
             </div>
         )

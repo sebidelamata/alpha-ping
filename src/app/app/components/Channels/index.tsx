@@ -397,7 +397,7 @@ const Channels:React.FC = () => {
     userChannels,
     setAaveAccount
   ])
-  
+
   return (
     <SidebarGroup className="flex flex-col h-full min-h-0">
       <SidebarGroupLabel>
@@ -539,6 +539,8 @@ const Channels:React.FC = () => {
                                             }
                                             > 
                                               {
+                                                aaveAccount?.healthFactor === "115792089237316195423570985008687907853.269984665640564039457584007913129639935" ? 
+                                                "∞" :
                                                 Number(aaveAccount?.healthFactor).toFixed(2)
                                               }
                                             </div>
