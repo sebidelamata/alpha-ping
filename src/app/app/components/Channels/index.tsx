@@ -336,6 +336,17 @@ const Channels:React.FC = () => {
     tokenMetaData
   ]); 
 
+  // we are going to use this timer to refetch a new aave detail every 60 seconds
+      const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  
+      // Timer to update lastUpdated every 60 seconds
+      useEffect(() => {
+          const intervalId = setInterval(() => {
+          setLastUpdated(new Date());
+          }, 60 * 1000); // 60 seconds in milliseconds
+          // Cleanup interval on component unmount
+          return () => clearInterval(intervalId);
+      }, []); // Empty dependency array to run once on mount
   // we need to find the user account details for aave if the user has any aave tokens
   useEffect(() => {
     const fetchAaveDetails = async (account: string) => {
@@ -395,7 +406,8 @@ const Channels:React.FC = () => {
     account, 
     signer, 
     userChannels,
-    setAaveAccount
+    setAaveAccount,
+    lastUpdated
   ])
 
   return (
