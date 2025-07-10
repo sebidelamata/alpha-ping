@@ -87,7 +87,7 @@ const Channel:React.FC<IChannel> = ({
                                     (
                                         channel.tokenType === 'ERC20' ?
                                         '/erc20IconAlt.svg' :
-                                        '/blank_nft.svg'
+                                        '/blank_nftAlt.svg'
                                     )
                                 :
                                     tokenMetadata.logo !== '' ? 

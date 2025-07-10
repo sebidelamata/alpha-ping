@@ -45,10 +45,8 @@ const MessagesHeaderTokenStats = () => {
     const { signer }= useEtherProviderContext()
     const { account } = useUserProviderContext()
     
-
     const [userBalance, setUserBalance] = useState<string | null>(null)
     const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
-    console.log("selectedChannelMetadata: ", selectedChannelMetadata)
 
     useEffect(() => {
         const getUserBalance = async () => {
@@ -135,7 +133,6 @@ const MessagesHeaderTokenStats = () => {
                     } as cmcPriceData)
                 }
                 const data = await response.json();
-                console.log('CMC API Response:', data);
                 // check data structure
                 if(
                     !data?.data || typeof data.data !== 'object'
