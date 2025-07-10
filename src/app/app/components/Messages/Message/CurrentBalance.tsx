@@ -91,32 +91,37 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
                     </div>
                 </div>
             </HoverCardTrigger>
-            <HoverCardContent className="bg-primary text-secondary">
-                <div>
-                    {
-                        userBalance !== null && 
-                        <div>
-                            {
-                                tokenDecimals !== null ? (
-                                    `$${
-                                        humanReadableNumbers((
-                                            (
-                                                parseFloat(
-                                                ethers.formatUnits(userBalance.toString(), tokenDecimals)
-                                                ) * 1e8
-                                            ) / 1e8 * Number(cmcFetch.tokenUSDPrice)
-                                        ).toString())
-                                    }`
-                                    ) : (
+            <HoverCardContent className="bg-primary text-secondary"> 
+                 <div className='flex flex-row gap-1'>
+                    <div className='current-token-amount-title'>
+                        <strong>Post Balance:</strong>
+                    </div>
+                    <div>
+                        {
+                            userBalance !== null && 
+                            <div>
+                                {
+                                    tokenDecimals !== null ? (
                                         `$${
-                                            humanReadableNumbers(
-                                                (Number(userBalance) * Number(cmcFetch.tokenUSDPrice)).toString()
-                                            )
+                                            humanReadableNumbers((
+                                                (
+                                                    parseFloat(
+                                                    ethers.formatUnits(userBalance.toString(), tokenDecimals)
+                                                    ) * 1e8
+                                                ) / 1e8 * Number(cmcFetch.tokenUSDPrice)
+                                            ).toString())
                                         }`
-                                    )
-                                }
-                        </div>
-                    }
+                                        ) : (
+                                            `$${
+                                                humanReadableNumbers(
+                                                    (Number(userBalance) * Number(cmcFetch.tokenUSDPrice)).toString()
+                                                )
+                                            }`
+                                        )
+                                    }
+                            </div>
+                        }
+                    </div>
                 </div>
             </HoverCardContent>
         </HoverCard>
