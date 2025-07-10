@@ -72,7 +72,6 @@ const Messages:React.FC = () => {
     followingList,
     blockedList 
   } = useUserProviderContext()
-  console.log('selectedChannelMetadata', selectedChannelMetadata)
 
   const [token, setToken] = useState<Contract | null>(null)
   const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
@@ -97,6 +96,7 @@ const Messages:React.FC = () => {
       if (token !== null) {
         try {
           const tokenDecimals = await token.decimals()
+          console.log(tokenDecimals)
           setTokenDecimals(tokenDecimals as number)
         } catch (error) {
           console.warn('Failed to fetch token decimals:', error)

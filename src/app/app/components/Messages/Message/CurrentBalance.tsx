@@ -27,6 +27,8 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
     tokenDecimals 
 }) => {
 
+    console.log(tokenDecimals)
+
     const { signer } = useEtherProviderContext()
     const { cmcFetch } = useChannelProviderContext()
 
@@ -94,7 +96,7 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
             <HoverCardContent className="bg-primary text-secondary"> 
                  <div className='flex flex-row gap-1'>
                     <div className='current-token-amount-title'>
-                        <strong>Post Balance:</strong>
+                        <strong>Current Balance:</strong>
                     </div>
                     <div>
                         {
