@@ -167,7 +167,7 @@ const AaveChannelGroup:React.FC<IAaveChannelGroup> = ({ channels }) => {
                                 // render color based on health factor
                                 Number(aaveAccount?.healthFactor) <= 1.1 ?
                                 "text-red-500 w-full justify-end flex" :
-                                Number(aaveAccount?.healthFactor) <= 2.0 ?
+                                Number(aaveAccount?.healthFactor) <= 5.0 ?
                                 "text-yellow-500 w-full justify-end flex" :
                                 "text-green-500 w-full justify-end flex"
                                 }
