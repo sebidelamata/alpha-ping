@@ -115,7 +115,7 @@ const MessagesHeaderTokenLinks:React.FC = () => {
                 }
                 {
                     (
-                        selectedChannelMetadata.description !== undefined ||
+                        selectedChannelMetadata.description !== undefined &&
                         selectedChannelMetadata.description !== ""
                     ) &&
                     <Popover>
