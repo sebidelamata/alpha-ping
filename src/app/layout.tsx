@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Metadata } from 'next';
 import '../styles/index.css'; 
-import { Roboto } from 'next/font/google'
+import { Roboto } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 
 // set font propertoes
 const roboto = Roboto({
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     creator: '@__AlphaPING__',
     title: 'AlphaPING | Chat | Trade',
     description: 'Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place.',
-    images: '/Apes.svg',
+    images: ['/Apes.svg'],
   },
 };
 
@@ -37,12 +38,14 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  
   return (
     <html lang="en" className={roboto.className}>
       <body id='root' className='bg-primary text-secondary min-h-screen !important'>
         <main>
           {children}
         </main>
+        <Analytics />
       </body>
     </html>
   );
