@@ -28,6 +28,7 @@ import { ScrollArea } from '@/components/components/ui/scroll-area';
 import NewUserNoChannels from '../Channels/NewUserNoChannels';
 import MessagesHeader from './MessagesHeader';
 import { Skeleton } from '@/components/components/ui/skeleton'
+import { useTokenMetadataContext } from 'src/contexts/TokenMetaDataContext';
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -53,12 +54,14 @@ const Messages:React.FC = () => {
 
   const { 
     signer, 
-    alphaPING,
-    tokenMetaData 
+    alphaPING, 
   } = useEtherProviderContext()
   const { 
-    currentChannel, 
-    tokenMetadataLoading,
+    tokenMetaData, 
+    tokenMetadataLoading 
+  } = useTokenMetadataContext()
+  const { 
+    currentChannel,
     selectedChannelMetadata, 
   } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()

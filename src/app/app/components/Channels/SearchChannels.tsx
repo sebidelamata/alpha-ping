@@ -29,6 +29,7 @@ import {
   } from "@/components/components/ui/dialog"
   import { Button } from "@/components/components/ui/button.tsx";
   import { ChevronsUpDown, SearchCode } from "lucide-react";
+  import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext.tsx";
 
 const SearchChannels: React.FC = () => {
 
@@ -36,8 +37,8 @@ const SearchChannels: React.FC = () => {
         channels, 
         alphaPING, 
         signer,
-        tokenMetaData 
     } = useEtherProviderContext()
+    const { tokenMetaData } = useTokenMetadataContext()
     const { 
         setCurrentChannel,
         joinChannelLoading, 

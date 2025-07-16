@@ -12,13 +12,15 @@ import MessagesProvider from '../../contexts/MessagesContext';
 import ChannelProvider from '../../contexts/ChannelContext';
 import UserProvider from '../../contexts/UserContext';
 import Web3WalletConnectProvider from '../../contexts/Web3ConnectContext';
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/Navbar";
 import { 
     SidebarProvider, 
     SidebarTrigger 
 } from "@/components/components/ui/sidebar"
 import AppSidebar from "./components/AppSidebar";
 import { Toaster } from "@/components/components/ui/toaster"
+import { TokenMetadataProvider } from "src/contexts/TokenMetaDataContext";
+import { CMCPriceDataProvider } from "src/contexts/CMCPriceDataContext";
 
 const Layout = ({ children }: { children: ReactNode }) => {
 
@@ -42,28 +44,32 @@ const Layout = ({ children }: { children: ReactNode }) => {
     return(
       <Web3WalletConnectProvider>
         <ProviderProvider>
-          <SocketProvider>
-            <ChannelProvider>
-              <MessagesProvider>
-                <UserProvider>
-                  <SidebarProvider>
-                      <Navbar/>
-                      <div className="top-24 flex">
-                          <AppSidebar/>
-                          <main>
-                              {
-                              isMobile === true &&
-                              <SidebarTrigger className="fixed top-24"/>
-                              }
-                              {children}
-                          </main>
-                          <Toaster/>
-                      </div>
-                  </SidebarProvider>
-                  </UserProvider>
-              </MessagesProvider>
-            </ChannelProvider>
-          </SocketProvider>
+          <TokenMetadataProvider>
+            <SocketProvider>
+              <ChannelProvider>
+                <CMCPriceDataProvider>
+                  <MessagesProvider>
+                    <UserProvider>
+                      <SidebarProvider>
+                          <Navbar/>
+                          <div className="top-24 flex">
+                              <AppSidebar/>
+                              <main>
+                                  {
+                                  isMobile === true &&
+                                  <SidebarTrigger className="fixed top-24"/>
+                                  }
+                                  {children}
+                              </main>
+                              <Toaster/>
+                          </div>
+                      </SidebarProvider>
+                    </UserProvider>
+                  </MessagesProvider>
+                </CMCPriceDataProvider>
+              </ChannelProvider>
+            </SocketProvider>
+          </TokenMetadataProvider>
         </ProviderProvider>
       </Web3WalletConnectProvider>
     )

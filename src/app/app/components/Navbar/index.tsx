@@ -1,11 +1,11 @@
 'use client';
 
 import SearchChannels from '../Channels/SearchChannels';
-import { useEtherProviderContext } from 'src/contexts/ProviderContext';
+import { useTokenMetadataContext } from 'src/contexts/TokenMetaDataContext';
 
 const Navbar: React.FC = () => {
 
-  const { tokenMetaData } = useEtherProviderContext()
+  const { tokenMetaData } = useTokenMetadataContext()
 
   return (
     <nav className='fixed z-50 flex h-24 w-full justify-between bg-primary p-4'>

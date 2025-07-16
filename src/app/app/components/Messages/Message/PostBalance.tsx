@@ -12,7 +12,7 @@ import {
     HoverCardTrigger, 
     HoverCardContent 
 } from "@/components/components/ui/hover-card";
-import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 
 interface PostBalanceProps{
@@ -28,7 +28,7 @@ const PostBalance:React.FC<PostBalanceProps> = ({
 }) => {
 
     const { signer } = useEtherProviderContext()
-    const { cmcFetch } = useChannelProviderContext()
+    const { cmcFetch } = useCMCPriceDataContext()
 
     const [tokenSymbol, setTokenSymbol] = useState<string | null>(null)
 

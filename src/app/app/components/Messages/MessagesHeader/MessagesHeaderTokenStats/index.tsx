@@ -26,6 +26,7 @@ import { Badge } from "@/components/components/ui/badge";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
+import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import { ethers } from "ethers";
 import ERC20Faucet from '../../../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import MessagesHeaderTokenLinks from "./MessagesHeaderTokenLinks";
@@ -38,10 +39,12 @@ const MessagesHeaderTokenStats = () => {
     const { 
         currentChannel, 
         selectedChannelMetadata,
-        setCmcFetch,
-        cmcFetch, 
         setChannelAction 
     } = useChannelProviderContext()
+    const {
+        setCmcFetch,
+        cmcFetch, 
+    } = useCMCPriceDataContext()
     const { signer }= useEtherProviderContext()
     const { account } = useUserProviderContext()
     

@@ -14,6 +14,4 @@ import type { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/Al
     hasJoined: boolean[]
     setHasJoined: React.Dispatch<React.SetStateAction<boolean[] | []>>
     isInitialized: boolean
-    tokenMetaData: tokenMetadata[]
-    setTokenMetaData: React.Dispatch<React.SetStateAction<tokenMetadata[] | []>>
   }

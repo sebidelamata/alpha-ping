@@ -12,7 +12,7 @@ import {
     HoverCardTrigger, 
     HoverCardContent 
 } from "@/components/components/ui/hover-card";
-import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 
 interface CurrentBalanceProps{
@@ -27,10 +27,8 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
     tokenDecimals 
 }) => {
 
-    console.log(tokenDecimals)
-
     const { signer } = useEtherProviderContext()
-    const { cmcFetch } = useChannelProviderContext()
+    const { cmcFetch } = useCMCPriceDataContext()
 
     const [userBalance, setUserBalance] = useState<string | null>(null)
 

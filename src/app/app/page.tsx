@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 // messages
 import Messages from './components/Messages'
@@ -14,42 +14,20 @@ import Loading from './components/Loading';
 import JoinAlphaPING from './components/JoinAlphaPING'
 import { useAppKitAccount } from "@reown/appkit/react";
 import { useUserProviderContext } from '../../contexts/UserContext';
-import { useEtherProviderContext } from '../../contexts/ProviderContext';
 import { useChannelProviderContext } from '../../contexts/ChannelContext';
 import BlacklistedScreen from './components/BlacklistedScreen';
+import useIsMember from 'src/hooks/useIsMember';
 
 const App:React.FC = () => {
 
-  const { alphaPING, signer, isInitialized } = useEtherProviderContext()
   const { blacklisted } = useUserProviderContext()
   const { isConnected } = useAppKitAccount()
   const { channelAction } = useChannelProviderContext()
-
-  // is this user a member of the app
-  const [isMember, setIsMember] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(true)
-
-  useEffect(() => {
-    const findIsMember = async () => {
-       if (!signer || !alphaPING || !isInitialized) {
-        console.log("Not ready to check membership:", { signer: !!signer, alphaPING: !!alphaPING, isInitialized });
-        return;
-      }
-      try{
-        setLoading(true)
-        const isMember = await alphaPING?.isMember(signer)
-          if(isMember){
-          setIsMember(isMember)
-        }
-      } catch (error) {
-        console.error("Error checking membership:", error);
-      } finally{
-        setLoading(false)
-      }
-    }
-    findIsMember()
-  }, [signer, isConnected, alphaPING, isInitialized])
-  
+  const { 
+    isMember, 
+    setIsMember, 
+    loading 
+  } = useIsMember()
 
   const renderChannelAction = () => {
     switch(channelAction){
