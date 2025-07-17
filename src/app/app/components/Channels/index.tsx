@@ -17,6 +17,7 @@ import NFTChannelGroup from "./NFTChannelGroup";
 import useSetInitialCurrentChannel from "src/hooks/useSetInitialCurrentChannel";
 import useTokenMetadata from "src/hooks/useTokenMetadata";
 import useChannelGroups from "src/hooks/useChannelGroups";
+import useUserAaveDetails from "src/hooks/useUserAaveDetails";
 
 
 const Channels:React.FC = () => {
@@ -27,6 +28,9 @@ const Channels:React.FC = () => {
 
   // set the default channel to the first in the list if one hasn't been selected yet
   useSetInitialCurrentChannel()
+
+  // set the user aave details
+  useUserAaveDetails()
 
   // grab our channel groups
   const {

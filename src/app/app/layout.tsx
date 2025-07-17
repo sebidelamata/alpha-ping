@@ -21,6 +21,7 @@ import AppSidebar from "./components/AppSidebar";
 import { Toaster } from "@/components/components/ui/toaster"
 import { TokenMetadataProvider } from "src/contexts/TokenMetaDataContext";
 import { CMCPriceDataProvider } from "src/contexts/CMCPriceDataContext";
+import { AaveDetailsProvider } from "src/contexts/AaveDetailsContext";
 
 const Layout = ({ children }: { children: ReactNode }) => {
 
@@ -48,24 +49,26 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <SocketProvider>
               <ChannelProvider>
                 <CMCPriceDataProvider>
-                  <MessagesProvider>
-                    <UserProvider>
-                      <SidebarProvider>
-                          <Navbar/>
-                          <div className="top-24 flex">
-                              <AppSidebar/>
-                              <main>
-                                  {
-                                  isMobile === true &&
-                                  <SidebarTrigger className="fixed top-24"/>
-                                  }
-                                  {children}
-                              </main>
-                              <Toaster/>
-                          </div>
-                      </SidebarProvider>
-                    </UserProvider>
-                  </MessagesProvider>
+                  <AaveDetailsProvider>
+                    <MessagesProvider>
+                      <UserProvider>
+                        <SidebarProvider>
+                            <Navbar/>
+                            <div className="top-24 flex">
+                                <AppSidebar/>
+                                <main>
+                                    {
+                                    isMobile === true &&
+                                    <SidebarTrigger className="fixed top-24"/>
+                                    }
+                                    {children}
+                                </main>
+                                <Toaster/>
+                            </div>
+                        </SidebarProvider>
+                      </UserProvider>
+                    </MessagesProvider>
+                  </AaveDetailsProvider>
                 </CMCPriceDataProvider>
               </ChannelProvider>
             </SocketProvider>

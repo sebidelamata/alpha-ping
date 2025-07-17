@@ -11,7 +11,7 @@ import {
     AvatarImage 
 } from "@/components/components/ui/avatar";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
-import { useUserProviderContext } from "src/contexts/UserContext";
+import { useAaveDetailsContext } from "src/contexts/AaveDetailsContext";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import { Separator } from "@/components/components/ui/separator";
@@ -29,7 +29,7 @@ const MessagesHeaderAaveStats:React.FC = () => {
         selectedChannelMetadata,
         currentChannel 
     } = useChannelProviderContext()
-    const { aaveAccount } = useUserProviderContext()
+    const { aaveAccount } = useAaveDetailsContext()
     const { signer } = useEtherProviderContext()
 
     // this fetches the supply and borrow APY for the token

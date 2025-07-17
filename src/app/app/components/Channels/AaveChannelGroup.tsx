@@ -25,7 +25,7 @@ import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import Channel from "./Channel";
-import { useUserProviderContext } from "src/contexts/UserContext";
+import { useAaveDetailsContext } from "src/contexts/AaveDetailsContext";
 import { AlphaPING } from "typechain-types";
 
 interface IAaveChannelGroup{
@@ -37,7 +37,7 @@ interface IAaveChannelGroup{
 
 const AaveChannelGroup:React.FC<IAaveChannelGroup> = ({ channels }) => {
 
-    const { aaveAccount } = useUserProviderContext()
+    const { aaveAccount } = useAaveDetailsContext()
 
     return(
             <Collapsible defaultOpen className="group/collapsible">
