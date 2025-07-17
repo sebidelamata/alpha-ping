@@ -1,12 +1,10 @@
 'use client';
 
 import React, {
-  useEffect,
   useState,
 } from "react";
 import Link from "next/link";
 import { DateTime } from 'luxon';
-import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "../../../../../contexts/UserContext";
 import PostBalance from "./PostBalance";
 import CurrentBalance from "./CurrentBalance";
@@ -36,6 +34,9 @@ import { SmilePlus, UserPlus } from "lucide-react";
 import PfpPopover from "./PfpPopover";
 import MessageAaveHealthFactor from "./MessageAaveHealthFactor";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import extractImageUrls from "src/lib/extractImageUrls";
+import extractIframeStrings from "src/lib/extractIframeStrings";
+import useReplyUsernameAndPFP from "src/hooks/useReplyUsernameAndPFP";
 
 
 interface MessageProps {
@@ -74,63 +75,23 @@ const Message: React.FC<MessageProps> = ({
   blacklistArrayLoading,
 }) => {
 
-    const { 
-      currentChannelMod, 
-      owner 
-    } = useUserProviderContext()
-    const { alphaPING } = useEtherProviderContext()
-    const { selectedChannelMetadata } = useChannelProviderContext()
+  const { 
+    currentChannelMod, 
+    owner 
+  } = useUserProviderContext()
+  const { selectedChannelMetadata } = useChannelProviderContext()
 
-    const [hoverOptions, sethoverOptions] = useState<boolean>(false)
-    const [replyPFP, setReplyPFP] = useState<string | null>(null)
-    const [replyUsername, setReplyUsername] = useState<string | null>(null)
+  const [hoverOptions, sethoverOptions] = useState<boolean>(false)
 
-    // if there is a reply get username and profile pic to original post
-    useEffect(() => {
-      const fetchReplyPFP = async () => {
-        if(reply && reply !== null){
-          const replyPFP = await alphaPING?.profilePic(reply.account) || null
-          setReplyPFP(replyPFP)
-        }
-      }
-      fetchReplyPFP()
-      const fetchReplyUsername = async () => {
-        if(reply && reply !== null){
-          const replyUsername = await alphaPING?.username(reply.account) || null
-          setReplyUsername(replyUsername)
-        }
-      }
-      fetchReplyUsername()
-    }, [alphaPING, reply])
+  // if there is a repl fetch the reply pfp and username
+  const {replyPFP, replyUsername} = useReplyUsernameAndPFP(reply)
 
-    if (message === null || message === undefined || Object.keys(message).length === 0) {
-      // Render a placeholder or nothing if there is no message data
-      return <div>Message unavailable</div>;
-    }
+  if (message === null || message === undefined || Object.keys(message).length === 0) {
+    // Render a placeholder or nothing if there is no message data
+    return <div>Message unavailable</div>;
+  }
 
-    // Function to extract image URLs from message text
-    const extractImageUrls = (text: string): string[] => {
-      const regex = /!\[image\]\((.*?)\)/g;
-      let match;
-      const urls: string[] = [];
-      while ((match = regex.exec(text)) !== null) {
-          urls.push(match[1]);
-      }
-      return urls;
-    };
-
-    const imageUrls = extractImageUrls(message.text);
-
-    // Function to extract iframe strings from message text
-    const extractIframeStrings = (text: string): string[] => {
-      const regex = /<iframe src="(.*?)"/g;
-      let match;
-      const urls: string[] = [];
-      while ((match = regex.exec(text)) !== null) {
-        urls.push(match[1]);
-      }
-      return urls;
-    };
+  const imageUrls = extractImageUrls(message.text);
 
   const iframeStrings = extractIframeStrings(message.text);
 

@@ -9,7 +9,7 @@ const useSetInitialCurrentChannel = () => {
     const { 
         currentChannel, 
         setCurrentChannel,
-        setSelectedChannelMetadata
+        setSelectedChannelMetadata,
       } = useChannelProviderContext()
 
     const { userChannels } = useUserChannels()

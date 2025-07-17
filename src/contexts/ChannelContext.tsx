@@ -63,7 +63,7 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             addChannelLoading,
             setAddChannelLoading,
             channelAction,
-            setChannelAction,
+            setChannelAction
         }}>
             {children}
         </ChannelContext.Provider>

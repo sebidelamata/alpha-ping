@@ -6,11 +6,6 @@ import React,
     useState, 
     useRef
 } from 'react'
-import { 
-  ethers, 
-  Contract 
-} from 'ethers'
-import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { useEtherProviderContext } from '../../../../contexts/ProviderContext'
 import { useChannelProviderContext } from '../../../../contexts/ChannelContext'
 import { useUserProviderContext } from '../../../../contexts/UserContext';
@@ -29,6 +24,7 @@ import NewUserNoChannels from '../Channels/NewUserNoChannels';
 import MessagesHeader from './MessagesHeader';
 import { Skeleton } from '@/components/components/ui/skeleton'
 import { useTokenMetadataContext } from 'src/contexts/TokenMetaDataContext';
+import useGetTokenDecimals from 'src/hooks/useGetTokenDecimals';
 
 interface ProfilePics {
   [account: string]: string | null;
@@ -52,10 +48,7 @@ interface ErrorType{
 
 const Messages:React.FC = () => {
 
-  const { 
-    signer, 
-    alphaPING, 
-  } = useEtherProviderContext()
+  const { alphaPING } = useEtherProviderContext()
   const { 
     tokenMetaData, 
     tokenMetadataLoading 
@@ -76,54 +69,11 @@ const Messages:React.FC = () => {
     blockedList 
   } = useUserProviderContext()
 
-  const [token, setToken] = useState<Contract | null>(null)
-  const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
-  const [userBalance, setUserBalance] = useState<string | null>(null)
+  const { tokenDecimals } = useGetTokenDecimals()
+
 
   // this holds the value (if there is one) of the reply id of a message
   const [replyId, setReplyId] = useState<string | null>(null)
-
-  useEffect(() => {
-    if(currentChannel?.tokenAddress !== undefined){
-      const token = new ethers.Contract(
-        currentChannel?.tokenAddress,
-        ERC20Faucet.abi,
-        signer
-      )
-      setToken(token)
-    }
-  }, [currentChannel, signer])
-
-  useEffect(() => {
-    const fetchTokenDecimals = async () => {
-      if (token !== null) {
-        try {
-          const tokenDecimals = await token.decimals()
-          console.log(tokenDecimals)
-          setTokenDecimals(tokenDecimals as number)
-        } catch (error) {
-          console.warn('Failed to fetch token decimals:', error)
-          setTokenDecimals(null) 
-        }
-      } else {
-        setTokenDecimals(null) 
-      }
-    }
-    // only grab decimals if it is a erc20
-    if(currentChannel?.tokenType.toLowerCase() === 'erc20' && currentChannel?.tokenAddress !== undefined){
-      fetchTokenDecimals()
-    }
-  }, [token, currentChannel])
-
-  useEffect(() => {
-    const getUserBalance = async () => {
-      if(token !== null){
-        const userBalance = await token.balanceOf(signer)
-        setUserBalance(userBalance.toString())
-      }
-    }
-    getUserBalance()
-  }, [token, signer])
 
   const [profilePics, setProfilePics] = useState<ProfilePics>({})
   const [usernameArray, setUsernameArray] = useState<Usernames>({})
@@ -381,7 +331,6 @@ const Messages:React.FC = () => {
       </CardContent>
       <CardFooter className="sticky bottom-0 bg-primary py-3 w-full border-t">
         <SubmitMessage
-          userBalance={userBalance}
           replyId={replyId}
           setReplyId={setReplyId}
         />

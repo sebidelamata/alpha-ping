@@ -20,16 +20,15 @@ import {
   HoverCardTrigger, 
   HoverCardContent 
 } from "@/components/components/ui/hover-card";
+import useGetBalance from "src/hooks/useGetBalance";
 
 
 interface SubmitMessageProps {
-    userBalance: string | null;
     replyId: string | null;
     setReplyId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const SubmitMessage: React.FC<SubmitMessageProps> = ({ 
-  userBalance, 
   replyId, 
   setReplyId,
 }) => {
@@ -42,6 +41,7 @@ const SubmitMessage: React.FC<SubmitMessageProps> = ({
       blacklisted 
     } = useUserProviderContext()
     const { currentChannel } = useChannelProviderContext()
+    const { userBalance } = useGetBalance()
 
     const [message, setMessage] = useState<string>("")
     const [cleanedMessage, setCleanedMessage] = useState<string>("");
