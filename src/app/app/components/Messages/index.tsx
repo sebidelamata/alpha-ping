@@ -6,7 +6,6 @@ import React,
     useState, 
     useRef
 } from 'react'
-import { useEtherProviderContext } from '../../../../contexts/ProviderContext'
 import { useChannelProviderContext } from '../../../../contexts/ChannelContext'
 import { useUserProviderContext } from '../../../../contexts/UserContext';
 import SkeletonMessageFeed from './SkeletonMessageFeed';
@@ -25,30 +24,10 @@ import MessagesHeader from './MessagesHeader';
 import { Skeleton } from '@/components/components/ui/skeleton'
 import { useTokenMetadataContext } from 'src/contexts/TokenMetaDataContext';
 import useGetTokenDecimals from 'src/hooks/useGetTokenDecimals';
-
-interface ProfilePics {
-  [account: string]: string | null;
-}
-
-interface Usernames {
-  [account: string]: string | null;
-}
-
-interface Bans {
-  [account: string]: boolean;
-}
-
-interface Blacklists {
-  [account: string]: boolean;
-}
-
-interface ErrorType{
-  message: string;
-}
+import useMessageMetadata from 'src/hooks/useMessageMetadata';
 
 const Messages:React.FC = () => {
 
-  const { alphaPING } = useEtherProviderContext()
   const { 
     tokenMetaData, 
     tokenMetadataLoading 
@@ -58,12 +37,8 @@ const Messages:React.FC = () => {
     selectedChannelMetadata, 
   } = useChannelProviderContext()
   const { messages } = useMessagesProviderContext()
-  const { 
-    txMessageBan, 
-    txMessageBlacklist, 
-    account, 
-    txMessageFollow, 
-    txMessageBlock, 
+  const {
+    account,
     followFilter,
     followingList,
     blockedList 
@@ -75,95 +50,16 @@ const Messages:React.FC = () => {
   // this holds the value (if there is one) of the reply id of a message
   const [replyId, setReplyId] = useState<string | null>(null)
 
-  const [profilePics, setProfilePics] = useState<ProfilePics>({})
-  const [usernameArray, setUsernameArray] = useState<Usernames>({})
-  const [usernameArrayLoading, setUsernameArrayLoading] = useState<boolean>(false)
-  const [bansArray, setBansArray] = useState<Bans>({})
-  const [bansArrayLoading, setBansArrayLoading] = useState<boolean>(false)
-  const [blacklistArray, setBlacklistArray] = useState<Blacklists>({})
-  const [blacklistArrayLoading, setBlacklistArrayLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchMessagesMetadata = async () => {
-      try{
-        if(currentChannel !== null){
-          setError(null)
-          // store unique profiles for this message feed
-          const uniqueProfiles = new Set<string>(
-            messages // switch this back to messages
-              .filter(message => message.channel === currentChannel.id.toString())
-              .map(message => message.account)
-          );
-    
-          // grab unique user avatars
-          const profilePicsData: ProfilePics = {};
-          await Promise.all(
-            Array.from(uniqueProfiles).map( async (profile) => {
-              const profilePic = await alphaPING?.profilePic(profile)
-              profilePicsData[profile] = profilePic || null
-            })
-          )
-          setProfilePics(profilePicsData)
-    
-          // grab unique usernames
-          setUsernameArrayLoading(true)
-          const usernamesData: Usernames = {};
-          await Promise.all(
-            Array.from(uniqueProfiles).map( async (profile) => {
-              const username = await alphaPING?.username(profile)
-              usernamesData[profile] = username || null
-            })
-          )
-          setUsernameArray(usernamesData)
-    
-          // grab unique user channel ban status
-          setBansArrayLoading(true)
-          const bansData: Bans = {};
-          await Promise.all(
-            Array.from(uniqueProfiles).map( async (profile) => {
-              const ban = await alphaPING?.channelBans(currentChannel.id.toString(), profile) || false
-              bansData[profile] = ban
-            })
-          )
-          setBansArray(bansData)
-    
-          // grab unique user application blacklist status
-          setBlacklistArrayLoading(true)
-          const blacklistData: Blacklists = {};
-            await Promise.all(
-              Array.from(uniqueProfiles).map( async (profile) => {
-                const blacklist = await alphaPING?.isBlackListed(profile) || false
-                blacklistData[profile] = blacklist
-              })
-            )
-          setBlacklistArray(blacklistData)
-        }
-      }catch(error){
-        setError((error as ErrorType).message)
-      }finally{
-        setUsernameArrayLoading(false)
-        setBansArrayLoading(false)
-        setBlacklistArrayLoading(false)
-      }
-    }
-    if (currentChannel) {
-      fetchMessagesMetadata();
-    }
-  }, [
-    currentChannel, 
-    txMessageBan, 
-    txMessageBlacklist, 
-    txMessageFollow, 
-    txMessageBlock, 
-    account, 
-    messages, 
-    alphaPING
-  ])
-
-  if(error){
-    console.warn(error)
-  }
+  const {
+    usernameArray,
+    usernameArrayLoading,
+    profilePics,
+    profilePicsLoading,
+    bansArray,
+    bansArrayLoading,
+    blacklistArray,
+    blacklistArrayLoading
+  } = useMessageMetadata()
 
   // scroll to end
   const messageEndRef = useRef<HTMLDivElement | null>(null)
@@ -190,10 +86,15 @@ const Messages:React.FC = () => {
 
   // Scroll when metadata loading completes
   useEffect(() => {
-    if (!usernameArrayLoading && !bansArrayLoading && !blacklistArrayLoading) {
+    if (
+      !usernameArrayLoading && 
+      !bansArrayLoading && 
+      !blacklistArrayLoading && 
+      !profilePicsLoading
+    ) {
       scrollHandler()
     }
-  }, [usernameArrayLoading, bansArrayLoading, blacklistArrayLoading])
+  }, [usernameArrayLoading, bansArrayLoading, blacklistArrayLoading, profilePicsLoading])
 
   return (
     <Card 
