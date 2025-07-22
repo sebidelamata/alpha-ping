@@ -48,13 +48,11 @@ interface MessageProps {
     reply: Message | null;
     profilePic: string | null;
     username: string | null;
-    usernameArrayLoading: boolean;
     userBan: boolean;
     following: boolean;
     blocked: boolean;
-    bansArrayLoading: boolean;
     userBlacklist: boolean;
-    blacklistArrayLoading: boolean;
+    isMetadataLoading: boolean;
 }
 
 const Message: React.FC<MessageProps> = ({
@@ -66,13 +64,11 @@ const Message: React.FC<MessageProps> = ({
   reply, 
   profilePic,
   username,
-  usernameArrayLoading,
   userBan,
   following,
   blocked,
-  bansArrayLoading,
   userBlacklist,
-  blacklistArrayLoading,
+  isMetadataLoading,
 }) => {
 
   const { 
@@ -171,7 +167,7 @@ const Message: React.FC<MessageProps> = ({
         >
           <h4>
             {
-              usernameArrayLoading === true ?
+              isMetadataLoading === true ?
               message.account.slice(0, 6) + '...' + message.account.slice(38, 42) :
                 (username !== null && username !== '') ?
                 username :
@@ -180,7 +176,7 @@ const Message: React.FC<MessageProps> = ({
           </h4>
         </Link>
         {
-          bansArrayLoading === true &&
+          isMetadataLoading === true &&
           <Skeleton className="h-6 w-16 rounded-md" />
         }
         {
@@ -200,7 +196,7 @@ const Message: React.FC<MessageProps> = ({
           </Badge>
         }
         {
-          blacklistArrayLoading === true &&
+          isMetadataLoading === true &&
           <Skeleton className="h-6 w-16 rounded-md" />
         }
         {

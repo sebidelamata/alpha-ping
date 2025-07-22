@@ -3,6 +3,7 @@ import useUniqueProfilePics from "./useUniqueProfilePics";
 import useUniqueUsernames from "./useUniqueUsernames";
 import useBansArray from "./useBansArray";
 import useBlacklistArray from "./useBlacklistArray";
+import { useMemo } from "react";
 
 const useMessageMetadata = () => {
 
@@ -14,15 +15,25 @@ const useMessageMetadata = () => {
     const { bansArray, bansArrayLoading } = useBansArray(uniqueProfiles)
     const { blacklistArray, blacklistArrayLoading } = useBlacklistArray(uniqueProfiles)
 
+    // Memoize loading states
+    const isMetadataLoading = useMemo(() => (
+        usernameArrayLoading || 
+        bansArrayLoading || 
+        blacklistArrayLoading || 
+        profilePicsLoading
+    ), [
+        usernameArrayLoading, 
+        bansArrayLoading, 
+        blacklistArrayLoading, 
+        profilePicsLoading
+    ]);
+
     return {
         profilePics,
-        profilePicsLoading,
         usernameArray,
-        usernameArrayLoading,
         bansArray,
-        bansArrayLoading,
         blacklistArray,
-        blacklistArrayLoading
+        isMetadataLoading,
     }
 }
 

@@ -43,7 +43,7 @@ const TotalVolumeUSDCard: React.FC = () => {
                 }
                 
                 let total = 0
-                trades.map((trade) => total += parseFloat(trade.volumeUsd))
+                trades.map((trade) => total += (parseFloat(trade.volumeUsd)) || 0)
                 setTotalVolumeUSD(
                     (Math.round(total * 100) / 100).toFixed(2)
                 )

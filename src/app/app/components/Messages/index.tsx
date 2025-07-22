@@ -52,24 +52,22 @@ const Messages:React.FC = () => {
 
   const {
     usernameArray,
-    usernameArrayLoading,
     profilePics,
-    profilePicsLoading,
     bansArray,
-    bansArrayLoading,
     blacklistArray,
-    blacklistArrayLoading
+    isMetadataLoading,
   } = useMessageMetadata()
 
   // scroll to end
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
   const scrollHandler = () => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
         if(messageEndRef.current){
             (messageEndRef.current as HTMLDivElement)?.scrollIntoView({ behavior: 'smooth' })
         }
     }, 100)
+    return () => clearTimeout(timer);
   }
 
   // Scroll on mount
@@ -86,15 +84,10 @@ const Messages:React.FC = () => {
 
   // Scroll when metadata loading completes
   useEffect(() => {
-    if (
-      !usernameArrayLoading && 
-      !bansArrayLoading && 
-      !blacklistArrayLoading && 
-      !profilePicsLoading
-    ) {
+    if (!isMetadataLoading) {
       scrollHandler()
     }
-  }, [usernameArrayLoading, bansArrayLoading, blacklistArrayLoading, profilePicsLoading])
+  }, [isMetadataLoading])
 
   return (
     <Card 
@@ -160,13 +153,11 @@ const Messages:React.FC = () => {
                         }
                         profilePic={profilePics[message.account]}
                         username={usernameArray[message.account]}
-                        usernameArrayLoading={usernameArrayLoading}
                         userBan={bansArray[message.account]}
                         blocked={blockedList.includes(message.account)}
                         following={followingList.includes(message.account)}
-                        bansArrayLoading={bansArrayLoading}
                         userBlacklist={blacklistArray[message.account]}
-                        blacklistArrayLoading={blacklistArrayLoading}
+                        isMetadataLoading={isMetadataLoading}
                       />
                   ))
                 }
@@ -214,13 +205,11 @@ const Messages:React.FC = () => {
                         }
                         profilePic={profilePics[message.account]}
                         username={usernameArray[message.account]}
-                        usernameArrayLoading={usernameArrayLoading}
                         userBan={bansArray[message.account]}
                         blocked={blockedList.includes(message.account)}
                         following={followingList.includes(message.account)}
-                        bansArrayLoading={bansArrayLoading}
                         userBlacklist={blacklistArray[message.account]}
-                        blacklistArrayLoading={blacklistArrayLoading}
+                        isMetadataLoading={isMetadataLoading}
                       />
                   ))
                 }
