@@ -5,7 +5,7 @@ import {
 import useCurrentChannelERC20Contract from "./useCurrentChannelERC20Contract";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 
-const useGetBalance = () => {
+const useGetBalance = ( user: string = "" ) => {
 
     const { signer } = useEtherProviderContext()
     const { token } = useCurrentChannelERC20Contract()
@@ -15,12 +15,13 @@ const useGetBalance = () => {
     useEffect(() => {
         const getUserBalance = async () => {
           if(token !== null){
-            const userBalance = await token.balanceOf(signer)
+            const account = user === "" ? signer : user
+            const userBalance = await token.balanceOf(account)
             setUserBalance(userBalance.toString())
           }
         }
         getUserBalance()
-      }, [token, signer])
+      }, [token, signer, user])
 
     return { userBalance }
 }

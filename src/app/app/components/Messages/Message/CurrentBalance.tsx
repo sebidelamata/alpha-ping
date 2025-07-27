@@ -14,15 +14,17 @@ import useGetTokenSymbol from "src/hooks/useGetTokenSymbol";
 
 interface CurrentBalanceProps{
     tokenDecimals: number | null;
+    account: string;
 }
 
 const CurrentBalance:React.FC<CurrentBalanceProps> = ({ 
-    tokenDecimals 
+    tokenDecimals,
+    account 
 }) => {
 
     const { cmcFetch } = useCMCPriceDataContext()
 
-    const { userBalance } = useGetBalance()
+    const { userBalance } = useGetBalance(account)
     const { tokenSymbol } = useGetTokenSymbol()
 
     return(
