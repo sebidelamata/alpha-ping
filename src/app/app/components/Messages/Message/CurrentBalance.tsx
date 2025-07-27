@@ -1,12 +1,7 @@
 'use client';
 
-import React, {
-    useState,
-    useEffect
-} from "react";
+import React from "react";
 import { ethers } from 'ethers'
-import { useEtherProviderContext } from "../../../../../contexts/ProviderContext";
-import ERC20Faucet from '../../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import { 
     HoverCard, 
     HoverCardTrigger, 
@@ -14,54 +9,21 @@ import {
 } from "@/components/components/ui/hover-card";
 import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
+import useGetBalance from "src/hooks/useGetBalance";
+import useGetTokenSymbol from "src/hooks/useGetTokenSymbol";
 
 interface CurrentBalanceProps{
-    message: Message;
-    tokenAddress: string | null;
     tokenDecimals: number | null;
 }
 
 const CurrentBalance:React.FC<CurrentBalanceProps> = ({ 
-    message,
-    tokenAddress,
     tokenDecimals 
 }) => {
 
-    const { signer } = useEtherProviderContext()
     const { cmcFetch } = useCMCPriceDataContext()
 
-    const [userBalance, setUserBalance] = useState<string | null>(null)
-
-    useEffect(() => {
-        const getUserBalance = async () => {
-            if(tokenAddress !== null){
-                const token = new ethers.Contract(
-                    tokenAddress,
-                    ERC20Faucet.abi,
-                    signer
-                )
-                const userBalance = await token.balanceOf(message.account)
-                setUserBalance(userBalance.toString())
-            }
-        }
-        getUserBalance()
-    }, [message, tokenAddress, signer])
-
-    const [tokenSymbol, setTokenSymbol] = useState<string | null>(null)
-    useEffect(() => {
-        const getTokenSymbol = async () => {
-            if(tokenAddress !== null){
-                const token = new ethers.Contract(
-                    tokenAddress,
-                    ERC20Faucet.abi,
-                    signer
-                )
-                const tokenSymbol = await token.symbol()
-                setTokenSymbol(tokenSymbol.toString())
-            }
-        }
-        getTokenSymbol()
-    }, [message, tokenAddress, signer])
+    const { userBalance } = useGetBalance()
+    const { tokenSymbol } = useGetTokenSymbol()
 
     return(
         <HoverCard>

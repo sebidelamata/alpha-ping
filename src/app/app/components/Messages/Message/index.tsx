@@ -219,7 +219,7 @@ const Message: React.FC<MessageProps> = ({
         <CardDescription className='flex flex-col gap-4 flex-wrap'>
           <div className="flex justify-start items-center lg:gap-16 med:gap-8 sm:gap-4 flex-wrap">
             <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
-            <CurrentBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
+            <CurrentBalance tokenDecimals={tokenDecimals}/>
             {
               selectedChannelMetadata &&
               selectedChannelMetadata.protocol &&
