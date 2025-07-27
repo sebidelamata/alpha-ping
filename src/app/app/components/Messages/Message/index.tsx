@@ -59,7 +59,6 @@ const Message: React.FC<MessageProps> = ({
   message, 
   index, 
   tokenDecimals, 
-  tokenAddress, 
   setReplyId, 
   reply, 
   profilePic,
@@ -218,7 +217,7 @@ const Message: React.FC<MessageProps> = ({
       <CardContent className="flex flex-col w-full gap-4">
         <CardDescription className='flex flex-col gap-4 flex-wrap'>
           <div className="flex justify-start items-center lg:gap-16 med:gap-8 sm:gap-4 flex-wrap">
-            <PostBalance message={message} tokenAddress={tokenAddress} tokenDecimals={tokenDecimals}/>
+            <PostBalance message={message} tokenDecimals={tokenDecimals}/>
             <CurrentBalance tokenDecimals={tokenDecimals}/>
             {
               selectedChannelMetadata &&
