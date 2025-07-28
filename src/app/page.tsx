@@ -38,20 +38,14 @@ const Home: React.FC = () => {
                                     Chat | Analyze | Trade
                                 </h2>
                             </div>
-                            
-                            {/* Value Proposition */}
                             <div className="max-w-2xl mx-auto">
                                 <p className="text-base sm:text-lg md:text-xl text-secondary/90 leading-relaxed">
                                     Research with Transparency. Trust in your Community. Trade at the Best Prices. All in One Place.
                                 </p>
                             </div>
-                            
-                            {/* Volume Card */}
                             <div className="mt-8 sm:mt-12">
                                 <TotalVolumeUSDCard />
                             </div>
-                            
-                            {/* Call to Action */}
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8 sm:mt-12">
                                 <a 
                                     href="/app" 

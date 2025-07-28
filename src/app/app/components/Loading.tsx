@@ -31,26 +31,29 @@ const Loading:React.FC<LoadingProps> = ({text="NA"}) => {
 
     return(
         <Dialog open={true}>
-            <DialogContent className="items-center justify-center align-middle">
-                <DialogHeader className="items-center justify-center align-middle">
-                    {
-                        text !== "NA" ? (
-                            <DialogTitle className="items-center justify-center align-middle">
-                                {text}
-                            </DialogTitle>
-                        ) : (
-                            <DialogTitle className="items-center justify-center align-middle">
-                                Waiting for transaction confirmation...
-                            </DialogTitle>
-                        )
-                    }
+            <DialogContent className="items-center justify-center align-middle h-68 sm:h-84 md:h-100 lg:h-[400px]">
+                <DialogHeader className="backdrop-blur-md bg-secondary/20 dark:bg-primary/20 rounded-lg p-6 border border-secondary/30 shadow-lg z-10 relative">
+                    <img
+                        src="/bananaPeeled.svg"
+                        alt="Banana Peeled"
+                        className="absolute opacity-20 h-64 sm:h-80 md:h-96 lg:h-[400px] object-contain
+                                    top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                                    sm:left-1/4 sm:translate-x-0 md:left-1/6 lg:left-1/8
+                                    z-0" 
+                        loading="lazy"
+                    />
+                            {
+                                text !== "NA" ? (
+                                    <DialogTitle className="items-center justify-center align-middle text-3xl">
+                                        {text}
+                                    </DialogTitle>
+                                ) : (
+                                    <DialogTitle className="items-center justify-center align-middle text-3xl">
+                                        Waiting for transaction confirmation...
+                                    </DialogTitle>
+                                )
+                            }
                     <DialogDescription className="flex flex-col items-center justify-center space-y-4">
-                        <img
-                            src="/bananaPeeled.svg"
-                            alt="Banana Peeled"
-                            className="w-[70%] max-w-[500px] items-center justify-center object-contain"
-                            loading="lazy"
-                        />
                         <Progress 
                             value={progress} 
                             className="w-3/5 items-center justify-center bg-primary align-middle [&>div]:bg-accent"
