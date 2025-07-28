@@ -24,13 +24,12 @@ import {
 } from "@/components/components/ui/select";
 import { Badge } from "@/components/components/ui/badge";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
-import { useEtherProviderContext } from "src/contexts/ProviderContext";
-import { useUserProviderContext } from "src/contexts/UserContext";
 import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import { ethers } from "ethers";
-import ERC20Faucet from '../../../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import MessagesHeaderTokenLinks from "./MessagesHeaderTokenLinks";
 import ToggleFollowFilter from "../../../Profile/ToggleFollowFilter";
+import useGetBalance from "src/hooks/useGetBalance";
+import useGetTokenDecimals from "src/hooks/useGetTokenDecimals";
 
 type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
@@ -45,28 +44,9 @@ const MessagesHeaderTokenStats = () => {
         setCmcFetch,
         cmcFetch, 
     } = useCMCPriceDataContext()
-    const { signer }= useEtherProviderContext()
-    const { account } = useUserProviderContext()
-    
-    const [userBalance, setUserBalance] = useState<string | null>(null)
-    const [tokenDecimals, setTokenDecimals] = useState<number | null>(null)
 
-    useEffect(() => {
-        const getUserBalance = async () => {
-            if(currentChannel != null && currentChannel?.tokenAddress !== null){
-                const token = new ethers.Contract(
-                    currentChannel.tokenAddress,
-                    ERC20Faucet.abi,
-                    signer
-                )
-                const userBalance = await token.balanceOf(account)
-                setUserBalance(userBalance.toString())
-                const tokenDecimals = await token.decimals()
-                setTokenDecimals(tokenDecimals)
-            }
-        }
-        getUserBalance()
-    }, [account, signer, currentChannel])
+    const { userBalance } = useGetBalance()
+    const { tokenDecimals } = useGetTokenDecimals()
 
     // hold time range from selector
     const [timeRange, setTimeRange] = useState<TimeRange>("24h")
