@@ -1,15 +1,5 @@
-/*
- * Unified chain‑metadata list (with Chain IDs)
- * --------------------------------------------------
- * Each entry provides:
- *   • chainId  – EVM chain ID (number) when applicable; omitted for non‑EVM chains
- *   • name     – Human‑readable chain name
- *   • explorer – Canonical block‑explorer base URL
- *   • icon     – URL to an SVG/PNG logo (standardized CDN)
- *   • coinId   – CoinMarketCap coin ID for the native token
- */
 
-// Using more reliable and consistent icon sources
+// icon sources
 const TRUSTWALLET_ICONS = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
 const WEB3_ICONS = 'https://raw.githubusercontent.com/0xa3k5/web3icons/main/raw-svgs/networks/branded';
 

@@ -69,13 +69,11 @@ interface tokenMetadata {
     logo: string;
     notice: string;
     platform: {
-        coin: {
-            id: string;
-            name: string;
-            slug: string;
-            symbol: string;
-        };
-        name: string;
+      id: string;
+      name: string;
+      slug: string;
+      symbol: string;
+      token_address: string;
     };
     self_reported_market_circulating_supply: string;
     self_reported_market_cap: string;

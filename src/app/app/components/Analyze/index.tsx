@@ -41,6 +41,7 @@ import NewUserNoChannels from "../Channels/NewUserNoChannels";
 import { Switch } from "@/components/components/ui/switch";
 import { Label } from "@/components/components/ui/label";
 import { useUserProviderContext } from "src/contexts/UserContext";
+import useGetCoinGeckoID from "src/hooks/useGetCoinGeckoID";
 
 const Analyze:React.FC = () => {
 
@@ -53,6 +54,9 @@ const Analyze:React.FC = () => {
         followFilter,
         setFollowFilter 
     } = useUserProviderContext()
+
+    const { coinGeckoId } = useGetCoinGeckoID()
+    console.log("CoinGecko ID:", coinGeckoId);
 
     // filter for follows and blocks
     const [blocksFilter, setBlockssFilter] = useState<boolean>(true)
