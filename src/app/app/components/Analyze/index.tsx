@@ -41,7 +41,7 @@ import NewUserNoChannels from "../Channels/NewUserNoChannels";
 import { Switch } from "@/components/components/ui/switch";
 import { Label } from "@/components/components/ui/label";
 import { useUserProviderContext } from "src/contexts/UserContext";
-import useGetCoinGeckoID from "src/hooks/useGetCoinGeckoID";
+import useGetCoinGeckoHistoricData from "src/hooks/useGetCoinGeckoHistoricData";
 
 const Analyze:React.FC = () => {
 
@@ -54,9 +54,6 @@ const Analyze:React.FC = () => {
         followFilter,
         setFollowFilter 
     } = useUserProviderContext()
-
-    const { coinGeckoId } = useGetCoinGeckoID()
-    console.log("CoinGecko ID:", coinGeckoId);
 
     // filter for follows and blocks
     const [blocksFilter, setBlockssFilter] = useState<boolean>(true)
@@ -115,6 +112,11 @@ const Analyze:React.FC = () => {
     // filter for date range before weighting
     // toggle mock messages here
     const [timeRange, setTimeRange] = useState<TimeFrame>("all")
+
+    // grab historic data from coingecko
+    const { historicPriceData } = useGetCoinGeckoHistoricData(timeRange)
+    console.log("Historic Price Data:", historicPriceData)
+
     const timeFilteredData = useMemo(() => {
         return followBlockFilteredMessages !== null ?
         timeFilterMessages(followBlockFilteredMessages, timeRange) : 

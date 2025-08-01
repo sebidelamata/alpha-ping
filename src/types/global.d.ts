@@ -135,6 +135,12 @@ interface ChainInfo {
   chainId?: number; // present only for EVM‑compatible chains
 }
 
+interface historicPriceData {
+  market_caps: [number, number][];
+  prices: [number, number][];
+  total_volumes: [number, number][];
+}
+
 // aave
 interface AaveUserAccount {
   totalCollateral: string;
