@@ -111,7 +111,7 @@ const Analyze:React.FC = () => {
     
     // filter for date range before weighting
     // toggle mock messages here
-    const [timeRange, setTimeRange] = useState<TimeFrame>("all")
+    const [timeRange, setTimeRange] = useState<TimeFrame>("1y")
 
     // grab historic data from coingecko
     const { historicPriceData } = useGetCoinGeckoHistoricData(timeRange)
@@ -359,9 +359,9 @@ const Analyze:React.FC = () => {
                             <SelectValue placeholder="Last 3 months" />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl">
-                            <SelectItem value="all" className="rounded-lg">
+                            {/* <SelectItem value="all" className="rounded-lg">
                                 All Time
-                            </SelectItem>
+                            </SelectItem> */}
                             <SelectItem value="1y" className="rounded-lg">
                                 Last Year
                             </SelectItem>
