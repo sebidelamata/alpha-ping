@@ -1,12 +1,9 @@
 'use client';
 
 import React, {
-    useEffect,
     useState,
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
-import { useMessagesProviderContext } from "src/contexts/MessagesContext";
-import vader from 'vader-sentiment'
 import { 
     Card, 
     CardHeader, 
@@ -23,7 +20,6 @@ import OverallScoreDial from "./OverallScoreDial";
 import ChannelScoreDial from "./ChannelScoreDial";
 import ChannelScoreBarChartPosNeutNeg from "./ChannelScoreBarChartPosNeutNeg";
 import ChannelScoreOverTime from "./ChannelScoreOverTime";
-import Loading from "../Loading";
 import { 
     Select,
     SelectContent,
@@ -31,10 +27,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/components/ui/select";
-import weightAllMessages from "src/lib/weightAllMessages";
-import weightChannelMessages from "src/lib/weightChannelMessages";
-import averageScores from "src/lib/averageScores";
-import weightTimeseries from "src/lib/weightTimeseries";
 import NewUserNoChannels from "../Channels/NewUserNoChannels";
 import { Switch } from "@/components/components/ui/switch";
 import { Label } from "@/components/components/ui/label";
@@ -43,11 +35,16 @@ import useGetCoinGeckoHistoricData from "src/hooks/useGetCoinGeckoHistoricData";
 import useTimeFilteredMessages from "src/hooks/useTimeFilteredMessages";
 import useCurrentChannelTimeFilteredMessages from "src/hooks/useCurrentChannelTimeFilteredMessages";
 import useGetScores from "src/hooks/useGetScores";
+import useGetChannelScores from "src/hooks/useGetChannelScores";
+import useGetMessageWeights from "src/hooks/useGetMessageWeights";
+import useGetMessageChannelWeights from "src/hooks/useGetMessageChannelWeights";
+import useGetAllMessagesScore from "src/hooks/useGetAllMessagesScore";
+import useGetCurrentChannelMessagesScore from "src/hooks/useGetCurrentChannelMessagesScore";
+import useGetScoreTimeseries from "src/hooks/useGetScoreTimeseries";
 
 const Analyze:React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
-    const { authorCurrentTokenBalances } = useMessagesProviderContext()
     const { 
         followFilter,
         setFollowFilter 
@@ -67,113 +64,26 @@ const Analyze:React.FC = () => {
     const { currentChanneltimeFilteredData } = useCurrentChannelTimeFilteredMessages(blocksFilter, timeRange)
     const { timeFilteredData } = useTimeFilteredMessages(blocksFilter, timeRange)
 
+    // scores
+    // all messages
     const { scores } = useGetScores(timeFilteredData)
-
     // current channel
-    const [channelScores, setChannelScores] = useState<SentimentScore[]>([])
-    useEffect(() => {
-        const getChannelScores = ():void => {
-            const scores: SentimentScore[] = []
-            currentChanneltimeFilteredData.forEach((message) => {
-                if (typeof message.text === 'string') {
-                    const score = vader.SentimentIntensityAnalyzer.polarity_scores(message.text)
-                    if (score && typeof score.compound !== 'undefined') {
-                        scores.push(score)
-                    }
-                }
-            })
-            setChannelScores(scores)
-        }
-        getChannelScores()
-    }, [currentChanneltimeFilteredData])
-
+    const { channelScores } = useGetChannelScores(currentChanneltimeFilteredData)
 
     // weight messages
     // all channels
     const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
-    const [weights, setWeights] = useState<number[]>([])
-    useEffect(() => {
-        const weights = timeFilteredData !== null ?
-            weightAllMessages(
-                timeFilteredData, 
-                messageWeighting, 
-                authorCurrentTokenBalances
-            ) :
-            []
-        setWeights(weights)
-    }, [timeFilteredData, messageWeighting, authorCurrentTokenBalances])
+    const { weights } = useGetMessageWeights(messageWeighting, timeFilteredData)
     // current channel
-    const [channelWeights, setChannelWeights] = useState<number[]>([])
-    useEffect(() => {
-        const weights = currentChanneltimeFilteredData !== null &&
-            currentChannel !== null ?
-            weightChannelMessages(
-                currentChanneltimeFilteredData, 
-                messageWeighting,
-                authorCurrentTokenBalances
-            ) :
-            []
-        setChannelWeights(weights)
-    }, [currentChanneltimeFilteredData, messageWeighting, currentChannel, authorCurrentTokenBalances])
+    const { channelWeights } = useGetMessageChannelWeights(currentChanneltimeFilteredData, messageWeighting)
     
     // get scores from filtered and weighted data
     // all messages
-    const [allMessagesScore, setAllMessagesScore] = useState<SentimentScore | null>(null)
-    const [loading, setLoading] = useState<boolean>(true);
-    useEffect(() => {
-        const getAllMessagesScore = () => {
-            setLoading(true)
-            const averagedScores = averageScores(weights, scores)
-            setAllMessagesScore(averagedScores)
-            setLoading(false)
-        }
-        getAllMessagesScore()
-    }, [scores, weights])
-
-    // get the overall current channel score
-    const [currentChannelMessagesScore, setcurrentChannelMessagesScore] = useState<SentimentScore | null>(null)
-    useEffect(() => {
-        const getCurrentChannelMessagesScore = () => {
-            setLoading(true)
-            const averagedScores = averageScores(channelWeights, channelScores)
-            setcurrentChannelMessagesScore(averagedScores)
-            setLoading(false)
-        }
-        getCurrentChannelMessagesScore()
-    }, [channelWeights, channelScores])
-
-    // grab score time series plus message
-    const [scoreTimeseries, setScoreTimeseries] = useState<null | SentimentScoresTimeseries[]>(null)
-    useEffect(() => {
-        const getChannelScoreTimeseries = () => {
-            if(
-                channelScores.length > 0 &&
-                channelWeights.length > 0 &&
-                currentChanneltimeFilteredData !== null
-            ){
-                setLoading(true)
-                const timeseriesWeightedScores = weightTimeseries(channelWeights, channelScores)
-                const timeseries: SentimentScoresTimeseries[] = channelScores.map((_, index) => {
-                    const message = currentChanneltimeFilteredData[index];
-                    const weighted = timeseriesWeightedScores[index];
-                    if (message && weighted && typeof weighted.compound === 'number') {
-                      return {
-                        message,
-                        score: weighted.compound,
-                      };
-                    }
-                  }).filter((item): item is SentimentScoresTimeseries => item !== undefined);
-                setScoreTimeseries(timeseries)
-                setLoading(false)
-            } else {
-                return null
-            }
-        }
-        getChannelScoreTimeseries()
-    }, [channelWeights, channelScores, currentChanneltimeFilteredData])
-
-    loading === true &&
-        <Loading/>
+    const { allMessagesScore } = useGetAllMessagesScore(weights, scores)
+    // current channel
+    const { currentChannelMessagesScore } = useGetCurrentChannelMessagesScore(channelWeights, channelScores)
+    // get score timeseries
+    const { scoreTimeseries } = useGetScoreTimeseries(channelWeights, channelScores, currentChanneltimeFilteredData)
 
     return(
         <Card
