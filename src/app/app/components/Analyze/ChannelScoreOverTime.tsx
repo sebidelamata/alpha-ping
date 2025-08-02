@@ -83,7 +83,7 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
             channel: '',
             account: '',
             text: '',
-            timestamp: new Date(0), // Epoch time
+            timestamp: new Date(0), 
             messageTimestampTokenAmount: '0',
             reactions: {},
             replyId: null

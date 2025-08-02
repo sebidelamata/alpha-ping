@@ -3,7 +3,6 @@
 import React, {
     useEffect,
     useState,
-    useMemo,
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useMessagesProviderContext } from "src/contexts/MessagesContext";
@@ -32,7 +31,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/components/ui/select";
-import timeFilterMessages from "src/lib/timeFilterMessages";
 import weightAllMessages from "src/lib/weightAllMessages";
 import weightChannelMessages from "src/lib/weightChannelMessages";
 import averageScores from "src/lib/averageScores";
@@ -42,72 +40,21 @@ import { Switch } from "@/components/components/ui/switch";
 import { Label } from "@/components/components/ui/label";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import useGetCoinGeckoHistoricData from "src/hooks/useGetCoinGeckoHistoricData";
+import useTimeFilteredMessages from "src/hooks/useTimeFilteredMessages";
+import useCurrentChannelTimeFilteredMessages from "src/hooks/useCurrentChannelTimeFilteredMessages";
+import useGetScores from "src/hooks/useGetScores";
 
 const Analyze:React.FC = () => {
 
     const { currentChannel, selectedChannelMetadata } = useChannelProviderContext()
-    const {messages, authorCurrentTokenBalances} = useMessagesProviderContext()
+    const { authorCurrentTokenBalances } = useMessagesProviderContext()
     const { 
-        account, 
-        followingList, 
-        blockedList,
         followFilter,
         setFollowFilter 
     } = useUserProviderContext()
 
     // filter for follows and blocks
     const [blocksFilter, setBlockssFilter] = useState<boolean>(true)
-    const followBlockFilteredMessages = useMemo(() => {
-        // make sure thyre not null
-        if(messages === null){
-            return null
-        }
-        if(followFilter === false && blocksFilter === false){
-            // if both filters are off, return all messages
-            return messages
-
-        }
-        if(followFilter === true && blocksFilter === false){
-            // if only follows filter is on, return messages from follows
-            return messages.filter((message) => {
-                return(
-                    // return the meeages that belong to their account
-                    message.account.toString() === account.toString() ||
-                    // return mesages if the author is on the following list
-                    followingList.includes(message.account.toString())
-                )
-            })
-        }
-        if(followFilter === false && blocksFilter === true){
-            // if only blocks filter is on, return messages that are not from blocked accounts
-            return messages.filter((message) => {
-                return(
-                    // return the meeages that belong to their account
-                    message.account.toString() === account.toString() ||
-                    // return mesages if the author is not on the blocked list
-                    blockedList.includes(message.account.toString()) === false
-                )
-            })
-        }
-        if(followFilter === true && blocksFilter === true){
-            // if both filters are on, return messages from follows and not from blocks
-            return messages.filter((message) => {
-                return(
-                    // return the meeages that belong to their account
-                    message.account.toString() === account.toString() ||
-                    // return mesages if the author is on the following list or not blocked
-                    (
-                        followingList.includes(message.account.toString()) &&
-                        blockedList.includes(message.account.toString()) === false
-                    )
-                )
-            })
-        }
-        else{
-            return null
-        }
-    }
-    , [messages, followFilter, blocksFilter, account, followingList, blockedList])
     
     // filter for date range before weighting
     // toggle mock messages here
@@ -117,44 +64,11 @@ const Analyze:React.FC = () => {
     const { historicPriceData } = useGetCoinGeckoHistoricData(timeRange)
     console.log("Historic Price Data:", historicPriceData)
 
-    const timeFilteredData = useMemo(() => {
-        return followBlockFilteredMessages !== null ?
-        timeFilterMessages(followBlockFilteredMessages, timeRange) : 
-        null
-    },[followBlockFilteredMessages, timeRange])
+    const { currentChanneltimeFilteredData } = useCurrentChannelTimeFilteredMessages(blocksFilter, timeRange)
+    const { timeFilteredData } = useTimeFilteredMessages(blocksFilter, timeRange)
 
-    // current channel time filtered data
-    const currentChanneltimeFilteredData = useMemo(() => {
-        if(timeFilteredData !== null && currentChannel !== null){
-            const channelMessages: Message[] = timeFilteredData.filter((message) => {
-                return message.channel.toString() === currentChannel.id.toString()
-            })
-            return channelMessages
-        } else {
-            return []
-        }
-    },[timeFilteredData, currentChannel])
+    const { scores } = useGetScores(timeFilteredData)
 
-    // get message scores
-    // all channels
-    const [scores, setScores] = useState<SentimentScore[]>([])
-    useEffect(() => {
-        const getScores = ():void => {
-            if(timeFilteredData !== null){
-                const scores: SentimentScore[] = []
-                timeFilteredData.forEach((message) => {
-                    if (typeof message.text === 'string') {
-                        const score = vader.SentimentIntensityAnalyzer.polarity_scores(message.text)
-                        if (score && typeof score.compound !== 'undefined') {
-                            scores.push(score)
-                        }
-                    }
-                })
-                setScores(scores)
-            }
-        }
-        getScores()
-    }, [timeFilteredData])
     // current channel
     const [channelScores, setChannelScores] = useState<SentimentScore[]>([])
     useEffect(() => {
@@ -374,8 +288,11 @@ const Analyze:React.FC = () => {
                             <SelectItem value="30d" className="rounded-lg">
                                 Last 30 days
                             </SelectItem>
-                                <SelectItem value="7d" className="rounded-lg">
+                            <SelectItem value="7d" className="rounded-lg">
                                 Last 7 days
+                            </SelectItem>
+                            <SelectItem value="1d" className="rounded-lg">
+                                Last 24 hours
                             </SelectItem>
                         </SelectContent>
                     </Select>
