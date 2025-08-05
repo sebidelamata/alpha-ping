@@ -1,12 +1,12 @@
 'use client';
 
-import React from "react";
+import React, { useState } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { 
     Avatar, 
     AvatarImage, 
     AvatarFallback 
-} from "@radix-ui/react-avatar";
+} from "@/components/components/ui/avatar";
 import { 
     Card, 
     CardHeader, 
@@ -26,8 +26,17 @@ import {
     ChartContainer,
     ChartTooltip,
 } from "@/components/components/ui/chart"
+import { 
+    DropdownMenu, 
+    DropdownMenuTrigger, 
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem, 
+    DropdownMenuContent
+} from "@/components/components/ui/dropdown-menu";
+import { Button } from "@/components/components/ui/button";
 
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
+type Metric = 'none' | 'price' | 'mcap' | 'volume';
 
 interface IChannelScoreDial{
     scoreTimeseries: null | SentimentScoresTimeseries[];
@@ -48,6 +57,8 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
         currentChannel, 
         selectedChannelMetadata 
     } = useChannelProviderContext()
+
+    const [metric, setMetric] = useState<Metric>('none');
 
     const chartConfig = {
         datetime: { 
@@ -134,6 +145,22 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                             <div>
                                 {currentChannel?.name} Vibes Over Time
                             </div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button 
+                                        variant="outline" 
+                                        className="w-32 h-36 justify-between"
+                                    >+ Market Data</Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-primary text-secondary">
+                                    <DropdownMenuRadioGroup value={metric} onValueChange={(m) => setMetric(m as Metric)}>
+                                    <DropdownMenuRadioItem value="none">None</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="price">Price</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="mcap">MCap</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="volume">Volume</DropdownMenuRadioItem>
+                                    </DropdownMenuRadioGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                 </CardTitle>
                 <CardDescription>
                     {
