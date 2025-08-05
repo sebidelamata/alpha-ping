@@ -34,6 +34,7 @@ import {
     DropdownMenuContent
 } from "@/components/components/ui/dropdown-menu";
 import { Button } from "@/components/components/ui/button";
+import CustomTooltip from "./CustomTooltip";
 
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
 type Metric = 'none' | 'price' | 'mcap' | 'volume';
@@ -41,11 +42,6 @@ type Metric = 'none' | 'price' | 'mcap' | 'volume';
 interface IChannelScoreDial{
     scoreTimeseries: null | SentimentScoresTimeseries[];
     timeRange: TimeFrame;
-}
-
-interface ICustomTooltipProps {
-    active?: boolean;
-    payload?: Array<{ payload: SentimentScoresTimeseries }>;
 }
 
 const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
@@ -69,22 +65,6 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
         color: "hsl(273 54% 72)"
         },
     } satisfies ChartConfig
-
-    // Custom Tooltip Component
-    const CustomTooltip = ({ active, payload }: ICustomTooltipProps) => {
-        if (active && payload && payload.length) {
-            const data = payload[0].payload as SentimentScoresTimeseries; // Full data object
-            const date = data.message.timestamp instanceof Date ? data.message.timestamp : new Date(data.message.timestamp);
-            const score = `${(data.score * 100).toFixed(2).toString()}%`;
-            return (
-                <div className="bg-primary text-secondary p-2 rounded shadow font-light">
-                    <p>{`Date: ${date.toLocaleDateString()}`}</p>
-                    <p>{`Score: ${score}`}</p>
-                </div>
-            );
-        }
-        return null;
-    };
     
     // Dummy data for empty chart template
     const emptyData = [
