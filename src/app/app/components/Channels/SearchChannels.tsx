@@ -107,7 +107,7 @@ const SearchChannels: React.FC = () => {
                                         alt={channel.name}
                                         src={
                                                 // Check if the token exists in the tokenList and has a logoURI//   
-                                                tokenMetaData[index].logo
+                                                tokenMetaData[index]?.logo || '/erc20Icon.svg'
                                             } 
                                     />
                                     <AvatarFallback>
