@@ -84,7 +84,7 @@ const Analyze:React.FC = () => {
     const { currentChannelMessagesScore } = useGetCurrentChannelMessagesScore(channelWeights, channelScores)
     // get score timeseries
     const { scoreTimeseries } = useGetScoreTimeseries(channelWeights, channelScores, currentChanneltimeFilteredData)
-
+    console.log(scoreTimeseries)
     return(
         <Card
         className="flex flex-col w-full h-full bg-primary text-secondary overflow-hidden"
