@@ -57,7 +57,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
     const [metric, setMetric] = useState<Metric>('none');
 
     const chartConfig = {
-        datetime: { 
+        time: { 
             color: "hsl(273 54% 72)"
         }, 
         score: {
@@ -66,15 +66,15 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
         },
         price: {
             label: "Price",
-            color: "#22c55e"
+            color: "hsl(0 0% 100%)"
         },
         market_cap: {
             label: "Market Cap",
-            color: "#22c55e"
+            color: "hsl(0 0% 100%)"
         },
         volume: {
             label: "Volume", 
-            color: "#22c55e"
+            color: "hsl(0 0% 100%)"
         }
     } satisfies ChartConfig
     
