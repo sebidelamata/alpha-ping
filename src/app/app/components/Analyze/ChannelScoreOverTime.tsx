@@ -35,6 +35,7 @@ import {
 } from "@/components/components/ui/dropdown-menu";
 import { Button } from "@/components/components/ui/button";
 import CustomTooltip from "./CustomTooltip";
+import humanReadableNumbers from "src/lib/humanReadableNumbers";
 
 type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
 type Metric = 'none' | 'price' | 'mcap' | 'volume';
@@ -276,6 +277,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                             tickLine={true}
                                             axisLine={false}
                                             tickMargin={8}
+                                            tickFormatter={(value) => `$${humanReadableNumbers(value)}`}
                                         />
                                     }
                                 </LineChart>
