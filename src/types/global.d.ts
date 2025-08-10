@@ -40,8 +40,12 @@ interface ExtendedEip1193Provider extends Eip1193Provider {
 }
 
 type SentimentScoresTimeseries = {
-    message: Message;
-    score: number;
+    time: number; // always numeric timestamp (ms)
+    price?: number;
+    market_cap?: number;
+    volume?: number;
+    score?: number;
+    message?: Message; // full message object
 };
 interface tokenMetadataContract_address {
     contract_address: string;
@@ -136,9 +140,10 @@ interface ChainInfo {
 }
 
 interface historicPriceData {
-  market_caps: [number, number][];
-  prices: [number, number][];
-  total_volumes: [number, number][];
+  time: number;       // timestamp in ms
+  price: number;
+  market_cap: number;
+  volume: number;
 }
 
 // aave

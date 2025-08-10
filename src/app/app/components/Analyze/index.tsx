@@ -73,17 +73,34 @@ const Analyze:React.FC = () => {
     // weight messages
     // all channels
     const [messageWeighting, setMessageWeighting] = useState<Weighting>("unweighted")
-    const { weights } = useGetMessageWeights(messageWeighting, timeFilteredData)
+    const { weights } = useGetMessageWeights(
+        messageWeighting, 
+        timeFilteredData
+    )
     // current channel
-    const { channelWeights } = useGetMessageChannelWeights(currentChanneltimeFilteredData, messageWeighting)
+    const { channelWeights } = useGetMessageChannelWeights(
+        currentChanneltimeFilteredData, 
+        messageWeighting
+    )
     
     // get scores from filtered and weighted data
     // all messages
-    const { allMessagesScore } = useGetAllMessagesScore(weights, scores)
+    const { allMessagesScore } = useGetAllMessagesScore(
+        weights, 
+        scores
+    )
     // current channel
-    const { currentChannelMessagesScore } = useGetCurrentChannelMessagesScore(channelWeights, channelScores)
+    const { currentChannelMessagesScore } = useGetCurrentChannelMessagesScore(
+        channelWeights, 
+        channelScores
+    )
     // get score timeseries
-    const { scoreTimeseries } = useGetScoreTimeseries(channelWeights, channelScores, currentChanneltimeFilteredData)
+    const { scoreTimeseries } = useGetScoreTimeseries(
+        channelWeights, 
+        channelScores, 
+        currentChanneltimeFilteredData, 
+        historicPriceData !== null ? historicPriceData : []
+    )
     console.log(scoreTimeseries)
     return(
         <Card

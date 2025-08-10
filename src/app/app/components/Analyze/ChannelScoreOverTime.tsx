@@ -21,7 +21,7 @@ import {
     XAxis,
     YAxis
 } from "recharts"
-  import { 
+import { 
     ChartConfig, 
     ChartContainer,
     ChartTooltip,
@@ -44,7 +44,7 @@ interface IChannelScoreDial{
     timeRange: TimeFrame;
 }
 
-const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
+const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
     scoreTimeseries, 
     timeRange
 }) => {
@@ -61,25 +61,38 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
             color: "hsl(273 54% 72)"
         }, 
         score: {
-        label: `${currentChannel?.name || 'Current Channel'} Vibe Score`,
-        color: "hsl(273 54% 72)"
+            label: `${currentChannel?.name || 'Current Channel'} Vibe Score`,
+            color: "hsl(273 54% 72)"
         },
+        price: {
+            label: "Price",
+            color: "#22c55e"
+        },
+        market_cap: {
+            label: "Market Cap",
+            color: "#22c55e"
+        },
+        volume: {
+            label: "Volume", 
+            color: "#22c55e"
+        }
     } satisfies ChartConfig
     
     // Dummy data for empty chart template
     const emptyData = [
         { 
             message: {
-            _id: '',
-            channel: '',
-            account: '',
-            text: '',
-            timestamp: new Date(0), 
-            messageTimestampTokenAmount: '0',
-            reactions: {},
-            replyId: null
-          }, 
-          score: 0 
+                _id: '',
+                channel: '',
+                account: '',
+                text: '',
+                timestamp: new Date(0), 
+                messageTimestampTokenAmount: '0',
+                reactions: {},
+                replyId: null
+            }, 
+            score: 0,
+            time: new Date(0).getTime() 
         }
     ];
 
@@ -93,7 +106,6 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
         '7d': 'Vibe Scores for the Last Week',
         '1d': 'Vibe Scores for the Last Day',
     }
-
 
     return(
         <Card className="bg-primary text-secondary p-4 shadow-lg h-[500px] w-full">
@@ -122,32 +134,30 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                                 </Avatar>
                             </div>
                         }
-                            <div>
-                                {currentChannel?.name} Vibes Over Time
-                            </div>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button 
-                                        variant="outline" 
-                                        className="w-32 h-36 justify-between"
-                                    >+ Market Data</Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-primary text-secondary">
-                                    <DropdownMenuRadioGroup value={metric} onValueChange={(m) => setMetric(m as Metric)}>
+                        <div>
+                            {currentChannel?.name} Vibes Over Time
+                        </div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button 
+                                    variant="outline" 
+                                    className="w-32 h-8 justify-between"
+                                >+ Market Data</Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-primary text-secondary">
+                                <DropdownMenuRadioGroup value={metric} onValueChange={(m) => setMetric(m as Metric)}>
                                     <DropdownMenuRadioItem value="none">None</DropdownMenuRadioItem>
                                     <DropdownMenuRadioItem value="price">Price</DropdownMenuRadioItem>
                                     <DropdownMenuRadioItem value="mcap">MCap</DropdownMenuRadioItem>
                                     <DropdownMenuRadioItem value="volume">Volume</DropdownMenuRadioItem>
-                                    </DropdownMenuRadioGroup>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                </CardTitle>
-                <CardDescription>
-                    {
-                        descriptions[timeRange].toString() || ""
-                    }
-                </CardDescription>
-            </div>
+                                </DropdownMenuRadioGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </CardTitle>
+                    <CardDescription>
+                        {descriptions[timeRange] || ""}
+                    </CardDescription>
+                </div>
             </CardHeader>
             <CardContent className="flex flex-col items-center bg-primary">
                 {
@@ -162,36 +172,65 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                                 accessibilityLayer
                                 data={scoreTimeseries}
                                 margin={{
-                                left: 12,
-                                right: 12,
+                                    left: 12,
+                                    right: 12,
                                 }}
                             >
-                                <CartesianGrid vertical={false} />
                                 <XAxis
-                                dataKey="message.timestamp"
-                                tickLine={true}
-                                axisLine={false}
-                                tickMargin={8}
-                                tickFormatter={(value) => new Date(value).toLocaleDateString()}
-                                />
-                                <YAxis
-                                    domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
+                                    dataKey="time"
                                     tickLine={true}
                                     axisLine={false}
                                     tickMargin={8}
-                                    tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
+                                    tickFormatter={(value) => new Date(value).toLocaleDateString()}
                                 />
+                                <YAxis
+                                    yAxisId="left"
+                                    domain={[-1, 1]}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickMargin={0}
+                                />
+                                {
+                                    metric !== 'none' && (
+                                        <YAxis
+                                            yAxisId="right"
+                                            orientation="right"
+                                            tickLine={false}
+                                            axisLine={false}
+                                            tickMargin={0}
+                                        />
+                                    )
+                                }
                                 <ChartTooltip
-                                cursor={false}
-                                content={<CustomTooltip />}
+                                    cursor={false}
+                                    content={<CustomTooltip />}
                                 />
                                 <Line
-                                dataKey="score"
-                                type="natural"
-                                stroke="hsl(273 54% 72)"
-                                strokeWidth={4}
-                                dot={false}
+                                    yAxisId="left"
+                                    dataKey="score"
+                                    type="natural"
+                                    stroke="hsl(273 54% 72)"
+                                    strokeWidth={4}
+                                    dot={false}
                                 />
+                                {
+                                    metric !== 'none' && (
+                                        <Line
+                                            yAxisId="right"
+                                            dataKey={
+                                                metric === 'price'
+                                                    ? 'price'
+                                                    : metric === 'mcap'
+                                                    ? 'market_cap'
+                                                    : 'volume'
+                                            }
+                                            type="monotone"
+                                            stroke="hsl(0 0% 100%)"
+                                            strokeWidth={2}
+                                            dot={false}
+                                        />
+                                    )
+                                }
                             </LineChart>
                         </ChartContainer>
                     ) : (
@@ -200,30 +239,30 @@ const ChannelScoreOverTime:React.FC<IChannelScoreDial> = ({
                                 config={chartConfig}
                                 className="mx-auto aspect-square h-[400px] w-full bg-primary"
                             >
-                                    <LineChart
-                                        accessibilityLayer
-                                        data={emptyData}
-                                        margin={{
+                                <LineChart
+                                    accessibilityLayer
+                                    data={emptyData}
+                                    margin={{
                                         left: 12,
                                         right: 12,
-                                        }}
-                                    >
-                                        <CartesianGrid vertical={false} />
-                                        <XAxis
+                                    }}
+                                >
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis
                                         dataKey="message.datetime"
                                         tickLine={true}
                                         axisLine={false}
                                         tickMargin={8}
                                         tickFormatter={(value) => new Date(value).toLocaleDateString()}
-                                        />
-                                        <YAxis
-                                            domain={[-1, 1]}  // Fixed Y-axis range from -1 to 1
-                                            tickLine={true}
-                                            axisLine={false}
-                                            tickMargin={8}
-                                            tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
-                                        />
-                                    </LineChart>
+                                    />
+                                    <YAxis
+                                        domain={[-1, 1]}
+                                        tickLine={true}
+                                        axisLine={false}
+                                        tickMargin={8}
+                                        tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
+                                    />
+                                </LineChart>
                             </ChartContainer>
                             <div className="relative translate-x-96 bottom-48 text-4xl text-accent w-[50%]">
                                 No Data
