@@ -184,11 +184,31 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                     tickMargin={8}
                                     tickFormatter={(value) => new Date(value).toLocaleDateString()}
                                 />
+                                <YAxis
+                                    yAxisId="left"
+                                    orientation="left"
+                                    domain={[-1, 1]}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickMargin={0}
+                                    tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
+                                />
+                                {
+                                    metric !== 'none' &&
+                                    <YAxis
+                                        yAxisId="right"
+                                        orientation="right"
+                                        tickLine={false}
+                                        axisLine={false}
+                                        tickMargin={0}
+                                    />
+                                }
                                 <ChartTooltip
                                     cursor={false}
                                     content={<CustomTooltip />}
                                 />
                                 <Line
+                                    yAxisId="left"
                                     dataKey="score"
                                     type="monotone"
                                     stroke="hsl(273 54% 72)"
@@ -199,6 +219,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                 {
                                     metric !== 'none' && (
                                         <Line
+                                            yAxisId="right"
                                             dataKey={
                                                 metric === 'price'
                                                     ? 'price'
@@ -239,12 +260,24 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                         tickFormatter={(value) => new Date(value).toLocaleDateString()}
                                     />
                                     <YAxis
+                                        yAxisId="left"
+                                        orientation="left"
                                         domain={[-1, 1]}
                                         tickLine={true}
                                         axisLine={false}
                                         tickMargin={8}
                                         tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
                                     />
+                                    {
+                                        metric !== 'none' &&
+                                        <YAxis
+                                            yAxisId="right"
+                                            orientation="right"
+                                            tickLine={true}
+                                            axisLine={false}
+                                            tickMargin={8}
+                                        />
+                                    }
                                 </LineChart>
                             </ChartContainer>
                             <div className="relative translate-x-96 bottom-48 text-4xl text-accent w-[50%]">
