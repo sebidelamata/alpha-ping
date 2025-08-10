@@ -183,7 +183,14 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                     tickLine={true}
                                     axisLine={false}
                                     tickMargin={8}
-                                    tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                                    tickFormatter={(value) => {
+                                        if(timeRange === '1d') {
+                                            return new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                        }
+                                        else{
+                                            return new Date(value).toLocaleDateString();
+                                        }
+                                    }}
                                 />
                                 <YAxis
                                     yAxisId="left"
@@ -202,6 +209,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                         tickLine={false}
                                         axisLine={false}
                                         tickMargin={0}
+                                        tickFormatter={(value) => `$${humanReadableNumbers(value.toString())}`}
                                     />
                                 }
                                 <ChartTooltip
@@ -284,7 +292,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                             tickLine={true}
                                             axisLine={false}
                                             tickMargin={8}
-                                            tickFormatter={(value) => `$${humanReadableNumbers(value)}`}
+                                            tickFormatter={(value) => `$${humanReadableNumbers(value.toString())}`}
                                         />
                                     }
                                 </LineChart>
