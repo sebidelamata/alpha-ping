@@ -11,13 +11,11 @@ export const defaultTokenMetadata: tokenMetadata = {
     logo: '',
     notice: '',
     platform: {
-        coin: {
-            id: '',
-            name: '',
-            slug: '',
-            symbol: '',
-        },
-        name: '',
+      id: '',
+      name: '',
+      slug: '',
+      symbol: '',
+      token_address: '',
     },
     self_reported_market_circulating_supply: '',
     self_reported_market_cap: '',
