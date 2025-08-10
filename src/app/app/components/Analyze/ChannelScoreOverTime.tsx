@@ -194,6 +194,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                     stroke="hsl(273 54% 72)"
                                     strokeWidth={3}
                                     dot={false}
+                                    connectNulls={true}
                                 />
                                 {
                                     metric !== 'none' && (
@@ -209,6 +210,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                             stroke="hsl(0 0% 100%)"
                                             strokeWidth={3}
                                             dot={false}
+                                            connectNulls={true}
                                         />
                                     )
                                 }
