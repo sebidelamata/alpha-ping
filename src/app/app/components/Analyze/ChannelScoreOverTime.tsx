@@ -183,40 +183,20 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                     tickMargin={8}
                                     tickFormatter={(value) => new Date(value).toLocaleDateString()}
                                 />
-                                <YAxis
-                                    yAxisId="left"
-                                    domain={[-1, 1]}
-                                    tickLine={false}
-                                    axisLine={false}
-                                    tickMargin={0}
-                                />
-                                {
-                                    metric !== 'none' && (
-                                        <YAxis
-                                            yAxisId="right"
-                                            orientation="right"
-                                            tickLine={false}
-                                            axisLine={false}
-                                            tickMargin={0}
-                                        />
-                                    )
-                                }
                                 <ChartTooltip
                                     cursor={false}
                                     content={<CustomTooltip />}
                                 />
                                 <Line
-                                    yAxisId="left"
                                     dataKey="score"
                                     type="natural"
                                     stroke="hsl(273 54% 72)"
-                                    strokeWidth={4}
+                                    strokeWidth={3}
                                     dot={false}
                                 />
                                 {
                                     metric !== 'none' && (
                                         <Line
-                                            yAxisId="right"
                                             dataKey={
                                                 metric === 'price'
                                                     ? 'price'
@@ -226,7 +206,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                             }
                                             type="monotone"
                                             stroke="hsl(0 0% 100%)"
-                                            strokeWidth={2}
+                                            strokeWidth={3}
                                             dot={false}
                                         />
                                     )
