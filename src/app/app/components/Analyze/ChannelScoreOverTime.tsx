@@ -190,7 +190,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                 />
                                 <Line
                                     dataKey="score"
-                                    type="natural"
+                                    type="monotone"
                                     stroke="hsl(273 54% 72)"
                                     strokeWidth={3}
                                     dot={false}
@@ -230,7 +230,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                 >
                                     <CartesianGrid vertical={false} />
                                     <XAxis
-                                        dataKey="message.time"
+                                        dataKey="time"
                                         tickLine={true}
                                         axisLine={false}
                                         tickMargin={8}
