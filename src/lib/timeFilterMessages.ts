@@ -20,6 +20,8 @@ const timeFilterMessages = (
                 daysToSubtract = 30
             } else if (timeRange === "7d"){
                 daysToSubtract = 7
+            } else if (timeRange === "1d") {
+                daysToSubtract = 1
             }
             const startDate = new Date(referenceDate)
             startDate.setDate(startDate.getDate() - daysToSubtract)
