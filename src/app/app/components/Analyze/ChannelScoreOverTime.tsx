@@ -143,7 +143,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                 <Button 
                                     variant="outline" 
                                     className="w-32 h-8 justify-between"
-                                >+ Market Data</Button>
+                                >+ {metric !== 'none' ? metric.toLocaleUpperCase() : 'Market Data'}</Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="bg-primary text-secondary">
                                 <DropdownMenuRadioGroup value={metric} onValueChange={(m) => setMetric(m as Metric)}>
