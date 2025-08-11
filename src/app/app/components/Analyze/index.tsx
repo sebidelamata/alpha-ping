@@ -34,7 +34,7 @@ const Analyze:React.FC = () => {
     
     // filter for date range before weighting
     // toggle mock messages here
-    const [timeRange, setTimeRange] = useState<TimeFrame>("30d")
+    const [timeRange, setTimeRange] = useState<TimeFrame>("3m")
 
     // grab historic data from coingecko
     const { historicPriceData } = useGetCoinGeckoHistoricData(timeRange)
