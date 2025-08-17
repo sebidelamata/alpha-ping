@@ -18,6 +18,7 @@ import useSetInitialCurrentChannel from "src/hooks/useSetInitialCurrentChannel";
 import useTokenMetadata from "src/hooks/useTokenMetadata";
 import useChannelGroups from "src/hooks/useChannelGroups";
 import useUserAaveDetails from "src/hooks/useUserAaveDetails";
+import Loading from "../Loading";
 
 
 const Channels:React.FC = () => {
@@ -41,6 +42,10 @@ const Channels:React.FC = () => {
 
   return (
     <SidebarGroup className="flex flex-col h-full min-h-0">
+      {
+        tokenMetadataLoading === true &&
+        <Loading text="Loading Your Channels..."/>
+      }
       <SidebarGroupLabel>
           <h1 className="text-xl text-secondary flex-shrink-0 pb-2">
               Channels
