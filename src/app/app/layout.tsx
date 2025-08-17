@@ -54,9 +54,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
                       <UserProvider>
                         <SidebarProvider>
                             <Navbar/>
-                            <div className="top-24 flex">
+                            <div className="top-24 flex w-full">
                                 <AppSidebar/>
-                                <main>
+                                <main className={`flex-1 h-full w-full overflow-hidden`}>
                                     {
                                     isMobile === true &&
                                     <SidebarTrigger className="fixed top-24"/>

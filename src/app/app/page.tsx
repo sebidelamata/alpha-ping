@@ -57,7 +57,7 @@ const App:React.FC = () => {
           isConnected === true
         ) &&
         <div className='flex flex-row w-full h-screen pt-24 overflow-hidden'>
-          <div className='flex-1 h-full'>
+          <div className='flex-1 h-full w-full'>
             {renderChannelAction()}
           </div>
         </div>

@@ -17,15 +17,9 @@ import {
 } from "@/components/components/ui/card";
 import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import qs from 'qs'
-import ZeroExLogo from "../../../../../public/dark-0x-logo.png";
 import tokenList from "../../../../../public/tokenList.json";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
-import { 
-    Avatar, 
-    AvatarFallback, 
-    AvatarImage 
-} from "@radix-ui/react-avatar";
 import tokensByChain from "src/lib/tokensByChain";
 import ApproveOrReviewButton from "./ApproveOrReviewButton";
 import PriceFlipTokens from "./PriceFlipTokens";
@@ -240,14 +234,8 @@ const Price:React.FC<IPrice> = ({
         <Card className="flex flex-col w-full h-full bg-primary text-secondary">
             <CardHeader className="w-full flex flex-row justify-start items-center">
                 <CardTitle className="text-5xl">
-                    Trade with
+                    Trade
                 </CardTitle>
-                <Avatar>
-                    <AvatarImage src={ZeroExLogo.src} className="h-24"/>
-                    <AvatarFallback>
-                        0x
-                    </AvatarFallback>
-                   </Avatar>
             </CardHeader>
             <CardContent className="flex-1 w-full flex flex-col gap-4">
                 <PriceSellTokenDisplay
