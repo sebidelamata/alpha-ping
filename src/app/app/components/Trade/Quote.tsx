@@ -135,7 +135,7 @@ const Quote:React.FC<IQuote> = ({
 
   if (!quote) {
     return (
-      <Loading/>
+      <Loading text="Securing execution price…"/>
     );
   }
     

@@ -8,8 +8,8 @@ const useUserChannels = () => {
         hasJoined, 
     } = useEtherProviderContext()
 
-    
     const userChannels = useMemo(
+      
       () =>
         channels.filter((_, i) => hasJoined[i]),
       [channels, hasJoined]
