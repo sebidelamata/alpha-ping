@@ -187,7 +187,14 @@ const MessagesHeaderAaveStats:React.FC = () => {
                     </ul>
                     <ul className="flex flex-col h-full justify-evenly">
                         <li className="w-full justify-end flex">
-                            Current LTV: {
+                            Current Effective LTV: {
+                                    aaveAccount?.healthFactor === "115792089237316195423570985008687907853.269984665640564039457584007913129639935" ? 
+                                    "0" :
+                                    ((1 / Number(aaveAccount?.healthFactor)*100)).toFixed(2)
+                                }%
+                        </li>
+                        <li className="w-full justify-end flex">
+                            Max LTV: {
                             (Number(aaveAccount?.ltv) * 100).toFixed(2)
                             }%
                         </li>
