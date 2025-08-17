@@ -21,7 +21,7 @@ import useIsMember from 'src/hooks/useIsMember';
 const App:React.FC = () => {
 
   const { blacklisted } = useUserProviderContext()
-  const { isConnected } = useAppKitAccount()
+  const { isConnected, address } = useAppKitAccount()
   const { channelAction } = useChannelProviderContext()
   const { 
     isMember, 
@@ -42,10 +42,12 @@ const App:React.FC = () => {
 
   if(
     loading === true &&
+    address !== null &&
+    address !== undefined &&
     isConnected === true
   ){
     return (
-      <Loading text='Loading User Attributes...'/>
+      <Loading text={`Loading Account Data for ${address.slice(0,4)}...${address.slice(38,42)}`}/>
     )
   }
 
