@@ -1,6 +1,10 @@
 'use client';
 
-import React, { useEffect, useMemo } from "react";
+import React, { 
+  useEffect, 
+  useMemo, 
+  useState 
+} from "react";
 import { Settings } from "lucide-react";
 import {
   Dialog,
@@ -87,11 +91,14 @@ const SlippageSettings: React.FC<ISlippageSettings> = ({ slippage, setSlippage }
     setSlippage(value);
     form.setValue("customSlippage", "", { shouldValidate: true });
     form.clearErrors("customSlippage");
+    setOpen(false);
   };
+
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <div className="flex w-full h-full justify-start">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="size-12">
             <Settings className="text-secondary" />
