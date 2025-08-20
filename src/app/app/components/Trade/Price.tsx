@@ -7,7 +7,6 @@ import React, {
 import { 
     formatUnits, 
     parseUnits,
-    ethers
 } from "ethers";
 import { 
     Card, 
@@ -15,7 +14,6 @@ import {
     CardTitle, 
     CardContent
 } from "@/components/components/ui/card";
-import ERC20Faucet from '../../../../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
 import qs from 'qs'
 import tokenList from "../../../../../public/tokenList.json";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
@@ -33,6 +31,7 @@ import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
 import PriceFooter from "./PriceFooter";
 import SlippageSettings from "./SlippageSettings";
+import useGetBalance from "src/hooks/useGetBalance";
 
 interface Fills{
     from: string;
@@ -57,7 +56,7 @@ const Price:React.FC<IPrice> = ({
 }) => {
 
     const { account } = useUserProviderContext()
-    const { chainId, signer, provider } = useEtherProviderContext()
+    const { chainId, signer } = useEtherProviderContext()
 
     const [sellToken, setSellToken] = useState<string>("weth");
     const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null);
@@ -192,38 +191,17 @@ const Price:React.FC<IPrice> = ({
         lastUpdated
     ]);
 
-    // Hook for fetching balance information for specified token for a specific taker address
-    const [ userBalance, setUserBalance ] = useState<string | null>(null)
-    useEffect(() => {
-        const getUserBalance = async () => {
-            if (!provider || !account) {
-                setUserBalance(null);
-                return;
-            }
-
-            try {
-                // Check if the token is ETH (native token)
-                if (sellToken.toLowerCase() === 'eth' || sellTokenObject?.address === null) {
-                    // Fetch native ETH balance
-                    const balance = await provider.getBalance(account);
-                    setUserBalance(balance.toString());
-                } else {
-                    // Fetch ERC-20 token balance
-                    const token = new ethers.Contract(
-                        sellTokenObject.address,
-                        ERC20Faucet.abi,
-                        signer
-                    );
-                    const userBalance = await token.balanceOf(account);
-                    setUserBalance(userBalance.toString());
-                }
-            } catch (error) {
-                console.error('Error fetching balance:', error);
-                setUserBalance(null);
-            }
-        };
-    getUserBalance()
-}, [ sellTokenObject.address, signer, account, provider, sellToken])
+    // get sell token balance
+    const { userBalance } = useGetBalance(
+        account, 
+        sellTokenObject?.address, 
+        (
+            sellTokenObject?.address === null ||
+            sellToken === "eth"
+        ) ?
+            true : 
+            false
+    );
 
   const inSufficientBalance =
   userBalance && sellAmount
