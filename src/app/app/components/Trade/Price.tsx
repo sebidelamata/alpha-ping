@@ -74,7 +74,12 @@ const Price:React.FC<IPrice> = ({
     const [gasEstimate, setGasEstimate] = useState<string | null>(null);
 
     // flip tokens and values
-    const flipTokens = () => {
+    const flipTokens = (
+        sellToken: string, 
+        buyToken: string,
+        sellAmount: string,
+        buyAmount: string
+    ) => {
         const currentSellToken = sellToken;
         setSellToken(buyToken);
         setBuyToken(currentSellToken);
@@ -228,6 +233,10 @@ const Price:React.FC<IPrice> = ({
                 />
                 <PriceFlipTokens
                     flipTokens={flipTokens}
+                    sellToken={sellToken}
+                    buyToken={buyToken}
+                    sellAmount={sellAmount}
+                    buyAmount={buyAmount}
                 />
                 <PriceBuyTokenDisplay
                     setTradeDirection={setTradeDirection}
