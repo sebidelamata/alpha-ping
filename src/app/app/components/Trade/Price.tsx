@@ -130,9 +130,9 @@ const Price:React.FC<IPrice> = ({
     );
 
   const inSufficientBalance =
-  userBalance && sellAmount
-      ? parseUnits(sellAmount, sellTokenDecimals) > BigInt(userBalance)
-      : true;
+    userBalance && sellAmount
+        ? parseUnits(sellAmount, sellTokenDecimals) > BigInt(userBalance)
+        : true;
 
     return(
         <Card className="flex flex-col w-full h-full bg-primary text-secondary">
