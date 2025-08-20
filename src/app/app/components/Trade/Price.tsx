@@ -1,20 +1,13 @@
 'use client'
 
-import React, {
-    useEffect,
-    useState,
-} from "react";
-import { 
-    formatUnits, 
-    parseUnits,
-} from "ethers";
+import React, { useState } from "react";
+import { parseUnits } from "ethers";
 import { 
     Card, 
     CardHeader, 
     CardTitle, 
     CardContent
 } from "@/components/components/ui/card";
-import qs from 'qs'
 import tokenList from "../../../../../public/tokenList.json";
 import { useEtherProviderContext } from "../../../../contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
@@ -32,13 +25,8 @@ import GasDisplay from "./GasDisplay";
 import PriceFooter from "./PriceFooter";
 import SlippageSettings from "./SlippageSettings";
 import useGetBalance from "src/hooks/useGetBalance";
+import useGetPriceData from "src/hooks/useGetPriceData";
 
-interface Fills{
-    from: string;
-    to: string;
-    source: string;
-    proportionBps: string;
-}
   interface IPrice {
     price: PriceResponse | null | undefined;
     setPrice: (price: PriceResponse | null | undefined) => void;
@@ -56,7 +44,7 @@ const Price:React.FC<IPrice> = ({
 }) => {
 
     const { account } = useUserProviderContext()
-    const { chainId, signer } = useEtherProviderContext()
+    const { chainId } = useEtherProviderContext()
 
     const [sellToken, setSellToken] = useState<string>("weth");
     const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null);
@@ -64,14 +52,6 @@ const Price:React.FC<IPrice> = ({
     const [sellAmount, setSellAmount] = useState<string>("");
     const [buyAmount, setBuyAmount] = useState<string>("");
     const [tradeDirection, setTradeDirection] = useState<string>("sell");
-    const [buyTokenTax, setBuyTokenTax] = useState<string>("0");
-    const [sellTokenTax, setSellTokenTax] = useState<string>("0");
-    // trading fees
-    const [zeroExFee, setZeroExFee] = useState<string>("0");
-    // liquidity route
-    const [route, setRoute] = useState<string[]>([])
-    // gas estimate
-    const [gasEstimate, setGasEstimate] = useState<string | null>(null);
 
     // flip tokens and values
     const flipTokens = (
@@ -119,82 +99,23 @@ const Price:React.FC<IPrice> = ({
         ? parseUnits(buyAmount, buyTokenDecimals).toString()
         : undefined;
 
-    // we are going to use this timer to refetch a new price every 30 seconds
-    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-
-    // Timer to update lastUpdated every 30 seconds
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-        setLastUpdated(new Date());
-        }, 30 * 1000); // 30 seconds in milliseconds
-    
-        // Cleanup interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []); // Empty dependency array to run once on mount
-    
-    // Fetch price data and set the buyAmount whenever the sellAmount changes
-    useEffect(() => {
-        const params = {
-        chainId: chainId,
-        sellToken: sellTokenObject.address,
-        buyToken: buyTokenObject.address,
-        sellAmount: parsedSellAmount,
-        buyAmount: parsedBuyAmount,
-        taker: signer,
-        swapFeeRecipient: process.env.NEXT_PUBLIC_FEE_RECIPIENT,
-        swapFeeBps: process.env.NEXT_PUBLIC_AFFILIATE_FEE,
-        swapFeeToken: buyTokenObject.address,
-        tradeSurplusRecipient: process.env.NEXT_PUBLIC_FEE_RECIPIENT,
-        slippageBps: (Number(slippage) * 100).toFixed(0),
-        };
-
-        async function main() {
-            const response = await fetch(`/api/price?${qs.stringify(params)}`);
-            const data = await response.json();
-            if (data.buyAmount) {
-                setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
-                setPrice(data);
-            }
-            // Set token tax information
-            if (data?.tokenMetadata) {
-                setBuyTokenTax(data.tokenMetadata.buyToken.buyTaxBps);
-                setSellTokenTax(data.tokenMetadata.sellToken.sellTaxBps);
-            }
-            // set zero ex trade fee info
-            if(data?.fees && data?.fees.zeroExFee) {
-                setZeroExFee(data.fees.zeroExFee.amount);
-            }
-            // set liquidity route
-            if (data?.route) {
-                const routeSources = data.route.fills.map((r: Fills) => r.source);
-                setRoute(routeSources);
-            }
-            // set gas estimate
-            if (data?.gas && data?.gasPrice) {
-                setGasEstimate(
-                    (
-                        Number(data.gas) * Number(data.gasPrice) / 1e18
-                    ).toString()
-                );
-            }
-        }
-
-        if (sellAmount !== "") {
-        main();
-        }
-    }, [
-        sellTokenObject.address,
-        buyTokenObject.address,
+    const {
+        buyTokenTax,
+        sellTokenTax,
+        zeroExFee,
+        route,
+        gasEstimate
+    } = useGetPriceData(
+        setBuyAmount,
+        sellAmount,
+        buyTokenObject,
+        sellTokenObject,
         parsedSellAmount,
         parsedBuyAmount,
-        chainId,
-        sellAmount,
-        setPrice,
         buyTokenDecimals,
-        signer,
-        slippage,
-        lastUpdated
-    ]);
+        setPrice,
+        slippage
+    )
 
     // get sell token balance
     const { userBalance } = useGetBalance(
