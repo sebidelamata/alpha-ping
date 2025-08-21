@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { formatUnits } from "ethers";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import qs from 'qs';
+import useCountdown from "./useCountdown";
 
 interface Fills{
     from: string;
@@ -33,18 +34,7 @@ const useGetPriceData = (
     // gas estimate
     const [gasEstimate, setGasEstimate] = useState<string | null>(null);
 
-    // we are going to use this timer to refetch a new price every 30 seconds
-    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-
-    // Timer to update lastUpdated every 30 seconds
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-        setLastUpdated(new Date());
-        }, 30 * 1000); // 30 seconds in milliseconds
-    
-        // Cleanup interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []); // Empty dependency array to run once on mount
+    const { expired } = useCountdown(30)
 
     // Fetch price data and set the buyAmount whenever the sellAmount changes
     useEffect(() => {
@@ -108,7 +98,7 @@ const useGetPriceData = (
         buyTokenDecimals,
         signer,
         slippage,
-        lastUpdated
+        expired
     ]);
 
     return {

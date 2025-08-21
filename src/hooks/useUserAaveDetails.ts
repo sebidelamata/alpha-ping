@@ -1,7 +1,4 @@
-import { 
-    useState, 
-    useEffect 
-} from "react";
+import { useEffect } from "react";
 import AaveL2LendingPool from '../lib/aaveL2PoolABI.json'
 import { 
   ethers, 
@@ -10,6 +7,7 @@ import {
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import { useAaveDetailsContext } from "src/contexts/AaveDetailsContext";
+import useCountdown from "./useCountdown";
 
 const useUserAaveDetails = () => {
 
@@ -20,16 +18,7 @@ const useUserAaveDetails = () => {
     } = useAaveDetailsContext()
 
     // we are going to use this timer to refetch a new aave detail every 60 seconds
-    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-    
-    // Timer to update lastUpdated every 60 seconds
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-        setLastUpdated(new Date());
-        }, 60 * 1000); // 60 seconds in milliseconds
-        // Cleanup interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []); // Empty dependency array to run once on mount
+    const { expired } = useCountdown(60);
         
     // we need to find the user account details for aave if the user has any aave tokens
     useEffect(() => {
@@ -77,7 +66,7 @@ const useUserAaveDetails = () => {
         account, 
         signer, 
         setAaveAccount,
-        lastUpdated
+        expired
     ])
 
 }

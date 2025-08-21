@@ -30,6 +30,7 @@ import MessagesHeaderTokenLinks from "./MessagesHeaderTokenLinks";
 import ToggleFollowFilter from "../../../Profile/ToggleFollowFilter";
 import useGetBalance from "src/hooks/useGetBalance";
 import useGetTokenDecimals from "src/hooks/useGetTokenDecimals";
+import useCountdown from "src/hooks/useCountdown";
 
 type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
@@ -60,16 +61,7 @@ const MessagesHeaderTokenStats = () => {
     } as const satisfies Record<TimeRange, keyof cmcPriceData>;
 
     // we are going to use this timer to refetch a new price every 60 seconds
-    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-
-    // Timer to update lastUpdated every 60 seconds
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-        setLastUpdated(new Date());
-        }, 60 * 1000); // 60 seconds in milliseconds
-        // Cleanup interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []); // Empty dependency array to run once on mount
+    const { expired } = useCountdown(60);
 
     // get latest quote in USD
     const [loading, setLoading] = useState<boolean>(false);
@@ -176,7 +168,7 @@ const MessagesHeaderTokenStats = () => {
             }
         }
         main();
-    },[selectedChannelMetadata, lastUpdated, setCmcFetch]);
+    },[selectedChannelMetadata, expired, setCmcFetch]);
     // Separate useEffect for error logging to avoid dependency issues
     useEffect(() => {
         if (cmcError) {

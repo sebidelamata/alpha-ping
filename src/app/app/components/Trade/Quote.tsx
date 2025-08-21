@@ -28,6 +28,7 @@ import GasDisplay from "./GasDisplay";
 import PlaceOrderButton from "./PlaceOrderButton";
 import BroadcastTrade from "./BroadcastTrade";
 import { AlphaPING } from "typechain-types";
+import useCountdown from "src/hooks/useCountdown";
 
 interface IQuote{
     price: PriceResponse;
@@ -110,22 +111,7 @@ const Quote:React.FC<IQuote> = ({
     ]);
 
     // our quote is no good after 60 seconds
-    const [quoteSecondsLeft, setQuoteSecondsLeft] = useState<number>(60)
-    const [quoteExpired, setQuoteExpired] = useState<boolean>(false)
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setQuoteSecondsLeft((prev) => {
-              if (prev <= 1) {
-                clearInterval(intervalId);
-                setQuoteExpired(true);
-                return 0;
-              }
-              return prev - 1;
-            });
-          }, 1000);
-        
-          return () => clearInterval(intervalId);
-    }, [])
+    const { secondsLeft, expired } = useCountdown(60);
 
     // whether we should broadcast the trade to chat
     const [isBroadcasting, setIsBroadcasting] = useState(true);
@@ -144,7 +130,7 @@ const Quote:React.FC<IQuote> = ({
         <Card className="flex flex-col w-full h-full bg-primary text-secondary">
             <CardHeader>
                 {
-                    quoteExpired === false ?
+                    expired === false ?
                     <CardTitle className="flex justify-center gap-4">
                         <Button 
                             variant={"outline"}
@@ -154,7 +140,7 @@ const Quote:React.FC<IQuote> = ({
                             <ArrowLeft/>
                         </Button>
                         <div className="flex justify-center">
-                            Quote expires in {quoteSecondsLeft.toString()} seconds
+                            Quote expires in {secondsLeft.toString()} seconds
                         </div>
                     </CardTitle> :
                     <CardTitle className="text-red-500 flex justify-center w-full">
@@ -231,7 +217,7 @@ const Quote:React.FC<IQuote> = ({
                 }
                 <PlaceOrderButton
                     quote={quote}
-                    quoteExpired={quoteExpired}
+                    quoteExpired={expired}
                     isBroadcasting={isBroadcasting} 
                     buyTokenChannel={buyTokenChannel}
                 />
