@@ -5,9 +5,10 @@ import {
 import useGetCoinGeckoID from "./useGetCoinGeckoID";
 import qs from "qs";
 
-const useGetCoinGeckoHistoricData = (timeframe: TimeFrame) => {
+const useGetCoinGeckoHistoricData = (timeframe: TimeFrame, optionalAddress="") => {
 
-    const { coinGeckoId } = useGetCoinGeckoID()
+    const { coinGeckoId } = useGetCoinGeckoID(optionalAddress)
+    console.log("CoinGecko ID:", coinGeckoId)
 
     const [historicPriceData, setHistoricPriceData] = useState<historicPriceData[] | null>(null);
     useEffect(() => {

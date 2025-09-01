@@ -37,9 +37,6 @@ import { Button } from "@/components/components/ui/button";
 import CustomTooltip from "./CustomTooltip";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 
-type TimeFrame = 'all' | '1y' | '6m' | '3m' | '30d' | '7d' | '1d';
-type Metric = 'none' | 'price' | 'mcap' | 'volume';
-
 interface IChannelScoreDial{
     scoreTimeseries: null | SentimentScoresTimeseries[];
     timeRange: TimeFrame;

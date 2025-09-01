@@ -5,7 +5,6 @@ import { parseUnits } from "ethers";
 import { 
     Card, 
     CardHeader, 
-    CardTitle, 
     CardContent
 } from "@/components/components/ui/card";
 import tokenList from "../../../../../public/tokenList.json";
@@ -26,6 +25,7 @@ import PriceFooter from "./PriceFooter";
 import SlippageSettings from "./SlippageSettings";
 import useGetBalance from "src/hooks/useGetBalance";
 import useGetPriceData from "src/hooks/useGetPriceData";
+import PriceChart from "./PriceChart";
 
   interface IPrice {
     price: PriceResponse | null | undefined;
@@ -132,14 +132,14 @@ const Price:React.FC<IPrice> = ({
   const inSufficientBalance =
     userBalance && sellAmount
         ? parseUnits(sellAmount, sellTokenDecimals) > BigInt(userBalance)
-        : true;
+        : true
+
+    console.log("buy token object", buyTokenObject);
 
     return(
         <Card className="flex flex-col w-full h-full bg-primary text-secondary">
             <CardHeader className="w-full flex flex-row justify-start items-center">
-                <CardTitle className="text-5xl">
-                    Trade
-                </CardTitle>
+                <PriceChart buyTokenObject={buyTokenObject}/>
             </CardHeader>
             <CardContent className="flex-1 w-full flex flex-col gap-4">
                 <PriceSellTokenDisplay

@@ -38,7 +38,6 @@ const Analyze:React.FC = () => {
 
     // grab historic data from coingecko
     const { historicPriceData } = useGetCoinGeckoHistoricData(timeRange)
-    console.log("Historic Price Data:", historicPriceData)
 
     const { currentChanneltimeFilteredData } = useCurrentChannelTimeFilteredMessages(blocksFilter, timeRange)
     const { timeFilteredData } = useTimeFilteredMessages(blocksFilter, timeRange)

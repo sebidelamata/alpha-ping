@@ -1,11 +1,16 @@
 import coinGeckoIdMap from '../constants/coinGeckoIDMap.json';
 import { useChannelProviderContext } from 'src/contexts/ChannelContext';
 
-const useGetCoinGeckoID = () => {
+const useGetCoinGeckoID = (optionalAddress:string="") => {
 
     const { selectedChannelMetadata, currentChannel } = useChannelProviderContext()
     
     const coinGeckoMetadata = coinGeckoIdMap.filter((token) => {
+        // make a case for when fetching id for channel that is not current channel (for the trading page)
+        if(optionalAddress !== "" && token.platforms['arbitrum-one']) {
+            return token.platforms['arbitrum-one'].toLowerCase() === optionalAddress.toLowerCase()
+        }
+        // normal case, fetch for current channel (one for underlying token of channel for etheruem and arbitrum)
         if(selectedChannelMetadata && selectedChannelMetadata.platform.slug === 'ethereum' && token.platforms['ethereum']) {
             return token.platforms['ethereum'].toLowerCase() === (selectedChannelMetadata.platform.token_address).toLowerCase()
         }

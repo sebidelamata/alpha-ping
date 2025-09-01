@@ -26,23 +26,25 @@ const Trade:React.FC = () => {
         >
             <CardContent className="flex-1 flex flex-col overflow-hidden p-0">
                 <ScrollArea className="h-full w-full overflow-y-auto p-4">
-                    {finalize && price ? (
-                        <Quote
-                        price={price}
-                        quote={quote}
-                        setQuote={setQuote}
-                        slippage={slippage}
-                        setFinalize={setFinalize}
-                        />
-                    ) : (
-                        <Price
-                        price={price}
-                        setPrice={setPrice}
-                        setFinalize={setFinalize}
-                        slippage={slippage}
-                        setSlippage={setSlippage}
-                        />
-                    )}
+                    <div >
+                        {finalize && price ? (
+                            <Quote
+                            price={price}
+                            quote={quote}
+                            setQuote={setQuote}
+                            slippage={slippage}
+                            setFinalize={setFinalize}
+                            />
+                        ) : (
+                            <Price
+                            price={price}
+                            setPrice={setPrice}
+                            setFinalize={setFinalize}
+                            slippage={slippage}
+                            setSlippage={setSlippage}
+                            />
+                        )}
+                    </div>
                 </ScrollArea>
             </CardContent>
         </Card>

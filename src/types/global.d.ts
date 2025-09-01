@@ -389,6 +389,8 @@ type AlphaPingSwapRecord = {
   service: string;
 };
 
+type Metric = 'none' | 'price' | 'mcap' | 'volume';
+
 
 }
 
