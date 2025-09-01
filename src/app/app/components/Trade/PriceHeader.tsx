@@ -24,15 +24,23 @@ import {
     AvatarImage, 
     AvatarFallback 
 } from "@/components/components/ui/avatar";
+import { Label } from "@/components/components/ui/label";
+import { Switch } from "@/components/components/ui/switch";
+import { DollarSign } from "lucide-react";
 
 interface IPriceHeader {
     buyTokenObject: Token | null | undefined;
+    sellTokenObject: Token | null | undefined;
 }
 
-const PriceHeader:React.FC<IPriceHeader> = ({ buyTokenObject }) => {
+const PriceHeader:React.FC<IPriceHeader> = ({ 
+    buyTokenObject,
+    sellTokenObject 
+}) => {
     
     const [timeRange, setTimeRange] = useState<TimeFrame>("7d")
     const [metric, setMetric] = useState<Metric>('price');
+    const [baseCurrencyUSD, setBaseCurrencyUSD] = useState<boolean>(false);
 
     return(
         <CardTitle className="flex flex-col gap-4 pr-0">
@@ -120,6 +128,47 @@ const PriceHeader:React.FC<IPriceHeader> = ({ buyTokenObject }) => {
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <div className="flex flex-row gap-2 items-center">
+                    <Label 
+                        className="flex flex-row gap-2"
+                        htmlFor="blocks-filter"
+                    >
+                        <DollarSign/>
+                    </Label>
+                    <Switch 
+                        id="blocks-filter" 
+                        className="data-[state=checked]:bg-accent"
+                        checked={baseCurrencyUSD} 
+                        onCheckedChange={() => setBaseCurrencyUSD(!baseCurrencyUSD)}
+                    />
+                    <Label 
+                        className="flex flex-row gap-2"
+                        htmlFor="blocks-filter"
+                    >
+                        {
+                            (
+                                sellTokenObject &&
+                                sellTokenObject.logoURI !== '' &&
+                                sellTokenObject.logoURI !== null
+                            ) ?
+                            <Avatar className="size-8">
+                                <AvatarImage
+                                    src={
+                                        sellTokenObject.logoURI !== '' ? 
+                                        sellTokenObject.logoURI : 
+                                        '/erc20Icon.svg'
+                                    }
+                                    loading="lazy"
+                                    alt="AlphaPING Logo"
+                                />
+                                <AvatarFallback>AP</AvatarFallback>
+                            </Avatar> :
+                            <div>
+                                Sell Token
+                            </div>
+                        }
+                    </Label>
+                </div>
             </div>
             {
                 buyTokenObject === null || buyTokenObject === undefined ?

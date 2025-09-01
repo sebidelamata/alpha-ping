@@ -134,11 +134,14 @@ const Price:React.FC<IPrice> = ({
         : true
 
     return(
-        <Card className="flex flex-row w-full h-full bg-primary text-secondary gap-2">
-            <CardHeader className="w-full flex flex-row justify-start items-center p-0">
-                <PriceHeader buyTokenObject={buyTokenObject}/>
+        <Card className="flex w-full h-full bg-primary text-secondary gap-2">
+            <CardHeader className="w-full flex flex-row justify-start p-0">
+                <PriceHeader    
+                    buyTokenObject={buyTokenObject}
+                    sellTokenObject={sellTokenObject}
+                />
             </CardHeader>
-            <CardContent className="flex-1 w-full flex flex-col gap-4 p-0">
+            <CardContent className="flex-1 w-full flex flex-col gap-4 p-0 justify-start">
                 <PriceSellTokenDisplay
                     setTradeDirection={setTradeDirection}
                     setSellToken={setSellToken}
