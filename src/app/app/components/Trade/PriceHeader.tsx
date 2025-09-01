@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
     useState
 } from "react";
@@ -78,9 +80,6 @@ const PriceHeader:React.FC<IPriceHeader> = ({
                         <SelectValue placeholder="Last 3 months" />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl bg-primary text-secondary">
-                        {/* <SelectItem value="all" className="rounded-lg">
-                            All Time
-                        </SelectItem> */}
                         <SelectItem value="1y" className="rounded-lg">
                             Last Year
                         </SelectItem>
@@ -175,12 +174,19 @@ const PriceHeader:React.FC<IPriceHeader> = ({
                 </div>
             </div>
             {
-                buyTokenObject === null || buyTokenObject === undefined ?
+                (
+                    buyTokenObject === null || 
+                    buyTokenObject === undefined ||
+                    sellTokenObject === null || 
+                    sellTokenObject === undefined
+                ) ?
                 <div>
                     Select a token to see price data
                 </div> :
                 <PriceChart 
                     buyTokenObject={buyTokenObject}
+                    sellTokenObject={sellTokenObject}
+                    baseCurrencyUSD={baseCurrencyUSD}
                     metric={metric}
                     timeRange={timeRange}
                 />

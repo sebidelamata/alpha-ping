@@ -1,5 +1,6 @@
+'use client';
+
 import React from "react";
-import useGetCoinGeckoHistoricData from "src/hooks/useGetCoinGeckoHistoricData";
 import { 
     CartesianGrid, 
     Line, 
@@ -14,15 +15,20 @@ import {
 } from "@/components/components/ui/chart"
 import CustomTooltip from "../Analyze/CustomTooltip";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
+import useGetPriceChartData from "src/hooks/useGetPriceChartData";
 
 interface IPriceChart {
     buyTokenObject: Token;
+    sellTokenObject: Token;
+    baseCurrencyUSD: boolean;
     metric: Metric;
     timeRange: TimeFrame;
 }
 
 const PriceChart:React.FC<IPriceChart> = ({ 
     buyTokenObject,
+    sellTokenObject,
+    baseCurrencyUSD,
     metric,
     timeRange 
 }) => {
@@ -45,17 +51,27 @@ const PriceChart:React.FC<IPriceChart> = ({
         }
     } satisfies ChartConfig
 
-    // grab historic data from coingecko
-    const { historicPriceData } = useGetCoinGeckoHistoricData(
+    // grab chart data (may have usd or sell token as base currency)
+    const { 
+        historicBuyDataUSD, 
+        historicDataSellTokenBase 
+    } = useGetPriceChartData(
         timeRange, 
-        buyTokenObject !== null && 
-        buyTokenObject !== undefined ? 
-        buyTokenObject.address : 
-        ""
+        buyTokenObject, 
+        sellTokenObject,
     )
-    console.log("Historic Price Data:", historicPriceData)
 
-    if(historicPriceData === null) {
+    // grab historic data from coingecko
+    // const { historicPriceData } = useGetCoinGeckoHistoricData(
+    //     timeRange, 
+    //     buyTokenObject !== null && 
+    //     buyTokenObject !== undefined ? 
+    //     buyTokenObject.address : 
+    //     ""
+    // )
+    // console.log("Historic Price Data:", historicPriceData)
+
+    if(historicBuyDataUSD === null) {
         return (
             <div className="mx-auto flex h-[400px] w-full items-center justify-center bg-primary">
                 <p className="text-center text-sm text-muted-foreground">
@@ -72,7 +88,7 @@ const PriceChart:React.FC<IPriceChart> = ({
         >
             <LineChart
                 accessibilityLayer
-                data={historicPriceData}
+                data={historicBuyDataUSD}
                 margin={{
                     left: 12,
                     right: 12,
