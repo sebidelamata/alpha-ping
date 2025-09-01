@@ -61,16 +61,6 @@ const PriceChart:React.FC<IPriceChart> = ({
         sellTokenObject,
     )
 
-    // grab historic data from coingecko
-    // const { historicPriceData } = useGetCoinGeckoHistoricData(
-    //     timeRange, 
-    //     buyTokenObject !== null && 
-    //     buyTokenObject !== undefined ? 
-    //     buyTokenObject.address : 
-    //     ""
-    // )
-    // console.log("Historic Price Data:", historicPriceData)
-
     if(historicBuyDataUSD === null) {
         return (
             <div className="mx-auto flex h-[400px] w-full items-center justify-center bg-primary">
@@ -81,65 +71,156 @@ const PriceChart:React.FC<IPriceChart> = ({
         )
     }
 
-    return(
-        <ChartContainer
-            config={chartConfig}
-            className="mx-auto aspect-square h-[400px] w-full bg-primary"
-        >
-            <LineChart
-                accessibilityLayer
-                data={historicBuyDataUSD}
-                margin={{
-                    left: 12,
-                    right: 12,
-                }}
+    if(baseCurrencyUSD === false){
+        return(
+            <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square h-[400px] w-full bg-primary"
             >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                    dataKey="time"
-                    tickLine={true}
-                    axisLine={false}
-                    tickMargin={8}
-                    tickFormatter={(value) => {
-                        if(timeRange === '1d') {
-                            return new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        }
-                        else{
-                            return new Date(value).toLocaleDateString();
-                        }
+                <LineChart
+                    accessibilityLayer
+                    data={historicBuyDataUSD}
+                    margin={{
+                        left: 12,
+                        right: 12,
                     }}
-                />
-                <YAxis
-                    yAxisId="left"
-                    orientation="left"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={0}
-                    tickFormatter={(value) => `$${humanReadableNumbers(value.toString())}`}
-                    domain={['auto', 'auto']} 
-                />
-                <ChartTooltip
-                    cursor={false}
-                    content={<CustomTooltip />}
-                />
-                <Line
-                    yAxisId="left"
-                    dataKey={
-                        metric === 'price'
-                            ? 'price'
-                            : metric === 'mcap'
-                            ? 'market_cap'
-                            : 'volume'
+                >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                        dataKey="time"
+                        tickLine={true}
+                        axisLine={false}
+                        tickMargin={8}
+                        tickFormatter={(value) => {
+                            if(timeRange === '1d') {
+                                return new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            }
+                            else{
+                                return new Date(value).toLocaleDateString();
+                            }
+                        }}
+                    />
+                    <YAxis
+                        yAxisId="left"
+                        orientation="left"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={0}
+                        tickFormatter={(value) => `$${humanReadableNumbers(value.toString())}`}
+                        domain={['auto', 'auto']} 
+                    />
+                    <ChartTooltip
+                        cursor={false}
+                        content={<CustomTooltip />}
+                    />
+                    <Line
+                        yAxisId="left"
+                        dataKey={
+                            metric === 'price'
+                                ? 'price'
+                                : metric === 'mcap'
+                                ? 'market_cap'
+                                : 'volume'
+                        }
+                        type="natural"
+                        stroke="hsl(0 0% 100%)"
+                        strokeWidth={3}
+                        dot={false}
+                        connectNulls={true}
+                    />
+                </LineChart>
+            </ChartContainer>
+        )
+
+    } if(
+        baseCurrencyUSD === true && 
+        historicDataSellTokenBase !== null
+    ){
+        return(
+            <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square h-[400px] w-full bg-primary"
+            >
+                <LineChart
+                    accessibilityLayer
+                    data={historicDataSellTokenBase}
+                    margin={{
+                        left: 12,
+                        right: 12,
+                    }}
+                >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                        dataKey="time"
+                        tickLine={true}
+                        axisLine={false}
+                        tickMargin={8}
+                        tickFormatter={(value) => {
+                            if(timeRange === '1d') {
+                                return new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            }
+                            else{
+                                return new Date(value).toLocaleDateString();
+                            }
+                        }}
+                    />
+                    {
+                        // if metric is price, show sell token symbol otherwise its the ratio
+                        metric === 'price' ?
+                            <YAxis
+                                yAxisId="left"
+                                orientation="left"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={0}
+                                tickFormatter={(value) => {
+                                    if(value >= 1){
+                                        return `${humanReadableNumbers(value.toString())} ${sellTokenObject.symbol}`
+                                    } else {
+                                        return `${value.toFixed(4)} ${sellTokenObject.symbol}`
+                                    }
+                                }}
+                                domain={['auto', 'auto']} 
+                            /> :
+                        <YAxis
+                            yAxisId="left"
+                            orientation="left"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={0}
+                            tickFormatter={(value) => {
+                                if(value >= 1){
+                                    return `${humanReadableNumbers(value.toString())}`
+                                } else {
+                                    return `${value.toFixed(4)}`
+                                }
+                            }}
+                            domain={['auto', 'auto']} 
+                        />
                     }
-                    type="natural"
-                    stroke="hsl(0 0% 100%)"
-                    strokeWidth={3}
-                    dot={false}
-                    connectNulls={true}
-                />
-            </LineChart>
-        </ChartContainer>
-    )
+                    <ChartTooltip
+                        cursor={false}
+                        content={<CustomTooltip />}
+                    />
+                    <Line
+                        yAxisId="left"
+                        dataKey={
+                            metric === 'price'
+                                ? 'price'
+                                : metric === 'mcap'
+                                ? 'market_cap'
+                                : 'volume'
+                        }
+                        type="natural"
+                        stroke="hsl(0 0% 100%)"
+                        strokeWidth={3}
+                        dot={false}
+                        connectNulls={true}
+                    />
+                </LineChart>
+            </ChartContainer>
+        )
+    }
 }
 
 export default PriceChart;
