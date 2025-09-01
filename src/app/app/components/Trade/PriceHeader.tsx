@@ -18,6 +18,12 @@ import {
     SelectContent 
 } from "@/components/components/ui/select";
 import PriceChart from "./PriceChart";
+import PriceFooter from "./PriceFooter";
+import { 
+    Avatar, 
+    AvatarImage, 
+    AvatarFallback 
+} from "@/components/components/ui/avatar";
 
 interface IPriceHeader {
     buyTokenObject: Token | null | undefined;
@@ -29,8 +35,30 @@ const PriceHeader:React.FC<IPriceHeader> = ({ buyTokenObject }) => {
     const [metric, setMetric] = useState<Metric>('price');
 
     return(
-        <CardTitle className="flex flex-col gap-4">
-            <div className="flex flex-row items-center gap-4">
+        <CardTitle className="flex flex-col gap-4 pr-0">
+            <div className="flex flex-row items-center gap-4 pr-0">
+                {
+                    buyTokenObject !== null &&
+                    buyTokenObject !== undefined &&
+                    buyTokenObject.logoURI !== null &&
+                    <div className="flex flex-row gap-2">
+                        <Avatar className="size-8">
+                            <AvatarImage
+                                src={
+                                    buyTokenObject.logoURI !== '' ? 
+                                    buyTokenObject.logoURI : 
+                                    '/erc20Icon.svg'
+                                }
+                                loading="lazy"
+                                alt="AlphaPING Logo"
+                            />
+                            <AvatarFallback>AP</AvatarFallback>
+                        </Avatar>
+                    </div>
+                }
+                <div>
+                    {buyTokenObject?.name}
+                </div>
                 <Select 
                     value={timeRange} 
                     onValueChange={(value: string) => setTimeRange(value as TimeFrame)}
@@ -104,6 +132,7 @@ const PriceHeader:React.FC<IPriceHeader> = ({ buyTokenObject }) => {
                     timeRange={timeRange}
                 />
             }
+            <PriceFooter/>
         </CardTitle>
     )
 }

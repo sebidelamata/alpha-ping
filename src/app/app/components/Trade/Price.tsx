@@ -21,7 +21,6 @@ import TaxInfoDisplay from "./TaxInfoDisplay";
 import AlphaPingFee from "./AlphaPingFee";
 import LiquidityRoute from "./LiquidityRoute";
 import GasDisplay from "./GasDisplay";
-import PriceFooter from "./PriceFooter";
 import SlippageSettings from "./SlippageSettings";
 import useGetBalance from "src/hooks/useGetBalance";
 import useGetPriceData from "src/hooks/useGetPriceData";
@@ -46,9 +45,9 @@ const Price:React.FC<IPrice> = ({
     const { account } = useUserProviderContext()
     const { chainId } = useEtherProviderContext()
 
-    const [sellToken, setSellToken] = useState<string>("weth");
+    const [sellToken, setSellToken] = useState<string>("usdc");
     const [sellTokenValueUSD, setSellTokenValueUSD] = useState<string | null>(null);
-    const [buyToken, setBuyToken] = useState<string>("usdc");
+    const [buyToken, setBuyToken] = useState<string>("weth");
     const [sellAmount, setSellAmount] = useState<string>("");
     const [buyAmount, setBuyAmount] = useState<string>("");
     const [tradeDirection, setTradeDirection] = useState<string>("sell");
@@ -135,11 +134,11 @@ const Price:React.FC<IPrice> = ({
         : true
 
     return(
-        <Card className="flex flex-row w-full h-full bg-primary text-secondary">
-            <CardHeader className="w-full flex flex-row justify-start items-center">
+        <Card className="flex flex-row w-full h-full bg-primary text-secondary gap-2">
+            <CardHeader className="w-full flex flex-row justify-start items-center p-0">
                 <PriceHeader buyTokenObject={buyTokenObject}/>
             </CardHeader>
-            <CardContent className="flex-1 w-full flex flex-col gap-4">
+            <CardContent className="flex-1 w-full flex flex-col gap-4 p-0">
                 <PriceSellTokenDisplay
                     setTradeDirection={setTradeDirection}
                     setSellToken={setSellToken}
@@ -212,7 +211,6 @@ const Price:React.FC<IPrice> = ({
                     price={price}
                 />
             </CardContent>
-            <PriceFooter/>
         </Card>
     )
 }
