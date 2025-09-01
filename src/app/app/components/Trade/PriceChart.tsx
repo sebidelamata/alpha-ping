@@ -1,32 +1,49 @@
-import React, {
-    useState
-} from "react";
+import React from "react";
 import useGetCoinGeckoHistoricData from "src/hooks/useGetCoinGeckoHistoricData";
-import { CardTitle } from "@/components/components/ui/card";
 import { 
-    DropdownMenu, 
-    DropdownMenuTrigger, 
-    DropdownMenuContent, 
-    DropdownMenuRadioGroup, 
-    DropdownMenuRadioItem 
-} from "@/components/components/ui/dropdown-menu";
-import { Button } from "@/components/components/ui/button";
+    CartesianGrid, 
+    Line, 
+    LineChart, 
+    XAxis,
+    YAxis
+} from "recharts"
 import { 
-    Select, 
-    SelectTrigger, 
-    SelectValue, 
-    SelectItem, 
-    SelectContent 
-} from "@/components/components/ui/select";
+    ChartConfig, 
+    ChartContainer,
+    ChartTooltip,
+} from "@/components/components/ui/chart"
+import CustomTooltip from "../Analyze/CustomTooltip";
+import humanReadableNumbers from "src/lib/humanReadableNumbers";
 
 interface IPriceChart {
-    buyTokenObject: Token | null | undefined;
+    buyTokenObject: Token;
+    metric: Metric;
+    timeRange: TimeFrame;
 }
 
-const PriceChart:React.FC<IPriceChart> = ({ buyTokenObject }) => {
-    
-    const [timeRange, setTimeRange] = useState<TimeFrame>("7d")
-    const [metric, setMetric] = useState<Metric>('price');
+const PriceChart:React.FC<IPriceChart> = ({ 
+    buyTokenObject,
+    metric,
+    timeRange 
+}) => {
+
+    const chartConfig = {
+        time: { 
+            color: "hsl(273 54% 72)"
+        },
+        price: {
+            label: "Price",
+            color: "hsl(0 0% 100%)"
+        },
+        market_cap: {
+            label: "Market Cap",
+            color: "hsl(0 0% 100%)"
+        },
+        volume: {
+            label: "Volume", 
+            color: "hsl(0 0% 100%)"
+        }
+    } satisfies ChartConfig
 
     // grab historic data from coingecko
     const { historicPriceData } = useGetCoinGeckoHistoricData(
@@ -37,72 +54,75 @@ const PriceChart:React.FC<IPriceChart> = ({ buyTokenObject }) => {
         ""
     )
     console.log("Historic Price Data:", historicPriceData)
-    return(
-        <CardTitle>
-            <div className="flex flex-row items-center gap-4">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button 
-                            variant="outline" 
-                            className="w-32 h-8 justify-between"
-                        >+ {metric !== 'none' ? metric.toLocaleUpperCase() : 'Market Data'}</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-primary text-secondary">
-                        <DropdownMenuRadioGroup value={metric} onValueChange={(m) => setMetric(m as Metric)}>
-                            <DropdownMenuRadioItem 
-                                value="price"
-                            >
-                                Price
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem 
-                                value="mcap"
-                            >
-                                MCap
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem 
-                                value="volume"
-                            >
-                                Volume
-                            </DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <Select 
-                    value={timeRange} 
-                    onValueChange={(value: string) => setTimeRange(value as TimeFrame)}
-                >
-                    <SelectTrigger
-                        className="w-[160px] h-8 "
-                        aria-label="Select a value"
-                    >
-                        <SelectValue placeholder="Last 3 months" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl bg-primary text-secondary">
-                        {/* <SelectItem value="all" className="rounded-lg">
-                            All Time
-                        </SelectItem> */}
-                        <SelectItem value="1y" className="rounded-lg">
-                            Last Year
-                        </SelectItem>
-                        <SelectItem value="6m" className="rounded-lg">
-                            Last 6 months
-                        </SelectItem>
-                        <SelectItem value="3m" className="rounded-lg">
-                            Last 3 months
-                            </SelectItem>
-                        <SelectItem value="30d" className="rounded-lg">
-                            Last 30 days
-                        </SelectItem>
-                        <SelectItem value="7d" className="rounded-lg">
-                            Last 7 days
-                        </SelectItem>
-                        <SelectItem value="1d" className="rounded-lg">
-                            Last 24 hours
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
+
+    if(historicPriceData === null) {
+        return (
+            <div className="mx-auto flex h-[400px] w-full items-center justify-center bg-primary">
+                <p className="text-center text-sm text-muted-foreground">
+                    Loading chart...
+                </p>
             </div>
-        </CardTitle>
+        )
+    }
+
+    return(
+        <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square h-[400px] w-full bg-primary"
+        >
+            <LineChart
+                accessibilityLayer
+                data={historicPriceData}
+                margin={{
+                    left: 12,
+                    right: 12,
+                }}
+            >
+                <CartesianGrid vertical={false} />
+                <XAxis
+                    dataKey="time"
+                    tickLine={true}
+                    axisLine={false}
+                    tickMargin={8}
+                    tickFormatter={(value) => {
+                        if(timeRange === '1d') {
+                            return new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        }
+                        else{
+                            return new Date(value).toLocaleDateString();
+                        }
+                    }}
+                />
+                <YAxis
+                    yAxisId="left"
+                    orientation="left"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={0}
+                    tickFormatter={(value) => `$${humanReadableNumbers(value.toString())}`}
+                    domain={['auto', 'auto']} 
+                />
+                <ChartTooltip
+                    cursor={false}
+                    content={<CustomTooltip />}
+                />
+                <Line
+                    yAxisId="left"
+                    dataKey={
+                        metric === 'price'
+                            ? 'price'
+                            : metric === 'mcap'
+                            ? 'market_cap'
+                            : 'volume'
+                    }
+                    type="natural"
+                    stroke="hsl(0 0% 100%)"
+                    strokeWidth={3}
+                    dot={false}
+                    connectNulls={true}
+                />
+            </LineChart>
+        </ChartContainer>
     )
 }
 

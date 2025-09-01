@@ -207,6 +207,7 @@ const ChannelScoreOverTime: React.FC<IChannelScoreDial> = ({
                                         axisLine={false}
                                         tickMargin={0}
                                         tickFormatter={(value) => `$${humanReadableNumbers(value.toString())}`}
+                                        domain={['auto', 'auto']} 
                                     />
                                 }
                                 <ChartTooltip

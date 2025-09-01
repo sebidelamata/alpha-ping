@@ -25,7 +25,7 @@ import PriceFooter from "./PriceFooter";
 import SlippageSettings from "./SlippageSettings";
 import useGetBalance from "src/hooks/useGetBalance";
 import useGetPriceData from "src/hooks/useGetPriceData";
-import PriceChart from "./PriceChart";
+import PriceHeader from "./PriceHeader";
 
   interface IPrice {
     price: PriceResponse | null | undefined;
@@ -134,12 +134,10 @@ const Price:React.FC<IPrice> = ({
         ? parseUnits(sellAmount, sellTokenDecimals) > BigInt(userBalance)
         : true
 
-    console.log("buy token object", buyTokenObject);
-
     return(
-        <Card className="flex flex-col w-full h-full bg-primary text-secondary">
+        <Card className="flex flex-row w-full h-full bg-primary text-secondary">
             <CardHeader className="w-full flex flex-row justify-start items-center">
-                <PriceChart buyTokenObject={buyTokenObject}/>
+                <PriceHeader buyTokenObject={buyTokenObject}/>
             </CardHeader>
             <CardContent className="flex-1 w-full flex flex-col gap-4">
                 <PriceSellTokenDisplay
