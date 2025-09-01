@@ -176,6 +176,8 @@ const PriceChart:React.FC<IPriceChart> = ({
                                 tickFormatter={(value) => {
                                     if(value >= 1){
                                         return `${humanReadableNumbers(value.toString())} ${sellTokenObject.symbol}`
+                                    } else if(value <= 0.0002){
+                                        return `${value.toFixed(6)} ${sellTokenObject.symbol}`
                                     } else {
                                         return `${value.toFixed(4)} ${sellTokenObject.symbol}`
                                     }
@@ -191,6 +193,8 @@ const PriceChart:React.FC<IPriceChart> = ({
                             tickFormatter={(value) => {
                                 if(value >= 1){
                                     return `${humanReadableNumbers(value.toString())}`
+                                } else if(value <= 0.0002){
+                                    return `${value.toFixed(6)}`
                                 } else {
                                     return `${value.toFixed(4)}`
                                 }
