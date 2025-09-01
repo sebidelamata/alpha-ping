@@ -19,7 +19,7 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = ({ active, payload }) => {
 
     return (
       <div className="bg-primary text-secondary p-2 rounded shadow font-light">
-        <p>{`Date: ${date.toLocaleDateString()}`}</p>
+        <p>{`Date: ${date.toLocaleString()}`}</p>
 
         {/* Sentiment score */}
         {data.score !== undefined && <p>{`Score: ${score}`}</p>}

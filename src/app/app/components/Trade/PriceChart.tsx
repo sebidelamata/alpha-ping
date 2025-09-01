@@ -16,6 +16,8 @@ import {
 import CustomTooltip from "../Analyze/CustomTooltip";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import useGetPriceChartData from "src/hooks/useGetPriceChartData";
+import SellTokenUSDCustomTooltip from "./SellTokenUSDCustomTooltip";
+
 
 interface IPriceChart {
     buyTokenObject: Token;
@@ -204,7 +206,12 @@ const PriceChart:React.FC<IPriceChart> = ({
                     }
                     <ChartTooltip
                         cursor={false}
-                        content={<CustomTooltip />}
+                        content={(tooltipProps) => (
+                            <SellTokenUSDCustomTooltip 
+                                {...tooltipProps}
+                                sellTokenObject={sellTokenObject}
+                            />
+                    )}
                     />
                     <Line
                         yAxisId="left"
