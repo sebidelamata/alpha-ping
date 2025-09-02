@@ -24,6 +24,8 @@ const useGetPriceChartData = (
                 const computedData = historicSellDataUSD.map((sellPoint, index) => {
                 const buyPoint = historicBuyDataUSD[index];
                 if(
+                    buyPoint &&
+                    sellPoint &&
                     buyPoint.price && 
                     sellPoint.price && 
                     buyPoint.market_cap && 
