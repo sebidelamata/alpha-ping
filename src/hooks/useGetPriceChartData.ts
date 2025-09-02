@@ -23,12 +23,23 @@ const useGetPriceChartData = (
             if (historicSellDataUSD && historicBuyDataUSD){
                 const computedData = historicSellDataUSD.map((sellPoint, index) => {
                 const buyPoint = historicBuyDataUSD[index];
-                return {
-                    time: sellPoint.time,
-                    price: buyPoint.price / sellPoint.price,
-                    market_cap: buyPoint.market_cap / sellPoint.market_cap,
-                    volume: buyPoint.volume / sellPoint.volume,
-                };
+                if(
+                    buyPoint.price && 
+                    sellPoint.price && 
+                    buyPoint.market_cap && 
+                    sellPoint.market_cap && 
+                    buyPoint.volume && 
+                    sellPoint.volume
+                ){
+                    return {
+                        time: sellPoint.time,
+                        price: buyPoint.price / sellPoint.price,
+                        market_cap: buyPoint.market_cap / sellPoint.market_cap,
+                        volume: buyPoint.volume / sellPoint.volume,
+                    };
+                } else{
+                    return null
+                }
                 }) as unknown as historicPriceData[]
                 setHistoricDataSellTokenBase(computedData)
             }
