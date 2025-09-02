@@ -219,6 +219,7 @@ const PriceChart:React.FC<IPriceChart> = ({
 
     } if(
         baseCurrencyUSD === true && 
+        historicDataSellTokenBase !== undefined &&
         historicDataSellTokenBase !== null &&
         historicDataSellTokenBase.length > 0
 
