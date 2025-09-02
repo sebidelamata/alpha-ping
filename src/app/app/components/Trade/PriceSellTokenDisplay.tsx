@@ -50,13 +50,13 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
     };
 
     return (
-        <section className="mt-4 flex flex-col items-start justify-center gap-4">
+        <section className="flex flex-col items-start justify-center gap-2">
             <div className="flex flex-row">
                 <Label
                     htmlFor="sell-select"
-                    className="flex flex-row w-[100%] justify-start items-baseline gap-4"
+                    className="flex flex-row w-[100%] justify-start"
                 >
-                    <div className="text-3xl">
+                    <div className="text-2xl">
                         Sell
                     </div>
                 </Label>
@@ -74,7 +74,7 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
                     }   
                 </div>
                 <Button
-                    className="text-xl"
+                    className="text-lg"
                     variant="outline"
                     onClick={handleMaxSellAmount}
                 >
@@ -99,7 +99,7 @@ const PriceSellTokenDisplay: React.FC<IPriceSellTokenDisplay> = ({
                 />
                 <Label htmlFor="sell-amount"/>
                 <Input
-                    className="h-16 rounded-md text-3xl"
+                    className="h-12 rounded-md text-lg"
                     type="text"
                     inputMode="decimal"
                     pattern="[0-9]*[.]?[0-9]*"

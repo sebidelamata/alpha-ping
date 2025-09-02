@@ -44,7 +44,7 @@ const GasDisplay: React.FC<IGasDisplay> = ({gasEstimate}) => {
 
     return(
         <div className="flex flex-row items-center justify-end w-full p-2 bg-primary text-secondary rounded-lg gap-4">
-            <Fuel className="text-secondary h-8"/>
+            <Fuel className="text-secondary h-6"/>
             {
                 ethUSDPrice !== "" && gasEstimate !== null && !cmcError ?
                     <div>

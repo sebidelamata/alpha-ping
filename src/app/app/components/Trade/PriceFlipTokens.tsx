@@ -24,7 +24,7 @@ const PriceFlipTokens: React.FC<IPriceFlipTokens> = ({
     buyAmount
 }) => {
     return (
-        <section className="flex flex-col items-center justify-center gap-4">
+        <section className="flex flex-col items-center justify-center gap-2">
             <Separator color="accent"/>
             <Button 
                 onClick={() => flipTokens(
@@ -33,7 +33,7 @@ const PriceFlipTokens: React.FC<IPriceFlipTokens> = ({
                     sellAmount,
                     buyAmount
                 )} 
-                className="mt-4 h-30 w-30 text-4xl justify-center align-middle items-center scale-150" 
+                className="h-18 w-18 text-xl justify-center align-middle items-center scale-120" 
                 variant={"outline"}
             >
                 <ArrowDownUp size={48}/>

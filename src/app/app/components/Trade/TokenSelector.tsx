@@ -136,7 +136,7 @@ const TokenSelector:React.FC<ITokenSelector> = ({
                 {
                     tokenObject.symbol !== undefined ? 
                     <Button
-                        className="text-xl h-16 w-96 gap-4"
+                        className="text-lg h-12 w-96 gap-4"
                         variant="outline"
                         aria-expanded={open}
                     >

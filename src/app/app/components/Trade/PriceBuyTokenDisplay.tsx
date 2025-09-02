@@ -31,13 +31,13 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
 }) => {
 
     return(
-        <section className="mt-4 flex flex-col items-start justify-center gap-4">
+        <section className="flex flex-col items-start justify-center gap-2">
             <div className="flex flex-row">
                 <Label
                     htmlFor="buy-select"
                     className="w-36"
                 >
-                    <div className="text-3xl">
+                    <div className="text-2xl">
                         Buy
                     </div>
                 </Label>
@@ -52,7 +52,7 @@ const PriceBuyTokenDisplay: React.FC<IPriceBuyTokenDisplay> = ({
                 <Input
                     id="buy-amount"
                     value={buyAmount}
-                    className="h-16 rounded-md text-3xl cursor-not-allowed"
+                    className="h-12 rounded-md text-lg cursor-not-allowed"
                     type="text"
                     inputMode="decimal"
                     pattern="[0-9]*[.]?[0-9]*"
