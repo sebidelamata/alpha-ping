@@ -219,7 +219,9 @@ const PriceChart:React.FC<IPriceChart> = ({
 
     } if(
         baseCurrencyUSD === true && 
-        historicDataSellTokenBase !== null
+        historicDataSellTokenBase !== null &&
+        historicDataSellTokenBase.length > 0
+
     ){
         const percentChange = historicDataSellTokenBase.length > 1 ?
             ((historicDataSellTokenBase[historicDataSellTokenBase.length - 1].price - historicDataSellTokenBase[0].price) / historicDataSellTokenBase[0].price) * 100

@@ -49,10 +49,6 @@ const useGetPriceChartData = (
         computeSellTokenBaseData();
     }, [historicSellDataUSD, historicBuyDataUSD]);
 
-    // logic to fetch and set chart data based on the parameters
-    // This is a placeholder for actual data fetching logic.
-    // You would typically use an API call here to get the data.
-
     return { 
         historicBuyDataUSD,
         historicDataSellTokenBase
