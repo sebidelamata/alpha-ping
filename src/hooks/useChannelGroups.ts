@@ -5,6 +5,7 @@ const useChannelGroups = () => {
 
    // user channels zipped with metadata
     const { userChannelsWithMetadata } = useUserChannelsWithMetadata()
+    console.log('userChannelsWithMetadata', userChannelsWithMetadata)
 
     // memoize our channel groups
     const spotChannels = useMemo(() =>
