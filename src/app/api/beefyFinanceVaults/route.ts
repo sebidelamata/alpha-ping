@@ -6,7 +6,7 @@ export async function GET() {
       `https://api.beefy.finance/vaults/`,
       {
         headers: {
-        'Accepts': 'application/json',
+        'Accepts': '*/*',
         },
       }
     );

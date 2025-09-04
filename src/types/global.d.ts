@@ -394,4 +394,53 @@ type Metric = 'none' | 'price' | 'mcap' | 'volume';
 
 }
 
+// Beefy Finance vault interface
+type BeefyVault = {
+  id: string;
+  name: string;
+  type: string;
+  token: string;
+  tokenAddress: string;
+  tokenDecimals: number;
+  tokenProviderId: string;
+  earnedToken: string;
+  earnedTokenAddress: string;
+  earnContractAddress: string;
+  oracle: string;
+  oracleId: string;
+  status: 'active' | 'eol';
+  createdAt: number;
+  updatedAt?: number;
 
+  // Retirement fields
+  retireReason?: string;
+  retiredAt?: number;
+
+  platformId: string;
+  assets: string[];
+  risks: string[];
+  strategyTypeId: string;
+
+  // Optional URLs
+  buyTokenUrl?: string;
+  addLiquidityUrl?: string;
+  removeLiquidityUrl?: string;
+
+  network: string;
+  zaps?: {
+    providerId?: string; // e.g. "beefy" | "1inch" | "paraswap" | "cow"
+    url?: string;
+    [key: string]: unknown;
+  }; 
+  isGovVault: boolean;
+  chain: string;
+  strategy: string;
+
+  // Dynamic state fields
+  pricePerFullShare: string;
+  lastHarvest: number;
+
+  // Additional optional fields
+  migrationIds?: string[];
+  pointStructureIds?: string[];
+};

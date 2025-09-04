@@ -19,7 +19,7 @@ const useUserChannelsWithMetadata = () => {
           metadata: tokenMetaData[i] || defaultTokenMetadata,
         }));
       }
-      }, [userChannels, tokenMetaData, tokenMetadataLoading])
+    }, [userChannels, tokenMetaData, tokenMetadataLoading])
 
     return { userChannelsWithMetadata }
 }

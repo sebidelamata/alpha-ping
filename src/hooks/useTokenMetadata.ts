@@ -10,6 +10,7 @@ import useUserChannels from "./useUserChannels";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { defaultTokenMetadata } from "src/constants/defaultTokenMetadata";
 import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext";
+import useBeefyVaults from "./useBeefyVaults";
 
 const useTokenMetadata = () => {
     const { signer } = useEtherProviderContext()
@@ -18,6 +19,7 @@ const useTokenMetadata = () => {
         setTokenMetadataLoading 
     } = useTokenMetadataContext()
     const { userChannels } = useUserChannels()
+    const { isBeefyToken } = useBeefyVaults()
 
     // here we will grab metadata for each channel with a promise.all
     useEffect(() => {
@@ -98,7 +100,15 @@ const useTokenMetadata = () => {
 
       // here is where we run through the possible scenarios to fetch the token metadata
       const fetchTokenMetadata = async (tokenAddress:string) => {
-        // first we will try to get token metatadata from coinmarketcap
+        // first we will check if the token is a beefy finance vault
+        if (isBeefyToken(tokenAddress)) {
+                console.log('Beefy Finance token detected:', tokenAddress);
+                return {
+                    ...defaultTokenMetadata,
+                    protocol: 'beefy',
+                };
+            }
+        // then we will try to get token metatadata from coinmarketcap
         const tokenMetaData:tokenMetadata = await fetchTokenMetadataCMC(tokenAddress);
         // if we got metadata back, we will set it
         if (tokenMetaData) {
@@ -191,7 +201,7 @@ const useTokenMetadata = () => {
           return Promise.resolve(defaultTokenMetadata);
         })
       );
-      console.log('All user channels metadata fetched:', allUserChannelsMetadata);
+      
       setTokenMetaData(allUserChannelsMetadata)
       setTokenMetadataLoading(false);
       return allUserChannelsMetadata
@@ -209,7 +219,8 @@ const useTokenMetadata = () => {
     userChannels, 
     signer, 
     setTokenMetadataLoading, 
-    setTokenMetaData
+    setTokenMetaData,
+    isBeefyToken,
   ])
 }
 
