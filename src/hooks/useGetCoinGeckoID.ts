@@ -1,5 +1,6 @@
 import coinGeckoIdMap from '../constants/coinGeckoIDMap.json';
 import { useChannelProviderContext } from 'src/contexts/ChannelContext';
+import { useMemo } from 'react';
 
 const useGetCoinGeckoID = (optionalAddress:string="") => {
 
@@ -25,7 +26,7 @@ const useGetCoinGeckoID = (optionalAddress:string="") => {
 
     const coinGeckoId = coinGeckoMetadata.length > 0 ? coinGeckoMetadata[0].id : null;
 
-    return { coinGeckoId }
+    return useMemo(() => ({ coinGeckoId }), [coinGeckoId]);
 }
 
 export default useGetCoinGeckoID;

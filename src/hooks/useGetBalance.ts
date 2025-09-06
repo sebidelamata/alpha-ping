@@ -1,6 +1,7 @@
 import { 
     useState,
-    useEffect 
+    useEffect,
+    useMemo 
 } from "react";
 import useCurrentChannelERC20Contract from "./useCurrentChannelERC20Contract";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
@@ -32,7 +33,7 @@ const useGetBalance = ( user: string = "", tokenAddress: string = "", nativeToke
         getUserBalance()
       }, [token, signer, user, nativeToken, provider])
 
-    return { userBalance }
+    return useMemo(() => ({ userBalance }), [userBalance])
 }
 
 export default useGetBalance;

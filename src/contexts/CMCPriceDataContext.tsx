@@ -4,6 +4,7 @@ import React, {
   createContext,
   useContext,
   useState,
+  useMemo,
   type ReactNode
 } from 'react';
 
@@ -36,11 +37,13 @@ export const CMCPriceDataProvider = ({ children }: { children: ReactNode }) => {
                 volume_change_24h: ""
     } as cmcPriceData);
 
+    const contextValues = useMemo(() => ({
+        cmcFetch,
+        setCmcFetch
+    }), [cmcFetch]);
+
   return (
-    <CMCPriceDataContext.Provider value={{
-      cmcFetch,
-      setCmcFetch
-      }}>
+    <CMCPriceDataContext.Provider value={contextValues}>
       {children}
     </CMCPriceDataContext.Provider>
   );

@@ -1,6 +1,7 @@
 import {
     useState,
-    useEffect
+    useEffect,
+    useMemo
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useMessagesProviderContext } from "src/contexts/MessagesContext";
@@ -32,7 +33,9 @@ const useGetMessageChannelWeights = (
         authorCurrentTokenBalances
     ])
 
-    return { channelWeights }
+    return useMemo(() => ({
+        channelWeights
+    }), [channelWeights]);
 }
 
 export default useGetMessageChannelWeights;

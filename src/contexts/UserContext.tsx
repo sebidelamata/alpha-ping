@@ -5,7 +5,8 @@ import React, {
     createContext,
     useContext,
     useState,
-    useEffect
+    useEffect,
+    useMemo
 } from "react"
 import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 import { useEtherProviderContext } from "./ProviderContext"
@@ -230,35 +231,54 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         userAttributesError,
         userAttributesLoading
     ])
+
+    const contextValue = useMemo(() => ({ 
+        account,
+        owner,
+        setOwner,
+        mod,
+        setMod,
+        currentChannelMod,
+        banned,
+        txMessageBan, 
+        setTxMessageBan,
+        blacklisted,
+        txMessageBlacklist, 
+        setTxMessageBlacklist,
+        txMessageFollow,
+        setTxMessageFollow,
+        txMessageBlock,
+        setTxMessageBlock,
+        author,
+        userUsername,
+        setUserUsername,
+        userProfilePic,
+        setUserProfilePic,
+        followFilter,
+        setFollowFilter,
+        followingList,
+        blockedList
+    }), [
+        account,
+        owner,
+        mod,
+        currentChannelMod,
+        banned,
+        txMessageBan,
+        txMessageBlacklist,
+        txMessageFollow,
+        txMessageBlock,
+        author,
+        userUsername,
+        userProfilePic,
+        followFilter,
+        followingList,
+        blockedList,
+        blacklisted
+    ])
     
     return (
-        <UserContext.Provider value={{ 
-            account,
-            owner,
-            setOwner,
-            mod,
-            setMod,
-            currentChannelMod,
-            banned,
-            txMessageBan, 
-            setTxMessageBan,
-            blacklisted,
-            txMessageBlacklist, 
-            setTxMessageBlacklist,
-            txMessageFollow,
-            setTxMessageFollow,
-            txMessageBlock,
-            setTxMessageBlock,
-            author,
-            userUsername,
-            setUserUsername,
-            userProfilePic,
-            setUserProfilePic,
-            followFilter,
-            setFollowFilter,
-            followingList,
-            blockedList
-        }}>
+        <UserContext.Provider value={contextValue}>
             {children}
         </UserContext.Provider>
   )

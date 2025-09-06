@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useCurrentChannelERC20Contract from "./useCurrentChannelERC20Contract";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 
@@ -30,7 +30,7 @@ const useGetTokenDecimals = () => {
         }
       }, [token, currentChannel])
 
-      return { tokenDecimals }
+      return useMemo(() => ({ tokenDecimals }), [tokenDecimals]);
 
 }
 

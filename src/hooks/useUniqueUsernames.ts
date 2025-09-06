@@ -1,6 +1,7 @@
 import { 
     useState, 
-    useEffect 
+    useEffect,
+    useMemo 
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
@@ -49,11 +50,11 @@ const useUniqueUsernames = (uniqueProfiles: Set<string>) => {
         fetchUniqueUsernames();
     }, [alphaPING, currentChannel, uniqueProfiles]);
 
-    return {
+      return useMemo(() => ({ 
         usernameArray,
         usernameArrayLoading,
         usernameError
-    };
+    }), [usernameArray, usernameArrayLoading, usernameError]);
 };
 
 export default useUniqueUsernames;

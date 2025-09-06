@@ -21,7 +21,9 @@ const useUserChannelsWithMetadata = () => {
       }
     }, [userChannels, tokenMetaData, tokenMetadataLoading])
 
-    return { userChannelsWithMetadata }
+    return useMemo(() => ({
+        userChannelsWithMetadata
+    }), [userChannelsWithMetadata]);
 }
 
 export default useUserChannelsWithMetadata

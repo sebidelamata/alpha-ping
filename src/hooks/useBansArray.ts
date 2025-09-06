@@ -1,6 +1,7 @@
 import { 
     useState, 
-    useEffect 
+    useEffect,
+    useMemo 
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
@@ -49,11 +50,11 @@ const useBansArray = (uniqueProfiles: Set<string>) => {
         fetchUserBans();
     }, [alphaPING, currentChannel, uniqueProfiles]);
 
-    return {
+    return useMemo(() => ({
         bansArray,
         bansArrayLoading,
         bansError
-    };
+    }), [bansArray, bansArrayLoading, bansError]);
 };
 
 export default useBansArray;

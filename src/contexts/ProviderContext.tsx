@@ -3,6 +3,7 @@
 import React, { 
     useEffect, 
     useState,
+    useMemo,
     createContext,
     useContext,
     type ReactNode 
@@ -135,18 +136,28 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     loadBlockchainData();
   }, [isConnected, walletProvider]);
 
+  const contextValue = useMemo(() => ({
+    provider,
+    chainId,
+    signer,
+    alphaPING,
+    channels,
+    setChannels,
+    hasJoined,
+    setHasJoined,
+    isInitialized
+  }), [
+    provider,
+    chainId,
+    signer,
+    alphaPING,
+    channels,
+    hasJoined,
+    isInitialized
+  ]);
+
   return (
-    <ProviderContext.Provider value={{
-      provider,
-      chainId,
-      signer,
-      alphaPING,
-      channels,
-      setChannels,
-      hasJoined,
-      setHasJoined,
-      isInitialized
-    }}>
+    <ProviderContext.Provider value={contextValue}>
       {children}
     </ProviderContext.Provider>
   );

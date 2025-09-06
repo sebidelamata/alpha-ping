@@ -5,7 +5,8 @@ import React, {
     createContext,
     useContext,
     useState,
-    useEffect
+    useEffect,
+    useMemo
 } from "react"
 import { useSocketProviderContext } from "./SocketContext"
 import { ethers } from 'ethers'
@@ -133,13 +134,15 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     
         fetchChannelAndBuildMap();
     }, [messages, alphaPING, signer]);
+
+    const contextValue = useMemo(() => ({
+        messages,
+        setMessages,
+        authorCurrentTokenBalances
+    }), [messages, authorCurrentTokenBalances]);
     
     return (
-        <MessagesContext.Provider value={{ 
-            messages,
-            setMessages,
-            authorCurrentTokenBalances
-        }}>
+        <MessagesContext.Provider value={contextValue}>
             {children}
         </MessagesContext.Provider>
   )

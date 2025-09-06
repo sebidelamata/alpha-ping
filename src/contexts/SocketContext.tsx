@@ -5,7 +5,8 @@ import React, {
     createContext,
     useContext,
     useState,
-    useEffect
+    useEffect,
+    useMemo
 } from "react"
 import DefaultEventsMap, 
 { 
@@ -38,10 +39,14 @@ const SocketProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         setSocket((webSocket))
     }, [])
 
+    const memoizedSocket = useMemo(() => socket, [socket]);
+
+    if(memoizedSocket === null){
+        return null
+    }
+
     return (
-        <SocketContext.Provider value={{ 
-            socket
-        }}>
+        <SocketContext.Provider value={memoizedSocket ? { socket: memoizedSocket } : { socket: null }}>
             {children}
         </SocketContext.Provider>
   )

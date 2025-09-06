@@ -1,6 +1,7 @@
 import {
     useState,
     useEffect,
+    useMemo
 } from "react";
 import averageScores from "src/lib/averageScores";
 
@@ -16,7 +17,9 @@ const useGetCurrentChannelMessagesScore = (channelWeights: number[], channelScor
         getCurrentChannelMessagesScore()
     }, [channelWeights, channelScores])
 
-    return { currentChannelMessagesScore }
+    return useMemo(() => ({
+        currentChannelMessagesScore
+    }), [currentChannelMessagesScore]);
 
 }
 

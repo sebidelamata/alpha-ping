@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { formatUnits } from "ethers";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import qs from 'qs';
@@ -101,13 +101,19 @@ const useGetPriceData = (
         expired
     ]);
 
-    return {
+    return useMemo(() => ({
         buyTokenTax,
         sellTokenTax,
         zeroExFee,
         route,
         gasEstimate
-    }
+    }), [
+        buyTokenTax,
+        sellTokenTax,
+        zeroExFee,
+        route,
+        gasEstimate
+    ]);
 
 }
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
@@ -25,7 +25,7 @@ const useGetTokenSymbol = () => {
         getTokenSymbol()
     }, [currentChannel, signer])
 
-    return {tokenSymbol}
+    return useMemo(() => ({tokenSymbol}), [tokenSymbol]);
 
 }
 

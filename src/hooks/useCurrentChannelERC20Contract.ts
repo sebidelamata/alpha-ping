@@ -1,6 +1,7 @@
 import { 
     useState,
-    useEffect 
+    useEffect,
+    useMemo
 } from "react";
 import { ethers } from 'ethers'
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
@@ -39,7 +40,7 @@ const useCurrentChannelERC20Contract = (tokenAddress: string = "", nativeToken: 
         }
     }, [currentChannel, signer, setToken, tokenAddress, nativeToken])
 
-    return { token }
+    return useMemo(() => ({ token }), [token]);
 }
 
 export default useCurrentChannelERC20Contract;

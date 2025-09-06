@@ -4,6 +4,7 @@ import React, {
   createContext,
   useContext,
   useState,
+  useMemo,
   type ReactNode
 } from 'react';
 
@@ -29,13 +30,15 @@ export const TokenMetadataProvider = ({ children }: { children: ReactNode }) => 
   // token metadata loading state
     const [tokenMetadataLoading, setTokenMetadataLoading] = useState<boolean>(false)
 
-  return (
-    <TokenMetadataContext.Provider value={{
-      tokenMetaData, 
+    const contextValue = useMemo(() => ({
+      tokenMetaData,
       setTokenMetaData,
       tokenMetadataLoading,
-      setTokenMetadataLoading 
-      }}>
+      setTokenMetadataLoading
+    }), [tokenMetaData, tokenMetadataLoading]);
+
+  return (
+    <TokenMetadataContext.Provider value={contextValue}>
       {children}
     </TokenMetadataContext.Provider>
   );

@@ -4,6 +4,7 @@ import React, {
   createContext,
   useContext,
   useState,
+  useMemo,
   type ReactNode
 } from 'react';
 
@@ -27,11 +28,13 @@ export const AaveDetailsProvider = ({ children }: { children: ReactNode }) => {
     // we need to find the user account details for aave if the user has any aave tokens
     const [aaveAccount, setAaveAccount] = useState<null | AaveUserAccount>(null)
 
-  return (
-    <AaveDetailsContext.Provider value={{
+    const contextValue = useMemo(() => ({
         aaveAccount,
         setAaveAccount
-    }}>
+    }), [aaveAccount]);
+
+  return (
+    <AaveDetailsContext.Provider value={contextValue}>
       {children}
     </AaveDetailsContext.Provider>
   );
