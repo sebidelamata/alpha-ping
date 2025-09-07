@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import { formatUnits } from "ethers";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import qs from 'qs';
-import useCountdown from "./useCountdown";
 
 interface Fills{
     from: string;
@@ -33,8 +32,6 @@ const useGetPriceData = (
     const [route, setRoute] = useState<string[]>([])
     // gas estimate
     const [gasEstimate, setGasEstimate] = useState<string | null>(null);
-
-    const { expired } = useCountdown(30)
 
     // Fetch price data and set the buyAmount whenever the sellAmount changes
     useEffect(() => {
@@ -85,6 +82,9 @@ const useGetPriceData = (
 
         if (sellAmount !== "") {
         main();
+        const intervalId = setInterval(main, 60000);
+    
+        return () => clearInterval(intervalId);
         }
     }, [
         setBuyAmount,
@@ -98,7 +98,6 @@ const useGetPriceData = (
         buyTokenDecimals,
         signer,
         slippage,
-        expired
     ]);
 
     return useMemo(() => ({

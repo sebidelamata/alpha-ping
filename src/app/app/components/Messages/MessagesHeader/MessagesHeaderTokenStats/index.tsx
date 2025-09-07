@@ -30,7 +30,6 @@ import MessagesHeaderTokenLinks from "./MessagesHeaderTokenLinks";
 import ToggleFollowFilter from "../../../Profile/ToggleFollowFilter";
 import useGetBalance from "src/hooks/useGetBalance";
 import useGetTokenDecimals from "src/hooks/useGetTokenDecimals";
-import useCountdown from "src/hooks/useCountdown";
 
 type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
@@ -60,9 +59,6 @@ const MessagesHeaderTokenStats = () => {
         "60d":  "percent_change_60d"
     } as const satisfies Record<TimeRange, keyof cmcPriceData>;
 
-    // we are going to use this timer to refetch a new price every 60 seconds
-    const { expired } = useCountdown(60);
-
     // get latest quote in USD
     const [loading, setLoading] = useState<boolean>(false);
     const [cmcError, setCmcError] = useState<string | null>(null);
@@ -87,7 +83,7 @@ const MessagesHeaderTokenStats = () => {
         const params = {
             slug: selectedChannelMetadata?.slug,
         }
-        async function main() {
+        const fetchTokenStats = async () => {
             try{
                 setLoading(true);
                 setCmcError(null);
@@ -167,8 +163,14 @@ const MessagesHeaderTokenStats = () => {
                 setLoading(false);
             }
         }
-        main();
-    },[selectedChannelMetadata, expired, setCmcFetch]);
+        // initial fetch
+        fetchTokenStats();
+        // refetch every 60 seconds
+        const interval = setInterval(() => {
+            fetchTokenStats();
+        }, 60000);
+        return () => clearInterval(interval);
+    },[selectedChannelMetadata, setCmcFetch]);
     // Separate useEffect for error logging to avoid dependency issues
     useEffect(() => {
         if (cmcError) {

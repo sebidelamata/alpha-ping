@@ -7,7 +7,6 @@ import {
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
 import { useAaveDetailsContext } from "src/contexts/AaveDetailsContext";
-import useCountdown from "./useCountdown";
 
 const useUserAaveDetails = () => {
 
@@ -16,14 +15,11 @@ const useUserAaveDetails = () => {
     const {
         setAaveAccount 
     } = useAaveDetailsContext()
-
-    // we are going to use this timer to refetch a new aave detail every 60 seconds
-    const { expired } = useCountdown(60);
         
     // we need to find the user account details for aave if the user has any aave tokens
     useEffect(() => {
         const fetchAaveDetails = async (account: string) => {
-        const aaveLendingPool = new ethers.Contract(
+            const aaveLendingPool = new ethers.Contract(
             // aave lending pool address
             "0x794a61358d6845594f94dc1db02a252b5b4814ad",
             AaveL2LendingPool.abi,
@@ -62,11 +58,15 @@ const useUserAaveDetails = () => {
     
         // only run this function if the user is part of an aave channel
         fetchAaveDetails(account)
+        // refetch every minute
+        const interval = setInterval(() => {
+            fetchAaveDetails(account)
+        }, 60000);
+        return () => clearInterval(interval);
         }, [
         account, 
         signer, 
         setAaveAccount,
-        expired
     ])
 
 }

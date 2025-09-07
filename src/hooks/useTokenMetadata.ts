@@ -5,7 +5,7 @@ import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPI
 import { defaultTokenMetadata } from "src/constants/defaultTokenMetadata";
 import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext";
 import fetchTokenMetadata from "src/lib/fetchTokenMetadata";
-import useBeefyVaults from "./useBeefyVaults";
+//import useBeefyVaults from "./useBeefyVaults";
 
 const useTokenMetadata = () => {
     const { signer } = useEtherProviderContext()
