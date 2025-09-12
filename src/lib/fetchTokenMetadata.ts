@@ -3,21 +3,22 @@ import { defaultTokenMetadata } from "src/constants/defaultTokenMetadata";
 import fetchTokenMetadataCMC from "src/lib/fetchTokenMetadataCMC";
 import fetchL1Address from "src/lib/fetchL1Address";
 import fetchUnderlyingTokenAddress from "src/lib/fetchUnderlyingTokenAddress";
+import { isBeefyToken } from './isBeefyToken';
+import { BeefyVault } from 'src/types/global';
 
 // here is where we run through the possible scenarios to fetch the token metadata
-const fetchTokenMetadata = async (tokenAddress:string, signer: Signer) => {
+const fetchTokenMetadata = async (tokenAddress:string, signer: Signer, beefyVaults: BeefyVault[]) => {
     if(!signer){
         console.error('No signer available to fetch token metadata for token:', tokenAddress);
         return defaultTokenMetadata;
     }
     // // first we will check if the token is a beefy finance vault
-    // if (isBeefyToken(tokenAddress)) {
-    //         console.log('Beefy Finance token detected:', tokenAddress);
-    //         return {
-    //             ...defaultTokenMetadata,
-    //             protocol: 'beefy',
-    //         };
-    //     }
+    if (isBeefyToken(tokenAddress, beefyVaults)) {
+            console.log('Beefy Finance token detected:', tokenAddress);
+            const outputMetadata = defaultTokenMetadata
+            outputMetadata.protocol = "beefy"
+            return outputMetadata
+        }
     // then we will try to get token metatadata from coinmarketcap
     const tokenMetaData:tokenMetadata = await fetchTokenMetadataCMC(tokenAddress);
     // if we got metadata back, we will set it

@@ -1,5 +1,9 @@
 // hooks/useBeefyVaults.ts
-import { useState, useEffect } from 'react';
+import { 
+  useState, 
+  useEffect,
+  useMemo 
+} from 'react';
 import { BeefyVault } from 'src/types/global';
 import useUserChannels from './useUserChannels';
 
@@ -15,9 +19,9 @@ const useBeefyVaults = () => {
       try {
         const response = await fetch('/api/beefyFinanceVaults');
         const vaultsArray = await response.json();
-        // Filter to Arbitrum only to reduce size
+        // Filter to Arbitrum only to reduce size, also only active vaults
         const arbitrumVaults = vaultsArray.filter((vault: BeefyVault) => 
-          vault.chain === 'arbitrum'
+          vault.chain === 'arbitrum' && vault.status === 'active'
         );
         setBeefyVaults(arbitrumVaults);
       } catch (err) {
@@ -35,19 +39,13 @@ const useBeefyVaults = () => {
     }
   }, [userChannels]);
 
-  const isBeefyToken = (tokenAddress: string) => {
-    if(!tokenAddress || beefyVaults.length === 0) return false;
-    return beefyVaults.some(vault => 
-      vault.tokenAddress?.toLowerCase() === tokenAddress.toLowerCase()
-    );
-  };
+  const context = useMemo(() => ({
+    beefyVaults,
+    loading,
+    error,
+  }), [beefyVaults, loading, error]);
 
-  return { 
-    beefyVaults, 
-    loading, 
-    error, 
-    isBeefyToken 
-    };
+  return context;
 };
 
 export default useBeefyVaults;

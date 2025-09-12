@@ -5,7 +5,7 @@ import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPI
 import { defaultTokenMetadata } from "src/constants/defaultTokenMetadata";
 import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext";
 import fetchTokenMetadata from "src/lib/fetchTokenMetadata";
-//import useBeefyVaults from "./useBeefyVaults";
+import useBeefyVaults from "./useBeefyVaults";
 
 const useTokenMetadata = () => {
     const { signer } = useEtherProviderContext()
@@ -15,8 +15,9 @@ const useTokenMetadata = () => {
     } = useTokenMetadataContext()
     const { userChannels } = useUserChannels()
 
-    // const { isBeefyToken, beefyVaults } = useBeefyVaults()
-    // console.log('beefyVaults', beefyVaults)
+    // grab our beefy vaults to check against
+    const { beefyVaults } = useBeefyVaults()
+    console.log('beefyVaults', beefyVaults)
 
     // here we will grab metadata for each channel with a promise.all
     useEffect(() => {
@@ -33,8 +34,13 @@ const useTokenMetadata = () => {
                             console.warn('ERC721 token type detected, skipping metadata fetch for channel:', channel);
                             return defaultTokenMetadata;
                         }
+                        // fetch metadata
                         if (channel.tokenAddress) {
-                            return await fetchTokenMetadata(channel.tokenAddress, signer);
+                            return await fetchTokenMetadata(
+                                channel.tokenAddress, 
+                                signer, 
+                                beefyVaults
+                            );
                         }
                         console.warn('No token address found for channel:', channel);
                         return defaultTokenMetadata;
