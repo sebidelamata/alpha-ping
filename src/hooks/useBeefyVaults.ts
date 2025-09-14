@@ -19,11 +19,11 @@ const useBeefyVaults = () => {
       try {
         const response = await fetch('/api/beefyFinanceVaults');
         const vaultsArray = await response.json();
-        // Filter to Arbitrum only to reduce size, also only active vaults
-        const arbitrumVaults = vaultsArray.filter((vault: BeefyVault) => 
-          vault.chain === 'arbitrum' && vault.status === 'active'
+        // Filter to Arbitrum only to reduce size, also inactive vaults for legacy channels
+        const arbitrumVaults = await vaultsArray.filter((vault: BeefyVault) => 
+          vault.chain === 'arbitrum'
         );
-        setBeefyVaults(arbitrumVaults);
+        setBeefyVaults(await arbitrumVaults);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {

@@ -17,12 +17,17 @@ const useTokenMetadata = () => {
 
     // grab our beefy vaults to check against
     const { beefyVaults } = useBeefyVaults()
-    console.log('beefyVaults', beefyVaults)
 
     // here we will grab metadata for each channel with a promise.all
     useEffect(() => {
         const fetchAllUserChannelsMetadata = async () => {
-            if (!userChannels || userChannels.length === 0 || !signer) return;
+            if (
+                !userChannels || 
+                userChannels.length === 0 || 
+                !signer || 
+                !beefyVaults || 
+                beefyVaults.length === 0
+            ) return;
             
             setTokenMetadataLoading(true);
             
@@ -46,7 +51,6 @@ const useTokenMetadata = () => {
                         return defaultTokenMetadata;
                     })
                 );
-                
                 setTokenMetaData(allUserChannelsMetadata);
                 return allUserChannelsMetadata;
             } catch (error) {
@@ -61,7 +65,8 @@ const useTokenMetadata = () => {
         userChannels, 
         signer, 
         setTokenMetaData, 
-        setTokenMetadataLoading
+        setTokenMetadataLoading,
+        beefyVaults
     ]);
 
 }

@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/components/ui/skeleton";
 import SpotChannelGroup from "./SpotChannelGroup";
 import AaveChannelGroup from "./AaveChannelGroup";
 import NFTChannelGroup from "./NFTChannelGroup";
+import BeefyChannelGroup from "./BeefyChannelGroup";
 import useSetInitialCurrentChannel from "src/hooks/useSetInitialCurrentChannel";
 import useTokenMetadata from "src/hooks/useTokenMetadata";
 import useChannelGroups from "src/hooks/useChannelGroups";
@@ -37,7 +38,8 @@ const Channels:React.FC = () => {
   const {
     spotChannels,
     aaveChannels,
-    nftChannels
+    nftChannels,
+    beefyChannels
   } = useChannelGroups()
 
   return (
@@ -74,6 +76,10 @@ const Channels:React.FC = () => {
                           {
                             aaveChannels.length > 0 &&
                             <AaveChannelGroup channels={aaveChannels} />
+                          }
+                          {
+                            beefyChannels.length > 0 &&
+                            <BeefyChannelGroup channels={beefyChannels} />
                           }
                           {
                             nftChannels.length > 0 &&

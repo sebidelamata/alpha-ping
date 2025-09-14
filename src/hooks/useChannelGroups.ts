@@ -11,7 +11,7 @@ const useChannelGroups = () => {
     const spotChannels = useMemo(() =>
         userChannelsWithMetadata.filter(({ channel, metadata }) =>
             channel.tokenType.toLowerCase() !== 'erc721' &&
-            (!metadata?.protocol || metadata.protocol.toLowerCase() !== 'aave')
+            !metadata?.protocol
         ), [userChannelsWithMetadata]
     );
     
@@ -28,13 +28,21 @@ const useChannelGroups = () => {
         ), [userChannelsWithMetadata]
     );
 
+    const beefyChannels = useMemo(() =>
+        userChannelsWithMetadata.filter(({ channel, metadata }) =>
+            channel.tokenType.toLowerCase() !== 'erc721' &&
+            metadata?.protocol?.toLowerCase() === 'beefy'
+        ), [userChannelsWithMetadata]
+    );
+
     const result = useMemo(() => {
         return {
             spotChannels,
             aaveChannels,
-            nftChannels
+            nftChannels,
+            beefyChannels
         };
-    }, [spotChannels, aaveChannels, nftChannels]);
+    }, [spotChannels, aaveChannels, nftChannels, beefyChannels]);
 
 return result;
 }

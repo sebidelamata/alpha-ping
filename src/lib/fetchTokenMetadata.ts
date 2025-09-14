@@ -8,17 +8,21 @@ import { BeefyVault } from 'src/types/global';
 
 // here is where we run through the possible scenarios to fetch the token metadata
 const fetchTokenMetadata = async (tokenAddress:string, signer: Signer, beefyVaults: BeefyVault[]) => {
+    // // first we will check if the token is a beefy finance vault
+    console.log('Checking if token is a Beefy vault:', tokenAddress);   
+    console.log('beefyVaults', beefyVaults);
+    console.log(isBeefyToken(tokenAddress, beefyVaults));
+    if (isBeefyToken(tokenAddress, beefyVaults) === true) {
+        console.log('Beefy Finance token detected:', tokenAddress);
+        return {
+            ...defaultTokenMetadata,
+            protocol: "beefy"
+        }
+    }
     if(!signer){
         console.error('No signer available to fetch token metadata for token:', tokenAddress);
         return defaultTokenMetadata;
     }
-    // // first we will check if the token is a beefy finance vault
-    if (isBeefyToken(tokenAddress, beefyVaults)) {
-            console.log('Beefy Finance token detected:', tokenAddress);
-            const outputMetadata = defaultTokenMetadata
-            outputMetadata.protocol = "beefy"
-            return outputMetadata
-        }
     // then we will try to get token metatadata from coinmarketcap
     const tokenMetaData:tokenMetadata = await fetchTokenMetadataCMC(tokenAddress);
     // if we got metadata back, we will set it
@@ -49,7 +53,6 @@ const fetchTokenMetadata = async (tokenAddress:string, signer: Signer, beefyVaul
             return l1TokenMetaData;
         }
     }
-
     // if we still dont have anything. maybe it's an aave token
     // we will try to fetch the underlying asset address
     let underlyingAsset: string | null = null;
@@ -66,11 +69,13 @@ const fetchTokenMetadata = async (tokenAddress:string, signer: Signer, beefyVaul
         const underlyingTokenMetaData:tokenMetadata = await fetchTokenMetadataCMC(underlyingAsset);
         // if we got metadata back, we will set it
         if (underlyingTokenMetaData) {
-            // we can also set the optional protocol field of the metadata object
-            underlyingTokenMetaData.protocol = "aave"
             // setTokenMetaData(underlyingTokenMetaData);
             console.log('Underlying Token metadata found for token:', tokenAddress, 'Metadata:', underlyingTokenMetaData);
-            return underlyingTokenMetaData;
+            // we can also set the optional protocol field of the metadata object
+            return {
+                ...underlyingTokenMetaData,
+                protocol: "aave"
+            };
         }
         // if we didn't get metata data back for the underlying asset
         // theres is a possibility that the underlying asset
