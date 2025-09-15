@@ -177,6 +177,15 @@ const MessagesHeaderTokenStats = () => {
             console.error('CMC API Error:', cmcError);
         }
     }, [cmcError]);
+
+    console.log("User balance raw:", userBalance);
+    console.log("Token decimals:", tokenDecimals);
+    console.log(userBalance ? humanReadableNumbers((Math.round(
+                                        parseFloat(
+                                            ethers.formatUnits(userBalance.toString(), tokenDecimals || 0)
+                                        ) * 1e8
+                                    ) / 1e8).toString()
+                                    ) : "null");
     
 
     return(
@@ -348,30 +357,17 @@ const MessagesHeaderTokenStats = () => {
                         </div>
                         <div className="current-token-amount-value">
                             {
-                                    `${
-                                    humanReadableNumbers((Math.round(
-                                        parseFloat(
-                                            ethers.formatUnits(userBalance.toString(), tokenDecimals || 0)
-                                        ) * 1e8
-                                    ) / 1e8).toString()
-                                    )
-                                } ${
-                                    selectedChannelMetadata?.symbol || 
-                                    currentChannel?.name || 
-                                    ''
-                                } 
-                                ($${
-                                    humanReadableNumbers(
-                                        (
-                                            Number(cmcFetch.tokenUSDPrice) * 
-                                            Number(Math.round(
-                                                parseFloat(
-                                                    ethers.formatUnits(userBalance.toString(), tokenDecimals || 0)
-                                                ) * 1e8
-                                            ) / 1e8)
-                                        ).toString()
-                                    )
-                                })`
+                                (() => {
+                                    const balanceFormatted = ethers.formatUnits(userBalance.toString(), tokenDecimals || 0);
+                                    const balanceNumber = Number(balanceFormatted);
+                                    const usdValue = Number(cmcFetch.tokenUSDPrice) * balanceNumber;
+                                    
+                                    return `${humanReadableNumbers(balanceFormatted)} ${
+                                        selectedChannelMetadata?.symbol || 
+                                        currentChannel?.name || 
+                                        ''
+                                    } ($${humanReadableNumbers(usdValue.toString())})`;
+                                })()
                             }
                         </div>
                     </div>

@@ -6,7 +6,12 @@ const humanReadableNumbers = (num: string): string => {
     return 'Invalid number';
   }
 
-  if (parsed >= 1e9) {
+  // real small get scientific notation
+  if (parsed === 0) {
+    return '0.00';
+  } else if (parsed > 0 && parsed < 0.005) {
+    return parsed.toExponential(2);
+  } else if (parsed >= 1e9) {
     return (parsed / 1e9).toFixed(2) + 'B';
   } else if (parsed >= 1e6) {
     return (parsed / 1e6).toFixed(2) + 'M';

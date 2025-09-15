@@ -18,9 +18,7 @@ const useBeefyLPsBreakdown = (userVaults:string[]) => {
       setLoading(true);
       try {
         const response = await fetch('/api/beefyLPBreakdown');
-        console.log('response', response);
         const LPsArray = await response.json();
-        console.log('LPsArray', LPsArray);
         // Filter to only the user's vaults
         const userLPsBreakdowns = Object.entries(LPsArray).filter(([tokenId]) => 
           userVaults.includes(tokenId)

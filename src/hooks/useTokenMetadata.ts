@@ -14,8 +14,7 @@ const useTokenMetadata = () => {
         setTokenMetadataLoading 
     } = useTokenMetadataContext()
     const { userChannels } = useUserChannels()
-    const { beefyVaults, beefyLPs } = useBeefyDetailsContext()
-    console.log('beefylps in useTokenMetadata', beefyLPs)
+    const { beefyVaults } = useBeefyDetailsContext()
 
 
     // here we will grab metadata for each channel with a promise.all
