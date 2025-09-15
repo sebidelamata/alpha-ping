@@ -17,7 +17,7 @@ const useBeefyLPsBreakdown = (userVaults:string[]) => {
     const fetchBeefyVaults = async () => {
       setLoading(true);
       try {
-        const response = await fetch('/api/beefyLPBreadown');
+        const response = await fetch('/api/beefyLPBreakdown');
         console.log('response', response);
         const LPsArray = await response.json();
         console.log('LPsArray', LPsArray);

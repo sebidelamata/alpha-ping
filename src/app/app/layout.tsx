@@ -22,6 +22,7 @@ import { Toaster } from "@/components/components/ui/toaster"
 import { TokenMetadataProvider } from "src/contexts/TokenMetaDataContext";
 import { CMCPriceDataProvider } from "src/contexts/CMCPriceDataContext";
 import { AaveDetailsProvider } from "src/contexts/AaveDetailsContext";
+import { BeefyDetailsProvider } from "src/contexts/BeefyDetailsContext";
 
 const Layout = ({ children }: { children: ReactNode }) => {
 
@@ -50,24 +51,26 @@ const Layout = ({ children }: { children: ReactNode }) => {
               <ChannelProvider>
                 <CMCPriceDataProvider>
                   <AaveDetailsProvider>
-                    <MessagesProvider>
-                      <UserProvider>
-                        <SidebarProvider>
-                            <Navbar/>
-                            <div className="top-24 flex w-full">
-                                <AppSidebar/>
-                                <main className={`flex-1 h-full w-full overflow-hidden`}>
-                                    {
-                                    isMobile === true &&
-                                    <SidebarTrigger className="fixed top-24"/>
-                                    }
-                                    {children}
-                                </main>
-                                <Toaster/>
-                            </div>
-                        </SidebarProvider>
-                      </UserProvider>
-                    </MessagesProvider>
+                    <BeefyDetailsProvider>
+                      <MessagesProvider>
+                        <UserProvider>
+                          <SidebarProvider>
+                              <Navbar/>
+                              <div className="top-24 flex w-full">
+                                  <AppSidebar/>
+                                  <main className={`flex-1 h-full w-full overflow-hidden`}>
+                                      {
+                                      isMobile === true &&
+                                      <SidebarTrigger className="fixed top-24"/>
+                                      }
+                                      {children}
+                                  </main>
+                                  <Toaster/>
+                              </div>
+                          </SidebarProvider>
+                        </UserProvider>
+                      </MessagesProvider>
+                    </BeefyDetailsProvider>
                   </AaveDetailsProvider>
                 </CMCPriceDataProvider>
               </ChannelProvider>
