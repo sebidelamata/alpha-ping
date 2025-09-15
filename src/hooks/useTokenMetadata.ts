@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import useUserChannels from "./useUserChannels";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
@@ -6,6 +6,7 @@ import { defaultTokenMetadata } from "src/constants/defaultTokenMetadata";
 import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext";
 import fetchTokenMetadata from "src/lib/fetchTokenMetadata";
 import useBeefyVaults from "./useBeefyVaults";
+import useBeefyLPsBreakdown from "./useBeefyLPsBreakdown";
 
 const useTokenMetadata = () => {
     const { signer } = useEtherProviderContext()
@@ -17,6 +18,12 @@ const useTokenMetadata = () => {
 
     // grab our beefy vaults to check against
     const { beefyVaults } = useBeefyVaults()
+    const vaultIds = useMemo(() => 
+        beefyVaults.map(vault => vault.id), 
+        [beefyVaults]
+    );
+    const { beefyLPs } = useBeefyLPsBreakdown(vaultIds)
+    console.log('beefyLPs', beefyLPs);
 
     // here we will grab metadata for each channel with a promise.all
     useEffect(() => {

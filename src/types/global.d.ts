@@ -444,3 +444,12 @@ type BeefyVault = {
   migrationIds?: string[];
   pointStructureIds?: string[];
 };
+
+type BeefyLPBreakdown = {
+  [tokenId: string]: {
+    price: number;
+    tokens: string[];
+    balances: string[];
+    totalSupply: string;
+  };
+}
