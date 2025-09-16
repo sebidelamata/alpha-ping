@@ -30,6 +30,7 @@ import MessagesHeaderTokenLinks from "./MessagesHeaderTokenLinks";
 import ToggleFollowFilter from "../../../Profile/ToggleFollowFilter";
 import useGetBalance from "src/hooks/useGetBalance";
 import useGetTokenDecimals from "src/hooks/useGetTokenDecimals";
+import useGetCurrentChannelBeefyLP from "src/hooks/useGetCurrentChannelBeefyLP";
 
 type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
@@ -44,6 +45,8 @@ const MessagesHeaderTokenStats = () => {
         setCmcFetch,
         cmcFetch, 
     } = useCMCPriceDataContext()
+    const { currentChannelBeefyLP } = useGetCurrentChannelBeefyLP()
+    console.log('Current Channel Beefy LP:', currentChannelBeefyLP !== null ? currentChannelBeefyLP[1].price : "null");
 
     const { userBalance } = useGetBalance()
     const { tokenDecimals } = useGetTokenDecimals()
@@ -177,16 +180,6 @@ const MessagesHeaderTokenStats = () => {
             console.error('CMC API Error:', cmcError);
         }
     }, [cmcError]);
-
-    console.log("User balance raw:", userBalance);
-    console.log("Token decimals:", tokenDecimals);
-    console.log(userBalance ? humanReadableNumbers((Math.round(
-                                        parseFloat(
-                                            ethers.formatUnits(userBalance.toString(), tokenDecimals || 0)
-                                        ) * 1e8
-                                    ) / 1e8).toString()
-                                    ) : "null");
-    
 
     return(
         <div className="flex flex-row flex-wrap w-full bg-primary text-secondary gap-4 items-center justify-start p-2">
@@ -357,6 +350,21 @@ const MessagesHeaderTokenStats = () => {
                         </div>
                         <div className="current-token-amount-value">
                             {
+                                (
+                                    currentChannelBeefyLP !== undefined && 
+                                    currentChannelBeefyLP !== null
+                                ) ?
+                                (() => {
+                                    const balanceFormatted = ethers.formatUnits(userBalance.toString(), tokenDecimals || 0);
+                                    const balanceNumber = Number(balanceFormatted);
+                                    const usdValue = Number(currentChannelBeefyLP[1].price) * balanceNumber;
+                                    
+                                    return `${humanReadableNumbers(balanceFormatted)} ${
+                                        selectedChannelMetadata?.symbol || 
+                                        currentChannel?.name || 
+                                        ''
+                                    } ($${humanReadableNumbers(usdValue.toString())})`;
+                                })() :
                                 (() => {
                                     const balanceFormatted = ethers.formatUnits(userBalance.toString(), tokenDecimals || 0);
                                     const balanceNumber = Number(balanceFormatted);

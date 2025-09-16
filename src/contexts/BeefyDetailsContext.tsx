@@ -28,6 +28,7 @@ export const BeefyDetailsProvider = ({ children }: { children: ReactNode }) => {
     // user beefy details
     // grab our beefy vaults to check against
     const { beefyVaults } = useBeefyVaults()
+    console.log("Beefy Vaults: ", beefyVaults)
     const vaultIds = useMemo(() => 
         beefyVaults.map(vault => vault.id), 
         [beefyVaults]
