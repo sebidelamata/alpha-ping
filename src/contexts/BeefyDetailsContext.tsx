@@ -28,16 +28,17 @@ export const BeefyDetailsProvider = ({ children }: { children: ReactNode }) => {
     // user beefy details
     // grab our beefy vaults to check against
     const { beefyVaults } = useBeefyVaults()
-    console.log("Beefy Vaults: ", beefyVaults)
-    const vaultIds = useMemo(() => 
-        beefyVaults.map(vault => vault.id), 
-        [beefyVaults]
+    
+    const vaultIds = useMemo(() => {
+        if (!beefyVaults?.length) return []
+        return beefyVaults.map(vault => vault.id)
+      }, [beefyVaults]
     );
     const { beefyLPs } = useBeefyLPsBreakdown(vaultIds)
 
     const contextValue = useMemo(() => ({
-        beefyVaults,
-        beefyLPs
+        beefyVaults: beefyVaults || [],
+        beefyLPs: beefyLPs || []
     }), [beefyVaults, beefyLPs]);
 
   return (

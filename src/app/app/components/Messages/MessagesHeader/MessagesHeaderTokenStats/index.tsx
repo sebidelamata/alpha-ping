@@ -1,9 +1,6 @@
 'use client';
 
-import React, {
-    useState,
-    useEffect
-} from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/components/ui/button";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { 
@@ -11,7 +8,6 @@ import {
     AvatarFallback, 
     AvatarImage 
 } from "@/components/components/ui/avatar";
-import qs from 'qs'
 import { Skeleton } from "@/components/components/ui/skeleton";
 import { 
     Select, 
@@ -25,12 +21,9 @@ import {
 import { Badge } from "@/components/components/ui/badge";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
-import { ethers } from "ethers";
 import MessagesHeaderTokenLinks from "./MessagesHeaderTokenLinks";
 import ToggleFollowFilter from "../../../Profile/ToggleFollowFilter";
 import useGetBalance from "src/hooks/useGetBalance";
-import useGetTokenDecimals from "src/hooks/useGetTokenDecimals";
-import useGetCurrentChannelBeefyLP from "src/hooks/useGetCurrentChannelBeefyLP";
 
 type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
@@ -41,15 +34,9 @@ const MessagesHeaderTokenStats = () => {
         selectedChannelMetadata,
         setChannelAction 
     } = useChannelProviderContext()
-    const {
-        setCmcFetch,
-        cmcFetch, 
-    } = useCMCPriceDataContext()
-    const { currentChannelBeefyLP } = useGetCurrentChannelBeefyLP()
-    console.log('Current Channel Beefy LP:', currentChannelBeefyLP !== null ? currentChannelBeefyLP[1].price : "null");
+    const { cmcFetch, cmcLoading } = useCMCPriceDataContext()
 
     const { userBalance } = useGetBalance()
-    const { tokenDecimals } = useGetTokenDecimals()
 
     // hold time range from selector
     const [timeRange, setTimeRange] = useState<TimeRange>("24h")
@@ -61,125 +48,6 @@ const MessagesHeaderTokenStats = () => {
         "30d":  "percent_change_30d",        // 30‑day pct change
         "60d":  "percent_change_60d"
     } as const satisfies Record<TimeRange, keyof cmcPriceData>;
-
-    // get latest quote in USD
-    const [loading, setLoading] = useState<boolean>(false);
-    const [cmcError, setCmcError] = useState<string | null>(null);
-    useEffect(() => {
-        if (!selectedChannelMetadata || !selectedChannelMetadata.slug) {
-            setLoading(true)
-            setCmcFetch({
-                twentyFourHourChange: "",
-                tokenUSDPrice: "",
-                marketCap: "",
-                percent_change_1h: "",
-                percent_change_7d: "",
-                percent_change_30d: "",
-                percent_change_60d: "",
-                volume_24h: "",
-                volume_change_24h: ""
-            } as cmcPriceData)
-            setCmcError("No token symbol available for price fetch")
-            setLoading(false)
-            return;
-        }
-        const params = {
-            slug: selectedChannelMetadata?.slug,
-        }
-        const fetchTokenStats = async () => {
-            try{
-                setLoading(true);
-                setCmcError(null);
-                const response = await fetch(`/api/CMCquoteLatest?${qs.stringify(params)}`);
-                // check response
-                if(!response.ok){
-                    setCmcError("Failed to fetch token price from CoinMarketCap");
-                    setCmcFetch({
-                        twentyFourHourChange: "",
-                        tokenUSDPrice: "",
-                        marketCap: "",
-                        percent_change_1h: "",
-                        percent_change_7d: "",
-                        percent_change_30d: "",
-                        percent_change_60d: "",
-                        volume_24h: "",
-                        volume_change_24h: ""
-                    } as cmcPriceData)
-                }
-                const data = await response.json();
-                // check data structure
-                if(
-                    !data?.data || typeof data.data !== 'object'
-                ){
-                    setCmcError('Invalid response structure from API')
-                    setCmcFetch({
-                        twentyFourHourChange: "",
-                        tokenUSDPrice: "",
-                        marketCap: "",
-                        percent_change_1h: "",
-                        percent_change_7d: "",
-                        percent_change_30d: "",
-                        percent_change_60d: "",
-                        volume_24h: "",
-                        volume_change_24h: ""
-                    } as cmcPriceData)
-                }
-                // Get the first token's data dynamically
-                const tokenDataArray = Object.values(data.data) as CMCQuoteUSD[];
-                if (!tokenDataArray?.length || !tokenDataArray?.[0].quote?.USD?.price) {
-                    setCmcError("USD price not found in response");
-                    setCmcFetch({
-                        twentyFourHourChange: "",
-                        tokenUSDPrice: "",
-                        marketCap: "",
-                        percent_change_1h: "",
-                        percent_change_7d: "",
-                        percent_change_30d: "",
-                        percent_change_60d: "",
-                        volume_24h: "",
-                        volume_change_24h: ""
-                    } as cmcPriceData)
-                }
-                const usdPrice = tokenDataArray[0].quote.USD.price;
-                const change24h = tokenDataArray[0].quote.USD.percent_change_24h
-                const percent_change_1h = tokenDataArray[0].quote.USD.percent_change_1h
-                const percent_change_7d = tokenDataArray[0].quote.USD.percent_change_7d
-                const percent_change_30d = tokenDataArray[0].quote.USD.percent_change_30d
-                const percent_change_60d = tokenDataArray[0].quote.USD.percent_change_60d
-                const volume_24h = tokenDataArray[0].quote.USD.volume_24h
-                const volume_change_24h = tokenDataArray[0].quote.USD.volume_change_24h
-                const marketCapValue = tokenDataArray[0].quote.USD.market_cap
-                setCmcFetch({
-                    twentyFourHourChange: change24h.toString(),
-                    tokenUSDPrice: usdPrice.toString(),
-                    marketCap: marketCapValue.toString(),
-                    percent_change_1h: percent_change_1h.toString(),
-                    percent_change_7d: percent_change_7d.toString(),
-                    percent_change_30d: percent_change_30d.toString(),
-                    percent_change_60d: percent_change_60d.toString(),
-                    volume_24h: volume_24h.toString(),
-                    volume_change_24h: volume_change_24h.toString()
-                })
-            } catch (error) {
-                setCmcError("An error occurred while fetching the token price: " + error);
-            }finally{
-                setLoading(false);
-            }
-        }
-        // initial fetch
-        fetchTokenStats();
-        // refetch every 60 seconds
-        const interval = setInterval(() => {
-            fetchTokenStats();
-        }, 60000);
-        return () => clearInterval(interval);
-    },[selectedChannelMetadata, setCmcFetch]);
-    // Separate useEffect for error logging to avoid dependency issues
-    useEffect(() => {
-        if (cmcError) {
-            console.error('CMC API Error:', cmcError);
-        }
-    }, [cmcError]);
 
     return(
         <div className="flex flex-row flex-wrap w-full bg-primary text-secondary gap-4 items-center justify-start p-2">
@@ -215,7 +83,7 @@ const MessagesHeaderTokenStats = () => {
                 cmcFetch.tokenUSDPrice !== "" &&
                 <div className="text-3xl text-secondary">
                     {
-                        loading === false ?
+                        cmcLoading === false ?
                         // if its is less than a dollar extend to 6 decimal places, 
                         // less thann a penny 10
                         `$${
@@ -239,7 +107,7 @@ const MessagesHeaderTokenStats = () => {
                     }
                 >
                     {
-                        loading === false ?
+                        cmcLoading === false ?
                             Number(cmcFetch[FIELD_BY_RANGE[timeRange]]) < 0 ? 
                             `▼ ${
                                 Number(cmcFetch[FIELD_BY_RANGE[timeRange]]).toFixed(2)
@@ -301,7 +169,7 @@ const MessagesHeaderTokenStats = () => {
                 cmcFetch.marketCap !== "" &&
                 <Badge variant={"secondary"}>
                     {
-                        loading === false ?
+                        cmcLoading === false ?
                         // if its is less than a dollar extend to 6 decimal places, 
                         // less thann a penny 10
                         `MCap $${
@@ -323,7 +191,7 @@ const MessagesHeaderTokenStats = () => {
                         `text-green-500`
                     }>
                     {
-                        loading === false ?
+                        cmcLoading === false ?
                         Number(cmcFetch.volume_change_24h) < 0 ?
                             `Vol (24h) $${
                                 humanReadableNumbers(cmcFetch.volume_24h)
@@ -349,7 +217,7 @@ const MessagesHeaderTokenStats = () => {
                             <strong>Current Balance:</strong>
                         </div>
                         <div className="current-token-amount-value">
-                            {
+                            {/* {
                                 (
                                     currentChannelBeefyLP !== undefined && 
                                     currentChannelBeefyLP !== null
@@ -376,7 +244,7 @@ const MessagesHeaderTokenStats = () => {
                                         ''
                                     } ($${humanReadableNumbers(usdValue.toString())})`;
                                 })()
-                            }
+                            } */}
                         </div>
                     </div>
                 </Badge>

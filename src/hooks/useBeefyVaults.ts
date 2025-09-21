@@ -19,7 +19,7 @@ const useBeefyVaults = () => {
       try {
         const response = await fetch('/api/beefyFinanceVaults');
         const vaultsArray = await response.json();
-        // Filter to Arbitrum only to reduce size, also inactive vaults for legacy channels
+        // Filter to Arbitrum only to reduce size, also inactive vaults for legacy channels vaults
         const arbitrumVaults = await vaultsArray.filter((vault: BeefyVault) => 
           vault.chain === 'arbitrum'
         );

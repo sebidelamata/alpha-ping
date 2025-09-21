@@ -7,30 +7,28 @@ const useGetCurrentChannelBeefyLP = () => {
     const { beefyLPs, beefyVaults } = useBeefyDetailsContext();
 
     const currentChannelBeefyLP = useMemo(() => {
-        if (
-            !currentChannel || 
-            !beefyLPs || 
-            beefyLPs.length === 0 ||
-            !beefyVaults || 
-            beefyVaults.length === 0 ||
-            !selectedChannelMetadata ||
-            selectedChannelMetadata.protocol !== 'beefy'
-        ) return null
+        // Early returns for safety
+        if (!currentChannel?.tokenAddress) return null;
+        if (!selectedChannelMetadata?.protocol) return null;
+        if (selectedChannelMetadata.protocol !== 'beefy') return null;
+        if (!beefyVaults?.length || !beefyLPs?.length) return null;
 
         const matchingVault = beefyVaults.find(
             (vault) => vault.earnedTokenAddress?.toLowerCase() === currentChannel.tokenAddress.toLowerCase()
         );
         
         if (!matchingVault) return null;
+
+        const searchKey = matchingVault.oracle !== 'tokens' ?
+            matchingVault.oracleId :
+            matchingVault.id;
         const matchingLP = beefyLPs.find(
-            matchingVault.oracle !== 'tokens' ?
-            (lpArray) => lpArray[0] === matchingVault.oracleId :
-            (lpArray) => lpArray[0] === matchingVault.id
+            (lpArray) => lpArray[0] === searchKey
         );
 
         return matchingLP || null;
     }, [
-        currentChannel, 
+        currentChannel?.tokenAddress, 
         beefyLPs, 
         beefyVaults, 
         selectedChannelMetadata
