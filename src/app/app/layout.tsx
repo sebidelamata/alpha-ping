@@ -46,14 +46,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
     return(
       <Web3WalletConnectProvider>
         <ProviderProvider>
-          <TokenMetadataProvider>
+          <BeefyDetailsProvider>
             <SocketProvider>
               <ChannelProvider>
-                <CMCPriceDataProvider>
-                  <AaveDetailsProvider>
-                    <BeefyDetailsProvider>
+                <TokenMetadataProvider>
+                  <CMCPriceDataProvider>
                       <MessagesProvider>
                         <UserProvider>
+                          <AaveDetailsProvider>
                           <SidebarProvider>
                               <Navbar/>
                               <div className="top-24 flex w-full">
@@ -68,14 +68,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
                                   <Toaster/>
                               </div>
                           </SidebarProvider>
+                          </AaveDetailsProvider>
                         </UserProvider>
                       </MessagesProvider>
-                    </BeefyDetailsProvider>
-                  </AaveDetailsProvider>
-                </CMCPriceDataProvider>
+                  </CMCPriceDataProvider>
+                </TokenMetadataProvider>
               </ChannelProvider>
             </SocketProvider>
-          </TokenMetadataProvider>
+          </BeefyDetailsProvider>
         </ProviderProvider>
       </Web3WalletConnectProvider>
     )

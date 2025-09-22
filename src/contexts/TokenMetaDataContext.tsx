@@ -3,16 +3,15 @@
 import React, {
   createContext,
   useContext,
-  useState,
   useMemo,
   type ReactNode
 } from 'react';
+import useTokenMetadata from 'src/hooks/useTokenMetadata';
+import useSetInitialCurrentChannel from 'src/hooks/useSetInitialCurrentChannel';
 
 export type TokenMetadataContextType = {
   tokenMetaData: tokenMetadata[];
-  setTokenMetaData: React.Dispatch<React.SetStateAction<tokenMetadata[]>>;
   tokenMetadataLoading: boolean;
-  setTokenMetadataLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const TokenMetadataContext = createContext<TokenMetadataContextType | undefined>(undefined);
@@ -26,15 +25,14 @@ export const useTokenMetadataContext = (): TokenMetadataContextType => {
 };
 
 export const TokenMetadataProvider = ({ children }: { children: ReactNode }) => {
-  const [tokenMetaData, setTokenMetaData] = useState<tokenMetadata[]>([]);
-  // token metadata loading state
-    const [tokenMetadataLoading, setTokenMetadataLoading] = useState<boolean>(false)
+  // fetch channel metadata
+  const { tokenMetaData, tokenMetadataLoading }= useTokenMetadata()
+   // set the default channel to the first in the list if one hasn't been selected yet
+    useSetInitialCurrentChannel(tokenMetaData)
 
     const contextValue = useMemo(() => ({
       tokenMetaData,
-      setTokenMetaData,
       tokenMetadataLoading,
-      setTokenMetadataLoading
     }), [tokenMetaData, tokenMetadataLoading]);
 
   return (

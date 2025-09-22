@@ -2,6 +2,7 @@
 
 import React, {
     useState, 
+    useMemo
 } from "react"
 import { AlphaPING } from '../../../../../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { ethers } from 'ethers'
@@ -37,7 +38,10 @@ const Channel:React.FC<IChannel> = ({
     } = useChannelProviderContext()
 
     const [joinChannelLoading, setJoinChannelLoading] = useState<boolean>(false)
-    console.log("Channel render", channel.tokenAddress, tokenMetadata);
+
+    const isCurrentChannel = useMemo(() => {
+        return currentChannel && currentChannel.id.toString() === channel.id.toString();
+    }, [currentChannel, channel.id]);
     
     // handles clicking on channel names from channels list
     const channelHandler = async (channel:AlphaPING.ChannelStructOutput) => {
@@ -63,15 +67,26 @@ const Channel:React.FC<IChannel> = ({
       }
     }
 
+    const avatarSources = useMemo(() => {
+        const hasLogo = tokenMetadata.logo && tokenMetadata.logo !== '';
+        const defaultIcon = channel.tokenType === 'ERC20' ? '/erc20Icon.svg' : '/blank_nft.svg';
+        const hoverIcon = channel.tokenType === 'ERC20' ? '/erc20IconAlt.svg' : '/blank_nftAlt.svg';
+        
+        return {
+            normal: hasLogo ? tokenMetadata.logo : defaultIcon,
+            hover: hasLogo ? tokenMetadata.logo : hoverIcon
+        };
+    }, [tokenMetadata.logo, channel.tokenType]);
+
     // pass hover info to leaveChannel component to make icon appear
     const [isHovered, setIsHovered] = useState(false);
 
     return(
         <SidebarMenuButton
             className={`flex items-center justify-between ${
-                currentChannel && 
-                currentChannel.id.toString() === channel.id.toString() && 
-                "bg-accent" }`
+                isCurrentChannel ? 
+                "bg-accent" :
+                "" }`
             }
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -80,24 +95,7 @@ const Channel:React.FC<IChannel> = ({
             <div className="flex items-center justify-start gap-4">
                 <Avatar className="size-4">
                     <AvatarImage 
-                        src={
-                                isHovered === true ?
-                                    tokenMetadata.logo !== '' ? 
-                                    tokenMetadata.logo : 
-                                    (
-                                        channel.tokenType === 'ERC20' ?
-                                        '/erc20IconAlt.svg' :
-                                        '/blank_nftAlt.svg'
-                                    )
-                                :
-                                    tokenMetadata.logo !== '' ? 
-                                    tokenMetadata.logo : 
-                                    (
-                                        channel.tokenType === 'ERC20' ?
-                                        '/erc20Icon.svg' :
-                                        '/blank_nft.svg'
-                                    )
-                        } 
+                        src={isHovered ? avatarSources.hover : avatarSources.normal}
                         alt="Token Logo"
                         loading="lazy"
                     />

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AaveL2LendingPool from '../lib/aaveL2PoolABI.json'
 import { 
   ethers, 
@@ -6,19 +6,25 @@ import {
 } from 'ethers';
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { useUserProviderContext } from "src/contexts/UserContext";
-import { useAaveDetailsContext } from "src/contexts/AaveDetailsContext";
 
 const useUserAaveDetails = () => {
 
     const { signer } = useEtherProviderContext()
     const { account } = useUserProviderContext()
-    const {
-        setAaveAccount 
-    } = useAaveDetailsContext()
+
+    // user aave details
+    // we need to find the user account details for aave if the user has any aave tokens
+    const [aaveAccount, setAaveAccount] = useState<null | AaveUserAccount>(null)
+    const [aaveAccountLoading, setAaveAccountLoading] = useState<boolean>(false)
+    const [aaveAccountError, setAaveAccountError] = useState<null | string>(null)
         
     // we need to find the user account details for aave if the user has any aave tokens
     useEffect(() => {
         const fetchAaveDetails = async (account: string) => {
+        if(!signer || !account) return;
+        setAaveAccountLoading(true)
+        if(aaveAccountError) setAaveAccountError(null)
+
             const aaveLendingPool = new ethers.Contract(
             // aave lending pool address
             "0x794a61358d6845594f94dc1db02a252b5b4814ad",
@@ -27,10 +33,7 @@ const useUserAaveDetails = () => {
             );
             try{
             const accountData = await aaveLendingPool.getUserAccountData(account)
-            console.log('accountData: ', accountData)
             if (accountData) {
-                console.log('accountData: ', accountData)
-    
                 // Raw values are BigNumbers; convert them to human‑readable strings
                 const cleanedAccountData: AaveUserAccount = {
                 totalCollateral: formatUnits(accountData.totalCollateralBase, 8),
@@ -42,7 +45,6 @@ const useUserAaveDetails = () => {
                 ltv: (Number(accountData.ltv) / 10000).toString(),
                 healthFactor: formatUnits(accountData.healthFactor, 18)
                 };
-                console.log('user aave data:', cleanedAccountData);
                 setAaveAccount(cleanedAccountData);
             } else {
                 console.warn('No aave account data found for this user:', accountData);
@@ -50,9 +52,11 @@ const useUserAaveDetails = () => {
             }
             } catch(error: unknown){
             if(error !== undefined || error !== null){
-                console.warn("Error unable to fetch aave user account details for: " + signer + ": " + (error as Error).toString())
+                setAaveAccountError("Error unable to fetch aave user account details for: " + signer + ": " + (error as Error).toString())
                 return;
             }
+            } finally{
+            setAaveAccountLoading(false)
             }
         }
     
@@ -66,8 +70,14 @@ const useUserAaveDetails = () => {
         }, [
         account, 
         signer, 
-        setAaveAccount,
+        aaveAccountError
     ])
+
+    return {
+        aaveAccount,
+        aaveAccountLoading,
+        aaveAccountError
+    }
 
 }
 

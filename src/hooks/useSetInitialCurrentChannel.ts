@@ -1,11 +1,8 @@
 import { useEffect } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import useUserChannels from "./useUserChannels";
-import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext";
 
-const useSetInitialCurrentChannel = () => {
-
-    const { tokenMetaData } = useTokenMetadataContext()
+const useSetInitialCurrentChannel = (tokenMetaData:tokenMetadata[]) => {
     const { 
         currentChannel, 
         setCurrentChannel,

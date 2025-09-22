@@ -2,7 +2,8 @@
 import { 
   useState, 
   useEffect,
-  useMemo 
+  useMemo,
+  useRef 
 } from 'react';
 import { BeefyVault } from 'src/types/global';
 import useUserChannels from './useUserChannels';
@@ -12,6 +13,9 @@ const useBeefyVaults = () => {
   const [beefyVaults, setBeefyVaults] = useState<BeefyVault[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Use ref to track if we've already fetched to prevent unnecessary re-fetches
+  const hasFetched = useRef(false);
 
   useEffect(() => {
     const fetchBeefyVaults = async () => {
@@ -24,6 +28,7 @@ const useBeefyVaults = () => {
           vault.chain === 'arbitrum'
         );
         setBeefyVaults(await arbitrumVaults);
+        hasFetched.current = true;
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
@@ -33,7 +38,8 @@ const useBeefyVaults = () => {
     if(
         (userChannels !== undefined) && 
         (userChannels !== null) && 
-        userChannels.length > 0
+        userChannels.length > 0 &&
+        !hasFetched.current
     ){
       fetchBeefyVaults();
     }

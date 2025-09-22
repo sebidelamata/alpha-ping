@@ -1,22 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import useUserChannels from "./useUserChannels";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { defaultTokenMetadata } from "src/constants/defaultTokenMetadata";
-import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext";
 import fetchTokenMetadata from "src/lib/fetchTokenMetadata";
 import { useBeefyDetailsContext } from "src/contexts/BeefyDetailsContext";
 
 const useTokenMetadata = () => {
     const { signer } = useEtherProviderContext()
-    const { 
-        setTokenMetaData, 
-        setTokenMetadataLoading 
-    } = useTokenMetadataContext()
     const { userChannels } = useUserChannels()
     const { beefyVaults } = useBeefyDetailsContext()
 
 
+    const [tokenMetaData, setTokenMetaData] = useState<tokenMetadata[]>([]);
+    const [tokenMetadataLoading, setTokenMetadataLoading] = useState<boolean>(false)
+    const [tokenMetadataError, setTokenMetadataError] = useState<string | null>(null)
     // here we will grab metadata for each channel with a promise.all
     useEffect(() => {
         const fetchAllUserChannelsMetadata = async () => {
@@ -53,7 +51,7 @@ const useTokenMetadata = () => {
                 setTokenMetaData(allUserChannelsMetadata);
                 return allUserChannelsMetadata;
             } catch (error) {
-                console.error('Error fetching all user channels metadata:', error);
+                setTokenMetadataError(`Error fetching all user channels metadata: ${error}`);
             } finally {
                 setTokenMetadataLoading(false);
             }
@@ -67,6 +65,8 @@ const useTokenMetadata = () => {
         setTokenMetadataLoading,
         beefyVaults
     ]);
+
+    return { tokenMetaData, tokenMetadataLoading, tokenMetadataError };
 
 }
 

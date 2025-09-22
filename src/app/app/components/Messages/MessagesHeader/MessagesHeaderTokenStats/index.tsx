@@ -24,6 +24,9 @@ import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import MessagesHeaderTokenLinks from "./MessagesHeaderTokenLinks";
 import ToggleFollowFilter from "../../../Profile/ToggleFollowFilter";
 import useGetBalance from "src/hooks/useGetBalance";
+import { ethers } from "ethers";
+import useGetTokenDecimals from "src/hooks/useGetTokenDecimals";
+import useGetCurrentChannelBeefyLP from "src/hooks/useGetCurrentChannelBeefyLP";
 
 type TimeRange = "1h" | "24h" | "7d" | "30d" | "60d"
 
@@ -35,8 +38,26 @@ const MessagesHeaderTokenStats = () => {
         setChannelAction 
     } = useChannelProviderContext()
     const { cmcFetch, cmcLoading } = useCMCPriceDataContext()
-
+    const { currentChannelBeefyLP } = useGetCurrentChannelBeefyLP()
+    const { tokenDecimals } = useGetTokenDecimals()
+    console.log('tokenDecimals: ', tokenDecimals)
     const { userBalance } = useGetBalance()
+
+    const balanceFormatted = (
+        userBalance !== null && 
+        tokenDecimals !==null 
+        ) ?
+        ethers.formatUnits(
+            userBalance.toString(), 
+            tokenDecimals
+        ) : '0'
+    const balanceNumber = Number(balanceFormatted);
+    const usdValue = (
+        currentChannelBeefyLP !== undefined && 
+        currentChannelBeefyLP !== null
+        ) ?
+        Number(currentChannelBeefyLP[1].price) * balanceNumber :
+        Number(cmcFetch.tokenUSDPrice) * balanceNumber
 
     // hold time range from selector
     const [timeRange, setTimeRange] = useState<TimeRange>("24h")
@@ -217,34 +238,13 @@ const MessagesHeaderTokenStats = () => {
                             <strong>Current Balance:</strong>
                         </div>
                         <div className="current-token-amount-value">
-                            {/* {
-                                (
-                                    currentChannelBeefyLP !== undefined && 
-                                    currentChannelBeefyLP !== null
-                                ) ?
-                                (() => {
-                                    const balanceFormatted = ethers.formatUnits(userBalance.toString(), tokenDecimals || 0);
-                                    const balanceNumber = Number(balanceFormatted);
-                                    const usdValue = Number(currentChannelBeefyLP[1].price) * balanceNumber;
-                                    
-                                    return `${humanReadableNumbers(balanceFormatted)} ${
-                                        selectedChannelMetadata?.symbol || 
-                                        currentChannel?.name || 
-                                        ''
-                                    } ($${humanReadableNumbers(usdValue.toString())})`;
-                                })() :
-                                (() => {
-                                    const balanceFormatted = ethers.formatUnits(userBalance.toString(), tokenDecimals || 0);
-                                    const balanceNumber = Number(balanceFormatted);
-                                    const usdValue = Number(cmcFetch.tokenUSDPrice) * balanceNumber;
-                                    
-                                    return `${humanReadableNumbers(balanceFormatted)} ${
-                                        selectedChannelMetadata?.symbol || 
-                                        currentChannel?.name || 
-                                        ''
-                                    } ($${humanReadableNumbers(usdValue.toString())})`;
-                                })()
-                            } */}
+                            {
+                                `${humanReadableNumbers(balanceFormatted)} ${
+                                    selectedChannelMetadata?.symbol || 
+                                    currentChannel?.name || 
+                                    ''
+                                } ($${humanReadableNumbers(usdValue.toString())})`
+                            }
                         </div>
                     </div>
                 </Badge>

@@ -3,14 +3,12 @@
 import React, {
   createContext,
   useContext,
-  useState,
-  useMemo,
   type ReactNode
 } from 'react';
+import useUserAaveDetails from 'src/hooks/useUserAaveDetails';
 
 export type AaveDetailsContextType = {
     aaveAccount: AaveUserAccount | null;
-    setAaveAccount: React.Dispatch<React.SetStateAction<AaveUserAccount | null>>;
 };
 
 const AaveDetailsContext = createContext<AaveDetailsContextType | undefined>(undefined);
@@ -24,17 +22,12 @@ export const useAaveDetailsContext = (): AaveDetailsContextType => {
 };
 
 export const AaveDetailsProvider = ({ children }: { children: ReactNode }) => {
-    // user aave details
-    // we need to find the user account details for aave if the user has any aave tokens
-    const [aaveAccount, setAaveAccount] = useState<null | AaveUserAccount>(null)
 
-    const contextValue = useMemo(() => ({
-        aaveAccount,
-        setAaveAccount
-    }), [aaveAccount]);
+    // set the user aave details
+    const { aaveAccount } = useUserAaveDetails()
 
   return (
-    <AaveDetailsContext.Provider value={contextValue}>
+    <AaveDetailsContext.Provider value={{aaveAccount}}>
       {children}
     </AaveDetailsContext.Provider>
   );

@@ -2,7 +2,8 @@
 import { 
   useState, 
   useEffect,
-  useMemo 
+  useMemo,
+  useRef 
 } from 'react';
 import { BeefyLPBreakdown } from 'src/types/global';
 import useUserChannels from './useUserChannels';
@@ -13,8 +14,17 @@ const useBeefyLPsBreakdown = (userVaults:string[]) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Track previous vault IDs to prevent unnecessary re-fetches
+  const prevVaultIds = useRef<string>();
+  
+  // Create stable reference for userVaults comparison
+  const vaultIdsString = useMemo(() => {
+    return userVaults.sort().join(',');
+  }, [userVaults]);
+
   useEffect(() => {
     const fetchBeefyVaults = async () => {
+      if (prevVaultIds.current === vaultIdsString) return;
       setLoading(true);
       try {
         const response = await fetch('/api/beefyLPBreakdown');
@@ -24,6 +34,7 @@ const useBeefyLPsBreakdown = (userVaults:string[]) => {
           userVaults.includes(tokenId)
         );
         setBeefyLPs(userLPsBreakdowns as unknown as BeefyLPBreakdown[]);
+        prevVaultIds.current = vaultIdsString;
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
@@ -36,11 +47,12 @@ const useBeefyLPsBreakdown = (userVaults:string[]) => {
         userChannels.length > 0 &&
         (userVaults !== undefined) && 
         (userVaults !== null) && 
-        userVaults.length > 0
+        userVaults.length > 0 &&
+        prevVaultIds.current !== vaultIdsString
     ){
       fetchBeefyVaults();
     }
-  }, [userChannels, userVaults]);
+  }, [userChannels, userVaults, vaultIdsString]);
 
   const context = useMemo(() => ({
     beefyLPs,

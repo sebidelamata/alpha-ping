@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import useCurrentChannelERC20Contract from "./useCurrentChannelERC20Contract";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 
@@ -14,23 +14,28 @@ const useGetTokenDecimals = () => {
           if (token !== null) {
             try {
               const tokenDecimals = await token.decimals()
-              console.log(tokenDecimals)
-              setTokenDecimals(tokenDecimals as number)
+              const decimalsNumber = typeof tokenDecimals === 'bigint' ? 
+                Number(tokenDecimals) : 
+                Number(tokenDecimals.toString())
+              setTokenDecimals(decimalsNumber)
             } catch (error) {
               console.warn('Failed to fetch token decimals:', error)
-              setTokenDecimals(null) 
+              setTokenDecimals(null)
             }
-          } else {
-            setTokenDecimals(null) 
           }
         }
         // only grab decimals if it is a erc20
-        if(currentChannel?.tokenType.toLowerCase() === 'erc20' && currentChannel?.tokenAddress !== undefined){
+        if(
+          currentChannel &&
+          currentChannel?.tokenType.toLowerCase() === 'erc20' && 
+          currentChannel?.tokenAddress !== undefined && 
+          token !== null
+        ) {
           fetchTokenDecimals()
         }
       }, [token, currentChannel])
 
-      return useMemo(() => ({ tokenDecimals }), [tokenDecimals]);
+      return { tokenDecimals }
 
 }
 
