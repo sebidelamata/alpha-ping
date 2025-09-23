@@ -13,9 +13,7 @@ const useUserChannels = () => {
         [channels, hasJoined]
     )
 
-    return useMemo(() => ({ 
-        userChannels 
-    }), [userChannels]);
+    return { userChannels }
 }
 
 export default useUserChannels

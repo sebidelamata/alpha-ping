@@ -1,11 +1,8 @@
 'use client';
 
 import SearchChannels from '../Channels/SearchChannels';
-import { useTokenMetadataContext } from 'src/contexts/TokenMetaDataContext';
 
 const Navbar: React.FC = () => {
-
-  const { tokenMetaData } = useTokenMetadataContext()
 
   return (
     <nav className='fixed z-50 flex h-24 w-full justify-between bg-primary p-4'>
@@ -22,11 +19,7 @@ const Navbar: React.FC = () => {
           A<span className='text-sm font-light italic'>lpha</span>PING
         </h1>
       </div>
-      {
-        // search channels relies on tokenmetadata
-        tokenMetaData.length > 0 &&
         <SearchChannels/>
-      }
       <div className='grid justify-end align-middle' >
         <appkit-button 
           size='sm' 

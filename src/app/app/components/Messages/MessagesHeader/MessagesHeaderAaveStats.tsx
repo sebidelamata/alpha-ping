@@ -23,8 +23,8 @@ const MessagesHeaderAaveStats:React.FC = () => {
     if(
         aaveAccount !== null &&
         selectedChannelMetadata !== null &&
-        selectedChannelMetadata.protocol &&
-        selectedChannelMetadata.protocol === 'aave'
+        selectedChannelMetadata?.protocol &&
+        selectedChannelMetadata?.protocol === 'aave'
     ){
         return(
             <div className="flex flex-row flex-wrap w-full gap-4 text-xl">

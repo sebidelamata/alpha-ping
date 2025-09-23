@@ -6,7 +6,6 @@ import React, {
     useContext,
     useEffect,
     useState,
-    useMemo
 } from "react"
 import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
 
@@ -53,8 +52,8 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         }
     }, [currentChannel])
 
-    // memoize context value
-    const contextValue = useMemo(() => ({
+    return (
+        <ChannelContext.Provider value={{
         currentChannel,
         setCurrentChannel,
         selectedChannelMetadata,
@@ -65,16 +64,7 @@ const ChannelProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         setAddChannelLoading,
         channelAction,
         setChannelAction
-    }), [
-        currentChannel,
-        selectedChannelMetadata,
-        joinChannelLoading,
-        addChannelLoading,
-        channelAction
-    ]);
-
-    return (
-        <ChannelContext.Provider value={contextValue}>
+    }}>
             {children}
         </ChannelContext.Provider>
     )

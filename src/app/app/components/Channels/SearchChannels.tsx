@@ -30,13 +30,14 @@ import {
   import { Button } from "@/components/components/ui/button.tsx";
   import { ChevronsUpDown, SearchCode } from "lucide-react";
   import { useTokenMetadataContext } from "src/contexts/TokenMetaDataContext.tsx";
+  import useAllChannelsMetadata from 'src/hooks/useAllChannelsMetadata.ts'
 
 const SearchChannels: React.FC = () => {
 
     const { 
-        channels, 
         alphaPING, 
         signer,
+        channels
     } = useEtherProviderContext()
     const { tokenMetaData } = useTokenMetadataContext()
     const { 
@@ -48,6 +49,10 @@ const SearchChannels: React.FC = () => {
 
     const [openSearch, setOpenSearch] = useState(false)
 
+    // if the user has no channels yet we will fetch all and display
+    const { allChannels, allChannelsMetadata, allChannelsMetadataLoading } = useAllChannelsMetadata()
+
+
     const handleChannelClick = async (channel: AlphaPING.ChannelStructOutput, index: number) => {
         const account = await signer?.getAddress()
         // Check if user has joined already
@@ -58,7 +63,7 @@ const SearchChannels: React.FC = () => {
         // If they haven't allow them to mint.
         if (hasJoined) {
             setCurrentChannel(channel)
-            setSelectedChannelMetadata(tokenMetaData[index])
+            setSelectedChannelMetadata(allChannelsMetadata[index])
         } else {
             setJoinChannelLoading(true)
             const transaction = await alphaPING?.connect(signer).joinChannel(BigInt(channel.id))
@@ -69,6 +74,10 @@ const SearchChannels: React.FC = () => {
         }
         setOpenSearch(false)
     }
+
+    if(allChannelsMetadataLoading == true){
+        return(<Loading text="Fetching Channels"/>)
+    } 
 
     return(
         <div className='flex justify-center align-middle'>
@@ -93,29 +102,56 @@ const SearchChannels: React.FC = () => {
                         <CommandInput placeholder="Search Token or NFT..." className="h-9" />
                         <CommandList>
                             <CommandEmpty>No token found.</CommandEmpty>
-                            {channels.map((channel, index) => (
-                                <CommandItem
-                                key={channel.tokenAddress}
-                                value={channel.name}
-                                onSelect={() => {
-                                    handleChannelClick(channel, index)
-                                }}
-                                >
-                                <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
-                                <Avatar>
-                                    <AvatarImage 
-                                        alt={channel.name}
-                                        src={
-                                                // Check if the token exists in the tokenList and has a logoURI//   
-                                                tokenMetaData[index]?.logo || '/erc20Icon.svg'
-                                            } 
-                                    />
-                                    <AvatarFallback>
-                                        {channel.tokenAddress.slice(0, 2).toUpperCase()}
-                                    </AvatarFallback>
-                                </Avatar>
-                                </CommandItem>
-                            ))}
+                            {
+                                channels.length > 0 ?
+                                channels.map((channel, index) => (
+                                    <CommandItem
+                                    key={channel.tokenAddress}
+                                    value={channel.name}
+                                    onSelect={() => {
+                                        handleChannelClick(channel, index)
+                                    }}
+                                    >
+                                    <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
+                                    <Avatar>
+                                        <AvatarImage 
+                                            alt={channel.name}
+                                            src={
+                                                    // Check if the token exists in the tokenList and has a logoURI//   
+                                                    tokenMetaData[index]?.logo || '/erc20Icon.svg'
+                                                } 
+                                        />
+                                        <AvatarFallback>
+                                            {channel.tokenAddress.slice(0, 2).toUpperCase()}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    </CommandItem>
+                                )) :
+                                // this runs when user has no channels
+                                allChannels.map((channel, index) => (
+                                    <CommandItem
+                                    key={channel.tokenAddress}
+                                    value={channel.name}
+                                    onSelect={() => {
+                                        handleChannelClick(channel, index)
+                                    }}
+                                    >
+                                    <span>{channel.name} - {channel.tokenAddress.slice(0,4)}...{channel.tokenAddress.slice(-4)}</span>
+                                    <Avatar>
+                                        <AvatarImage 
+                                            alt={channel.name}
+                                            src={
+                                                    // Check if the token exists in the tokenList and has a logoURI//   
+                                                    allChannelsMetadata[index]?.logo || '/erc20Icon.svg'
+                                                } 
+                                        />
+                                        <AvatarFallback>
+                                            {channel.tokenAddress.slice(0, 2).toUpperCase()}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    </CommandItem>
+                                ))
+                            }
                         </CommandList>
                     </Command>
                 </DialogContent>
