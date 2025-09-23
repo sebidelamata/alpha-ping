@@ -6,9 +6,11 @@ import React, {
   type ReactNode
 } from 'react';
 import useUserAaveDetails from 'src/hooks/useUserAaveDetails';
+import useFetchAaveAssetDetails from 'src/hooks/useFetchAaveAssetDetails';
 
 export type AaveDetailsContextType = {
     aaveAccount: AaveUserAccount | null;
+    aaveAssetDetails: AaveSupplyBorrowRate | null;
 };
 
 const AaveDetailsContext = createContext<AaveDetailsContextType | undefined>(undefined);
@@ -25,9 +27,10 @@ export const AaveDetailsProvider = ({ children }: { children: ReactNode }) => {
 
     // set the user aave details
     const { aaveAccount } = useUserAaveDetails()
+    const { aaveAssetDetails } = useFetchAaveAssetDetails()
 
   return (
-    <AaveDetailsContext.Provider value={{aaveAccount}}>
+    <AaveDetailsContext.Provider value={{aaveAccount, aaveAssetDetails}}>
       {children}
     </AaveDetailsContext.Provider>
   );
