@@ -120,7 +120,7 @@ const Messages:React.FC = () => {
                 .filter(message => message.channel === currentChannel.id.toString())
                 .length === 0
             ) &&
-            tokenMetaData.length > 0 &&
+            tokenMetaData.length === 0 &&
             <ScrollArea className='h-full overflow-y-auto w-full p-4'>
               <SkeletonMessageFeed/>
               <NewUserNoChannels/>
