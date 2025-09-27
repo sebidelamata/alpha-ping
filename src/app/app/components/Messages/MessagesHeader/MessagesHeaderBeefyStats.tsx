@@ -108,6 +108,22 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                         </Button>
                     </div>
                 }
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.risks &&
+                    <ul>
+                        {
+                            currentChannelBeefyVault.risks.map((risk) => {
+                                return <Badge>
+                                    {
+                                        risk.replace('_', ' ')
+                                            .toLocaleUpperCase()
+                                    }
+                                </Badge>
+                            })
+                        }
+                    </ul>
+                }
                 {/* {
                     currentChannelBeefyLP !== null &&
                     <div className="flex flex-col justify-evenly">
