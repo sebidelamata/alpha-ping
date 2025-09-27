@@ -32,47 +32,56 @@ const MessagesHeaderBeefyStats:React.FC = () => {
     ){
         return(
             <div className="flex flex-row flex-wrap w-full gap-4 text-xl">
-                    {
-                        currentChannelBeefyVault &&
-                        currentChannelBeefyVault.id &&
-                        <div className="flex flex-col h-full justify-evenly">
-                            <Link 
-                                className="text-accent flex flex-wrap gap-2 justify-center"
-                                href={`https://app.beefy.finance/vault/${currentChannelBeefyVault?.id}`}
-                                target="_blank"
-                            >
-                                <Avatar className="size-6">
-                                    <AvatarImage 
-                                        src='https://s2.coinmarketcap.com/static/img/coins/64x64/7311.png' 
-                                        alt="Beefy Logo"
-                                        loading="lazy"
-                                    />
-                                    <AvatarFallback>
-                                        Beefy
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    Beefy Position
-                                </div>
-                            </Link>
-                        </div>
-                    }
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.id &&
+                    <div className="flex flex-col h-full justify-evenly">
+                        <Link 
+                            className="text-accent flex flex-wrap gap-2 justify-center"
+                            href={`https://app.beefy.finance/vault/${currentChannelBeefyVault?.id}`}
+                            target="_blank"
+                        >
+                            <Avatar className="size-6">
+                                <AvatarImage 
+                                    src='https://s2.coinmarketcap.com/static/img/coins/64x64/7311.png' 
+                                    alt="Beefy Logo"
+                                    loading="lazy"
+                                />
+                                <AvatarFallback>
+                                    Beefy
+                                </AvatarFallback>
+                            </Avatar>
+                            <div>
+                                Beefy Position
+                            </div>
+                        </Link>
+                    </div>
+                }
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.status &&
                     (
                         currentChannelBeefyVault.status === 'active' ?
                         <Badge className="text-green-500">
-                            {
-                                currentChannelBeefyVault.status.toLocaleUpperCase()
-                            }
+                            Active
                         </Badge> :
                         <Badge variant={'destructive'}>
-                            {
-                                currentChannelBeefyVault.status.toLocaleUpperCase()
-                            }
+                            Retired
                         </Badge>
                     )
+                }
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.strategyTypeId &&
+                    <div className="flex flex-row">
+                        <Badge>
+                            {
+                                currentChannelBeefyVault.strategyTypeId
+                                    .replace('-', ' ')
+                                    .toLocaleUpperCase()
+                            }
+                        </Badge>
+                    </div>
                 }
                 {
                     currentChannelBeefyLP !== null &&
