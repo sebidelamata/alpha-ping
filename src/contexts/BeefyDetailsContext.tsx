@@ -36,10 +36,10 @@ export const BeefyDetailsProvider = ({ children }: { children: ReactNode }) => {
     );
     const { beefyLPs } = useBeefyLPsBreakdown(vaultIds)
 
-    const contextValue = useMemo(() => ({
+    const contextValue = {
         beefyVaults: beefyVaults || [],
         beefyLPs: beefyLPs || []
-    }), [beefyVaults, beefyLPs]);
+    };
 
   return (
     <BeefyDetailsContext.Provider value={contextValue}>

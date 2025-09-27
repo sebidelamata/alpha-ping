@@ -54,11 +54,11 @@ const useBeefyLPsBreakdown = (userVaults:string[]) => {
     }
   }, [userChannels, userVaults, vaultIdsString]);
 
-  const context = useMemo(() => ({
+  const context = {
     beefyLPs,
     loading,
     error,
-  }), [beefyLPs, loading, error]);
+  }
 
   return context;
 };

@@ -40,7 +40,6 @@ const MessagesHeaderTokenStats = () => {
     const { cmcFetch, cmcLoading } = useCMCPriceDataContext()
     const { currentChannelBeefyLP } = useGetCurrentChannelBeefyLP()
     const { tokenDecimals } = useGetTokenDecimals()
-    console.log('tokenDecimals: ', tokenDecimals)
     const { userBalance } = useGetBalance()
 
     const balanceFormatted = (

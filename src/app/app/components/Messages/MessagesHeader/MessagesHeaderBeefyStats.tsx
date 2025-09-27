@@ -8,21 +8,23 @@ import {
     AvatarImage 
 } from "@/components/components/ui/avatar";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
+import useGetCurrentChannelBeefyLP from "src/hooks/useGetCurrentChannelBeefyLP";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import { Separator } from "@/components/components/ui/separator";
 import { Badge } from "@/components/components/ui/badge";
 
-const MessagesHeaderAaveStats:React.FC = () => {
+const MessagesHeaderBeefyStats:React.FC = () => {
 
     const { 
         selectedChannelMetadata,
     } = useChannelProviderContext()
- 
+    const { currentChannelBeefyLP } = useGetCurrentChannelBeefyLP()
+ console.log("beefyLs: ", currentChannelBeefyLP)
 
     if(
         selectedChannelMetadata !== null &&
         selectedChannelMetadata.protocol &&
-        selectedChannelMetadata.protocol === 'aave'
+        selectedChannelMetadata.protocol === 'beefy'
     ){
         return(
             <div className="flex flex-row flex-wrap w-full gap-4 text-xl">
@@ -33,25 +35,32 @@ const MessagesHeaderAaveStats:React.FC = () => {
                         target="_blank"
                     >
                         <Avatar className="size-6">
-                            <AvatarImage 
-                                src='https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png' 
-                                alt="Token Logo"
+                             <AvatarImage 
+                                src='https://s2.coinmarketcap.com/static/img/coins/64x64/7311.png' 
+                                alt="Beefy Logo"
                                 loading="lazy"
                             />
                             <AvatarFallback>
-                                Aave
+                                Beefy
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            Aave Position
+                            Beefy Position
                         </div>
                     </Link>
-                    <div>
-                        Supplied: {selectedChannelMetadata.name}
-                    </div>
                 </div>
                 {
-                    aaveAssetDetails !== null &&
+                    currentChannelBeefyLP !== null &&
+                    <div className="flex flex-col justify-evenly">
+                        <Badge className="text-lg">
+                            TVL: { 
+                                `$${humanReadableNumbers((Number(currentChannelBeefyLP[1].totalSupply) * Number(currentChannelBeefyLP[1].price)).toString())}`
+                            }
+                        </Badge>
+                    </div>
+                }
+                {/* {
+                    currentChannelBeefyLP !== null &&
                     <div className="flex flex-col justify-evenly">
                         <Badge className="text-lg">
                             Supply APY: { 
@@ -132,7 +141,7 @@ const MessagesHeaderAaveStats:React.FC = () => {
                             (Number(aaveAccount?.currentLiquidationThreshold) * 100).toFixed(2)
                             }%
                         </li>
-                    </ul>
+                    </ul> */}
             </div>
         )
     } else {
@@ -141,4 +150,4 @@ const MessagesHeaderAaveStats:React.FC = () => {
 
 }
 
-export default MessagesHeaderAaveStats
+export default MessagesHeaderBeefyStats

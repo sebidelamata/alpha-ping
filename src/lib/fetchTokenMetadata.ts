@@ -9,11 +9,7 @@ import { BeefyVault } from 'src/types/global';
 // here is where we run through the possible scenarios to fetch the token metadata
 const fetchTokenMetadata = async (tokenAddress:string, signer: Signer, beefyVaults: BeefyVault[]) => {
     // // first we will check if the token is a beefy finance vault
-    console.log('Checking if token is a Beefy vault:', tokenAddress);   
-    console.log('beefyVaults', beefyVaults);
-    console.log(isBeefyToken(tokenAddress, beefyVaults));
     if (isBeefyToken(tokenAddress, beefyVaults) === true) {
-        console.log('Beefy Finance token detected:', tokenAddress);
         return {
             ...defaultTokenMetadata,
             protocol: "beefy"
