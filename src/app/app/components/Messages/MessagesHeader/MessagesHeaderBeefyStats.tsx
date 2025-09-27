@@ -32,27 +32,31 @@ const MessagesHeaderBeefyStats:React.FC = () => {
     ){
         return(
             <div className="flex flex-row flex-wrap w-full gap-4 text-xl">
-                <div className="flex flex-col h-full justify-evenly">
-                    <Link 
-                        className="text-accent flex flex-wrap gap-2 justify-center"
-                        href="https://app.aave.com/"
-                        target="_blank"
-                    >
-                        <Avatar className="size-6">
-                             <AvatarImage 
-                                src='https://s2.coinmarketcap.com/static/img/coins/64x64/7311.png' 
-                                alt="Beefy Logo"
-                                loading="lazy"
-                            />
-                            <AvatarFallback>
-                                Beefy
-                            </AvatarFallback>
-                        </Avatar>
-                        <div>
-                            Beefy Position
+                    {
+                        currentChannelBeefyVault &&
+                        currentChannelBeefyVault.id &&
+                        <div className="flex flex-col h-full justify-evenly">
+                            <Link 
+                                className="text-accent flex flex-wrap gap-2 justify-center"
+                                href={`https://app.beefy.finance/vault/${currentChannelBeefyVault?.id}`}
+                                target="_blank"
+                            >
+                                <Avatar className="size-6">
+                                    <AvatarImage 
+                                        src='https://s2.coinmarketcap.com/static/img/coins/64x64/7311.png' 
+                                        alt="Beefy Logo"
+                                        loading="lazy"
+                                    />
+                                    <AvatarFallback>
+                                        Beefy
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    Beefy Position
+                                </div>
+                            </Link>
                         </div>
-                    </Link>
-                </div>
+                    }
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.status &&
