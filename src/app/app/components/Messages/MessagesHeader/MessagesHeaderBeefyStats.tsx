@@ -54,6 +54,23 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                     </Link>
                 </div>
                 {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.status &&
+                    (
+                        currentChannelBeefyVault.status === 'active' ?
+                        <Badge className="text-green-500">
+                            {
+                                currentChannelBeefyVault.status.toLocaleUpperCase()
+                            }
+                        </Badge> :
+                        <Badge variant={'destructive'}>
+                            {
+                                currentChannelBeefyVault.status.toLocaleUpperCase()
+                            }
+                        </Badge>
+                    )
+                }
+                {
                     currentChannelBeefyLP !== null &&
                     <div className="flex flex-col justify-evenly">
                         <Badge className="text-lg">
