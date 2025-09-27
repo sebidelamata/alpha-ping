@@ -12,6 +12,9 @@ import useGetCurrentChannelBeefyLP from "src/hooks/useGetCurrentChannelBeefyLP";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import { Separator } from "@/components/components/ui/separator";
 import { Badge } from "@/components/components/ui/badge";
+import useGetCurrentChannelBeefyVault from "src/hooks/useGetCurrentChannelBeefyVault";
+import { Button } from "@/components/components/ui/button";
+import { ExternalLink } from "lucide-react";
 
 const MessagesHeaderBeefyStats:React.FC = () => {
 
@@ -19,7 +22,8 @@ const MessagesHeaderBeefyStats:React.FC = () => {
         selectedChannelMetadata,
     } = useChannelProviderContext()
     const { currentChannelBeefyLP } = useGetCurrentChannelBeefyLP()
- console.log("beefyLs: ", currentChannelBeefyLP)
+    const { currentChannelBeefyVault } = useGetCurrentChannelBeefyVault()
+ console.log("beefyLs: ", currentChannelBeefyVault)
 
     if(
         selectedChannelMetadata !== null &&
@@ -57,6 +61,21 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                                 `$${humanReadableNumbers((Number(currentChannelBeefyLP[1].totalSupply) * Number(currentChannelBeefyLP[1].price)).toString())}`
                             }
                         </Badge>
+                    </div>
+                }
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.addLiquidityUrl &&
+                    <div className="flex justify-evenly">
+                        <Button variant={'secondary'}>
+                            <Link 
+                                href={currentChannelBeefyVault.addLiquidityUrl} 
+                                target="_blank"
+                                className="flex flex-row justify-between gap-1"
+                            >
+                                Build LP <ExternalLink/>
+                            </Link>
+                        </Button>
                     </div>
                 }
                 {/* {
