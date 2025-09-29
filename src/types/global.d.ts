@@ -454,3 +454,18 @@ type BeefyLPBreakdown = [
     totalSupply: string;
   }
 ]
+
+type BeefyAPYBreakdown = [
+  poolId: string, 
+  {
+    vaultApr?: number;
+    compoundingsPerYear?: number;
+    beefyPerformanceFee?: number;
+    vaultApy?: number;
+    lpFee?: number;
+    tradingApr?: number;
+    totalApy: number;
+    composablePoolApr?: number;
+    liquidStakingApr?: number;
+  }
+]

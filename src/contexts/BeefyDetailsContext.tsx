@@ -8,10 +8,12 @@ import React, {
 } from 'react';
 import useBeefyVaults from 'src/hooks/useBeefyVaults';
 import useBeefyLPsBreakdown from 'src/hooks/useBeefyLPsBreakdown';
+import useBeefyAPYBreakdown from 'src/hooks/useBeefyAPYBreakdown';
 
 export type BeefyDetailsContextType = {
     beefyVaults: ReturnType<typeof useBeefyVaults>['beefyVaults'];
     beefyLPs: ReturnType<typeof useBeefyLPsBreakdown>['beefyLPs'];
+    beefyAPYs: ReturnType<typeof useBeefyAPYBreakdown>['beefyAPYs'];
 };
 
 const BeefyDetailsContext = createContext<BeefyDetailsContextType | undefined>(undefined);
@@ -35,10 +37,12 @@ export const BeefyDetailsProvider = ({ children }: { children: ReactNode }) => {
       }, [beefyVaults]
     );
     const { beefyLPs } = useBeefyLPsBreakdown(vaultIds)
+    const { beefyAPYs } = useBeefyAPYBreakdown(vaultIds)
 
     const contextValue = {
         beefyVaults: beefyVaults || [],
-        beefyLPs: beefyLPs || []
+        beefyLPs: beefyLPs || [],
+        beefyAPYs: beefyAPYs || [],
     };
 
   return (

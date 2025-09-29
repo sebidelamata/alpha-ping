@@ -20,6 +20,7 @@ import {
     DropdownMenuContent 
 } from "@/components/components/ui/dropdown-menu";
 import { DateTime } from 'luxon';
+import useGetCurrentChannelBeefyAPY from "src/hooks/useGetCurrentChannelBeefyAPY";
 
 const MessagesHeaderBeefyStats:React.FC = () => {
 
@@ -28,7 +29,8 @@ const MessagesHeaderBeefyStats:React.FC = () => {
     } = useChannelProviderContext()
     const { currentChannelBeefyLP } = useGetCurrentChannelBeefyLP()
     const { currentChannelBeefyVault } = useGetCurrentChannelBeefyVault()
- console.log("beefyLs: ", currentChannelBeefyVault)
+    const { currentChannelBeefyAPY } = useGetCurrentChannelBeefyAPY()
+ console.log("beefyLs: ", currentChannelBeefyAPY)
 
     if(
         selectedChannelMetadata !== null &&
@@ -66,7 +68,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.status &&
                     (
-                        <div className="flex items-center">
+                        <div className="flex items-center text-sm">
                             {
                                 currentChannelBeefyVault.status === 'active' ?
                                 <Badge className="text-green-500 rounded-full">
@@ -83,7 +85,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.retireReason &&
                     <div className="flex items-center">
-                        <Badge className="text-lg text-red-500">
+                        <Badge className="text-sm text-red-500">
                             Retire Reason: { 
                                 currentChannelBeefyVault.retireReason
                                     .replace('-', ' ')
@@ -95,8 +97,8 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.retiredAt &&
-                    <div className="flex items-center">
-                        <Badge className="text-lg text-red-500">
+                    <div className="flex items-center text-sm">
+                        <Badge className="text-red-500">
                             Retired At: { 
                                 DateTime.fromSeconds(currentChannelBeefyVault.retiredAt).toLocaleString(DateTime.DATETIME_MED)
                             }
@@ -108,7 +110,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                     currentChannelBeefyVault.strategyTypeId &&
                     <div className="flex items-center">
                         <Badge>
-                            {
+                            Exposure: {
                                 currentChannelBeefyVault.strategyTypeId
                                     .replace('-', ' ')
                                     .toLocaleUpperCase()
@@ -119,7 +121,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                 {
                     currentChannelBeefyLP !== null &&
                     <div className="flex items-center">
-                        <Badge className="text-lg">
+                        <Badge className="text-sm">
                             TVL: { 
                                 `$${humanReadableNumbers((Number(currentChannelBeefyLP[1].totalSupply) * Number(currentChannelBeefyLP[1].price)).toString())}`
                             }
@@ -144,7 +146,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.risks &&
-                    <div className="flex items-center">
+                    <div className="flex items-center text-sm">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant={'outline'}>
@@ -169,7 +171,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.assets &&
-                    <div className="flex items-center">
+                    <div className="flex items-center text-sm">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant={'outline'}>
@@ -195,7 +197,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.lastHarvest &&
                     <div className="flex items-center">
-                        <Badge className="text-lg">
+                        <Badge className="text-sm">
                             Last Harvest: { 
                                 DateTime.fromSeconds(currentChannelBeefyVault.lastHarvest).toLocaleString(DateTime.DATETIME_MED)
                             }
@@ -206,11 +208,53 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.oracle &&
                     <div className="flex items-center">
-                        <Badge className="text-lg">
+                        <Badge className="text-sm">
                             Oracle: { 
                                 currentChannelBeefyVault.oracle
                                     .replace('-', ' ')
                                     .toLocaleUpperCase()
+                            }
+                        </Badge>
+                    </div>
+                }
+                {
+                    currentChannelBeefyAPY &&
+                    currentChannelBeefyAPY[1] &&
+                    currentChannelBeefyAPY[1].totalApy !== null &&
+                    currentChannelBeefyAPY[1].totalApy !== undefined &&
+                    currentChannelBeefyAPY[1].totalApy > 0 &&
+                    <div className="flex items-center">
+                        <Badge className="text-sm">
+                            Total APY: { 
+                                `${(Number(currentChannelBeefyAPY[1].totalApy) * 100).toFixed(2)}%`
+                            }
+                        </Badge>
+                    </div>
+                }
+                {
+                    currentChannelBeefyAPY &&
+                    currentChannelBeefyAPY[1] &&
+                    currentChannelBeefyAPY[1].tradingApr !== null &&
+                    currentChannelBeefyAPY[1].tradingApr !== undefined &&
+                    currentChannelBeefyAPY[1].tradingApr > 0 &&
+                    <div className="flex items-center">
+                        <Badge className="text-sm">
+                            Trading APR: { 
+                                `${(Number(currentChannelBeefyAPY[1].tradingApr) * 100).toFixed(2)}%`
+                            }
+                        </Badge>
+                    </div>
+                }
+                {
+                    currentChannelBeefyAPY &&
+                    currentChannelBeefyAPY[1] &&
+                    currentChannelBeefyAPY[1].vaultApr !== null &&
+                    currentChannelBeefyAPY[1].vaultApr !== undefined &&
+                    currentChannelBeefyAPY[1].vaultApr > 0 &&
+                    <div className="flex items-center">
+                        <Badge className="text-sm">
+                            Vault APR: { 
+                                `${(Number(currentChannelBeefyAPY[1].vaultApr) * 100).toFixed(2)}%`
                             }
                         </Badge>
                     </div>
