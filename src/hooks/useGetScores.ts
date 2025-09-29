@@ -1,7 +1,6 @@
 import { 
     useState, 
     useEffect,
-    useMemo 
 } from "react";
 import vader from 'vader-sentiment'
 
@@ -28,9 +27,9 @@ const useGetScores = (timeFilteredData: Message[] | null) => {
         getScores()
     }, [timeFilteredData])
 
-    return useMemo(() => ({
+    return {
         scores
-    }), [scores]);
+    }
 }
 
 export default useGetScores;

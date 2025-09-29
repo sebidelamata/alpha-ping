@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 import { AlphaPING } from '../../typechain-types/contracts/AlphaPING.sol/AlphaPING';
 import { defaultTokenMetadata } from "src/constants/defaultTokenMetadata";
+import { useBeefyDetailsContext } from "src/contexts/BeefyDetailsContext";
 import fetchTokenMetadata from "src/lib/fetchTokenMetadata";
 
 const useAllChannelsMetadata = () => {
-    const { signer, alphaPING, channels } = useEtherProviderContext(); // assuming you have contract in context
+    const { signer, alphaPING, channels } = useEtherProviderContext();
+    const { beefyVaults } = useBeefyDetailsContext();
+
     const [allChannelsMetadata, setAllChannelsMetadata] = useState<tokenMetadata[]>([]);
     const [allChannelsMetadataLoading, setAllChannelsMetadataLoading] = useState<boolean>(false);
     const [allChannels, setAllChannels] = useState<AlphaPING.ChannelStructOutput[]>([]);
@@ -34,7 +37,7 @@ const useAllChannelsMetadata = () => {
                         return defaultTokenMetadata;
                     }
                     if (channel.tokenAddress) {
-                        return await fetchTokenMetadata(channel.tokenAddress, signer);
+                        return await fetchTokenMetadata(channel.tokenAddress, signer, beefyVaults);
                     }
                     console.warn('No token address found for channel:', channel);
                     return defaultTokenMetadata;
@@ -52,7 +55,7 @@ const useAllChannelsMetadata = () => {
         };
 
         fetchAllChannelsMetadata();
-    }, [signer, alphaPING, channels]);
+    }, [signer, alphaPING, channels, beefyVaults]);
 
     return {
         allChannelsMetadata,

@@ -1,7 +1,6 @@
 import {
     useState,
     useEffect,
-    useMemo
 } from "react";
 import averageScores from "src/lib/averageScores";
 
@@ -17,7 +16,7 @@ const useGetAllMessagesScore = (weights: number[], scores: SentimentScore[]) => 
         getAllMessagesScore()
     }, [scores, weights])
 
-    return useMemo(() => ({ allMessagesScore }), [allMessagesScore]);
+    return { allMessagesScore }
 }
 
 export default useGetAllMessagesScore;

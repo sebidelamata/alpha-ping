@@ -1,7 +1,6 @@
 import {
     useState,
     useEffect,
-    useMemo
 } from "react";
 import weightAllMessages from "src/lib/weightAllMessages";
 import { useMessagesProviderContext } from "src/contexts/MessagesContext";
@@ -23,9 +22,9 @@ const useGetMessageWeights = (messageWeighting: Weighting, timeFilteredData: Mes
         setWeights(weights)
     }, [timeFilteredData, messageWeighting, authorCurrentTokenBalances])
 
-    return useMemo(() => ({
+    return {
         weights
-    }), [weights]);
+    }
 }
 
 export default useGetMessageWeights;

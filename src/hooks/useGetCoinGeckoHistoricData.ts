@@ -1,7 +1,6 @@
 import { 
     useEffect, 
     useState,
-    useMemo
 } from "react";
 import useGetCoinGeckoID from "./useGetCoinGeckoID";
 import qs from "qs";
@@ -87,7 +86,7 @@ const useGetCoinGeckoHistoricData = (timeframe: TimeFrame, optionalAddress="") =
         }, [coinGeckoId, timeframe]);
     // this is the function that will fetch the token history from coingecko
 
-    return useMemo(() => ({ historicPriceData }), [historicPriceData])
+    return { historicPriceData }
     
 }
 

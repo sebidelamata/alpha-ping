@@ -1,7 +1,6 @@
 import { 
     useState, 
     useEffect,
-    useMemo 
 } from "react";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
 
@@ -30,10 +29,10 @@ const useReplyUsernameAndPFP = (reply: Message | null) => {
       fetchReplyUsername()
     }, [alphaPING, reply])
 
-    return useMemo(() => ({
+    return {
         replyPFP,
         replyUsername
-    }), [replyPFP, replyUsername]);
+    }
 
 }
 

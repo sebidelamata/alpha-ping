@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 const useCountdown = (timeSeconds: number) => {
     const [secondsLeft, setSecondsLeft] = useState<number>(timeSeconds)
@@ -18,10 +18,10 @@ const useCountdown = (timeSeconds: number) => {
             return () => clearInterval(intervalId);
     }, [])
 
-    return useMemo(() => ({
+    return {
         secondsLeft,
         expired
-    }), [secondsLeft, expired]);
+    }
 }
 
 export default useCountdown;

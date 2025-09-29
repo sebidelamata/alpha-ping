@@ -1,7 +1,6 @@
 import {
     useState,
     useEffect,
-    useMemo
 } from "react";
 import vader from 'vader-sentiment'
 
@@ -25,7 +24,7 @@ const useGetChannelScores = (currentChanneltimeFilteredData: Message[]) => {
         getChannelScores()
     }, [currentChanneltimeFilteredData])
 
-    return useMemo(() => ({ channelScores }), [channelScores])
+    return { channelScores }
 }
 
 export default useGetChannelScores;

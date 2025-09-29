@@ -1,7 +1,6 @@
 import { 
     useState, 
-    useEffect,
-    useMemo, 
+    useEffect, 
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
@@ -50,11 +49,11 @@ const useUniqueProfilePics = (uniqueProfiles: Set<string>) => {
         fetchUserProfiles();
     }, [alphaPING, currentChannel, uniqueProfiles]);
 
-    return useMemo(() => ({
+    return {
         profilePics,
         profilePicsLoading,
         profilePicsError
-    }), [profilePics, profilePicsLoading, profilePicsError]);
+    }
 };
 
 export default useUniqueProfilePics;

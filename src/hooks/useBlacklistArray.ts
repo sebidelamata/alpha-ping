@@ -1,7 +1,6 @@
 import { 
     useState, 
     useEffect,
-    useMemo 
 } from "react";
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
@@ -50,11 +49,11 @@ const useBlacklistArray = (uniqueProfiles: Set<string>) => {
         fetchBlacklist();
     }, [alphaPING, currentChannel, uniqueProfiles]);
 
-    return useMemo(() => ({
+    return {
         blacklistArray,
         blacklistArrayLoading,
         blacklistError
-    }), [blacklistArray, blacklistArrayLoading, blacklistError]);
+    }
 };
 
 export default useBlacklistArray;

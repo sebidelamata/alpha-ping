@@ -35,14 +35,12 @@ const useChannelGroups = () => {
         ), [userChannelsWithMetadata]
     );
 
-    const result = useMemo(() => {
-        return {
+    const result =  {
             spotChannels,
             aaveChannels,
             nftChannels,
             beefyChannels
-        };
-    }, [spotChannels, aaveChannels, nftChannels, beefyChannels]);
+        }
 
 return result;
 }

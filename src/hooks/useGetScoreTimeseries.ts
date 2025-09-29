@@ -1,7 +1,6 @@
 import {
     useState,
     useEffect,
-    useMemo
 } from "react";
 import weightTimeseries from "src/lib/weightTimeseries";
 
@@ -69,9 +68,9 @@ const useGetScoreTimeseries = (
         getChannelScoreTimeseries()
     }, [channelWeights, channelScores, currentChanneltimeFilteredData, historicPriceData])
 
-    return useMemo(() => ({
+    return {
         scoreTimeseries
-    }), [scoreTimeseries]);
+    }
 }
 
 export default useGetScoreTimeseries;

@@ -1,7 +1,6 @@
 import {
     useState,
     useEffect,
-    useMemo
 } from "react";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { useEtherProviderContext } from "src/contexts/ProviderContext";
@@ -40,11 +39,11 @@ const useIsMember = (): {
         findIsMember()
     }, [signer, isConnected, alphaPING, isInitialized])
 
-    return useMemo(() => ({
+    return {
         isMember,
         setIsMember,
         loading
-    }), [isMember, loading]);   
+    } 
 }
 
 export default useIsMember

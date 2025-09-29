@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import useGetCoinGeckoHistoricData from "src/hooks/useGetCoinGeckoHistoricData";
 
 const useGetPriceChartData = (
@@ -49,10 +49,10 @@ const useGetPriceChartData = (
         computeSellTokenBaseData();
     }, [historicSellDataUSD, historicBuyDataUSD]);
 
-    return useMemo(() => ({
+    return {
         historicBuyDataUSD,
         historicDataSellTokenBase
-    }), [historicBuyDataUSD, historicDataSellTokenBase]);
+    }
 }
 
 export default useGetPriceChartData;
