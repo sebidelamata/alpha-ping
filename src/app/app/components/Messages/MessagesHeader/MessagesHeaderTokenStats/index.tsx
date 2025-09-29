@@ -74,25 +74,34 @@ const MessagesHeaderTokenStats = () => {
             {
                 currentChannel &&
                 selectedChannelMetadata &&
-                <div className="flex flex-row gap-2">
-                    <Avatar className="size-8">
-                        <AvatarImage
-                            src={
-                                selectedChannelMetadata.logo !== '' ? 
-                                selectedChannelMetadata.logo : 
-                                (
-                                    currentChannel.tokenType === 'ERC20' ?
-                                    '/erc20Icon.svg' :
-                                    '/blank_nft.svg'
-                                )
-                            }
-                            loading="lazy"
-                            alt="AlphaPING Logo"
-                        />
-                        <AvatarFallback>AP</AvatarFallback>
-                    </Avatar>
-                </div>
-            }
+                (
+                    selectedChannelMetadata.protocol !== undefined &&
+                    selectedChannelMetadata.protocol.toLocaleLowerCase() === 'beefy' ?
+                    <div className="flex flex-row gap-2">
+                        <Badge className="bg-primary text-lg">
+                            Yield
+                        </Badge>
+                    </div> :
+                    <div className="flex flex-row gap-2">
+                        <Avatar className="size-8">
+                            <AvatarImage
+                                src={
+                                    selectedChannelMetadata.logo !== '' ? 
+                                    selectedChannelMetadata.logo : 
+                                    (
+                                        currentChannel.tokenType === 'ERC20' ?
+                                        '/erc20Icon.svg' :
+                                        '/blank_nft.svg'
+                                    )
+                                }
+                                loading="lazy"
+                                alt="AlphaPING Logo"
+                            />
+                            <AvatarFallback>AP</AvatarFallback>
+                        </Avatar>
+                    </div>
+                )
+            } 
             {
                 currentChannel &&
                 <div className="text-3xl">
