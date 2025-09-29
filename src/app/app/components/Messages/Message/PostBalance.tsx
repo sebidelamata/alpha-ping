@@ -10,6 +10,7 @@ import {
 import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import useGetTokenSymbol from "src/hooks/useGetTokenSymbol";
+import getFullStringScientificNotationSafe from "src/lib/getFullStringScientificNotationSafe";
 
 interface PostBalanceProps{
     message: Message;
@@ -39,7 +40,7 @@ const PostBalance:React.FC<PostBalanceProps> = ({
                                         Math.round(
                                             parseFloat(
                                                 ethers.formatUnits(
-                                                    message.messageTimestampTokenAmount.toString(), 
+                                                   getFullStringScientificNotationSafe(message.messageTimestampTokenAmount), 
                                                     tokenDecimals
                                                 )
                                             ) * 1e8
@@ -47,7 +48,7 @@ const PostBalance:React.FC<PostBalanceProps> = ({
                                         ).toString()
                                     } ${tokenSymbol ?? ''}`
                                     ) : (
-                                    `${message.messageTimestampTokenAmount.toString()} ${tokenSymbol ?? 'NFT'}${message.messageTimestampTokenAmount.toString().toString() === '1' ? '' : 's'}`
+                                    `${getFullStringScientificNotationSafe(message.messageTimestampTokenAmount)} ${tokenSymbol ?? 'NFT'}${getFullStringScientificNotationSafe(message.messageTimestampTokenAmount) === '1' ? '' : 's'}`
                                     )
                                 }
                             </div>
@@ -67,7 +68,7 @@ const PostBalance:React.FC<PostBalanceProps> = ({
                                         (Math.round(
                                             parseFloat(
                                                 ethers.formatUnits(
-                                                    message.messageTimestampTokenAmount.toString(), 
+                                                    getFullStringScientificNotationSafe(message.messageTimestampTokenAmount), 
                                                     tokenDecimals
                                                 )
                                             ) * 1e8
@@ -77,7 +78,7 @@ const PostBalance:React.FC<PostBalanceProps> = ({
                                 }`
                             ) : (
                             `$${humanReadableNumbers(
-                                (Number(message.messageTimestampTokenAmount) * Number(cmcFetch.twentyFourHourChange)
+                                (Number(getFullStringScientificNotationSafe(message.messageTimestampTokenAmount)) * Number(cmcFetch.twentyFourHourChange)
                             ).toString())}`
                             )
                         }

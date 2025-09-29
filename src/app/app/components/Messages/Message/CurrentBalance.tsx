@@ -11,6 +11,7 @@ import { useCMCPriceDataContext } from "src/contexts/CMCPriceDataContext";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
 import useGetBalance from "src/hooks/useGetBalance";
 import useGetTokenSymbol from "src/hooks/useGetTokenSymbol";
+import getFullStringScientificNotationSafe from "src/lib/getFullStringScientificNotationSafe";
 
 interface CurrentBalanceProps{
     tokenDecimals: number | null;
@@ -42,13 +43,13 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
                                     (
                                     Math.round(
                                         parseFloat(
-                                        ethers.formatUnits(userBalance.toString(), tokenDecimals)
+                                        ethers.formatUnits(getFullStringScientificNotationSafe(userBalance), tokenDecimals)
                                         ) * 1e8
                                     ) / 1e8
                                     ).toString()
                                 } ${tokenSymbol ?? ''}`
                                 ) : (
-                                `${userBalance.toString()} ${tokenSymbol ?? ''}${userBalance.toString() === '1' ? '' : 's'}`
+                                `${userBalance.toString()} ${tokenSymbol ?? ''}${getFullStringScientificNotationSafe(userBalance) === '1' ? '' : 's'}`
                                 )
                             )
                         }
@@ -70,7 +71,7 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
                                             humanReadableNumbers((
                                                 (
                                                     parseFloat(
-                                                    ethers.formatUnits(userBalance.toString(), tokenDecimals)
+                                                    ethers.formatUnits(getFullStringScientificNotationSafe(userBalance), tokenDecimals)
                                                     ) * 1e8
                                                 ) / 1e8 * Number(cmcFetch.tokenUSDPrice)
                                             ).toString())
@@ -78,7 +79,7 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
                                         ) : (
                                             `$${
                                                 humanReadableNumbers(
-                                                    (Number(userBalance) * Number(cmcFetch.tokenUSDPrice)).toString()
+                                                    (Number(getFullStringScientificNotationSafe(userBalance)) * Number(cmcFetch.tokenUSDPrice)).toString()
                                                 )
                                             }`
                                         )
