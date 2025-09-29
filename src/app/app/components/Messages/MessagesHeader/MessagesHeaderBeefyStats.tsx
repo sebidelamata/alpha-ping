@@ -10,11 +10,16 @@ import {
 import { useChannelProviderContext } from "src/contexts/ChannelContext";
 import useGetCurrentChannelBeefyLP from "src/hooks/useGetCurrentChannelBeefyLP";
 import humanReadableNumbers from "src/lib/humanReadableNumbers";
-import { Separator } from "@/components/components/ui/separator";
 import { Badge } from "@/components/components/ui/badge";
 import useGetCurrentChannelBeefyVault from "src/hooks/useGetCurrentChannelBeefyVault";
 import { Button } from "@/components/components/ui/button";
 import { ExternalLink } from "lucide-react";
+import { 
+    DropdownMenu, 
+    DropdownMenuTrigger, 
+    DropdownMenuContent 
+} from "@/components/components/ui/dropdown-menu";
+import { DateTime } from 'luxon';
 
 const MessagesHeaderBeefyStats:React.FC = () => {
 
@@ -31,13 +36,13 @@ const MessagesHeaderBeefyStats:React.FC = () => {
         selectedChannelMetadata.protocol === 'beefy'
     ){
         return(
-            <div className="flex flex-row flex-wrap w-full gap-4 text-xl">
+            <div className="flex flex-row flex-wrap justify-start items-center w-full gap-4 text-xl">
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.id &&
-                    <div className="flex flex-col h-full justify-evenly">
+                    <div className="flex items-center">
                         <Link 
-                            className="text-accent flex flex-wrap gap-2 justify-center"
+                            className="text-accent flex flex-wrap gap-2 items-center"
                             href={`https://app.beefy.finance/vault/${currentChannelBeefyVault?.id}`}
                             target="_blank"
                         >
@@ -61,19 +66,47 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.status &&
                     (
-                        currentChannelBeefyVault.status === 'active' ?
-                        <Badge className="text-green-500">
-                            Active
-                        </Badge> :
-                        <Badge variant={'destructive'}>
-                            Retired
-                        </Badge>
+                        <div className="flex items-center">
+                            {
+                                currentChannelBeefyVault.status === 'active' ?
+                                <Badge className="text-green-500 rounded-full">
+                                    Active
+                                </Badge> :
+                                <Badge variant={'outline'} className="text-red-500 rounded-full">
+                                    Retired
+                                </Badge>
+                            }
+                        </div>
                     )
                 }
                 {
                     currentChannelBeefyVault &&
+                    currentChannelBeefyVault.retireReason &&
+                    <div className="flex items-center">
+                        <Badge className="text-lg text-red-500">
+                            Retire Reason: { 
+                                currentChannelBeefyVault.retireReason
+                                    .replace('-', ' ')
+                                    .toLocaleUpperCase()
+                            }
+                        </Badge>
+                    </div>
+                }
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.retiredAt &&
+                    <div className="flex items-center">
+                        <Badge className="text-lg text-red-500">
+                            Retired At: { 
+                                DateTime.fromSeconds(currentChannelBeefyVault.retiredAt).toLocaleString(DateTime.DATETIME_MED)
+                            }
+                        </Badge>
+                    </div>  
+                }
+                {
+                    currentChannelBeefyVault &&
                     currentChannelBeefyVault.strategyTypeId &&
-                    <div className="flex flex-row">
+                    <div className="flex items-center">
                         <Badge>
                             {
                                 currentChannelBeefyVault.strategyTypeId
@@ -85,7 +118,7 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                 }
                 {
                     currentChannelBeefyLP !== null &&
-                    <div className="flex flex-col justify-evenly">
+                    <div className="flex items-center">
                         <Badge className="text-lg">
                             TVL: { 
                                 `$${humanReadableNumbers((Number(currentChannelBeefyLP[1].totalSupply) * Number(currentChannelBeefyLP[1].price)).toString())}`
@@ -96,14 +129,14 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.addLiquidityUrl &&
-                    <div className="flex justify-evenly">
+                    <div className="flex items-center">
                         <Button variant={'secondary'}>
                             <Link 
                                 href={currentChannelBeefyVault.addLiquidityUrl} 
                                 target="_blank"
-                                className="flex flex-row justify-between gap-1"
+                                className="flex flex-row items-center gap-1"
                             >
-                                Build LP <ExternalLink/>
+                                Build LP <ExternalLink className="w-4 h-4"/>
                             </Link>
                         </Button>
                     </div>
@@ -111,102 +144,77 @@ const MessagesHeaderBeefyStats:React.FC = () => {
                 {
                     currentChannelBeefyVault &&
                     currentChannelBeefyVault.risks &&
-                    <ul>
-                        {
-                            currentChannelBeefyVault.risks.map((risk) => {
-                                return <Badge>
-                                    {
-                                        risk.replace('_', ' ')
-                                            .toLocaleUpperCase()
-                                    }
-                                </Badge>
-                            })
-                        }
-                    </ul>
+                    <div className="flex items-center">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant={'outline'}>
+                                    Risks
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56 bg-primary text-secondary flex flex-col gap-2 p-4">
+                                {
+                                currentChannelBeefyVault.risks.map((risk, index) => {
+                                    return <Badge key={index}>
+                                        {
+                                            risk.replace('_', ' ')
+                                                .toLocaleUpperCase()
+                                        }
+                                    </Badge>
+                                })
+                            }
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 }
-                {/* {
-                    currentChannelBeefyLP !== null &&
-                    <div className="flex flex-col justify-evenly">
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.assets &&
+                    <div className="flex items-center">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant={'outline'}>
+                                    Assets
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56 bg-primary text-secondary flex flex-col gap-2 p-4">
+                                {
+                                currentChannelBeefyVault.assets.map((assets, index) => {
+                                    return <Badge key={index}>
+                                        {
+                                            assets.replace('_', ' ')
+                                                .toLocaleUpperCase()
+                                        }
+                                    </Badge>
+                                })
+                            }
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                }
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.lastHarvest &&
+                    <div className="flex items-center">
                         <Badge className="text-lg">
-                            Supply APY: { 
-                                Number(aaveAssetDetails.supplyRate) * 100 < 0.01 ?
-                                "< 0.01" :
-                                (Number(aaveAssetDetails.supplyRate) * 100).toFixed(2)
-                            }%
-                        </Badge>
-                        <Badge className="text-lg">
-                            Borrow APY: { 
-                                (Number(aaveAssetDetails.borrowRate) * 100).toFixed(2) 
-                            }%
+                            Last Harvest: { 
+                                DateTime.fromSeconds(currentChannelBeefyVault.lastHarvest).toLocaleString(DateTime.DATETIME_MED)
+                            }
                         </Badge>
                     </div>
-
                 }
-                    <div className="flex flex-col h-full justify-evenly">
-                        <div 
-                            className={
-                                // render color based on health factor
-                                Number(aaveAccount?.healthFactor) <= 1.1 ?
-                                "text-red-500" :
-                                Number(aaveAccount?.healthFactor) <= 5.0 ?
-                                "text-yellow-500" :
-                                "text-green-500"
+                {
+                    currentChannelBeefyVault &&
+                    currentChannelBeefyVault.oracle &&
+                    <div className="flex items-center">
+                        <Badge className="text-lg">
+                            Oracle: { 
+                                currentChannelBeefyVault.oracle
+                                    .replace('-', ' ')
+                                    .toLocaleUpperCase()
                             }
-                            > 
-                                Health Factor: {
-                                    aaveAccount?.healthFactor === "115792089237316195423570985008687907853.269984665640564039457584007913129639935" ? 
-                                    "∞" :
-                                    Number(aaveAccount?.healthFactor).toFixed(2)
-                                }
-                        </div>
-                        <div className="justify-end flex">
-                                Can Borrow: ${ 
-                                humanReadableNumbers(Number(aaveAccount?.availableBorrows).toString()) 
-                                }
-                        </div>
+                        </Badge>
                     </div>
-                    <ul className="flex flex-col text-sm justify-evenly">
-                        <li className="w-full justify-end flex">
-                            Assets: ${
-                            humanReadableNumbers(Number(aaveAccount?.totalCollateral).toString())
-                            }
-                        </li>
-                        <li className="w-full justify-end flex">
-                            - Debt: ${
-                            humanReadableNumbers(Number(aaveAccount?.totalDebt).toString())
-                            }
-                        </li>
-                        <Separator className="my-1 h-[2px] w-full bg-accent" />
-                        <li className="w-full justify-end flex">
-                            Net Worth: ${ 
-                            humanReadableNumbers(
-                                (
-                                Number(aaveAccount?.totalCollateral) -
-                                Number(aaveAccount?.totalDebt)
-                                ).toString()
-                            )
-                            }
-                        </li>
-                    </ul>
-                    <ul className="flex flex-col h-full justify-evenly">
-                        <li className="w-full justify-end flex">
-                            Effective LTV: {
-                                    aaveAccount?.healthFactor === "115792089237316195423570985008687907853.269984665640564039457584007913129639935" ? 
-                                    "0" :
-                                    ((1 / Number(aaveAccount?.healthFactor)*100)).toFixed(2)
-                                }%
-                        </li>
-                        <li className="w-full justify-end flex">
-                            Max LTV: {
-                            (Number(aaveAccount?.ltv) * 100).toFixed(2)
-                            }%
-                        </li>
-                        <li className="w-full justify-end flex">
-                            Liquidation LTV: {
-                            (Number(aaveAccount?.currentLiquidationThreshold) * 100).toFixed(2)
-                            }%
-                        </li>
-                    </ul> */}
+                }
             </div>
         )
     } else {
