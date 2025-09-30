@@ -49,7 +49,7 @@ const CurrentBalance:React.FC<CurrentBalanceProps> = ({
                                     ).toString()
                                 } ${tokenSymbol ?? ''}`
                                 ) : (
-                                `${userBalance.toString()} ${tokenSymbol ?? ''}${getFullStringScientificNotationSafe(userBalance) === '1' ? '' : 's'}`
+                                `${getFullStringScientificNotationSafe(userBalance)} ${tokenSymbol ?? ''}${getFullStringScientificNotationSafe(userBalance) === '1' ? '' : 's'}`
                                 )
                             )
                         }
