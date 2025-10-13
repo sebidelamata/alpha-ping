@@ -62,7 +62,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
 
     // 1. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const handleApprove = async () => {
-        if (!signer || !sellTokenAddress || !price?.issues?.allowance?.spender) {
+        if (!signer || !sellTokenAddress || !price?.allowanceTarget) {
             console.error("Signer or sellTokenAddress is not available");
             return;
         }
@@ -73,8 +73,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                 ERC20Faucet.abi,
                 signer
             )
-            const maxApproval = ethers.MaxUint256
-            const tx = await tokenContract.approve(price.issues.allowance.spender, maxApproval);
+            const tx = await tokenContract.approve(price?.allowanceTarget, price.sellAmount);
             await tx.wait();
             if(tx !== undefined && tx.hash !== undefined){
                 const txHash = tx?.hash;
