@@ -1,7 +1,6 @@
 'use client';
 
 import React, {
-    useEffect,
     useState
 } from "react";
 import { Button } from "@/components/components/ui/button";
@@ -20,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Loading from "../Loading";
+import useGetAllowance from "src/hooks/useGetAllowance";
 
 interface IApproveOrReviewButton {
     onClick: () => void;
@@ -49,42 +49,18 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
 
     const { toast } = useToast()
     const { signer } = useEtherProviderContext()
+    const { tokenAllowance } = useGetAllowance(
+        price?.allowanceTarget || "", 
+        sellTokenAddress, 
+        sellTokenSymbol === "ETH"
+    )
+    console.log(tokenAllowance)
     
     const [loading, setLoading] = useState<boolean>(false)
     const [txMessage, setTxMessage] = useState<string | null>(null)
-    const [tokenAllowance, setTokenAllowance] = useState<string>("0")
-    useEffect(() => {
-        const tokenContract = new ethers.Contract(
-            sellTokenAddress,
-            ERC20Faucet.abi,
-            signer
-        )
-        const fetchAllowance = async (spender: string) => {
-        if (!signer || !sellTokenAddress) {
-            console.error("Signer or sellTokenAddress is not available");
-            return null;
-        }
-        try {
-            const allowance = await tokenContract.allowance(
-                await signer.getAddress(),
-                spender
-            );
-            setTokenAllowance(allowance.toString());
-            return;
-        } catch (error) {
-            console.error("Error fetching allowance:", error);
-            return null;
-        }
-    }
-        // Fetch the allowance when the component mounts or when sellTokenAddress changes
-        if (price?.issues?.allowance?.spender) {
-            fetchAllowance(price.issues.allowance.spender);
-        } else {
-            console.warn("No spender address available in price issues allowance");
-        }
-    }, [signer, sellTokenAddress, price?.issues?.allowance?.spender, txMessage]);
+    
 
-    // 2. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
+    // 1. (only if insufficent allowance): write to erc20, approve token allowance for the determined spender
     const handleApprove = async () => {
         if (!signer || !sellTokenAddress || !price?.issues?.allowance?.spender) {
             console.error("Signer or sellTokenAddress is not available");
@@ -181,7 +157,11 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
         )
     }
     // If price.issues.allowance is null, show the Review Trade button
-    if (price?.issues.allowance === null) {
+    if (
+        price?.sellAmount &&
+        tokenAllowance &&
+        tokenAllowance >= price?.sellAmount
+    ) {
         return (
             <div className="flex flex-col w-full">
                 <Button
@@ -201,7 +181,11 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
                 </Button>
             </div>
         );
-    }else if(price?.issues.allowance !== null){
+    }else if(
+        tokenAllowance === null || 
+        !price?.sellAmount || 
+        tokenAllowance < price?.sellAmount
+    ){
         return (
             <div className="flex flex-col w-full">
                 {
