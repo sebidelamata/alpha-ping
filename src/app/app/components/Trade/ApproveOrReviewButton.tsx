@@ -54,6 +54,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
         sellTokenAddress, 
         sellTokenSymbol === "ETH"
     )
+    console.log('sellTokenAddress:', sellTokenAddress   )
     console.log(tokenAllowance)
     
     const [loading, setLoading] = useState<boolean>(false)

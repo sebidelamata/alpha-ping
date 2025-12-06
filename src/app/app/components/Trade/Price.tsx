@@ -56,15 +56,12 @@ const Price:React.FC<IPrice> = ({
     const flipTokens = (
         sellToken: string, 
         buyToken: string,
-        sellAmount: string,
         buyAmount: string
     ) => {
         const currentSellToken = sellToken;
         setSellToken(buyToken);
         setBuyToken(currentSellToken);
-        const currentSellAmount = sellAmount;
         setSellAmount(buyAmount);
-        setBuyAmount(currentSellAmount); 
     }
 
     // grab the token objects from the token list
