@@ -279,6 +279,8 @@ const Message: React.FC<MessageProps> = ({
           </p>
           {
             imageUrls.map((url, idx) => (
+              url !== null &&
+              url !== undefined &&
               <Image 
                 key={idx} 
                 src={url} 
@@ -293,6 +295,8 @@ const Message: React.FC<MessageProps> = ({
           }
           {
             iframeStrings.map((iframeString, idx) => (
+              iframeString !== null &&
+              iframeString !== undefined &&
               <iframe
                 key={idx}
                 src={iframeString}
