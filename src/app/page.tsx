@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useEffect} from "react";
 import HomeNav from "./components/HomeNav";
 import Footer from "./components/Footer";
