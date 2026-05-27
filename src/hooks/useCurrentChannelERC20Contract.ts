@@ -13,31 +13,39 @@ const useCurrentChannelERC20Contract = (tokenAddress: string = "", nativeToken: 
     const { currentChannel } = useChannelProviderContext()
     const { signer } = useEtherProviderContext() 
 
-    // current channel erc20 contract instance ready to go
     const [token, setToken] = useState<Contract | null>(null)
 
     useEffect(() => {
-        if(nativeToken) {
+        if (nativeToken) {
             setToken(null)
             return
         }
-        if(currentChannel?.tokenAddress !== undefined && tokenAddress === "") {
-            const token = new ethers.Contract(
-                currentChannel?.tokenAddress,
-                ERC20Faucet.abi,
-                signer
-            )
-            setToken(token)
-        }
-        if(tokenAddress !== "") {
+
+        // Guard: ensure address is a valid non-empty string before constructing contract
+        if (tokenAddress !== "") {
+            if (!ethers.isAddress(tokenAddress)) return;
             const token = new ethers.Contract(
                 tokenAddress,
                 ERC20Faucet.abi,
                 signer
             )
             setToken(token)
+            return
         }
-    }, [currentChannel, signer, setToken, tokenAddress, nativeToken])
+
+        if (
+            currentChannel?.tokenAddress !== undefined &&
+            currentChannel?.tokenAddress !== "" &&
+            ethers.isAddress(currentChannel.tokenAddress)
+        ) {
+            const token = new ethers.Contract(
+                currentChannel.tokenAddress,
+                ERC20Faucet.abi,
+                signer
+            )
+            setToken(token)
+        }
+    }, [currentChannel, signer, tokenAddress, nativeToken])
 
     return { token }
 }

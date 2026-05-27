@@ -14,23 +14,33 @@ const useGetBalance = ( user: string = "", tokenAddress: string = "", nativeToke
 
     useEffect(() => {
         const getUserBalance = async () => {
-          // hanfles case where token is native token 
-          if(
-            nativeToken===true && 
-            provider !== null && 
-            provider !== undefined
-          ){
-            const balance = await provider.getBalance(user)
-            setUserBalance(balance.toString())
-          }
-          if(token !== null && nativeToken===false) {
-            const account = user === "" ? signer : user
-            const userBalance = await token.balanceOf(account)
-            setUserBalance(userBalance.toString())
-          }
+            // Guard: nothing to look up yet
+            if (!signer && !user) return;
+
+            if (nativeToken === true && provider != null) {
+                // Guard: need a valid address for native balance
+                const address = user !== "" ? user : await signer?.getAddress()
+                if (!address) return;
+                const balance = await provider.getBalance(address)
+                setUserBalance(balance.toString())
+                return;
+            }
+
+            if (token !== null && nativeToken === false) {
+                // Guard: resolve address — never pass signer object to balanceOf
+                let address: string | undefined;
+                if (user !== "") {
+                    address = user;
+                } else {
+                    address = await signer?.getAddress()
+                }
+                if (!address) return;
+                const userBalance = await token.balanceOf(address)
+                setUserBalance(userBalance.toString())
+            }
         }
         getUserBalance()
-      }, [token, signer, user, nativeToken, provider])
+    }, [token, signer, user, nativeToken, provider])
 
     return { userBalance }
 }
