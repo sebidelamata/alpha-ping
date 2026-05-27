@@ -1,20 +1,10 @@
-'use client';
 
-import React, {useEffect} from "react";
+import React from "react";
 import HomeNav from "./components/HomeNav";
 import Footer from "./components/Footer";
 import TotalVolumeUSDCard from "./components/TotalVolumeUSDCard";
 
 const Home: React.FC = () => {
-
-    // In _app.tsx or layout.tsx (client component)
-useEffect(() => {
-  window.addEventListener('error', (e) => {
-    if (e.message?.includes('BigNumberish') || e.message?.includes('BigInt')) {
-      console.log('BigInt error caught — React component stack:', e.error?.stack);
-    }
-  });
-}, []);
 
     return (
         <div className="min-h-screen flex flex-col bg-primary text-secondary">

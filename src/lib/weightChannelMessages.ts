@@ -1,112 +1,68 @@
-
 const weightChannelMessages = (
-    messages:Message[], 
+    messages: Message[], 
     messageWeighting: Weighting,
     authorCurrentTokenBalances: Record<string, Record<string, Record<string, number>>>,
-):number[] => {
-    if(messages.length === 0){
+): number[] => {
+    if (messages.length === 0) {
         return []
     }
-    if(messageWeighting === "unweighted"){
-        // we return full weighting * by 1 (or return empty array)
-        const identityWeights = Array(messages.length).fill(1) || []
-        return identityWeights
-    } else if(messageWeighting === "post"){
-         // find total for avg calc, if its undefined just make it zero
-        // dont find sum find max
-        // working here first, need to apply this max method to the other weighting calls.
+    if (messageWeighting === "unweighted") {
+        return Array(messages.length).fill(1) || []
+
+    } else if (messageWeighting === "post") {
         const max: number = Math.max(...messages.map((message) => parseInt(message.messageTimestampTokenAmount)))
-        // if the total is zero everything is zero
         if (max === 0) {
-            // fallback to zero weights to prevent NaN
             return Array(messages.length).fill(0);
         }
-        const weights = messages.map((message) => {
-                return (
-                    // fallback to 0 in case we divide by zero or divide zero or anything weird
-                    Number(
-                        (Number(message.messageTimestampTokenAmount) / Number(max))
-                        .toFixed(2) || 0 
-                    )
-                )
-            }
+        return messages.map((message) =>
+            Number((Number(message.messageTimestampTokenAmount) / Number(max)).toFixed(2) || 0)
         )
-        return weights
-    } else if(messageWeighting === "current") {
-         // find total for avg calc if it is undefined just make it zero
-        const max = Object.values(authorCurrentTokenBalances).reduce((currentMax, channelBalances) => {
+
+    } else if (messageWeighting === "current") {
+        const max: number = Object.values(authorCurrentTokenBalances).reduce((currentMax, channelBalances) => {
             return Object.values(channelBalances).reduce((channelMax, tokenBalances) => {
                 return Object.values(tokenBalances).reduce((tokenMax, balance) => {
-                    const balanceBigInt = BigInt(balance);
-                    return balanceBigInt > tokenMax ? balanceBigInt : tokenMax;
+                    return balance > tokenMax ? balance : tokenMax;
                 }, channelMax);
             }, currentMax);
-        }, BigInt(0));
+        }, 0);
 
-        if (max === BigInt(0)) {
-            // fallback to 0 weights to prevent NaN
-            return Array(messages.length).fill(0);
-        }
-        const weights = messages.map((message) => {
-            const tokenAddress = Object.keys(authorCurrentTokenBalances[message.channel])[0]
-            const currentBalance = authorCurrentTokenBalances[message.channel][tokenAddress][message.account]
-            return (
-                // fallback to 0 in case we divide by zero or divide zero or anything weird
-                Number(
-                    (Number(currentBalance) / Number(max))
-                    .toFixed(2) || 0 
-                )
-            )
-        }
-    )
-    return weights
-    } else if(messageWeighting === "delta"){
-      // find total for avg calc, if its undefined just make it zero
-        const max: number = Math.max(
-            ...messages.map((message) => 
-                Number(authorCurrentTokenBalances[message.channel][Object.keys(authorCurrentTokenBalances[message.channel])[0]][message.account]) - Number(message.messageTimestampTokenAmount)
-            ) || BigInt(0)
-        )
         if (max === 0) {
-            // fallback to zero weights to prevent NaN
             return Array(messages.length).fill(0);
         }
-        const weights = messages.map((message) => {
-                return (
-                    // fallback to 0 in case we divide by zero or divide zero or anything weird
-                    Number(
-                        (
-                            (
-                                Number(authorCurrentTokenBalances[message.channel][Object.keys(authorCurrentTokenBalances[message.channel])[0]][message.account]) - 
-                                Number(message.messageTimestampTokenAmount)
-                            ) / Number(max)
-                        )
-                        .toFixed(2) || 0 
-                    )
-                )
-            }
+        return messages.map((message) => {
+            const channelBalances = authorCurrentTokenBalances[message.channel]
+            if (!channelBalances) return 0;
+            const tokenAddress = Object.keys(channelBalances)[0]
+            const currentBalance = channelBalances[tokenAddress]?.[message.account] ?? 0
+            return Number((currentBalance / max).toFixed(2) || 0)
+        })
+
+    } else if (messageWeighting === "delta") {
+        const deltas = messages.map((message) => {
+            const channelBalances = authorCurrentTokenBalances[message.channel]
+            if (!channelBalances) return 0;
+            const tokenAddress = Object.keys(channelBalances)[0]
+            const currentBalance = channelBalances[tokenAddress]?.[message.account] ?? 0
+            return currentBalance - Number(message.messageTimestampTokenAmount)
+        })
+        const max: number = Math.max(...deltas)
+        if (max === 0) {
+            return Array(messages.length).fill(0);
+        }
+        return messages.map((_, i) =>
+            Number((deltas[i] / max).toFixed(2) || 0)
         )
-        return weights
-    } else if(messageWeighting === "inverse"){
-        // find total for avg calc, if its undefined just make it zero
+
+    } else if (messageWeighting === "inverse") {
         const max: number = Math.max(...messages.map((message) => parseInt(message.messageTimestampTokenAmount)))
-        // if the total is zero everything is zero and therefore we weight them all 100%
         if (max === 0) {
-            // fallback to 1 weights to prevent NaN
             return Array(messages.length).fill(1);
         }
-        const weights = messages.map((message) => {
-                return (
-                    // inverse percent is 1 - weight eg 0.1 = 1 - 0.9
-                    // fallback to 1 in case we divide by zero or divide zero or anything weird
-                    Number(
-                        (1 - (Number(message.messageTimestampTokenAmount) / Number(max)))
-                        .toFixed(2) || 1 
-                    )
-                )
-            }
+        return messages.map((message) =>
+            Number((1 - (Number(message.messageTimestampTokenAmount) / Number(max))).toFixed(2) || 1)
         )
-        return weights
+
     } else {
         return []
     }

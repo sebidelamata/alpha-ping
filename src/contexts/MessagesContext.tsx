@@ -12,12 +12,15 @@ import { useSocketProviderContext } from "./SocketContext"
 import { ethers } from 'ethers'
 import { useEtherProviderContext } from "./ProviderContext";
 import ERC20Faucet from '../../artifacts/contracts/ERC20Faucet.sol/ERC20Faucet.json'
-import { AlphaPING } from "../../typechain-types/contracts/AlphaPING.sol/AlphaPING";
+
+interface ChannelStruct {
+    tokenAddress: string;
+}
 
 interface MessagesProviderType{
     messages: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-    authorCurrentTokenBalances: Record<string, Record<string, Record<string, bigint>>>;
+    authorCurrentTokenBalances: Record<string, Record<string, Record<string, number>>>;
 }
 
 const MessagesContext = createContext<MessagesProviderType | undefined>(undefined)
@@ -76,25 +79,23 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     }, [socket])
 
     const { signer, alphaPING } = useEtherProviderContext()
-    const [authorCurrentTokenBalances, setAuthorCurrentTokenBalances] = useState<Record<string, Record<string, Record<string, bigint>>>>({});
+    const [authorCurrentTokenBalances, setAuthorCurrentTokenBalances] = useState<Record<string, Record<string, Record<string, number>>>>({});
 
     useEffect(() => {
         if (!messages || !alphaPING || !signer) return;
 
         const fetchChannelAndBuildMap = async () => {
-            const map: Record<string, Record<string, Record<string, bigint>>> = {};
+            const map: Record<string, Record<string, Record<string, number>>> = {};
 
             for (const message of messages) {
                 const { account, channel } = message;
 
-                // Guard against invalid channel values
                 if (!channel || channel === '0' || channel === '') continue;
 
                 try {
-                    const channelStruct:AlphaPING.ChannelStructOutput = await alphaPING.channels(channel);
+                    const channelStruct = await alphaPING.channels(channel) as ChannelStruct;
                     const tokenAddress = channelStruct?.tokenAddress;
 
-                    // Guard against undefined/empty tokenAddress
                     if (!tokenAddress || tokenAddress === ethers.ZeroAddress) continue;
 
                     if (map[channel]?.[tokenAddress]?.[account] !== undefined) {
@@ -111,7 +112,7 @@ const MessagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                     if (!map[channel]) map[channel] = {};
                     if (!map[channel][tokenAddress]) map[channel][tokenAddress] = {};
 
-                    map[channel][tokenAddress][account] = balance;
+                    map[channel][tokenAddress][account] = Number(balance);
 
                 } catch (error) {
                     console.error("Error fetching channel details", error);
