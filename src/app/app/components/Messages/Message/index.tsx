@@ -69,7 +69,6 @@ const Message: React.FC<MessageProps> = ({
   userBlacklist,
   isMetadataLoading,
 }) => {
-  console.log(message, "this is the message in the message component");
 
   const { 
     currentChannelMod, 
