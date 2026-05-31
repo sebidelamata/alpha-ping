@@ -21,7 +21,7 @@ const useIsMember = (): {
     useEffect(() => {
         const findIsMember = async () => {
         if (!signer || !alphaPING || !isInitialized) {
-            console.log("Not ready to check membership:", { signer: !!signer, alphaPING: !!alphaPING, isInitialized });
+            // console.log("Not ready to check membership:", { signer: !!signer, alphaPING: !!alphaPING, isInitialized });
             return;
         }
         try{

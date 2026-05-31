@@ -59,7 +59,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       try {
         // Reset state when disconnected
         if (!isConnected || !walletProvider) {
-          console.log("Wallet not connected, clearing state");
+          //console.log("Wallet not connected, clearing state");
           setProvider(null);
           setChainId(null);
           setSigner(null);
@@ -70,7 +70,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           return;
         }
 
-        console.log("Wallet connected, initializing blockchain data...");
+        // console.log("Wallet connected, initializing blockchain data...");
         
         const provider = new ethers.BrowserProvider(walletProvider);
         setProvider(provider);
@@ -81,7 +81,7 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
         // Check if we have config for this chain
         if (!(config as BlockChainConfig)[chainId]) {
-          console.error(`No configuration found for chain ID: ${chainId}`);
+          //console.error(`No configuration found for chain ID: ${chainId}`);
           setIsInitialized(false);
           return;
         }
@@ -125,10 +125,10 @@ const ProviderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           (eth as unknown as ExtendedEip1193Provider)?.on?.('accountsChanged', () => window.location.reload());
         }
 
-        console.log("Blockchain data loaded successfully");
+        //console.log("Blockchain data loaded successfully");
 
       } catch (error) {
-        console.error("Error loading blockchain data:", error);
+        // console.error("Error loading blockchain data:", error);
         setIsInitialized(false);
       }
     };

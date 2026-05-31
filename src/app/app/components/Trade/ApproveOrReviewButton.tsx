@@ -44,8 +44,6 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
     disabled,
     price,
   }) => {
-    
-    console.log(price)
 
     const { toast } = useToast()
     const { signer } = useEtherProviderContext()
@@ -54,9 +52,7 @@ const ApproveOrReviewButton: React.FC<IApproveOrReviewButton> = ({
         sellTokenAddress, 
         sellTokenSymbol === "ETH"
     )
-    console.log('sellTokenAddress:', sellTokenAddress   )
-    console.log(tokenAllowance)
-    
+
     const [loading, setLoading] = useState<boolean>(false)
     const [txMessage, setTxMessage] = useState<string | null>(null)
     

@@ -208,7 +208,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                 setBlockedList(blockedList)
 
             }catch(err: unknown){
-                console.error(err as string)
+                // console.error(err as string)
                 setUserAttributesError((err as ErrorType).message)
             }finally{
                 setUserAttributesLoading(false)
@@ -216,10 +216,10 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         }
         loadUserAttributes()
         if(userAttributesLoading){
-            console.log("User Attributes Loading...")
+            // console.log("User Attributes Loading...")
         }
         if(userAttributesError){
-            console.error(userAttributesError)
+            // console.error(userAttributesError)
         }
     }, [
         currentChannel, 
